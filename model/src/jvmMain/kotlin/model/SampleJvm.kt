@@ -1,4 +1,4 @@
-package sample
+package model
 
 actual class Sample {
     actual fun checkMe() = 42

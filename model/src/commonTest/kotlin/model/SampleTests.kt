@@ -1,4 +1,4 @@
-package sample
+package model
 
 import kotlin.test.Test
 import kotlin.test.assertTrue

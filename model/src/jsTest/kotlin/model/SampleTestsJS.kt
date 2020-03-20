@@ -1,11 +1,12 @@
-package sample
+package model
 
+import request.hello
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class SampleTestsJVM {
+class SampleTestsJS {
     @Test
     fun testHello() {
-        assertTrue("JVM" in hello())
+        assertTrue("JS" in hello())
     }
 }
