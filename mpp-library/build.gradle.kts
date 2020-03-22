@@ -47,7 +47,7 @@ dependencies {
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "org.example.library"
+    multiplatformResourcesPackage = "by.iba.library"
 }
 
 // dependencies graph generator

@@ -24,7 +24,7 @@ android {
         minSdkVersion(Versions.Android.minSdk)
         targetSdkVersion(Versions.Android.targetSdk)
 
-        applicationId = "org.example.app"
+        applicationId = "by.iba.sbs"
 
         versionCode = 1
         versionName = "0.1.0"
@@ -64,7 +64,7 @@ dependencies {
 }
 
 multiplatformUnits {
-    classesPackage = "org.example.app"
-    dataBindingPackage = "org.example.app"
+    classesPackage = "by.iba.sbs"
+    dataBindingPackage = "by.iba.sbs"
     layoutsSourceSet = "main"
 }
