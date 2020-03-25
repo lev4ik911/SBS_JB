@@ -4,6 +4,7 @@
 
 package org.example.library
 
+import by.iba.library.MR
 import com.github.aakira.napier.Antilog
 import com.github.aakira.napier.Napier
 import com.russhwolf.settings.Settings
