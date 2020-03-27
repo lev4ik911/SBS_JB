@@ -5,6 +5,8 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.multiplatform")
+    id("kotlin-android-extensions")
+    id("kotlinx-serialization")
     id("dev.icerock.mobile.multiplatform")
     id("dev.icerock.mobile.multiplatform-resources")
 }
@@ -22,32 +24,37 @@ val mppLibs = listOf(
     Deps.Libs.MultiPlatform.settings,
     Deps.Libs.MultiPlatform.napier,
     Deps.Libs.MultiPlatform.mokoParcelize,
+    Deps.Libs.MultiPlatform.mokoNetwork,
     Deps.Libs.MultiPlatform.mokoResources,
     Deps.Libs.MultiPlatform.mokoMvvm,
     Deps.Libs.MultiPlatform.mokoUnits
 )
-val mppModules = listOf(
-    Modules.MultiPlatform.domain,
-    Modules.MultiPlatform.Feature.config,
-    Modules.MultiPlatform.Feature.list
+val ktorLibs = listOf(
+    Deps.Libs.MultiPlatform.ktorClient,
+    Deps.Libs.MultiPlatform.ktorClientLogging
 )
+//val mppModules = listOf(
+//    Modules.MultiPlatform.domain,
+//    Modules.MultiPlatform.Feature.config,
+//    Modules.MultiPlatform.Feature.list
+//)
 
 setupFramework(
-    exports = mppLibs + mppModules
+    exports = mppLibs //+ mppModules
 )
 
 dependencies {
     mppLibrary(Deps.Libs.MultiPlatform.kotlinStdLib)
     mppLibrary(Deps.Libs.MultiPlatform.coroutines)
-
+    mppLibrary(Deps.Libs.MultiPlatform.serialization)
     androidLibrary(Deps.Libs.Android.lifecycle)
-
+    ktorLibs.forEach { mppLibrary(it) }
     mppLibs.forEach { mppLibrary(it) }
-    mppModules.forEach { mppModule(it) }
+    // mppModules.forEach { mppModule(it) }
 }
 
 multiplatformResources {
-    multiplatformResourcesPackage = "by.iba.library"
+    multiplatformResourcesPackage = "by.iba.sbs.library"
 }
 
 // dependencies graph generator

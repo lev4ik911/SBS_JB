@@ -1,5 +1,0 @@
-package responce
-
-class Tag {
-
-}

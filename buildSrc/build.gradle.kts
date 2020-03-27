@@ -4,6 +4,7 @@
 
 plugins {
     `kotlin-dsl`
+    `maven-publish`
 }
 
 repositories {
@@ -12,7 +13,10 @@ repositories {
     jcenter()
     google()
 
-    maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
+    maven {
+        url = uri("https://dl.bintray.com/icerockdev/plugins")
+
+    }
 }
 
 dependencies {

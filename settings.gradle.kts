@@ -27,8 +27,8 @@ enableFeaturePreview("GRADLE_METADATA")
 include(":android-app")
 include(":mpp-library")
 
-listOf(
-    Modules.MultiPlatform.domain,
-    Modules.MultiPlatform.Feature.config,
-    Modules.MultiPlatform.Feature.list
-).forEach { include(it.name) }
+//listOf(
+//    Modules.MultiPlatform.domain,
+//    Modules.MultiPlatform.Feature.config,
+//    Modules.MultiPlatform.Feature.list
+//).forEach { include(it.name) }

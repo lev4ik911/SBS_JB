@@ -28,7 +28,7 @@ object Versions {
         object Android {
             const val kotlinStdLib = Versions.kotlin
             const val appCompat = "1.1.0"
-            const val material = "1.0.0"
+            const val material = "1.1.0"
             const val constraintLayout = "1.1.3"
             const val lifecycle = "2.0.0"
             const val recyclerView = "1.0.0"
@@ -38,7 +38,7 @@ object Versions {
             const val kotlinStdLib = Versions.kotlin
 
             const val coroutines = "1.3.5"
-            const val serialization = "0.0.0"
+            const val serialization = "0.20.0"
             const val ktorClient = "1.3.2"
             const val ktorClientLogging = ktorClient
 

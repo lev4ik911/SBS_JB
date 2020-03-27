@@ -1,11 +1,10 @@
-/*
- * Copyright 2019 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
- */
 
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    id("kotlin-android-extensions")
     id("kotlin-kapt")
+    id("kotlinx-serialization")
     id("dev.icerock.mobile.multiplatform-units")
 }
 
@@ -23,9 +22,7 @@ android {
     defaultConfig {
         minSdkVersion(Versions.Android.minSdk)
         targetSdkVersion(Versions.Android.targetSdk)
-
         applicationId = "by.iba.sbs"
-
         versionCode = 1
         versionName = "0.1.0"
 
@@ -45,6 +42,10 @@ android {
             applicationIdSuffix = ".debug"
         }
     }
+    compileOptions {
+        sourceCompatibility  = JavaVersion.VERSION_1_8
+        targetCompatibility  = JavaVersion.VERSION_1_8
+    }
 
     packagingOptions {
         exclude("META-INF/*.kotlin_module")
@@ -55,11 +56,19 @@ dependencies {
     implementation(Deps.Libs.Android.kotlinStdLib.name)
 
     implementation(Deps.Libs.Android.appCompat.name)
-    implementation(Deps.Libs.Android.material.name)
+  //  implementation(Deps.Libs.Android.material.name)
+    implementation(Deps.Libs.Android.constraintLayout.name)
     implementation(Deps.Libs.Android.recyclerView.name)
 
-    implementation(Deps.Libs.MultiPlatform.napier.android!!)
+    implementation(Deps.Libs.MultiPlatform.napier.android !!)
 
+    implementation ("com.google.android.material:material:1.1.0")
+    implementation ("androidx.constraintlayout:constraintlayout:1.1.3")
+    implementation ("androidx.navigation:navigation-fragment:2.2.1")
+    implementation ("androidx.navigation:navigation-ui:2.2.1")
+    implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.2.1")
+    implementation ("androidx.navigation:navigation-ui-ktx:2.2.1")
     implementation(project(":mpp-library"))
 }
 

@@ -6,4 +6,8 @@
     <string name="token_hint">API token</string>
     <string name="language_hint">Language code</string>
     <string name="retry_btn">Retry</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
