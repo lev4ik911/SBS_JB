@@ -24,8 +24,7 @@ pluginManagement {
 
 enableFeaturePreview("GRADLE_METADATA")
 
-include(":android-app")
-include(":mpp-library")
+include(":android-app", ":mpp-library", ":mvvmbase")
 
 //listOf(
 //    Modules.MultiPlatform.domain,

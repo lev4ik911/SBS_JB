@@ -1,30 +1,39 @@
-/*
- * Copyright 2019 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
- */
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `kotlin-dsl`
-    `maven-publish`
+    kotlin("jvm") version "1.3.71"
 }
 
 repositories {
-    mavenLocal()
 
     jcenter()
     google()
+    maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
 
-    maven {
-        url = uri("https://dl.bintray.com/icerockdev/plugins")
+}
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
     implementation("dev.icerock:mobile-multiplatform:0.4.0")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.71")
     implementation("com.android.tools.build:gradle:3.5.3")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 kotlinDslPluginOptions {
     experimentalWarning.set(false)
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }

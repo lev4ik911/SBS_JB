@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-android-extensions")
-    id("kotlin-kapt")
+    kotlin("android")
+    kotlin("android.extensions")
+    kotlin("kapt")
     id("kotlinx-serialization")
     id("dev.icerock.mobile.multiplatform-units")
 }
@@ -41,6 +41,7 @@ android {
             applicationIdSuffix = ".debug"
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -71,6 +72,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.2.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.2.1")
     implementation(project(":mpp-library"))
+    implementation(project(":mvvmbase"))
 }
 
 multiplatformUnits {
