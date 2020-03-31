@@ -2,7 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `kotlin-dsl`
-    kotlin("jvm") version "1.3.71"
+    `java-gradle-plugin`
+    kotlin("jvm") version "1.3.31"
 }
 
 repositories {
@@ -21,7 +22,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 
 dependencies {
     implementation("dev.icerock:mobile-multiplatform:0.4.0")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.71")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.31")
     implementation("com.android.tools.build:gradle:3.5.3")
     implementation(kotlin("stdlib-jdk8"))
 }

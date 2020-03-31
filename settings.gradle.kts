@@ -15,7 +15,7 @@ pluginManagement {
         maven { url = uri("https://plugins.gradle.org/m2/") }
     }
     resolutionStrategy.eachPlugin {
-        // part of plugins defined in Deps.Plugins, part in buildSrc/build.gradle.kts
+        // part of plugins defined in Deps.Plugins, part in buildSrc/build.gradle.kts.kts
         val module = Deps.plugins[requested.id.id] ?: return@eachPlugin
 
         useModule(module)

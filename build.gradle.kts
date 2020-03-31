@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.gradle.build-scan") version("2.1")
-    kotlin("jvm") version "1.3.71"
+    kotlin("jvm")
 }
 
 allprojects {
@@ -19,20 +19,21 @@ allprojects {
         maven { url = uri("https://dl.bintray.com/icerockdev/moko") }
         maven { url = uri("https://kotlin.bintray.com/ktor") }
         maven { url = uri("https://dl.bintray.com/aakira/maven") }
+        maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
     }
 
     // workaround for https://youtrack.jetbrains.com/issue/KT-27170
-    configurations.create("compileClasspath")
+//    configurations.create("compileClasspath")
 }
 
-buildScan {
-    termsOfServiceUrl = "https://gradle.com/terms-of-service"
-    termsOfServiceAgree = "yes"
-}
+//buildScan {
+//    termsOfServiceUrl = "https://gradle.com/terms-of-service"
+//    termsOfServiceAgree = "yes"
+//}
 
-tasks.register("clean", Delete::class).configure {
-    delete(rootProject.buildDir)
-}
+//tasks.register("clean", Delete::class).configure {
+//    delete(rootProject.buildDir)
+//}
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 }
