@@ -51,6 +51,11 @@ android {
 dependencies {
     implementation ("androidx.appcompat:appcompat:1.1.0")
     implementation ("androidx.core:core-ktx:1.2.0")
+    implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+    implementation ("androidx.recyclerview:recyclerview:1.1.0")
+    implementation ("com.github.Shashank02051997:FancyToast-Android:0.1.3")
+    implementation ("com.github.ybq:Android-SpinKit:1.4.0")
     testImplementation ("junit:junit:4.12")
 }
 
