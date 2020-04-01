@@ -1,7 +1,7 @@
-package by.iba.sbs.ui.ui.login
+package by.iba.sbs.ui.login
 
-import androidx.lifecycle.ViewModel
+import by.iba.mvvmbase.BaseViewModel
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel : BaseViewModel() {
     // TODO: Implement the ViewModel
 }

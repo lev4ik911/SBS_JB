@@ -1,4 +1,4 @@
-package by.iba.sbs.ui.ui.login
+package by.iba.sbs.ui.login
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle

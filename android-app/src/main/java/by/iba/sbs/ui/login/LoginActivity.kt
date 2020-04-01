@@ -3,7 +3,6 @@ package by.iba.sbs.ui.login
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import by.iba.sbs.R
-import by.iba.sbs.ui.ui.login.LoginFragment
 
 class LoginActivity : AppCompatActivity() {
 
