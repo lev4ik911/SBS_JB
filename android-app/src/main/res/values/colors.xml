@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0066b3</color>
+    <color name="colorPrimaryVariant">#003c83</color>
+    <color name="colorSecondary">#66a3d1</color>
+    <color name="colorSecondaryVariant">#93bede</color>
+
+    <color name="colorAccent">#0066b3</color>
+    <color name="colorLightBlue">#D2E8F5</color>
+
+    <color name="colorBlue">#4C93C9</color>
+    <color name="colorShadow">#CACDDD</color>
+    <color name="textColorPrimary">#333</color>
+    <color name="textColorPrimaryInverse">#EEE</color>
+    <color name="textColorSecondary">#666</color>
+    <color name="textColorSecondaryInverse">#BBB</color>
+    <color name="textColorTertiary">#aaa</color>
+    <color name="textColorHintInverse">#D81B60</color>
+    <color name="colorBackgroundAlpha">#6FA8D3</color>
+    <!--Prior-->
+    <color name="colorPrimaryPrior">#ffbf00</color>
+    <color name="colorPrimaryDarkPrior">#a67c00</color>
+
+    <color name="colorAccentPrior">#21825C</color>
+    <color name="colorLightBluePrior">#ffdc73</color>
+
+    <color name="colorBluePrior">#4C93C9</color>
+    <color name="colorShadowPrior">#CACDDD</color>
+    <color name="colorLightRed">#FF7D78</color>
+    <color name="colorLightYellow">#ffdc73</color>
+    <color name="colorLightGreen">#5ac18e</color>
+
+</resources>

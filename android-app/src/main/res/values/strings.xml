@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">moko-app</string>
+    <string name="app_name">SBS</string>
     <string name="no_data">No data</string>
     <string name="submit_btn">Submit</string>
     <string name="token_hint">API token</string>
@@ -10,4 +10,15 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="hint_login">Login</string>
+    <string name="sign_in">Login</string>
+    <string name="hint_password">Password</string>
+    <string name="caption_remember_me">Remember</string>
+    <string name="btn_next">Next</string>
+    <string name="caption_work_email">Your work e-mail</string>
+    <string name="app_description">Step by step instructions</string>
 </resources>

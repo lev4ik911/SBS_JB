@@ -47,7 +47,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
+    tasks.withType < org.jetbrains.kotlin.gradle.tasks.KotlinCompile > { kotlinOptions.jvmTarget = "1.8" }
 
     packagingOptions {
         exclude("META-INF/*.kotlin_module")
@@ -62,7 +62,7 @@ dependencies {
     implementation(Deps.Libs.Android.constraintLayout.name)
     implementation(Deps.Libs.Android.recyclerView.name)
 
-    implementation(Deps.Libs.MultiPlatform.napier.android!!)
+    implementation(Deps.Libs.MultiPlatform.napier.android !!)
 
     implementation("com.google.android.material:material:1.1.0")
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
@@ -71,6 +71,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.2.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.2.1")
+    implementation ("com.futuremind.recyclerfastscroll:fastscroll:0.2.5")
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
     implementation(project(":mpp-library"))
     implementation(project(":mvvmbase"))
 }
