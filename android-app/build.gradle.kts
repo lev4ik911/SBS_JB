@@ -58,7 +58,7 @@ dependencies {
     implementation(Deps.Libs.Android.kotlinStdLib.name)
 
     implementation(Deps.Libs.Android.appCompat.name)
-    //  implementation(Deps.Libs.Android.material.name)
+    implementation(Deps.Libs.Android.material.name)
     implementation(Deps.Libs.Android.constraintLayout.name)
     implementation(Deps.Libs.Android.recyclerView.name)
 
@@ -71,6 +71,12 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.2.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.2.1")
+    // Koin AndroidX Scope features
+    implementation ("org.koin:koin-androidx-scope:2.0.1")
+// Koin AndroidX ViewModel features
+    implementation ("org.koin:koin-androidx-viewmodel:2.0.1")
+// Koin AndroidX Experimental features
+    implementation ("org.koin:koin-androidx-ext:2.0.1")
     implementation ("com.futuremind.recyclerfastscroll:fastscroll:0.2.5")
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
     implementation(project(":mpp-library"))

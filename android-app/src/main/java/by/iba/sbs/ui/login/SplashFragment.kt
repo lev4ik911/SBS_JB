@@ -1,26 +1,28 @@
 package by.iba.sbs.ui.login
 
+import android.os.Bundle
 import by.iba.mvvmbase.BaseEventsFragment
+import by.iba.sbs.BR
+import by.iba.sbs.R
 import by.iba.sbs.databinding.SplashFragmentBinding
-
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SplashFragment :
     BaseEventsFragment<SplashFragmentBinding, SplashViewModel, SplashViewModel.EventsListener>(),
     SplashViewModel.EventsListener {
-    override val layoutId: Int = by.iba.sbs.R.layout.splash_fragment
+    override val layoutId: Int = R.layout.splash_fragment
+    override val viewModelVariableId: Int = BR.viewmodel
+    override val viewModel: SplashViewModel by viewModel()
 
-
-    override val viewModelVariableId: Int
-        get() = TODO("Not yet implemented")
-    override val viewModel: SplashViewModel
-        get() = TODO("Not yet implemented")
-    override fun routeToMainScreen() {
-        TODO("Not yet implemented")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.checkCredentials()
     }
-
     override fun routeToLoginScreen() {
-        TODO("Not yet implemented")
+        (activity as LoginActivity).navController.navigate(R.id.navigation_login)
     }
 
-
+    override fun routeToMainScreen() {
+        (activity as LoginActivity).navController.navigate(R.id.navigation_mainActivity)
+    }
 }

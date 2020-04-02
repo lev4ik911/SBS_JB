@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SBS</string>
+    <string name="app_version_str">Version: %s</string>
+
     <string name="no_data">No data</string>
     <string name="submit_btn">Submit</string>
     <string name="token_hint">API token</string>

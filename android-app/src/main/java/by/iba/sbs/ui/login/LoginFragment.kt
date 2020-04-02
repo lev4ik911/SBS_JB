@@ -1,32 +1,41 @@
 package by.iba.sbs.ui.login
 
-import androidx.lifecycle.ViewModelProviders
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import by.iba.mvvmbase.BaseEventsFragment
+import by.iba.sbs.BR
 import by.iba.sbs.R
+import by.iba.sbs.databinding.LoginFragmentBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
+//import kotlinx.android.synthetic.main.login_fragment.*
 
-class LoginFragment : Fragment() {
+class LoginFragment :
+    BaseEventsFragment<LoginFragmentBinding, LoginViewModel, LoginViewModel.EventsListener>(),
+    LoginViewModel.EventsListener {
+    override val layoutId: Int = R.layout.login_fragment
+    override val viewModelVariableId: Int = BR.viewmodel
+    override val viewModel: LoginViewModel by viewModel()
 
-    companion object {
-        fun newInstance() = LoginFragment()
+    override fun routeToLoginScreen() {
+        (activity as LoginActivity).navController.navigate(R.id.navigation_login)
     }
 
-    private lateinit var viewModel: LoginViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.login_fragment, container, false)
+    override fun routeToMainScreen() {
+        (activity as LoginActivity).navController.navigate(R.id.navigation_mainActivity)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun flipToPassword() {
+
+  //      flipper_login.setInAnimation(context, R.anim.slide_in_right)
+   //     flipper_login.setOutAnimation(context, R.anim.slide_out_left)
+    //    flipper_login.showPrevious()
     }
 
+    override fun flipToLogin() {
+      //  flipper_login.setInAnimation(context, android.R.anim.slide_in_left)
+      //  flipper_login.setOutAnimation(
+      //      context,
+      //      android.R.anim.slide_out_right
+      //  )
+      //  flipper_login.showNext()
+    }
 }
