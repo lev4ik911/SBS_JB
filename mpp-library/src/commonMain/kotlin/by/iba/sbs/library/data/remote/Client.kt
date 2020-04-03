@@ -1,6 +1,6 @@
 package by.iba.sbs.library.data.remote
 
-import by.iba.sbs.library.service.KeyValueStorage
+import by.iba.sbs.library.service.LocalStorage
 import com.github.aakira.napier.Napier
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
@@ -14,12 +14,11 @@ import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
 import io.ktor.http.HttpStatusCode
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.Json.Default.nonstrict
 import kotlinx.serialization.json.JsonConfiguration
 
 
 class Client(private val settings: Settings) {
-   private val keyValueStorage: KeyValueStorage by lazy { KeyValueStorage(settings) }
+   private val localStorage: LocalStorage by lazy { LocalStorage(settings) }
 
     private val json: Json by lazy {
         Json(JsonConfiguration.Default)
@@ -46,7 +45,7 @@ class Client(private val settings: Settings) {
             install(TokenFeature) {
                 tokenHeaderName = "Authorization"
                 tokenProvider = object : TokenFeature.TokenProvider {
-                    override fun getToken(): String? = keyValueStorage.token
+                    override fun getToken(): String? = localStorage.token
                 }
             }
 

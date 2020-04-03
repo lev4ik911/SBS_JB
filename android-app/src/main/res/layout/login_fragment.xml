@@ -24,17 +24,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintBottom_toTopOf="@+id/flipper_login"
-                app:layout_constraintTop_toTopOf="parent"
+                android:paddingVertical="@dimen/spacing_normal"
+                app:layout_constraintBottom_toTopOf="@+id/guideline"
                 app:shimmer_base_color="?attr/colorPrimaryDark"
                 app:shimmer_colored="true"
                 app:shimmer_duration="5000"
                 app:shimmer_highlight_alpha="0.9"
                 app:shimmer_highlight_color="?attr/colorPrimary"
                 app:shimmer_shape="radial">
-
             <LinearLayout
-
                     android:id="@+id/text_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -62,15 +60,7 @@
                         android:gravity="center_horizontal"
                         android:singleLine="false"
                         android:text="@string/app_description" />
-                <TextView
-                        android:id="@+id/tv_version"
-                        style="@style/Text.Description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/spacing_normal"
-                        android:gravity="center"
-                        android:text="@{String.format(@string/app_version_str, viewmodel.appVersion)}"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
         <!-- content layout -->
@@ -80,8 +70,9 @@
                 childrenEnabled="@{!viewmodel.isLoading}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:padding="@dimen/spacing_xsmall"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/shimmer_view_container"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent">
 
@@ -97,6 +88,20 @@
         </ViewFlipper>
 
 
-
+        <TextView
+                android:id="@+id/tv_version"
+                style="@style/Text.Description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/spacing_small"
+                android:gravity="center"
+                android:text="@{String.format(@string/app_version_str, viewmodel.appVersion)}"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.35" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
