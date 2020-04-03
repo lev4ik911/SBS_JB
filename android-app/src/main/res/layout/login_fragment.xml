@@ -60,6 +60,15 @@
                         android:gravity="center_horizontal"
                         android:singleLine="false"
                         android:text="@string/app_description" />
+                <TextView
+                    android:id="@+id/tv_version"
+                    style="@style/Text.Description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/spacing_small"
+                    android:gravity="center"
+                    android:text="@{String.format(@string/app_version_str, viewmodel.appVersion)}"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
@@ -88,15 +97,7 @@
         </ViewFlipper>
 
 
-        <TextView
-                android:id="@+id/tv_version"
-                style="@style/Text.Description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/spacing_small"
-                android:gravity="center"
-                android:text="@{String.format(@string/app_version_str, viewmodel.appVersion)}"
-                app:layout_constraintBottom_toBottomOf="parent" />
+
         <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
                 android:layout_width="wrap_content"
