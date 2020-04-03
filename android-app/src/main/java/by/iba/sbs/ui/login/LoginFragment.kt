@@ -8,11 +8,16 @@ import android.widget.TextView
 import android.widget.ViewFlipper
 import androidx.lifecycle.Observer
 import by.iba.mvvmbase.BaseEventsFragment
+import by.iba.mvvmbase.Extentions.Companion.waitForLayout
+import by.iba.mvvmbase.visibleOrNot
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.LoginFragmentBinding
+import com.facebook.shimmer.ShimmerFrameLayout
+import com.github.ybq.android.spinkit.style.FadingCircle
 //import com.github.ybq.android.spinkit.style.FadingCircle
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -25,42 +30,45 @@ class LoginFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-//        et_password.setOnEditorActionListener(this)
-//        et_login.setOnEditorActionListener(this)
-//        shimmer_view_container.waitForLayout {
-//            shimmer_view_container.visibleOrNot(shimmer_view_container.top > 0)
-//        }
-//        val mWaveDrawable = FadingCircle().apply {
-//            val size = resources.getDimension(R.dimen.spacing_large).toInt()
-//            this.setBounds(0, 0, size, size)
-//            this.color = resources.getColor(R.color.textColorPrimaryInverse)
-//            view.findViewById<MaterialButton>(R.id.btn_login).also {
-//                it.setCompoundDrawables(this, null, null, null)
-//                it.setPadding(
-//                    it.paddingLeft,
-//                    it.paddingTop,
-//                    it.paddingRight + size,
-//                    it.paddingBottom
-//                )
-//            }
-//        }
-//        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
-//            if (it)
-//                mWaveDrawable.start()
-//            else
-//                mWaveDrawable.stop()
-//        })
+        viewModel.init()
+        view.findViewById<TextInputEditText>(R.id.et_password)?.setOnEditorActionListener(this)
+        view.findViewById<TextInputEditText>(R.id.et_login)?.setOnEditorActionListener(this)
+        view.findViewById<ShimmerFrameLayout>(R.id.shimmer_view_container).also {
+            it?.waitForLayout { inner ->
+                inner.visibleOrNot(inner.top > 0)
+            }
+        }
+        val mWaveDrawable = FadingCircle().apply {
+            val size = resources.getDimension(R.dimen.spacing_large).toInt()
+            this.setBounds(0, 0, size, size)
+            this.color = resources.getColor(R.color.textColorPrimaryInverse)
+            view.findViewById<MaterialButton>(R.id.btn_login).also {
+                it.setCompoundDrawables(this, null, null, null)
+                it.setPadding(
+                    it.paddingLeft,
+                    it.paddingTop,
+                    it.paddingRight + size,
+                    it.paddingBottom
+                )
+            }
+        }
+        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
+            if (it)
+                mWaveDrawable.start()
+            else
+                mWaveDrawable.stop()
+        })
     }
 
     override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
         if (v != null) {
             if (v.id == R.id.et_login && actionId == EditorInfo.IME_ACTION_NEXT) {
-          //      btn_next.callOnClick()
+                view?.findViewById<MaterialButton>(R.id.btn_next)?.callOnClick()
                 return true
             }
 
             if (v.id == R.id.et_password && actionId == EditorInfo.IME_ACTION_DONE) {
-            //    btn_login.callOnClick()
+                view?.findViewById<MaterialButton>(R.id.btn_login)?.callOnClick()
                 return true
             }
         }

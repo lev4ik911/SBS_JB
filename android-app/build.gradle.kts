@@ -79,6 +79,7 @@ dependencies {
     implementation ("org.koin:koin-androidx-ext:2.0.1")
     implementation ("com.futuremind.recyclerfastscroll:fastscroll:0.2.5")
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
+    implementation("com.github.ybq:Android-SpinKit:1.4.0")
     implementation(project(":mpp-library"))
     implementation(project(":mvvmbase"))
 }

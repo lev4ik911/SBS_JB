@@ -38,8 +38,7 @@
         <com.google.android.material.checkbox.MaterialCheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/spacing_xxsmall"
-            android:layout_marginVertical="@dimen/spacing_small"
+            android:layout_marginVertical="@dimen/spacing_normal"
             android:checked="@={viewmodel.keepLogin}"
             android:text="@string/caption_remember_me" />
 

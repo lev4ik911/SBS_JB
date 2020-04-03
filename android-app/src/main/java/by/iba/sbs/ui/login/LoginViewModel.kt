@@ -31,11 +31,14 @@ class LoginViewModel(context: Context) : BaseViewModel(),
     val login = MutableLiveData(localStorage.login)
         .also {
             it.observeForever { value ->
-                isLoginEnabled.value = value.isNullOrBlank()
+                isLoginEnabled.value = value.isNotBlank()
                 localStorage.login = if (keepLogin.value!!) value else ""
             }
         }
-
+    fun init() {
+        if (login.value!!.isNotEmpty())
+            eventsDispatcher.dispatchEvent { flipToPassword() }
+    }
     val password = MutableLiveData("")//TODO
     fun onLoginButtonPressed() {
     }

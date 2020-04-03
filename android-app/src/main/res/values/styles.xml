@@ -22,17 +22,6 @@
         <item name="textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
     </style>
 
-    <style name="AppTheme.Prior" parent="AppTheme">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimaryPrior</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkPrior</item>
-        <item name="colorSecondary">@color/colorLightBluePrior</item>
-        <item name="colorError">@color/colorLightRed</item>
-        <item name="colorAccent">@color/colorAccentPrior</item>
-        <item name="colorButtonNormal">@color/colorLightBluePrior</item>
-        <item name="colorButtonAction">@color/colorBluePrior</item>
-    </style>
-
     <style name="Text" parent="TextAppearance.MaterialComponents.Body2">
         <item name="android:textColor">?android:attr/textColorTertiary</item>
     </style>
