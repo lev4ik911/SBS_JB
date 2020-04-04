@@ -79,6 +79,10 @@ class LoginFragment :
         (activity as LoginActivity).navController.navigate(R.id.navigation_login)
     }
 
+    override fun onResetPassword() {
+        (activity as LoginActivity).navController.navigate(R.id.navigation_reset)
+    }
+
 
     override fun routeToMainScreen() {
         (activity as LoginActivity).navController.navigate(R.id.navigation_mainActivity)

@@ -35,16 +35,18 @@ class LoginViewModel(context: Context) : BaseViewModel(),
                 localStorage.login = if (keepLogin.value!!) value else ""
             }
         }
+
     fun init() {
         if (login.value!!.isNotEmpty())
             eventsDispatcher.dispatchEvent { flipToPassword() }
     }
-    val password = MutableLiveData("")//TODO
+
+    val password = MutableLiveData("")
+
     fun onLoginButtonPressed() {
     }
 
     fun onNextButtonPressed() {
-
         eventsDispatcher.dispatchEvent { flipToPassword() }
     }
 
@@ -52,7 +54,12 @@ class LoginViewModel(context: Context) : BaseViewModel(),
         eventsDispatcher.dispatchEvent { flipToLogin() }
     }
 
+   fun  onResetPassword(){
+       eventsDispatcher.dispatchEvent { onResetPassword() }
+   }
+
     interface EventsListener {
+        fun onResetPassword()
         fun routeToMainScreen()
         fun routeToLoginScreen()
         fun flipToPassword()

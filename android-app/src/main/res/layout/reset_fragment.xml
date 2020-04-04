@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewmodel"
+            type="by.iba.sbs.ui.login.ResetViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:layout_marginBottom="@dimen/spacing_normal"
+        android:padding="@dimen/spacing_xsmall">
+
+        <!-- image layout -->
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_view_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/spacing_normal"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:shimmer_base_color="?attr/colorPrimaryDark"
+            app:shimmer_colored="true"
+            app:shimmer_duration="5000"
+            app:shimmer_highlight_alpha="0.9"
+            app:shimmer_highlight_color="?attr/colorPrimary"
+            app:shimmer_shape="radial">
+            <LinearLayout
+                android:id="@+id/text_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_small">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/outline_lock_24" />
+
+                <TextView
+                    style="@style/Text.Logo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="false"
+                    android:text="@string/text_reset_password" />
+
+                <TextView
+                    style="@style/Text.FragmentTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:singleLine="false"
+                    android:text="@string/app_description" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+        <!-- content layout -->
+
+        <ViewFlipper
+            android:id="@+id/flipper_login"
+            childrenEnabled="@{!viewmodel.isLoading}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:padding="@dimen/spacing_xsmall"
+            app:layout_constraintTop_toBottomOf="@+id/shimmer_view_container"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <include
+                android:id="@+id/include_email"
+                layout="@layout/content_reset_password"
+                app:viewmodel="@{viewmodel}" />
+
+            <include
+                android:id="@+id/include_password"
+                layout="@layout/content_reset_new_password"
+                app:viewmodel="@{viewmodel}" />
+        </ViewFlipper>
+
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.35" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

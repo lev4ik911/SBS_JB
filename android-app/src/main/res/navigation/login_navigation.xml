@@ -22,4 +22,8 @@
             android:id="@+id/navigation_mainActivity"
             android:name="by.iba.sbs.ui.MainActivity"
             android:label="MainActivity" />
+    <fragment
+        android:id="@+id/navigation_reset"
+        android:name="by.iba.sbs.ui.login.ResetFragment"
+        android:label="ResetFragment" />
 </navigation>

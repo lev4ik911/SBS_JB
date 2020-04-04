@@ -47,7 +47,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    tasks.withType < org.jetbrains.kotlin.gradle.tasks.KotlinCompile > { kotlinOptions.jvmTarget = "1.8" }
+    tasks.withType < org.jetbrains.kotlin.gradle.tasks.KotlinCompile > {
+        kotlinOptions.jvmTarget = "1.8"
+    }
 
     packagingOptions {
         exclude("META-INF/*.kotlin_module")
@@ -72,13 +74,13 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.2.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.2.1")
     // Koin AndroidX Scope features
-    implementation ("org.koin:koin-androidx-scope:2.0.1")
+    implementation("org.koin:koin-androidx-scope:2.0.1")
 // Koin AndroidX ViewModel features
-    implementation ("org.koin:koin-androidx-viewmodel:2.0.1")
+    implementation("org.koin:koin-androidx-viewmodel:2.0.1")
 // Koin AndroidX Experimental features
-    implementation ("org.koin:koin-androidx-ext:2.0.1")
-    implementation ("com.futuremind.recyclerfastscroll:fastscroll:0.2.5")
-    implementation ("com.facebook.shimmer:shimmer:0.5.0")
+    implementation("org.koin:koin-androidx-ext:2.0.1")
+    implementation("com.futuremind.recyclerfastscroll:fastscroll:0.2.5")
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
     implementation("com.github.ybq:Android-SpinKit:1.4.0")
     implementation(project(":mpp-library"))
     implementation(project(":mvvmbase"))
