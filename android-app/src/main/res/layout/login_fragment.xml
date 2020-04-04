@@ -12,7 +12,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            android:layout_marginBottom="@dimen/spacing_normal"
             android:padding="@dimen/spacing_xsmall">
 
         <!-- image layout -->
@@ -39,9 +38,9 @@
                     android:padding="@dimen/spacing_small">
 
                 <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/outline_home_24" />
+                        android:layout_width="@dimen/image_size"
+                        android:layout_height="@dimen/image_size"
+                        android:src="@drawable/outline_lock_24" />
 
                 <TextView
                         style="@style/Text.Logo"
@@ -49,23 +48,6 @@
                         android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="@string/app_name" />
-
-                <TextView
-                        style="@style/Text.FragmentTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:singleLine="false"
-                        android:text="@string/app_description" />
-                <TextView
-                    android:id="@+id/tv_version"
-                    style="@style/Text.Description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/spacing_small"
-                    android:gravity="center"
-                    android:text="@{String.format(@string/app_version_str, viewmodel.appVersion)}"
-                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
@@ -94,12 +76,21 @@
         </ViewFlipper>
 
 
+        <TextView
+            android:id="@+id/tv_version"
+            style="@style/Text.Description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/spacing_small"
+            android:gravity="center"
+            android:text="@{String.format(@string/app_version_str, viewmodel.appVersion)}"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.35" />
+                app:layout_constraintGuide_percent="0.55" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

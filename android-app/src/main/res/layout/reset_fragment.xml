@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:layout_marginBottom="@dimen/spacing_normal"
         android:padding="@dimen/spacing_xsmall">
 
         <!-- image layout -->
@@ -39,9 +38,9 @@
                 android:padding="@dimen/spacing_small">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/outline_lock_24" />
+                    android:layout_width="@dimen/image_size"
+                    android:layout_height="@dimen/image_size"
+                    android:src="@drawable/lock_reset" />
 
                 <TextView
                     style="@style/Text.Logo"
@@ -49,14 +48,6 @@
                     android:layout_height="wrap_content"
                     android:singleLine="false"
                     android:text="@string/text_reset_password" />
-
-                <TextView
-                    style="@style/Text.FragmentTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:singleLine="false"
-                    android:text="@string/app_description" />
 
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
@@ -91,6 +82,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.35" />
+            app:layout_constraintGuide_percent="0.55" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
