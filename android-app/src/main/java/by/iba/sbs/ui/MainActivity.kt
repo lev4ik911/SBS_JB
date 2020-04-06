@@ -8,8 +8,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import by.iba.ecl.ui.MainViewModel
+import by.iba.mvvmbase.custom.bottomnavigation.BottomNavigation
 import by.iba.sbs.R
-import by.iba.sbs.custom.bottomnavigation.BottomNavigation
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -83,8 +83,8 @@ class MainActivity : AppCompatActivity() {
             viewModel.activeTab.value = it.id
             navController.navigate(
                 when (it.id) {
-                    ActiveTabEnum.ID_HOME.index -> R.id.navigation_home
-                    ActiveTabEnum.ID_FAVORITES.index -> R.id.navigation_dashboard
+                    ActiveTabEnum.ID_HOME.index -> R.id.navigation_dashboard
+                    ActiveTabEnum.ID_FAVORITES.index -> R.id.navigation_search
                     ActiveTabEnum.ID_SEARCH.index -> R.id.navigation_notifications
                     ActiveTabEnum.ID_PROFILE.index -> R.id.navigation_profile
                     else -> R.id.navigation_home

@@ -19,7 +19,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/mobile_navigation"
     />
-    <by.iba.ecl.custom.bottomnavigation.BottomNavigation
+    <by.iba.mvvmbase.custom.bottomnavigation.BottomNavigation
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

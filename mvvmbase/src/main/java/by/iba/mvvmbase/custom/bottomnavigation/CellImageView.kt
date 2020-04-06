@@ -9,7 +9,7 @@ import by.iba.mvvmbase.R
 
 
 @Suppress("unused", "LeakingThis", "MemberVisibilityCanBePrivate")
-internal class CellImageView : AppCompatImageView {
+class CellImageView : AppCompatImageView {
 
     var isBitmap = false
         set(value) {
@@ -88,7 +88,11 @@ internal class CellImageView : AppCompatImageView {
 
         if (isBitmap) {
             try {
-                val drawable = if (color == 0) context.getDrawableCompat(resource) else DrawableHelper.changeColorDrawableRes(context, resource, color)
+                val drawable = if (color == 0) context.getDrawableCompat(resource) else DrawableHelper.changeColorDrawableRes(
+                    context,
+                    resource,
+                    color
+                )
                 setImageDrawable(drawable)
             } catch (e: Exception) {
                 e.printStackTrace()

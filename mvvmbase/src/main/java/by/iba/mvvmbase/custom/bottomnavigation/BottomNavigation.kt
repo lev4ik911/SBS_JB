@@ -12,7 +12,6 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import by.iba.mvvmbase.R
-import by.iba.mvvmbase.custom.bottomnavigation.BottomNavigationCell
 import kotlin.math.abs
 
 

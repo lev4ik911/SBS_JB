@@ -11,14 +11,16 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import by.iba.mvvmbase.R
 import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.
 
+
+@Suppress("unused")
 class BottomNavigationCell : RelativeLayout, LayoutContainer {
 
     companion object {
@@ -28,33 +30,33 @@ class BottomNavigationCell : RelativeLayout, LayoutContainer {
     var defaultIconColor = 0
     var selectedIconColor = 0
     var circleColor = 0
-
+    private lateinit var tvCount: TextView
+    lateinit var ivCell: CellImageView
+    private lateinit var vCircle: View
+    lateinit var frame: FrameLayout
     var icon = 0
         set(value) {
             field = value
             if (allowDraw)
-                iv.resource = value
+                ivCell.resource = value
         }
 
     var count: String? = EMPTY_VALUE
         set(value) {
             field = value
             if (allowDraw) {
-                findViewById<TextView>(R.id.tv_count).also {
-
                 if (count != null && count == EMPTY_VALUE) {
-                    it.text = ""
-                    it.visibility = View.INVISIBLE
+                    tvCount.text = ""
+                    tvCount.visibility = View.INVISIBLE
                 } else {
                     if (count != null && count?.length ?: 0 >= 3) {
                         field = count?.substring(0, 1) + ".."
                     }
-                    it.text = count
-                    it.visibility = View.VISIBLE
+                    tvCount.text = count
+                    tvCount.visibility = View.VISIBLE
                     val scale = if (count?.isEmpty() == true) 0.5f else 1f
-                    it.scaleX = scale
-                    it.scaleY = scale
-                }
+                    tvCount.scaleX = scale
+                    tvCount.scaleY = scale
                 }
             }
         }
@@ -63,9 +65,9 @@ class BottomNavigationCell : RelativeLayout, LayoutContainer {
         set(value) {
             field = value
             if (allowDraw) {
-                iv.size = value
-                iv.pivotX = iconSize / 2f
-                iv.pivotY = iconSize / 2f
+                ivCell.size = value
+                ivCell.pivotX = iconSize / 2f
+                ivCell.pivotY = iconSize / 2f
             }
         }
 
@@ -73,7 +75,7 @@ class BottomNavigationCell : RelativeLayout, LayoutContainer {
         set(value) {
             field = value
             if (allowDraw)
-                tv_count.setTextColor(field)
+                tvCount.setTextColor(field)
         }
 
     var countBackgroundColor = 0
@@ -83,7 +85,7 @@ class BottomNavigationCell : RelativeLayout, LayoutContainer {
                 val d = GradientDrawable()
                 d.setColor(field)
                 d.shape = GradientDrawable.OVAL
-                ViewCompat.setBackground(tv_count, d)
+                ViewCompat.setBackground(tvCount, d)
             }
         }
 
@@ -91,7 +93,7 @@ class BottomNavigationCell : RelativeLayout, LayoutContainer {
         set(value) {
             field = value
             if (allowDraw && field != null)
-                tv_count.typeface = field
+                tvCount.typeface = field
         }
 
     var rippleColor = 0
@@ -107,24 +109,24 @@ class BottomNavigationCell : RelativeLayout, LayoutContainer {
     private var progress = 0f
         set(value) {
             field = value
-            fl.y = (1f - progress) * dip(context, 18) + dip(context, -2)
+            frame.y = (1f - progress) * dip(context, 18) + dip(context, -2)
 
-            iv.color = if (progress == 1f) selectedIconColor else defaultIconColor
+            ivCell.color = if (progress == 1f) selectedIconColor else defaultIconColor
             val scale = (1f - progress) * (-0.2f) + 1f
-            iv.scaleX = scale
-            iv.scaleY = scale
+            ivCell.scaleX = scale
+            ivCell.scaleY = scale
 
             val d = GradientDrawable()
             d.setColor(circleColor)
             d.shape = GradientDrawable.OVAL
 
-            ViewCompat.setBackground(v_circle, d)
+            ViewCompat.setBackground(vCircle, d)
 
-            ViewCompat.setElevation(v_circle, if (progress > 0.7f) dipf(context, progress * 4f) else 0f)
+            ViewCompat.setElevation(vCircle, if (progress > 0.7f) dipf(context, progress * 4f) else 0f)
 
             val m = dip(context, 24)
-            v_circle.x = (1f - progress) * (if (isFromLeft) -m else m) + ((measuredWidth - dip(context, 48)) / 2f)
-            v_circle.y = (1f - progress) * measuredHeight + dip(context, 6)
+            vCircle.x = (1f - progress) * (if (isFromLeft) -m else m) + ((measuredWidth - dip(context, 48)) / 2f)
+            vCircle.y = (1f - progress) * measuredHeight + dip(context, 6)
         }
 
     var isEnabledCell = false
@@ -134,10 +136,10 @@ class BottomNavigationCell : RelativeLayout, LayoutContainer {
             d.setColor(circleColor)
             d.shape = GradientDrawable.OVAL
             if (Build.VERSION.SDK_INT >= 21 && !isEnabledCell) {
-                fl.background = RippleDrawable(ColorStateList.valueOf(rippleColor), null, d)
+                frame.background = RippleDrawable(ColorStateList.valueOf(rippleColor), null, d)
             } else {
-                fl.runAfterDelay(200) {
-                    fl.setBackgroundColor(Color.TRANSPARENT)
+                frame.runAfterDelay(200) {
+                    frame.setBackgroundColor(Color.TRANSPARENT)
                 }
             }
         }
@@ -145,7 +147,7 @@ class BottomNavigationCell : RelativeLayout, LayoutContainer {
     var onClickListener: () -> Unit = {}
         set(value) {
             field = value
-            iv?.setOnClickListener {
+            ivCell?.setOnClickListener {
                 onClickListener()
             }
         }
@@ -174,6 +176,10 @@ class BottomNavigationCell : RelativeLayout, LayoutContainer {
     private fun initializeView() {
         allowDraw = true
         containerView = LayoutInflater.from(context).inflate(R.layout.bottom_navigation_cell, this)
+        tvCount = findViewById(R.id.tv_count)
+        ivCell = findViewById(R.id.iv_cell)
+        vCircle= findViewById(R.id.v_circle)
+        frame =  findViewById(R.id.fl)
         draw()
     }
 
