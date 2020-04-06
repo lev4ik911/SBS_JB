@@ -20,8 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingVertical="@dimen/spacing_normal"
-            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            android:paddingVertical="@dimen/spacing_large"
+            app:layout_constraintTop_toTopOf="parent"
             app:shimmer_base_color="?attr/colorPrimaryDark"
             app:shimmer_colored="true"
             app:shimmer_duration="5000"
@@ -38,21 +38,56 @@
                 android:padding="@dimen/spacing_small">
 
                 <ImageView
-                    android:layout_width="@dimen/image_size"
-                    android:layout_height="@dimen/image_size"
+                    android:layout_width="@dimen/image_padding"
+                    android:layout_height="@dimen/image_padding"
                     android:src="@drawable/lightbulb_on_outline" />
 
                 <TextView
                     style="@style/Text.Logo"
+                    android:paddingVertical="@dimen/spacing_normal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="false"
-                    android:text="@string/app_name" />
+                    android:text="@string/app_description" />
 
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
 
-
+<LinearLayout
+    app:layout_constraintTop_toBottomOf="@id/shimmer_view_container"
+    android:paddingHorizontal="@dimen/spacing_small"
+    android:paddingVertical="@dimen/spacing_large"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_login"
+        style="@style/Button.Action"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/spacing_small"
+        android:onClick="@{() -> viewmodel.onLoginButtonClick()}"
+        android:paddingHorizontal="@dimen/spacing_xlarge"
+        android:text="@string/btn_login" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_register"
+        style="@style/Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/spacing_small"
+        android:onClick="@{() -> viewmodel.onRegisterButtonClick()}"
+        android:paddingHorizontal="@dimen/spacing_xlarge"
+        android:text="@string/btn_register" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_just_look"
+        style="@style/Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/spacing_normal"
+        android:onClick="@{() -> viewmodel.onJustLookButtonClick()}"
+        android:paddingHorizontal="@dimen/spacing_xlarge"
+        android:text="@string/btn_just_look" />
+</LinearLayout>
         <TextView
             android:id="@+id/tv_version"
             style="@style/Text.Description"

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorButtonAction" format="reference|color" />
+    <attr name="colorBadgeNotification" format="reference|color" />
+    <attr name="colorTextDayOfWeek" format="reference|color" />
+    <attr name="colorTextDisabled" format="reference|color" />
+    <attr name="textColorPrimaryInverse" format="reference|color" />
+    <declare-styleable name="CellImageView">
+        <attr name="imageview_useColor" format="boolean" />
+        <attr name="imageview_isBitmap" format="boolean" />
+        <attr name="imageview_resource" format="reference" />
+        <attr name="imageview_color" format="color" />
+        <attr name="imageview_size" format="dimension" />
+        <attr name="imageview_isAction" format="boolean" />
+        <attr name="imageview_actionBackgroundAlpha" format="boolean" />
+        <attr name="imageview_changeSize" format="boolean" />
+        <attr name="imageview_fitImage" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="BottomNavigation">
+        <attr name="bn_defaultIconColor" format="color" />
+        <attr name="bn_selectedIconColor" format="color" />
+        <attr name="bn_backgroundBottomColor" format="color" />
+        <attr name="bn_countTextColor" format="color" />
+        <attr name="bn_countBackgroundColor" format="color" />
+        <attr name="bn_countTypeface" format="string" />
+        <attr name="bn_rippleColor" format="color" />
+        <attr name="bn_shadowColor" format="color" />
+    </declare-styleable>
+</resources>

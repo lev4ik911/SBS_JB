@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingVertical="@dimen/spacing_normal"
-            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
             app:shimmer_base_color="?attr/colorPrimaryDark"
             app:shimmer_colored="true"
             app:shimmer_duration="5000"

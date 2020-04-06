@@ -22,6 +22,10 @@ class SplashFragment :
         (activity as LoginActivity).navController.navigate(R.id.navigation_login)
     }
 
+    override fun routeToRegisterScreen() {
+        (activity as LoginActivity).navController.navigate(R.id.navigation_register)
+    }
+
     override fun routeToMainScreen() {
         (activity as LoginActivity).navController.navigate(R.id.navigation_mainActivity)
     }
