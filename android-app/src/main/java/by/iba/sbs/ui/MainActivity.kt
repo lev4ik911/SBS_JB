@@ -1,12 +1,8 @@
 package by.iba.sbs.ui
 
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import by.iba.ecl.ui.MainViewModel
 import by.iba.mvvmbase.custom.bottomnavigation.BottomNavigation
 import by.iba.sbs.R
@@ -15,7 +11,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : AppCompatActivity() {
     enum class ActiveTabEnum(var index: Int) {
         ID_HOME(1),
-        ID_FAVORITES(2),
+        ID_INSTRUCTIONS(2),
         ID_SEARCH(3),
         ID_PROFILE(4)
     }
@@ -49,8 +45,8 @@ class MainActivity : AppCompatActivity() {
         )
         navView.add(
             BottomNavigation.Model(
-                ActiveTabEnum.ID_FAVORITES.index,
-                R.drawable.baseline_event_24
+                ActiveTabEnum.ID_INSTRUCTIONS.index,
+                R.drawable.clipboard_list_outline
             )
         )
         navView.add(
@@ -62,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         navView.add(
             BottomNavigation.Model(
                 ActiveTabEnum.ID_PROFILE.index,
-                R.drawable.baseline_settings_24
+                R.drawable.account_tie
             )
         )
         navView.setCount(ActiveTabEnum.ID_HOME.index, "15")
@@ -71,9 +67,9 @@ class MainActivity : AppCompatActivity() {
 
             val name = when (it.id) {
                 ActiveTabEnum.ID_HOME.index -> "HOME"
-                ActiveTabEnum.ID_FAVORITES.index -> "EVENT"
+                ActiveTabEnum.ID_INSTRUCTIONS.index -> "INSTRUCTIONS"
                 ActiveTabEnum.ID_SEARCH.index -> "SEARCH"
-                ActiveTabEnum.ID_PROFILE.index -> "SETTINGS"
+                ActiveTabEnum.ID_PROFILE.index -> "PROFILE"
                 else -> ""
             }
         }
@@ -84,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             navController.navigate(
                 when (it.id) {
                     ActiveTabEnum.ID_HOME.index -> R.id.navigation_dashboard
-                    ActiveTabEnum.ID_FAVORITES.index -> R.id.navigation_search
+                    ActiveTabEnum.ID_INSTRUCTIONS.index -> R.id.navigation_search
                     ActiveTabEnum.ID_SEARCH.index -> R.id.navigation_notifications
                     ActiveTabEnum.ID_PROFILE.index -> R.id.navigation_profile
                     else -> R.id.navigation_home

@@ -31,9 +31,9 @@ class BottomNavigationCell : RelativeLayout, LayoutContainer {
     var selectedIconColor = 0
     var circleColor = 0
     private lateinit var tvCount: TextView
-    lateinit var ivCell: CellImageView
+    private lateinit var ivCell: CellImageView
     private lateinit var vCircle: View
-    lateinit var frame: FrameLayout
+    private lateinit var frame: FrameLayout
     var icon = 0
         set(value) {
             field = value
@@ -99,9 +99,7 @@ class BottomNavigationCell : RelativeLayout, LayoutContainer {
     var rippleColor = 0
         set(value) {
             field = value
-            if (allowDraw) {
 
-            }
         }
 
     var isFromLeft = false
@@ -147,7 +145,7 @@ class BottomNavigationCell : RelativeLayout, LayoutContainer {
     var onClickListener: () -> Unit = {}
         set(value) {
             field = value
-            ivCell?.setOnClickListener {
+            ivCell.setOnClickListener {
                 onClickListener()
             }
         }
