@@ -26,7 +26,7 @@
             app:shimmer_colored="true"
             app:shimmer_duration="5000"
             app:shimmer_highlight_alpha="0.9"
-            app:shimmer_highlight_color="?attr/colorPrimary"
+            app:shimmer_highlight_color="?attr/colorAccent"
             app:shimmer_shape="radial">
             <LinearLayout
                 android:id="@+id/text_layout"

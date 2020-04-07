@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         navView.show(viewModel.activeTab.value!!)
         navView.setOnShowListener {
 
-            val name = when (it.id) {
+            title = when (it.id) {
                 ActiveTabEnum.ID_HOME.index -> "HOME"
                 ActiveTabEnum.ID_INSTRUCTIONS.index -> "INSTRUCTIONS"
                 ActiveTabEnum.ID_SEARCH.index -> "SEARCH"

@@ -1,13 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="by.iba.sbs.ui.profile.ProfileFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <data>
+        <variable
+            name="viewmodel"
+            type="by.iba.sbs.ui.profile.ProfileViewModel" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_gradient"
+            android:padding="@dimen/spacing_xxsmall">
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cards"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/spacing_xsmall"
+                android:layout_marginTop="@dimen/image_padding"
+                android:layout_marginBottom="@dimen/spacing_xsmall"
+                android:elevation="@dimen/spacing_normal"
+                android:padding="@dimen/spacing_small"
+                app:cardCornerRadius="@dimen/corner_radius">
+                <ImageButton
+                    android:id="@+id/btn_open_profile"
+                    style="@style/Widget.AppCompat.ActionButton.Overflow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/account_edit_outline"
+                    android:tint="@color/textColorSecondary" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/spacing_small"
+                    android:layout_marginTop="@dimen/image_padding"
+                    android:layout_marginBottom="@dimen/spacing_small"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_user_name"
+                        style="@style/Text.Main.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
+                        android:padding="@dimen/spacing_xxsmall"
+                        android:text="@{viewmodel.fullName}" />
+
+                    <TextView
+                        android:id="@+id/tv_user_email"
+                        style="@style/Text.Email"
+                        visibleOrGone="@{viewmodel.email.length() != 0}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="@dimen/spacing_xxsmall"
+                        android:text="@{viewmodel.email}" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1px"
+                        android:layout_marginTop="@dimen/spacing_xsmall"
+                        android:background="@color/colorShadow" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+<androidx.viewpager2.widget.ViewPager2
+    android:layout_below="@id/cards"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
+        </RelativeLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_profile"
+            android:layout_width="@dimen/image_size"
+            android:layout_height="@dimen/image_size"
+            android:layout_margin="@dimen/spacing_normal"
+            android:src="@drawable/ic_profile"
+            app:civ_border_color="@color/colorSecondaryVariant"
+            app:civ_border_width="@dimen/spacing_xsmall"
+            app:layout_anchor="@id/cards"
+            app:layout_anchorGravity="top|center" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/layout_avatar"
+            android:layout_width="@dimen/image_padding"
+            android:layout_height="@dimen/image_padding"
+            app:layout_anchor="@id/iv_profile"
+            app:layout_anchorGravity="center"/>
+
+        <ImageView
+            android:id="@+id/iv_status"
+            android:layout_width="@dimen/spacing_xxxlarge"
+            android:layout_height="@dimen/spacing_xxxlarge"
+            android:src="@drawable/star"
+            android:padding="@dimen/spacing_xxsmall"
+            android:tint="@color/colorLightYellow"
+            app:layout_anchor="@id/layout_avatar"
+            app:layout_anchorGravity="bottom|right"
+
+            />
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

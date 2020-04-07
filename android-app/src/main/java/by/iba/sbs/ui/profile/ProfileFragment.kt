@@ -1,33 +1,15 @@
 package by.iba.sbs.ui.profile
 
-import androidx.lifecycle.ViewModelProviders
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import by.iba.mvvmbase.BaseEventsFragment
+import by.iba.sbs.BR
 import by.iba.sbs.R
+import by.iba.sbs.databinding.ProfileFragmentBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
+class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewModel, ProfileViewModel.EventsListener>(),
+    ProfileViewModel.EventsListener {
 
-class ProfileFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = ProfileFragment()
-    }
-
-    private lateinit var viewModel: ProfileViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.profile_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
+    override val layoutId: Int = R.layout.profile_fragment
+    override val viewModelVariableId: Int = BR.viewmodel
+    override val viewModel: ProfileViewModel by viewModel()
 }

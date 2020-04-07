@@ -56,12 +56,15 @@ class LoginViewModel(context: Context, systemInfo:SystemInformation) : BaseViewM
         eventsDispatcher.dispatchEvent { flipToLogin() }
     }
 
-   fun  onResetPassword(){
+   fun  onResetPasswordClick(){
        eventsDispatcher.dispatchEvent { onResetPassword() }
    }
-
+    fun  onRegisterClick(){
+        eventsDispatcher.dispatchEvent { onRegister() }
+    }
     interface EventsListener {
         fun onResetPassword()
+        fun onRegister()
         fun routeToMainScreen()
         fun routeToLoginScreen()
         fun flipToPassword()

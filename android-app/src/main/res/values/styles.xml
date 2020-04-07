@@ -23,7 +23,7 @@
         <item name="textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
     </style>
 
-    <style name="Text" parent="TextAppearance.MaterialComponents.Body2">
+    <style name="Text" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">?android:attr/textColorTertiary</item>
     </style>
 
@@ -70,7 +70,9 @@
     <style name="Text.Main.Bold" parent="Text.Main">
         <item name="android:textStyle">bold</item>
     </style>
-
+    <style name="Text.Main.Link" parent="Text.Main">
+        <item name="android:autoLink">web|email</item>
+    </style>
     <style name="Text.Description" parent="Text">
         <item name="android:textColor">?android:attr/textColorTertiary</item>
         <item name="android:textSize">@dimen/text_size_small</item>

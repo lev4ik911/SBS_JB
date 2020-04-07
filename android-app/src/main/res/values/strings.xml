@@ -36,4 +36,5 @@
     <string name="btn_login">Login</string>
     <string name="btn_register">Register</string>
     <string name="btn_just_look"> I wanna see</string>
+    <string name="caption_register">Register</string>
 </resources>

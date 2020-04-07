@@ -1,8 +1,10 @@
 package by.iba.sbs.ui.login
 
+import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.TextView
 import android.widget.ViewFlipper
+import androidx.activity.addCallback
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.sbs.BR
 import by.iba.sbs.R
@@ -15,6 +17,12 @@ class ResetFragment :  BaseEventsFragment<ResetFragmentBinding, ResetViewModel, 
     override val layoutId: Int = R.layout.reset_fragment
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: ResetViewModel by viewModel()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            (activity as LoginActivity).navController.navigate(R.id.navigation_login)
+        }
+    }
     override fun onNextButtonPressed(){
         view?.findViewById<ViewFlipper>(R.id.flipper_login).also {
             it?.setInAnimation(context, R.anim.slide_in_right)
