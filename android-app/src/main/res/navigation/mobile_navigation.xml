@@ -9,19 +9,19 @@
             android:id="@+id/navigation_search"
             android:name="by.iba.sbs.ui.search.SearchFragment"
             android:label="@string/title_instructions"
-            tools:layout="@layout/fragment_home"/>
+            tools:layout="@layout/home_fragment"/>
 
     <fragment
             android:id="@+id/navigation_dashboard"
             android:name="by.iba.sbs.ui.dashboard.DashboardFragment"
             android:label="@string/title_dashboard"
-            tools:layout="@layout/fragment_dashboard"/>
+            tools:layout="@layout/dashboard_fragment"/>
 
     <fragment
             android:id="@+id/navigation_notifications"
             android:name="by.iba.sbs.ui.notifications.NotificationsFragment"
             android:label="@string/title_notifications"
-            tools:layout="@layout/fragment_notifications"/>
+            tools:layout="@layout/notifications_fragment"/>
     <fragment
         android:id="@+id/navigation_profile"
         android:name="by.iba.sbs.ui.profile.ProfileFragment"

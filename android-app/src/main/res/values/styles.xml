@@ -25,6 +25,7 @@
 
     <style name="Text" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">?android:attr/textColorTertiary</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
     </style>
 
     <style name="Text.FragmentTitle" parent="Text">
@@ -54,23 +55,18 @@
         <item name="android:autoLink">phone</item>
     </style>
 
-    <style name="Text.Title" parent="Text">
-        <item name="android:textSize">@dimen/text_size_normal</item>
-    </style>
+
 
     <style name="Image.Clickable" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:clickable">true</item>
         <item name="android:padding">@dimen/spacing_xsmall</item>
     </style>
 
-    <style name="Text.Main" parent="Text">
-        <item name="android:textSize">@dimen/text_size_normal</item>
-    </style>
 
-    <style name="Text.Main.Bold" parent="Text.Main">
+    <style name="Text.Main.Bold" parent="Text">
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="Text.Main.Link" parent="Text.Main">
+    <style name="Text.Main.Link" parent="Text">
         <item name="android:autoLink">web|email</item>
     </style>
     <style name="Text.Description" parent="Text">

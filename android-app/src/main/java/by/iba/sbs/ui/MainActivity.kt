@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                 ActiveTabEnum.ID_HOME.index -> "HOME"
                 ActiveTabEnum.ID_INSTRUCTIONS.index -> "INSTRUCTIONS"
                 ActiveTabEnum.ID_SEARCH.index -> "SEARCH"
-                ActiveTabEnum.ID_PROFILE.index -> "PROFILE"
+                ActiveTabEnum.ID_PROFILE.index -> ""
                 else -> ""
             }
         }
