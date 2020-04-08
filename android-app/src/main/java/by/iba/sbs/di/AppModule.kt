@@ -9,6 +9,7 @@ import by.iba.sbs.ui.login.LoginViewModel
 import by.iba.sbs.ui.login.RegisterViewModel
 import by.iba.sbs.ui.login.ResetViewModel
 import by.iba.sbs.ui.login.SplashViewModel
+import by.iba.sbs.ui.notifications.NotificationsViewModel
 import by.iba.sbs.ui.profile.ProfileViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -23,6 +24,7 @@ val viewModelModule = module {
     viewModel { ProfileViewModel() }
     viewModel { InstructionViewModel() }
     viewModel { InstructionEditViewModel() }
+    viewModel { NotificationsViewModel() }
     //viewModel { PostDetailsViewModel(userPostUseCase = get(), commentsUseCase = get()) }
 }
 val serviceModule = module {

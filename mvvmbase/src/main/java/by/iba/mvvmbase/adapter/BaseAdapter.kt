@@ -5,12 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 
 open class BaseAdapter<T>(
-    private val layoutId: Int,
+    @LayoutRes private val layoutId: Int,
     open val onBind: (view: View, item: T, position: Int) -> Unit,
     open val isSameContent: (oldItem: T, newItem: T) -> Boolean
 ) : RecyclerView.Adapter<BaseAdapter<T>.ViewHolder<T>>(), Filterable {
@@ -32,6 +33,7 @@ open class BaseAdapter<T>(
         super.onAttachedToRecyclerView(recyclerView)
         mRecyclerView = recyclerView
     }
+
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
@@ -101,7 +103,7 @@ open class BaseAdapter<T>(
         }
     }
 
-    private infix fun ViewGroup.inflate(layoutRes: Int): View =
+     infix fun ViewGroup.inflate(layoutRes: Int): View =
         LayoutInflater.from(context).inflate(layoutRes, this, false)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<T> {
