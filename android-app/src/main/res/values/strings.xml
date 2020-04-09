@@ -38,4 +38,5 @@
     <string name="btn_just_look"> I wanna see</string>
     <string name="caption_register">Register</string>
     <string name="text_rating">Rating: %s</string>
+    <string name="create_instruction">Add instruction</string>
 </resources>

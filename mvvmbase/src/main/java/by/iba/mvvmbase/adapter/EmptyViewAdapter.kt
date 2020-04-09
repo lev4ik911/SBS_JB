@@ -20,6 +20,6 @@ class EmptyViewAdapter<T>(
     }
 
     override fun onBindViewHolder(holder: ViewHolder<T>, pos: Int) {
-        if (pos < itemCount - 1)  holder.bind(itemsList[pos], pos)
+        if (pos < itemCount - 1)  holder.bind(itemsList[pos], pos) else holder.bindEmptyView()
     }
 }

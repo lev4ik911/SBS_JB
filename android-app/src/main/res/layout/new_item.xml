@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="@dimen/spacing_xxxsmall"
-    app:cardCornerRadius="@dimen/corner_radius"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:gravity="center">
+    android:layout_marginBottom="@dimen/spacing_xsmall"
+    android:layout_marginHorizontal="@dimen/spacing_xsmall"
+    android:clickable="true"
+    android:focusable="true"
+    style="@style/Card"
+    >
+
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_view_container"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="vertical"
         android:paddingVertical="@dimen/spacing_xsmall"
         app:shimmer_base_color="?attr/colorPrimaryDark"
@@ -18,10 +23,24 @@
         app:shimmer_highlight_alpha="0.9"
         app:shimmer_highlight_color="?attr/colorAccent"
         app:shimmer_shape="radial">
-<androidx.appcompat.widget.AppCompatImageView
-    android:layout_gravity="center"
-    android:src="@drawable/plus_circle_outline"
-    android:layout_width="@dimen/list_image_size"
-    android:layout_height="@dimen/list_image_size"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/spacing_xxlarge"
+                android:layout_height="@dimen/spacing_xxlarge"
+                android:layout_gravity="center"
+                android:src="@drawable/plus" />
+
+            <TextView
+                style="@style/Text.FragmentTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/spacing_xxsmall"
+                android:text="@string/create_instruction" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </com.facebook.shimmer.ShimmerFrameLayout>
 </androidx.cardview.widget.CardView>

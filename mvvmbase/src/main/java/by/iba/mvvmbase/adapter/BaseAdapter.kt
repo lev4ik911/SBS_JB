@@ -21,7 +21,7 @@ open class BaseAdapter<T>(
     var itemsList = ArrayList<T>()
 
     var onItemClick: ((pos: Int, view: View, item: T) -> Unit)? = null
-
+    var onEmptyViewItemClick: (() -> Unit)? = null
     var filterCriteria: ((item: T, textToSearch: String) -> Boolean)? = null
 
     init {
@@ -94,16 +94,22 @@ open class BaseAdapter<T>(
     ) : RecyclerView.ViewHolder(view), View.OnClickListener {
 
         override fun onClick(p0: View?) {
-            onItemClick?.invoke(adapterPosition, p0!!, itemsList[adapterPosition])
+            if (adapterPosition < itemCount - 1)
+                onItemClick?.invoke(adapterPosition, p0!!, itemsList[adapterPosition])
+            else
+                onEmptyViewItemClick?.invoke()
         }
 
         fun bind(item: T, position: Int) {
             view.setOnClickListener(this)
-            onBind(view, item, position)
+                onBind(view, item, position)
+        }
+        fun bindEmptyView() {
+            view.setOnClickListener(this)
         }
     }
 
-     infix fun ViewGroup.inflate(layoutRes: Int): View =
+    infix fun ViewGroup.inflate(layoutRes: Int): View =
         LayoutInflater.from(context).inflate(layoutRes, this, false)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<T> {
@@ -112,7 +118,7 @@ open class BaseAdapter<T>(
 
     override fun getItemCount(): Int = itemsList.size
 
-    override fun onBindViewHolder(holder: ViewHolder<T>, pos: Int) {
+    open override fun onBindViewHolder(holder: ViewHolder<T>, pos: Int) {
         holder.bind(itemsList[pos], pos)
     }
 

@@ -22,7 +22,11 @@
         <item name="colorTextDisabled">@color/textColorTertiary</item>
         <item name="textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
     </style>
-
+    <style name="Card" >
+        <item name="android:elevation">@dimen/spacing_xxxsmall</item>
+        <item name="cardCornerRadius">@dimen/corner_radius</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
     <style name="Text" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">?android:attr/textColorTertiary</item>
         <item name="android:textSize">@dimen/text_size_normal</item>
