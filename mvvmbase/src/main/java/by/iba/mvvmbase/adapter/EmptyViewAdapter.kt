@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 
 class EmptyViewAdapter<T>(
     @LayoutRes private val layoutId: Int,
-    @LayoutRes private val emptyViewId: Int = 0,
-    @LayoutRes private val dragLayoutId: Int = 0,
+
     override val onBind: (view: View, item: T, position: Int) -> Unit,
     isItemsEquals: (oldItem: T, newItem: T) -> Boolean
 ) : BaseAdapter<T>(layoutId, onBind, isItemsEquals) {
-
+    @LayoutRes  var emptyViewId: Int = 0
+    @LayoutRes  var dragLayoutId: Int = 0
     val itemTouchHelper by lazy {
         val simpleItemTouchCallback =
             object : ItemTouchHelper.SimpleCallback(UP or DOWN or START or END, 0) {

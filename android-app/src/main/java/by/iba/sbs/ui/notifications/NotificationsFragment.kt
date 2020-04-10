@@ -42,15 +42,16 @@ class NotificationsFragment :
     private val _cardAdapter =
         EmptyViewAdapter<ExampleListModel>(
             R.layout.instruction_list_item,
-            R.layout.new_item,
-            R.id.iv_drag,
             onBind = { view, item, _ ->
                 view.findViewById<TextView>(R.id.tv_title).text = item.title
                 view.findViewById<TextView>(R.id.tv_info).text = item.author
             },
             isItemsEquals = { oldItem, newItem ->
                 oldItem.title == newItem.title
-            })
+            }).also {
+            it.emptyViewId =  R.layout.new_item
+            it.dragLayoutId = R.id.iv_drag
+        }
 
     class ExampleListModel(val title: String, val author: String) {
 
