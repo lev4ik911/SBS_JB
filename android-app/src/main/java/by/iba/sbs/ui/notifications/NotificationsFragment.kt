@@ -1,5 +1,6 @@
 package by.iba.sbs.ui.notifications
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -26,7 +27,7 @@ class NotificationsFragment :
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<RecyclerView>(R.id.rv_notifications).also {
             it.adapter = _cardAdapter
-            it.layoutManager = LinearLayoutManager(context)
+            _cardAdapter.itemTouchHelper.attachToRecyclerView(it)
         }
         _cardAdapter.addItems(getData())
         _cardAdapter.onItemClick = { pos, itemView, item ->
@@ -37,10 +38,12 @@ class NotificationsFragment :
         }
     }
 
+    @SuppressLint("ResourceType")
     private val _cardAdapter =
         EmptyViewAdapter<ExampleListModel>(
             R.layout.instruction_list_item,
             R.layout.new_item,
+            R.id.iv_drag,
             onBind = { view, item, _ ->
                 view.findViewById<TextView>(R.id.tv_title).text = item.title
                 view.findViewById<TextView>(R.id.tv_info).text = item.author
