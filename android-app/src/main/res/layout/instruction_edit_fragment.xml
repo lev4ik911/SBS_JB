@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.profile.ProfileViewModel" />
+            type="by.iba.sbs.ui.instruction.InstructionEditViewModel" />
     </data>
 
     <FrameLayout

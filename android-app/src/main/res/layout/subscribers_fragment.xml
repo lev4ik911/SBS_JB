@@ -5,13 +5,13 @@
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.instruction.InstructionViewModel" />
+            type="by.iba.sbs.ui.profile.SubscribersViewModel" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="by.iba.sbs.ui.instruction.InstructionFragment">
+        tools:context="by.iba.sbs.ui.profile.SubscribersFragment">
 
         <TextView
             android:layout_width="match_parent"

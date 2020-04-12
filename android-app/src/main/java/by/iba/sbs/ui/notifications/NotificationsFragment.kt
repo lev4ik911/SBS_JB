@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_LONG
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
@@ -49,7 +48,7 @@ class NotificationsFragment :
             isItemsEquals = { oldItem, newItem ->
                 oldItem.title == newItem.title
             }).also {
-            it.emptyViewId =  R.layout.new_item
+            it.emptyViewId = R.layout.new_item
             it.dragLayoutId = R.id.iv_drag
         }
 

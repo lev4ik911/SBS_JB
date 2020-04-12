@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewmodel"
             type="by.iba.sbs.ui.profile.ProfileViewModel" />
@@ -30,6 +31,7 @@
                 android:elevation="@dimen/spacing_normal"
                 android:padding="@dimen/spacing_small"
                 app:cardCornerRadius="@dimen/corner_radius">
+
                 <ImageButton
                     android:id="@+id/btn_open_profile"
                     style="@style/Widget.AppCompat.ActionButton.Overflow"
@@ -38,6 +40,7 @@
                     android:layout_gravity="end"
                     android:src="@drawable/account_edit_outline"
                     android:tint="@color/textColorSecondary" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -75,10 +78,12 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
-<androidx.viewpager2.widget.ViewPager2
-    android:layout_below="@id/cards"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/cards" />
         </RelativeLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -97,14 +102,14 @@
             android:layout_width="@dimen/image_padding"
             android:layout_height="@dimen/image_padding"
             app:layout_anchor="@id/iv_profile"
-            app:layout_anchorGravity="center"/>
+            app:layout_anchorGravity="center" />
 
         <ImageView
             android:id="@+id/iv_status"
             android:layout_width="@dimen/spacing_xxxlarge"
             android:layout_height="@dimen/spacing_xxxlarge"
-            android:src="@drawable/star"
             android:padding="@dimen/spacing_xxsmall"
+            android:src="@drawable/star"
             android:tint="@color/colorLightYellow"
             app:layout_anchor="@id/layout_avatar"
             app:layout_anchorGravity="bottom|right"

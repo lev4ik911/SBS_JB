@@ -1,6 +1,5 @@
 package by.iba.sbs.ui.instruction
 
-import androidx.lifecycle.ViewModel
 import by.iba.mvvmbase.BaseViewModel
 import by.iba.mvvmbase.dispatcher.EventsDispatcher
 import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner

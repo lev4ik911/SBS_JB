@@ -9,7 +9,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class InstructionFragment : BaseEventsFragment<InstructionFragmentBinding, InstructionViewModel, InstructionViewModel.EventsListener>(),
     InstructionViewModel.EventsListener {
 
-    override val layoutId: Int = R.layout.profile_fragment
+    override val layoutId: Int = R.layout.instruction_fragment
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: InstructionViewModel by viewModel()
 }
