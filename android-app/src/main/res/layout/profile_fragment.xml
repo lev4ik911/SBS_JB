@@ -78,6 +78,19 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabMode="scrollable"
+                android:layout_below="@id/cards"
+                />
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/tabs"
+                />
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/pager"
