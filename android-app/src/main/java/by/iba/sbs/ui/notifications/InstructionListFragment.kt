@@ -1,6 +1,7 @@
 package by.iba.sbs.ui.notifications
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -11,17 +12,18 @@ import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
-import by.iba.sbs.databinding.NotificationsFragmentBinding
+import by.iba.sbs.databinding.InstructionListFragmentBinding
+import by.iba.sbs.ui.instruction.InstructionActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-class NotificationsFragment :
-    BaseEventsFragment<NotificationsFragmentBinding, NotificationsViewModel, NotificationsViewModel.EventsListener>(),
-    NotificationsViewModel.EventsListener {
+class InstructionListFragment :
+    BaseEventsFragment<InstructionListFragmentBinding, InstructionListViewModel, InstructionListViewModel.EventsListener>(),
+    InstructionListViewModel.EventsListener {
 
-    override val layoutId: Int = R.layout.notifications_fragment
+    override val layoutId: Int = R.layout.instruction_list_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: NotificationsViewModel by viewModel()
+    override val viewModel: InstructionListViewModel by viewModel()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<RecyclerView>(R.id.rv_notifications).also {
@@ -30,10 +32,10 @@ class NotificationsFragment :
         }
         _cardAdapter.addItems(getData())
         _cardAdapter.onItemClick = { pos, itemView, item ->
-            Toast.makeText(context, pos.toString(), LENGTH_LONG).show()
+            startActivity(Intent(activity, InstructionActivity::class.java))
         }
         _cardAdapter.onEmptyViewItemClick = {
-            Toast.makeText(context, "Add instruction click", LENGTH_LONG).show()
+            startActivity(Intent(activity, InstructionActivity::class.java))
         }
     }
 

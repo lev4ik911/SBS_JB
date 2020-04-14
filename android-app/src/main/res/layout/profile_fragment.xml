@@ -79,7 +79,7 @@
 
             </androidx.cardview.widget.CardView>
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
+                android:id="@+id/tabs_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tabMode="scrollable"
@@ -89,14 +89,9 @@
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/tabs"
+                android:layout_below="@id/tabs_profile"
                 />
 
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/cards" />
         </RelativeLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView

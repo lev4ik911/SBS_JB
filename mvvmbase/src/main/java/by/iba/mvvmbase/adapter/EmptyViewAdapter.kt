@@ -15,8 +15,10 @@ class EmptyViewAdapter<T>(
     override val onBind: (view: View, item: T, position: Int) -> Unit,
     isItemsEquals: (oldItem: T, newItem: T) -> Boolean
 ) : BaseAdapter<T>(layoutId, onBind, isItemsEquals) {
-    @LayoutRes  var emptyViewId: Int = 0
-    @LayoutRes  var dragLayoutId: Int = 0
+    @LayoutRes
+    var emptyViewId: Int = 0
+    @LayoutRes
+    var dragLayoutId: Int = 0
     val itemTouchHelper by lazy {
         val simpleItemTouchCallback =
             object : ItemTouchHelper.SimpleCallback(UP or DOWN or START or END, 0) {
@@ -26,6 +28,7 @@ class EmptyViewAdapter<T>(
                     viewHolder: RecyclerView.ViewHolder,
                     target: RecyclerView.ViewHolder
                 ): Boolean {
+                    if (dragLayoutId == 0) return false
                     val adapter = recyclerView.adapter as EmptyViewAdapter<T>
                     val from = viewHolder.adapterPosition
                     val to = target.adapterPosition
@@ -58,8 +61,7 @@ class EmptyViewAdapter<T>(
                     viewHolder.itemView.alpha = 1.0f
                 }
             }
-
-        ItemTouchHelper(simpleItemTouchCallback)
+            ItemTouchHelper(simpleItemTouchCallback)
     }
 
     fun moveItem(from: Int, to: Int) {

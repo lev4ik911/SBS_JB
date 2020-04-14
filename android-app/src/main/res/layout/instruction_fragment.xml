@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -8,15 +9,133 @@
             type="by.iba.sbs.ui.instruction.InstructionViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/htab_maincontent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="by.iba.sbs.ui.instruction.InstructionFragment">
+        android:fitsSystemWindows="true">
 
-        <TextView
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:fitsSystemWindows="true"
+            >
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/htab_collapse_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_image_size"
+                android:fitsSystemWindows="true"
+                app:contentScrim="@android:color/white"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:titleEnabled="false"
+                app:toolbarId="@+id/toolbar_description">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_collapseMode="parallax">
+
+                    <ImageView
+                        android:id="@+id/htab_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fitsSystemWindows="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_paneer" />
+
+                </RelativeLayout>
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:contentInsetStartWithNavigation="0dp"
+                    app:layout_collapseMode="pin"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:navigationIcon="@drawable/chevron_left"
+                    app:title="Recipe Detail"
+                    app:titleTextColor="?attr/colorPrimaryDark" />
+
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Hello" />
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:background="@drawable/bg_gradient"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    </FrameLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xsmall"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/spacing_large">
+
+                <TextView
+                    android:id="@+id/tvDishName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/spacing_small"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:layout_toStartOf="@id/ivFavourite"
+                    android:text="@{viewmodel.name}"
+                    android:textAppearance="@style/Text.Main.Bold"
+                     />
+
+                <ImageView
+                    android:id="@+id/ivFavourite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/spacing_small"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/heart"
+                    android:tint="@color/colorLightRed" />
+
+                <TextView
+                    android:id="@+id/tv_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tvDishName"
+                    android:layout_marginHorizontal="@dimen/spacing_small"
+                    android:layout_marginTop="@dimen/spacing_xsmall"
+                    android:gravity="center"
+                    android:text="@{String.format(@string/text_rating, viewmodel.rating)}"
+                    android:textAppearance="@style/Text.Description"
+                     />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_steps"
+                    android:layout_below="@+id/tv_rating"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_marginVertical="@dimen/spacing_xsmall"
+                    tools:listitem="@layout/instruction_step_list_item"/>
+
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="@dimen/spacing_xlarge"
+            android:layout_height="@dimen/spacing_xlarge"
+            android:layout_centerVertical="true"
+            android:layout_marginHorizontal="@dimen/spacing_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_profile"
+            app:layout_anchor="@id/toolbar_description"
+            app:layout_anchorGravity="center|end" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
 </layout>

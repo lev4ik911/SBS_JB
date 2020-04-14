@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.notifications.NotificationsViewModel" />
+            type="by.iba.sbs.ui.notifications.InstructionListViewModel" />
     </data>
     <RelativeLayout
         android:layout_width="match_parent"

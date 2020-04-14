@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_instruction_view"
         android:name="by.iba.sbs.ui.instruction.InstructionFragment"
-        android:label="instruction_fragment"
+        android:label=""
         tools:layout="@layout/instruction_fragment" />
     <fragment
         android:id="@+id/navigation_instruction_edit"

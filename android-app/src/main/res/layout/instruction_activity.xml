@@ -7,8 +7,6 @@
     android:layout_height="match_parent"
     tools:context="by.iba.sbs.ui.instruction.InstructionActivity">
 
-    <include layout="@layout/toolbar" />
-
     <fragment
         android:id="@+id/fragment_navigation_instruction"
         android:name="androidx.navigation.fragment.NavHostFragment"

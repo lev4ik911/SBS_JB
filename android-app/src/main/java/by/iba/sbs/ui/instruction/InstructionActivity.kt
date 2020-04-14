@@ -12,6 +12,9 @@ class InstructionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.instruction_activity)
+       // val toolbar = this.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_main)
+     //   toolbar.setNavigationIcon(R.drawable.chevron_left)
+      //  setSupportActionBar(toolbar)
         val navController = findNavController(R.id.fragment_navigation_instruction)
 //        // Passing each menu ID as a set of Ids because each
 //        // menu should be considered as top level destinations.
@@ -22,6 +25,6 @@ class InstructionActivity : AppCompatActivity() {
             )
         )
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
+      //  setupActionBarWithNavController(navController, appBarConfiguration)
     }
 }

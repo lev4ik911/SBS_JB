@@ -19,12 +19,17 @@
 
     <fragment
             android:id="@+id/navigation_notifications"
-            android:name="by.iba.sbs.ui.notifications.NotificationsFragment"
+            android:name="by.iba.sbs.ui.notifications.InstructionListFragment"
             android:label="@string/title_notifications"
-            tools:layout="@layout/notifications_fragment"/>
+            tools:layout="@layout/instruction_list_fragment"/>
     <fragment
         android:id="@+id/navigation_profile"
         android:name="by.iba.sbs.ui.profile.ProfileFragment"
         android:label="profile_fragment"
         tools:layout="@layout/profile_fragment" />
+    <activity
+        android:id="@+id/navigation_instructionActivity"
+        android:name="by.iba.sbs.ui.instruction.InstructionActivity"
+        android:label="instruction_activity"
+        tools:layout="@layout/instruction_activity" />
 </navigation>

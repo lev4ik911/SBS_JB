@@ -37,8 +37,6 @@
                 android:src="@drawable/star"
                 android:tint="@color/colorLightYellow" />
         </androidx.cardview.widget.CardView>
-
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -97,8 +95,6 @@
                     android:rating="3" />
             </LinearLayout>
         </LinearLayout>
-
-
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_drag"
             android:layout_width="wrap_content"
@@ -106,6 +102,5 @@
             android:layout_gravity="center"
             android:padding="@dimen/spacing_small"
             android:src="@drawable/drag" />
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>
