@@ -108,6 +108,7 @@
         <item name="cornerRadius">@dimen/corner_radius</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:elevation">@dimen/spacing_xxsmall</item>
     </style>
 
     <style name="Button.Toggle" parent="Widget.MaterialComponents.Button.TextButton">
