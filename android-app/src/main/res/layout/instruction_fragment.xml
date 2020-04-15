@@ -26,7 +26,7 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/htab_collapse_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/profile_image_size"
+                android:layout_height="@dimen/toolbar_height"
                 android:fitsSystemWindows="true"
                 app:contentScrim="@android:color/white"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
@@ -57,7 +57,9 @@
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:navigationIcon="@drawable/chevron_left"
                     app:title="Recipe Detail"
-                    app:titleTextColor="?attr/colorPrimaryDark" />
+                    app:titleTextColor="?attr/colorPrimaryDark" >
+
+                </androidx.appcompat.widget.Toolbar>
 
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -84,20 +86,21 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/spacing_normal"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_toStartOf="@id/ivFavourite"
+                    android:layout_toStartOf="@id/iv_action_button"
                     android:text="@{viewmodel.name}"
                     android:textAppearance="@style/Text.Main.Bold"
                      />
 
-                <ImageView
-                    android:id="@+id/ivFavourite"
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/iv_action_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/spacing_normal"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/heart"
+                    style="@style/Widget.AppCompat.ActionButton.Overflow"
+                    android:onClick="@{() -> viewmodel.onActionButtonClick()}"
+                    android:src="@drawable/heart_outline"
                     android:tint="@color/colorLightRed" />
 
                 <TextView

@@ -2,7 +2,7 @@ package by.iba.sbs.di
 
 import by.iba.ecl.ui.MainViewModel
 import by.iba.sbs.library.service.SystemInformation
-import by.iba.sbs.service.SystemInfo
+import by.iba.sbs.tools.SystemInfo
 import by.iba.sbs.ui.instruction.InstructionEditViewModel
 import by.iba.sbs.ui.instruction.InstructionViewModel
 import by.iba.sbs.ui.login.LoginViewModel
