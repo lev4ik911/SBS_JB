@@ -12,7 +12,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            android:layout_marginBottom="@dimen/spacing_normal"
             android:padding="@dimen/spacing_xsmall">
 
         <!-- image layout -->
@@ -27,7 +26,7 @@
                 app:shimmer_colored="true"
                 app:shimmer_duration="5000"
                 app:shimmer_highlight_alpha="0.9"
-                app:shimmer_highlight_color="?attr/colorPrimary"
+                app:shimmer_highlight_color="?attr/colorAccent"
                 app:shimmer_shape="radial">
             <LinearLayout
                     android:id="@+id/text_layout"
@@ -39,9 +38,9 @@
                     android:padding="@dimen/spacing_small">
 
                 <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/outline_home_24" />
+                        android:layout_width="@dimen/profile_image_size"
+                        android:layout_height="@dimen/profile_image_size"
+                        android:src="@drawable/outline_lock_24" />
 
                 <TextView
                         style="@style/Text.Logo"
@@ -49,23 +48,6 @@
                         android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="@string/app_name" />
-
-                <TextView
-                        style="@style/Text.FragmentTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:singleLine="false"
-                        android:text="@string/app_description" />
-                <TextView
-                    android:id="@+id/tv_version"
-                    style="@style/Text.Description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/spacing_small"
-                    android:gravity="center"
-                    android:text="@{String.format(@string/app_version_str, viewmodel.appVersion)}"
-                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
@@ -93,13 +75,24 @@
                     app:viewmodel="@{viewmodel}" />
         </ViewFlipper>
 
-
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/Text.Email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_normal"
+            android:layout_marginTop="12dp"
+            android:gravity="end"
+            android:onClick="@{() -> viewmodel.onRegisterClick()}"
+            android:text="@string/caption_register"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/flipper_login" />
 
         <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.35" />
+                app:layout_constraintGuide_percent="0.5" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -10,20 +10,26 @@
         <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryVariant</item>
-        <item name="colorSecondary">@color/colorBlue</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
         <item name="colorError">@color/colorLightRed</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorButtonNormal">@color/colorLightBlue</item>
-        <item name="colorButtonAction">@color/colorBlue</item>
+        <item name="colorButtonNormal">@color/colorSecondary</item>
+        <item name="colorButtonAction">@color/colorAccent</item>
         <item name="iconTint">@color/textColorSecondary</item>
         <item name="colorBadgeNotification">@color/colorLightRed</item>
         <item name="colorTextDayOfWeek">@color/colorLightRed</item>
         <item name="colorTextDisabled">@color/textColorTertiary</item>
         <item name="textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
     </style>
-
-    <style name="Text" parent="TextAppearance.MaterialComponents.Body2">
+    <style name="Card" >
+        <item name="android:elevation">@dimen/spacing_xxxsmall</item>
+        <item name="cardCornerRadius">@dimen/corner_radius</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+    <style name="Text" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">?android:attr/textColorTertiary</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
     </style>
 
     <style name="Text.FragmentTitle" parent="Text">
@@ -53,23 +59,20 @@
         <item name="android:autoLink">phone</item>
     </style>
 
-    <style name="Text.Title" parent="Text">
-        <item name="android:textSize">@dimen/text_size_normal</item>
-    </style>
+
 
     <style name="Image.Clickable" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:clickable">true</item>
         <item name="android:padding">@dimen/spacing_xsmall</item>
     </style>
 
-    <style name="Text.Main" parent="Text">
-        <item name="android:textSize">@dimen/text_size_normal</item>
-    </style>
 
-    <style name="Text.Main.Bold" parent="Text.Main">
+    <style name="Text.Main.Bold" parent="Text">
         <item name="android:textStyle">bold</item>
     </style>
-
+    <style name="Text.Main.Link" parent="Text">
+        <item name="android:autoLink">web|email</item>
+    </style>
     <style name="Text.Description" parent="Text">
         <item name="android:textColor">?android:attr/textColorTertiary</item>
         <item name="android:textSize">@dimen/text_size_small</item>
@@ -105,6 +108,7 @@
         <item name="cornerRadius">@dimen/corner_radius</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:elevation">@dimen/spacing_xxsmall</item>
     </style>
 
     <style name="Button.Toggle" parent="Widget.MaterialComponents.Button.TextButton">
@@ -116,7 +120,7 @@
 
     <style name="Button.Action" parent="Button">
         <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
-        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="backgroundTint">?attr/colorButtonAction</item>
     </style>
 
 </resources>

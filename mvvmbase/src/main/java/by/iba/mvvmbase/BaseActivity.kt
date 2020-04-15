@@ -10,8 +10,8 @@ import com.shashank.sony.fancytoastlib.FancyToast
 
 abstract class BaseActivity<DB : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() {
     protected lateinit var binding: DB
-    protected abstract val viewModel: VM
     protected abstract val layoutId: Int
+    protected abstract val viewModel: VM
     protected abstract val viewModelVariableId: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {

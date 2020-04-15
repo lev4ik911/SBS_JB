@@ -5,12 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 
 open class BaseAdapter<T>(
-    private val layoutId: Int,
+    @LayoutRes private val layoutId: Int,
     open val onBind: (view: View, item: T, position: Int) -> Unit,
     open val isSameContent: (oldItem: T, newItem: T) -> Boolean
 ) : RecyclerView.Adapter<BaseAdapter<T>.ViewHolder<T>>(), Filterable {
@@ -20,7 +21,7 @@ open class BaseAdapter<T>(
     var itemsList = ArrayList<T>()
 
     var onItemClick: ((pos: Int, view: View, item: T) -> Unit)? = null
-
+    var onEmptyViewItemClick: (() -> Unit)? = null
     var filterCriteria: ((item: T, textToSearch: String) -> Boolean)? = null
 
     init {
@@ -32,6 +33,7 @@ open class BaseAdapter<T>(
         super.onAttachedToRecyclerView(recyclerView)
         mRecyclerView = recyclerView
     }
+
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
@@ -92,16 +94,22 @@ open class BaseAdapter<T>(
     ) : RecyclerView.ViewHolder(view), View.OnClickListener {
 
         override fun onClick(p0: View?) {
-            onItemClick?.invoke(adapterPosition, p0!!, itemsList[adapterPosition])
+            if (adapterPosition < itemCount - 1)
+                onItemClick?.invoke(adapterPosition, p0!!, itemsList[adapterPosition])
+            else
+                onEmptyViewItemClick?.invoke()
         }
 
         fun bind(item: T, position: Int) {
             view.setOnClickListener(this)
-            onBind(view, item, position)
+                onBind(view, item, position)
+        }
+        fun bindEmptyView() {
+            view.setOnClickListener(this)
         }
     }
 
-    private infix fun ViewGroup.inflate(layoutRes: Int): View =
+    infix fun ViewGroup.inflate(layoutRes: Int): View =
         LayoutInflater.from(context).inflate(layoutRes, this, false)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<T> {
@@ -110,7 +118,7 @@ open class BaseAdapter<T>(
 
     override fun getItemCount(): Int = itemsList.size
 
-    override fun onBindViewHolder(holder: ViewHolder<T>, pos: Int) {
+    open override fun onBindViewHolder(holder: ViewHolder<T>, pos: Int) {
         holder.bind(itemsList[pos], pos)
     }
 

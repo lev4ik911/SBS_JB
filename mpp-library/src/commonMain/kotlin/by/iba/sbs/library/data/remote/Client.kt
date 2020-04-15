@@ -1,6 +1,6 @@
 package by.iba.sbs.library.data.remote
 
-import by.iba.sbs.library.service.LocalStorage
+import by.iba.sbs.library.service.LocalSettings
 import com.github.aakira.napier.Napier
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
@@ -18,7 +18,7 @@ import kotlinx.serialization.json.JsonConfiguration
 
 
 class Client(private val settings: Settings) {
-   private val localStorage: LocalStorage by lazy { LocalStorage(settings) }
+   private val localStorage: LocalSettings by lazy { LocalSettings(settings) }
 
     private val json: Json by lazy {
         Json(JsonConfiguration.Default)

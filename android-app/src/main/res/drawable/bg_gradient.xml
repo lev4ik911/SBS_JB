@@ -6,6 +6,6 @@
     <gradient
         android:angle="45"
         android:endColor="@android:color/white"
-        android:startColor="?attr/colorButtonNormal"
+        android:startColor="?attr/colorSecondaryVariant"
         />
 </shape>

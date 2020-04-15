@@ -6,6 +6,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.ViewFlipper
+import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.Extentions.Companion.waitForLayout
@@ -30,6 +31,9 @@ class LoginFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            (activity as LoginActivity).navController.navigate(R.id.navigation_splash)
+        }
         viewModel.init()
         view.findViewById<TextInputEditText>(R.id.et_password)?.setOnEditorActionListener(this)
         view.findViewById<TextInputEditText>(R.id.et_login)?.setOnEditorActionListener(this)
@@ -81,6 +85,10 @@ class LoginFragment :
 
     override fun onResetPassword() {
         (activity as LoginActivity).navController.navigate(R.id.navigation_reset)
+    }
+
+    override fun onRegister() {
+        (activity as LoginActivity).navController.navigate(R.id.navigation_register)
     }
 
 

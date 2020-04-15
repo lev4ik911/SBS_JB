@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="@{viewmodel.isLoginEnabled}"
-            android:onClick="@{() -> viewmodel.onNextButtonPressed()}"
+            android:onClick="@{() -> viewmodel.onNextButtonClick()}"
             android:paddingHorizontal="@dimen/spacing_xlarge"
             android:text="@string/btn_next" />
     </androidx.appcompat.widget.LinearLayoutCompat>

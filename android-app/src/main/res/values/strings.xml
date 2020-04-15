@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SBS</string>
+    <string name="app_description">Step by step instructions</string>
     <string name="app_version_str">Version: %s</string>
 
     <string name="no_data">No data</string>
@@ -9,7 +10,7 @@
     <string name="language_hint">Language code</string>
     <string name="retry_btn">Retry</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
+    <string name="title_instructions">Instructions</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
@@ -22,7 +23,7 @@
     <string name="caption_remember_me">Remember</string>
     <string name="btn_next">Next</string>
     <string name="caption_work_email">Your work e-mail</string>
-    <string name="app_description">Step by step instructions</string>
+
     <string name="caption_reset_password">Reset password</string>
     <string name="text_reset_password">Reset password</string>
     <string name="caption_old_password">Enter old password</string>
@@ -32,4 +33,12 @@
     <string name="caption_new_password">Enter new password</string>
     <string name="btn_confirm">Confirm</string>
     <string name="btn_reset">Reset</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_register">Register</string>
+    <string name="btn_just_look"> I wanna see</string>
+    <string name="caption_register">Register</string>
+    <string name="text_rating">Rating: %s</string>
+    <string name="create_instruction">Add instruction</string>
+    <string name="instruction_name">Instruction name</string>
+    <string name="create_step">Add step</string>
 </resources>

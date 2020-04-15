@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/instruction_navigation"
+    app:startDestination="@id/navigation_instruction_view">
+
+    <fragment
+        android:id="@+id/navigation_instruction_view"
+        android:name="by.iba.sbs.ui.instruction.InstructionFragment"
+        android:label=""
+        tools:layout="@layout/instruction_fragment" />
+    <fragment
+        android:id="@+id/navigation_instruction_edit"
+        android:name="by.iba.sbs.ui.instruction.InstructionEditFragment"
+        android:label="instruction_edit_fragment"
+        tools:layout="@layout/instruction_edit_fragment" />
+</navigation>

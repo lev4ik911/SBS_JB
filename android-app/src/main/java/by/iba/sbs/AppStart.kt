@@ -1,6 +1,7 @@
 package by.iba.sbs
 
 import android.app.Application
+import by.iba.sbs.di.serviceModule
 import by.iba.sbs.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
@@ -24,7 +25,8 @@ class AppStart : Application() {
             // module list
             modules(
                 listOf(
-                    viewModelModule
+                    viewModelModule,
+                    serviceModule
                 )
             )
         }

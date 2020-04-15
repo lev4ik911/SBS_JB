@@ -7,19 +7,21 @@ import by.iba.mvvmbase.BaseViewModel
 import by.iba.mvvmbase.dispatcher.EventsDispatcher
 import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
 import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
-import by.iba.sbs.library.service.LocalStorage
+import by.iba.sbs.library.service.LocalSettings
+import by.iba.sbs.library.service.SystemInformation
 import com.russhwolf.settings.AndroidSettings
 
-class LoginViewModel(context: Context) : BaseViewModel(),
+class LoginViewModel(context: Context, systemInfo:SystemInformation) : BaseViewModel(),
     EventsDispatcherOwner<LoginViewModel.EventsListener> {
 
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
-    val appVersion: String = "version"//settings.appVersion
+
+    val appVersion: String = systemInfo.getAppVersion()
     val isLoginEnabled = MutableLiveData(true)
-    private val localStorage: LocalStorage by lazy {
+    private val localStorage: LocalSettings by lazy {
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
         val settings = AndroidSettings(sharedPrefs)
-        LocalStorage(settings)
+        LocalSettings(settings)
     }
     val keepLogin = MutableLiveData(true).apply {
         value = localStorage.keepLogin
@@ -43,23 +45,26 @@ class LoginViewModel(context: Context) : BaseViewModel(),
 
     val password = MutableLiveData("")
 
-    fun onLoginButtonPressed() {
+    fun onLoginButtonClick() {
     }
 
-    fun onNextButtonPressed() {
+    fun onNextButtonClick() {
         eventsDispatcher.dispatchEvent { flipToPassword() }
     }
 
-    fun onBackButtonPressed() {
+    fun onBackButtonClick() {
         eventsDispatcher.dispatchEvent { flipToLogin() }
     }
 
-   fun  onResetPassword(){
+   fun  onResetPasswordClick(){
        eventsDispatcher.dispatchEvent { onResetPassword() }
    }
-
+    fun  onRegisterClick(){
+        eventsDispatcher.dispatchEvent { onRegister() }
+    }
     interface EventsListener {
         fun onResetPassword()
+        fun onRegister()
         fun routeToMainScreen()
         fun routeToLoginScreen()
         fun flipToPassword()

@@ -46,7 +46,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
     tasks.withType < org.jetbrains.kotlin.gradle.tasks.KotlinCompile > {
         kotlinOptions.jvmTarget = "1.8"
     }
@@ -67,7 +69,7 @@ dependencies {
     implementation(Deps.Libs.MultiPlatform.napier.android !!)
 
     implementation("com.google.android.material:material:1.1.0")
-    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta4")
     implementation("androidx.navigation:navigation-fragment:2.2.1")
     implementation("androidx.navigation:navigation-ui:2.2.1")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
@@ -82,6 +84,8 @@ dependencies {
     implementation("com.futuremind.recyclerfastscroll:fastscroll:0.2.5")
     implementation("com.facebook.shimmer:shimmer:0.5.0")
     implementation("com.github.ybq:Android-SpinKit:1.4.0")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
     implementation(project(":mpp-library"))
     implementation(project(":mvvmbase"))
 }
