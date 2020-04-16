@@ -42,4 +42,6 @@
     <string name="instruction_name">Instruction name</string>
     <string name="create_step">Add step</string>
     <string name="open_activity_transition">OpenActivityTransition</string>
+    <string name="hint_instruction_name">Instruction name</string>
+    <string name="hint_instruction_description">Description (optional)</string>
 </resources>

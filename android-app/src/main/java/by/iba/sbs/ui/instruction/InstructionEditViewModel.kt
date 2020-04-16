@@ -11,6 +11,7 @@ import java.util.ArrayList
 class InstructionEditViewModel : BaseViewModel(), EventsDispatcherOwner<InstructionEditViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
     val name = MutableLiveData("Отпадный шашлычок!")
+    val description = MutableLiveData("Отпадный шашлычок!")
     val steps = MutableLiveData<List<ExampleListModel>>().apply {
         val mData = ArrayList<ExampleListModel>()
         mData.add(ExampleListModel("Свиную шею нарезать одинаковыми кусочками, не мелкими."))

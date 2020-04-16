@@ -3,7 +3,6 @@ package by.iba.sbs.ui.notifications
 import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -18,7 +17,6 @@ import by.iba.sbs.ui.instruction.InstructionActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
-
 class InstructionListFragment :
     BaseEventsFragment<InstructionListFragmentBinding, InstructionListViewModel, InstructionListViewModel.EventsListener>(),
     InstructionListViewModel.EventsListener {
@@ -29,29 +27,25 @@ class InstructionListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<RecyclerView>(R.id.rv_notifications).also {
-            it.adapter = _cardAdapter
-            _cardAdapter.itemTouchHelper.attachToRecyclerView(it)
+            it.adapter = instructionsAdapter
+            instructionsAdapter.itemTouchHelper.attachToRecyclerView(it)
         }
-        _cardAdapter.addItems(getData())
-        _cardAdapter.onItemClick = { pos, itemView, item ->
-
+        instructionsAdapter.addItems(getData())
+        instructionsAdapter.onItemClick = { pos, itemView, item ->
             val transitionSharedName = this.getString(R.string.open_activity_transition)
-            val imageView = itemView.findViewById<ImageView>(R.id.iv_preview)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && imageView != null) {
-                imageView.setTransitionName(transitionSharedName)
-                val options = ActivityOptions.makeSceneTransitionAnimation(activity, imageView, transitionSharedName)
+             itemView.findViewById<ImageView>(R.id.iv_preview).apply {
+                this.transitionName = transitionSharedName
+                val options = ActivityOptions.makeSceneTransitionAnimation(activity, this, transitionSharedName)
                 startActivity(Intent(activity, InstructionActivity::class.java), options?.toBundle())
-            } else {
-                startActivity(Intent(activity, InstructionActivity::class.java))
-            }
+             }
         }
-        _cardAdapter.onEmptyViewItemClick = {
+        instructionsAdapter.onEmptyViewItemClick = {
             startActivity(Intent(activity, InstructionActivity::class.java))
         }
     }
 
     @SuppressLint("ResourceType")
-    private val _cardAdapter =
+    private val instructionsAdapter =
         EmptyViewAdapter<ExampleListModel>(
             R.layout.instruction_list_item,
             onBind = { view, item, _ ->

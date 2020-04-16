@@ -26,16 +26,16 @@ class InstructionFragment :
         view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_description)?.title =
             viewModel.name.value
         view.findViewById<RecyclerView>(R.id.rv_steps).also {
-            it.adapter = _cardAdapter
-            _cardAdapter.itemTouchHelper.attachToRecyclerView(it)
+            it.adapter = stepsAdapter
+            stepsAdapter.itemTouchHelper.attachToRecyclerView(it)
         }
         viewModel.steps.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            _cardAdapter.addItems(it)
+            stepsAdapter.addItems(it)
         })
-        _cardAdapter.onItemClick = { pos, itemView, item ->
+        stepsAdapter.onItemClick = { pos, itemView, item ->
             Toast.makeText(context, pos.toString(), Toast.LENGTH_LONG).show()
         }
-        _cardAdapter.onEmptyViewItemClick = {
+        stepsAdapter.onEmptyViewItemClick = {
             // startActivity(Intent(activity, InstructionActivity::class.java))
         }
         initActionButton()
@@ -44,6 +44,9 @@ class InstructionFragment :
         })
     }
 
+    fun View.backClick() {
+        activity?.finish()
+    }
     private fun initActionButton() {
         view?.findViewById<ImageView>(R.id.iv_action_button).apply {
             when {
@@ -64,7 +67,7 @@ class InstructionFragment :
     }
 
     @SuppressLint("ResourceType")
-    private val _cardAdapter =
+    private val stepsAdapter =
         EmptyViewAdapter<ExampleListModel>(
             R.layout.instruction_step_list_item,
             onBind = { view, item, _ ->
