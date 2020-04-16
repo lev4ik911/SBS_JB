@@ -1,12 +1,13 @@
 package by.iba.sbs.ui.notifications
 
 import android.annotation.SuppressLint
+import android.app.ActivityOptions
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
 import androidx.recyclerview.widget.RecyclerView
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
@@ -16,6 +17,7 @@ import by.iba.sbs.databinding.InstructionListFragmentBinding
 import by.iba.sbs.ui.instruction.InstructionActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
+
 
 class InstructionListFragment :
     BaseEventsFragment<InstructionListFragmentBinding, InstructionListViewModel, InstructionListViewModel.EventsListener>(),
@@ -32,7 +34,16 @@ class InstructionListFragment :
         }
         _cardAdapter.addItems(getData())
         _cardAdapter.onItemClick = { pos, itemView, item ->
-            startActivity(Intent(activity, InstructionActivity::class.java))
+
+            val transitionSharedName = this.getString(R.string.open_activity_transition)
+            val imageView = itemView.findViewById<ImageView>(R.id.iv_preview)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && imageView != null) {
+                imageView.setTransitionName(transitionSharedName)
+                val options = ActivityOptions.makeSceneTransitionAnimation(activity, imageView, transitionSharedName)
+                startActivity(Intent(activity, InstructionActivity::class.java), options?.toBundle())
+            } else {
+                startActivity(Intent(activity, InstructionActivity::class.java))
+            }
         }
         _cardAdapter.onEmptyViewItemClick = {
             startActivity(Intent(activity, InstructionActivity::class.java))

@@ -123,4 +123,21 @@
         <item name="backgroundTint">?attr/colorButtonAction</item>
     </style>
 
+
+    <style name="Theme.ui.MainActivity" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowActivityTransitions">true</item>
+    </style>
+
+    <style name="Theme.ui.instruction.InstructionActivity" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowActivityTransitions">true</item>
+
+        <item name="android:windowSharedElementEnterTransition">
+            @transition/open_activity_transition
+        </item>
+
+        <item name="android:windowSharedElementExitTransition">
+            @transition/open_activity_transition
+        </item>
+    </style>
+
 </resources>

@@ -44,6 +44,7 @@
                         android:layout_height="match_parent"
                         android:fitsSystemWindows="true"
                         android:scaleType="fitXY"
+                        android:transitionName="@string/open_activity_transition"
                         android:src="@drawable/ic_paneer" />
 
                 </RelativeLayout>
