@@ -33,6 +33,8 @@
                 android:elevation="@dimen/spacing_xxxsmall"
                 android:padding="@dimen/spacing_small"
                 android:scaleType="fitXY"
+                android:clickable="true"
+                android:focusable="true"
                 android:src="@drawable/camera_outline"
                 android:tint="@android:color/white" />
         </androidx.cardview.widget.CardView>

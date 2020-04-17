@@ -87,22 +87,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/spacing_normal"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_toStartOf="@id/iv_action_button"
                     android:text="@{viewmodel.name}"
+                    android:layout_marginEnd="@dimen/spacing_xxxxlarge"
                     android:textAppearance="@style/Text.Main.Bold"
                      />
 
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/iv_action_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/spacing_normal"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/spacing_small"
-                    style="@style/Widget.AppCompat.ActionButton.Overflow"
-                    android:onClick="@{() -> viewmodel.onActionButtonClick()}"
-                    android:src="@drawable/heart_outline"
-                    android:tint="@color/colorLightRed" />
 
                 <TextView
                     android:id="@+id/te_description"
@@ -138,6 +127,21 @@
             android:src="@drawable/ic_profile"
             app:layout_anchor="@id/toolbar_description"
             app:layout_anchorGravity="center|end" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/f_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/heart"
+            android:layout_margin="@dimen/spacing_large"
+            app:layout_anchor="@id/htab_collapse_toolbar"
+            app:layout_anchorGravity="bottom|end"
+            android:tint="@color/colorLightRed"
+            android:backgroundTint="@android:color/white"
+            app:borderWidth="0dp"
+            app:elevation="6dp"
+            app:fabSize="normal"
+            android:onClick="@{() -> viewmodel.onActionButtonClick()}"
+            />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

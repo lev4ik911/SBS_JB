@@ -70,11 +70,11 @@ dependencies {
 
     implementation("com.google.android.material:material:1.1.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta4")
-    implementation("androidx.navigation:navigation-fragment:2.2.1")
-    implementation("androidx.navigation:navigation-ui:2.2.1")
+    implementation("androidx.navigation:navigation-fragment:2.2.2")
+    implementation("androidx.navigation:navigation-ui:2.2.2")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.2.1")
-    implementation("androidx.navigation:navigation-ui-ktx:2.2.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.2.2")
+    implementation("androidx.navigation:navigation-ui-ktx:2.2.2")
     // Koin AndroidX Scope features
     implementation("org.koin:koin-androidx-scope:2.0.1")
 // Koin AndroidX ViewModel features
@@ -86,6 +86,7 @@ dependencies {
     implementation("com.github.ybq:Android-SpinKit:1.4.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
+    implementation ("com.github.yalantis:ucrop:2.2.4")
     implementation(project(":mpp-library"))
     implementation(project(":mvvmbase"))
 }

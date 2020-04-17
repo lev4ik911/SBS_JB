@@ -48,11 +48,11 @@ class InstructionFragment :
         activity?.finish()
     }
     private fun initActionButton() {
-        view?.findViewById<ImageView>(R.id.iv_action_button).apply {
+        view?.findViewById<ImageView>(R.id.f_action_button).apply {
             when {
                 viewModel.isInstructionOwner.value!! -> {
                     this?.setImageResource(R.drawable.file_document_edit_outline)
-                    this?.setColorFilter(resources.getColor(R.color.textColorSecondary))
+                    this?.setColorFilter(resources.getColor(R.color.colorAccent))
                 }
                 viewModel.isFavorite.value!! -> {
                     this?.setImageResource(R.drawable.heart)
