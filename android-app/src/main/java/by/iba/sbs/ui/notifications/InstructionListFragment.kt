@@ -1,12 +1,13 @@
 package by.iba.sbs.ui.notifications
 
 import android.annotation.SuppressLint
-import android.app.ActivityOptions
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
@@ -16,6 +17,7 @@ import by.iba.sbs.databinding.InstructionListFragmentBinding
 import by.iba.sbs.ui.instruction.InstructionActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
+import androidx.core.util.Pair
 
 class InstructionListFragment :
     BaseEventsFragment<InstructionListFragmentBinding, InstructionListViewModel, InstructionListViewModel.EventsListener>(),
@@ -32,12 +34,22 @@ class InstructionListFragment :
         }
         instructionsAdapter.addItems(getData())
         instructionsAdapter.onItemClick = { pos, itemView, item ->
-            val transitionSharedName = this.getString(R.string.open_activity_transition)
+            val transitionSharedNameImgView = this.getString(R.string.transition_name_img_view)
+            val transitionSharedNameTxtView = this.getString(R.string.transition_name_txt_view)
+            var imageViewPair: Pair<View, String>
+            val textViewPair: Pair<View, String>
              itemView.findViewById<ImageView>(R.id.iv_preview).apply {
-                this.transitionName = transitionSharedName
-                val options = ActivityOptions.makeSceneTransitionAnimation(activity, this, transitionSharedName)
-                startActivity(Intent(activity, InstructionActivity::class.java), options?.toBundle())
+                 this.transitionName = transitionSharedNameImgView
+                 imageViewPair = Pair.create(this, transitionSharedNameImgView)
              }
+             itemView.findViewById<TextView>(R.id.tv_title).apply {
+                 this.transitionName = transitionSharedNameTxtView
+                 textViewPair = Pair.create(this, transitionSharedNameTxtView)
+             }
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as Activity,
+                imageViewPair,
+                textViewPair)
+            startActivity(Intent(activity, InstructionActivity::class.java), options.toBundle())
         }
         instructionsAdapter.onEmptyViewItemClick = {
             startActivity(Intent(activity, InstructionActivity::class.java))

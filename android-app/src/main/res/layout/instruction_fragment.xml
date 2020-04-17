@@ -44,7 +44,7 @@
                         android:layout_height="match_parent"
                         android:fitsSystemWindows="true"
                         android:scaleType="fitXY"
-                        android:transitionName="@string/open_activity_transition"
+                        android:transitionName="@string/transition_name_img_view"
                         android:src="@drawable/ic_paneer" />
 
                 </RelativeLayout>
@@ -90,7 +90,7 @@
                     android:layout_marginEnd="@dimen/spacing_xxxxlarge"
                     android:text="@{viewmodel.name}"
                     android:textAppearance="@style/Text.Main.Bold"
-                     />
+                    android:transitionName="@string/transition_name_txt_view" />
 
 
                 <TextView

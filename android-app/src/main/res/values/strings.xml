@@ -41,7 +41,8 @@
     <string name="create_instruction">Add instruction</string>
     <string name="instruction_name">Instruction name</string>
     <string name="create_step">Add step</string>
-    <string name="open_activity_transition">OpenActivityTransition</string>
+    <string name="transition_name_img_view">ImageViewTransitionName</string>
+    <string name="transition_name_txt_view">TextViewTransitionName</string>
     <string name="hint_instruction_name">Instruction name</string>
     <string name="hint_instruction_description">Description (optional)</string>
 </resources>
