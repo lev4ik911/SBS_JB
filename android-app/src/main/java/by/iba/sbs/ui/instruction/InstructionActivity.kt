@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -42,5 +43,9 @@ class InstructionActivity : AppCompatActivity() {
         } else if (resultCode == UCrop.RESULT_ERROR) {
             val cropError = UCrop.getError(data!!)
         }
+    }
+
+    fun onToolbarClick(view: View) {
+        onBackPressed()
     }
 }

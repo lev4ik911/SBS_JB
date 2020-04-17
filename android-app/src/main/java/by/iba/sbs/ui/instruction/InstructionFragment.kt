@@ -23,8 +23,9 @@ class InstructionFragment :
     override val viewModel: InstructionViewModel by viewModel()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_description)?.title =
-            viewModel.name.value
+        view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_description)?.apply {
+        title = viewModel.name.value
+        }
         view.findViewById<RecyclerView>(R.id.rv_steps).also {
             it.adapter = stepsAdapter
             stepsAdapter.itemTouchHelper.attachToRecyclerView(it)

@@ -2,19 +2,16 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
         <variable
             name="viewmodel"
             type="by.iba.sbs.ui.instruction.InstructionViewModel" />
     </data>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/htab_maincontent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
-
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
@@ -22,7 +19,6 @@
             android:background="@android:color/white"
             android:fitsSystemWindows="true"
             >
-
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/htab_collapse_toolbar"
                 android:layout_width="match_parent"
@@ -32,12 +28,10 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
                 app:titleEnabled="false"
                 app:toolbarId="@+id/toolbar_description">
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_collapseMode="parallax">
-
                     <ImageView
                         android:id="@+id/htab_header"
                         android:layout_width="match_parent"
@@ -46,9 +40,7 @@
                         android:scaleType="fitXY"
                         android:transitionName="@string/transition_name_img_view"
                         android:src="@drawable/ic_paneer" />
-
                 </RelativeLayout>
-
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar_description"
                     android:layout_width="match_parent"
@@ -58,14 +50,11 @@
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:navigationIcon="@drawable/chevron_left"
                     app:title="Recipe Detail"
+                    android:onClick="onToolbarClick"
                     app:titleTextColor="?attr/colorPrimaryDark" >
-
                 </androidx.appcompat.widget.Toolbar>
-
-
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
-
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -73,14 +62,12 @@
             android:overScrollMode="never"
             android:background="@drawable/bg_gradient"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_xsmall"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/spacing_large">
-
                 <TextView
                     android:id="@+id/tv_name"
                     android:layout_width="match_parent"
@@ -89,10 +76,8 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:layout_marginEnd="@dimen/spacing_xxxxlarge"
                     android:text="@{viewmodel.name}"
-                    android:textAppearance="@style/Text.Main.Bold"
+                    android:textAppearance="@style/Text"
                     android:transitionName="@string/transition_name_txt_view" />
-
-
                 <TextView
                     android:id="@+id/te_description"
                     android:layout_width="wrap_content"
@@ -112,10 +97,8 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:layout_marginVertical="@dimen/spacing_xsmall"
                     tools:listitem="@layout/instruction_step_list_item"/>
-
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
-
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivProfile"
             android:layout_width="@dimen/spacing_xlarge"
@@ -138,12 +121,9 @@
             android:tint="@color/colorLightRed"
             android:backgroundTint="@android:color/white"
             app:borderWidth="0dp"
-            app:elevation="6dp"
+            app:elevation="@dimen/spacing_xsmall"
             app:fabSize="normal"
             android:onClick="@{() -> viewmodel.onActionButtonClick()}"
             />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
 </layout>
