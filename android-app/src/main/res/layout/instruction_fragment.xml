@@ -82,13 +82,13 @@
                 android:paddingBottom="@dimen/spacing_large">
 
                 <TextView
-                    android:id="@+id/tvDishName"
+                    android:id="@+id/tv_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/spacing_normal"
+                    android:layout_marginStart="@dimen/spacing_normal"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:text="@{viewmodel.name}"
                     android:layout_marginEnd="@dimen/spacing_xxxxlarge"
+                    android:text="@{viewmodel.name}"
                     android:textAppearance="@style/Text.Main.Bold"
                      />
 
@@ -97,7 +97,7 @@
                     android:id="@+id/te_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tvDishName"
+                    android:layout_below="@id/tv_name"
                     android:layout_marginHorizontal="@dimen/spacing_normal"
                     android:layout_marginTop="@dimen/spacing_xsmall"
                     android:gravity="center"

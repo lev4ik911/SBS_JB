@@ -23,6 +23,9 @@ class InstructionEditViewModel : BaseViewModel(), EventsDispatcherOwner<Instruct
 
         this.postValue( mData)
     }
+    fun onActionButtonClick(){
+
+    }
     interface EventsListener {
 
     }
