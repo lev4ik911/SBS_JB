@@ -146,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_navigation_height"
             style="@style/Text.Inverse"
-            android:background="@drawable/bg_btn_action"
+            android:background="@drawable/selector_action_button"
             >
             <androidx.appcompat.widget.AppCompatTextView
                 android:text="Save"
