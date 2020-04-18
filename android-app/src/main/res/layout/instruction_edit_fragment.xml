@@ -53,6 +53,7 @@
                     android:layout_height="?attr/actionBarSize"
                     app:contentInsetStartWithNavigation="0dp"
                     app:layout_collapseMode="pin"
+                    android:background="@drawable/bg_gradient_top"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:navigationIcon="@drawable/chevron_left"
                     android:onClick="onToolbarClick"
@@ -71,9 +72,10 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/bottom_navigation_height"
                 android:layout_marginTop="@dimen/spacing_xsmall"
                 android:orientation="vertical"
-                android:paddingBottom="@dimen/spacing_large">
+                >
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/cg_categories"
                     android:layout_marginHorizontal="@dimen/spacing_normal"
@@ -136,5 +138,21 @@
             app:fabSize="normal"
             app:layout_anchor="@id/htab_collapse_toolbar"
             app:layout_anchorGravity="bottom|end" />
+        <LinearLayout
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_navigation_height"
+            style="@style/Text.Inverse"
+            android:background="@drawable/bg_btn_action"
+            >
+            <androidx.appcompat.widget.AppCompatTextView
+                android:text="Save"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

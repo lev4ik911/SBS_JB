@@ -46,6 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:contentInsetStartWithNavigation="0dp"
+                    android:background="@drawable/bg_gradient_top"
                     app:layout_collapseMode="pin"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:navigationIcon="@drawable/chevron_left"
@@ -89,9 +90,22 @@
                     android:text="@{String.format(@string/text_rating, viewmodel.rating)}"
                     android:textAppearance="@style/Text.Description"
                      />
+                <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabMode="scrollable"
+                android:layout_below="@id/te_description"
+                />
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/view_pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/tabs_profile"
+                    />
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_steps"
-                    android:layout_below="@+id/te_description"
+                    android:layout_below="@+id/view_pager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

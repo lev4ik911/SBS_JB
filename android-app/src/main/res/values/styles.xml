@@ -28,10 +28,12 @@
         <item name="android:layout_gravity">center</item>
     </style>
     <style name="Text" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">?android:attr/textColorTertiary</item>
-        <item name="android:textSize">@dimen/text_size_normal</item>
+    <item name="android:textColor">?android:attr/textColorTertiary</item>
+    <item name="android:textSize">@dimen/text_size_normal</item>
+</style>
+    <style name="Text.Inverse" parent="Text">
+        <item name="android:textColor">?attr/textColorPrimaryInverse</item>
     </style>
-
     <style name="Text.FragmentTitle" parent="Text">
         <item name="android:textSize">@dimen/text_size_large</item>
         <item name="android:textColor">?attr/colorPrimaryDark</item>

@@ -6,7 +6,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
@@ -82,4 +84,5 @@ class InstructionFragment :
     override fun onCallInstructionEditor() {
         (activity as InstructionActivity).callInstructionEditor()
     }
+
 }
