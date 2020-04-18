@@ -5,10 +5,11 @@ import by.iba.mvvmbase.BaseViewModel
 import by.iba.mvvmbase.dispatcher.EventsDispatcher
 import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
 import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
-import java.util.ArrayList
+import java.util.*
 
 
-class InstructionEditViewModel : BaseViewModel(), EventsDispatcherOwner<InstructionEditViewModel.EventsListener> {
+class InstructionEditViewModel : BaseViewModel(),
+    EventsDispatcherOwner<InstructionEditViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
     val name = MutableLiveData("Отпадный шашлычок!")
     val description = MutableLiveData("Отпадный шашлычок!")
@@ -21,13 +22,15 @@ class InstructionEditViewModel : BaseViewModel(), EventsDispatcherOwner<Instruct
         mData.add(ExampleListModel("Оставить свинину в маринаде на несколько часов в холодильнике."))
         mData.add(ExampleListModel(" Затем нанизывать кусочки маринованного мяса на шампуры и жарить шашлык из свинины."))
 
-        this.postValue( mData)
+        this.postValue(mData)
     }
-    fun onActionButtonClick(){
 
+    fun onActionButtonClick() {
+        eventsDispatcher.dispatchEvent { onAfterSaveAction() }
     }
+
     interface EventsListener {
-
+        fun onAfterSaveAction()
     }
 
 }

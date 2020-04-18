@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
@@ -57,4 +58,8 @@ class InstructionEditFragment : BaseEventsFragment<InstructionEditFragmentBindin
             it.emptyViewId = R.layout.new_step
             it.dragLayoutId = R.id.iv_drag
         }
+
+    override fun onAfterSaveAction() {
+       activity?.findNavController(R.id.fragment_navigation_instruction)?.navigate(R.id.navigation_instruction_view)
+    }
 }
