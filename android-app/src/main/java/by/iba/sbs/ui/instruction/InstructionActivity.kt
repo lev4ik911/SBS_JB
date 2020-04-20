@@ -9,12 +9,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import by.iba.sbs.R
 import com.yalantis.ucrop.UCrop
+import org.koin.androidx.fragment.android.setupKoinFragmentFactory
 
 
 class InstructionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.instruction_activity)
+        setupKoinFragmentFactory()
         val instructionId = intent?.getIntExtra("instructionId", 0) ?: 0
         val bundle = Bundle()
         bundle.putInt("instructionId", instructionId)
@@ -23,7 +25,6 @@ class InstructionActivity : AppCompatActivity() {
             if (instructionId == 0) R.id.navigation_instruction_edit else R.id.navigation_instruction_view,
             bundle
         )
-
     }
 
     fun callInstructionEditor(instructionId:Int) {

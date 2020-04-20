@@ -8,14 +8,16 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionFragmentBinding
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class InstructionFragment :
@@ -25,6 +27,9 @@ class InstructionFragment :
     override val layoutId: Int = R.layout.instruction_fragment
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: InstructionViewModel by viewModel()
+    private lateinit var demoCollectionAdapter: DemoCollectionAdapter
+    private lateinit var viewPager: ViewPager2
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
@@ -50,6 +55,13 @@ class InstructionFragment :
         viewModel.isFavorite.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             initActionButton()
         })
+        demoCollectionAdapter = DemoCollectionAdapter(this)
+        viewPager = view.findViewById(R.id.view_pager)
+        viewPager.adapter = demoCollectionAdapter
+        val tabLayout = view.findViewById<TabLayout>(R.id.tabs_profile)
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = "OBJECT ${(position + 1)}"
+        }.attach()
     }
 
     private fun initActionButton() {
@@ -87,4 +99,39 @@ class InstructionFragment :
         (activity as InstructionActivity).callInstructionEditor(instructionId)
     }
 
+    class DemoCollectionAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+
+        override fun getItemCount(): Int = 2
+
+        override fun createFragment(position: Int): Fragment {
+            when(position){
+                0 ->{
+                    val fragment = StepsFragment()
+                    fragment.arguments = Bundle().apply {
+                        // Our object is just an integer :-P
+                        putInt(ARG_PARAM1, position + 1)
+                    }
+                    return fragment
+                }
+                1->{
+                    val fragment = RatingsFragment()
+                    fragment.arguments = Bundle().apply {
+                        // Our object is just an integer :-P
+                        putInt(ARG_PARAM2, position + 1)
+                    }
+                    return fragment
+                }
+                else->{
+                    val fragment = RatingsFragment()
+                    fragment.arguments = Bundle().apply {
+                        // Our object is just an integer :-P
+                        putInt(ARG_PARAM2, position + 1)
+                    }
+                    return fragment
+                }
+            }
+            // Return a NEW fragment instance in createFragment(int)
+
+        }
+    }
 }

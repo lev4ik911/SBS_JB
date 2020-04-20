@@ -45,4 +45,7 @@
     <string name="transition_name_txt_view">TextViewTransitionName</string>
     <string name="hint_instruction_name">Enter instruction name</string>
     <string name="hint_instruction_description">Enter description (optional)</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Steps fragment</string>
 </resources>
