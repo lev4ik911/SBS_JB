@@ -6,7 +6,9 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import by.iba.mvvmbase.BaseEventsFragment
@@ -25,6 +27,9 @@ class InstructionFragment :
     override val viewModel: InstructionViewModel by viewModel()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+        activity?.finish()
+        }
         view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_description)?.apply {
         title = viewModel.name.value
         }
@@ -47,9 +52,6 @@ class InstructionFragment :
         })
     }
 
-    fun View.backClick() {
-        activity?.finish()
-    }
     private fun initActionButton() {
         view?.findViewById<ImageView>(R.id.f_action_button).apply {
             when {
@@ -81,8 +83,8 @@ class InstructionFragment :
             }).also {
         }
 
-    override fun onCallInstructionEditor() {
-        (activity as InstructionActivity).callInstructionEditor()
+    override fun onCallInstructionEditor(instructionId: Int) {
+        (activity as InstructionActivity).callInstructionEditor(instructionId)
     }
 
 }

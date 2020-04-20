@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/instruction_navigation"
-    app:startDestination="@id/navigation_instruction_view">
+    app:startDestination="@id/navigation_instruction_view"
+    >
 
     <fragment
         android:id="@+id/navigation_instruction_view"
@@ -14,5 +15,10 @@
         android:id="@+id/navigation_instruction_edit"
         android:name="by.iba.sbs.ui.instruction.InstructionEditFragment"
         android:label="instruction_edit_fragment"
-        tools:layout="@layout/instruction_edit_fragment" />
+        tools:layout="@layout/instruction_edit_fragment" >
+        <argument
+            android:name="instructionId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

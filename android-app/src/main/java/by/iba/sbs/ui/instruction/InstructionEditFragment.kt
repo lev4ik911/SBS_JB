@@ -6,13 +6,16 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionEditFragmentBinding
+import by.iba.sbs.ui.login.LoginActivity
 import com.yalantis.ucrop.UCrop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -23,8 +26,17 @@ class InstructionEditFragment : BaseEventsFragment<InstructionEditFragmentBindin
     override val layoutId: Int = R.layout.instruction_edit_fragment
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: InstructionEditViewModel by viewModel()
+    var instructionId = 0
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+          if(instructionId ==0)
+              activity?.finish()
+            else
+              findNavController().navigate(R.id.navigation_instruction_view)
+        }
+        instructionId = arguments?.getInt("instructionId") ?: 0
+        viewModel.loadInstruction(instructionId)
         view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_description)?.title =
             viewModel.name.value
         view.findViewById<RecyclerView>(R.id.rv_steps).apply {

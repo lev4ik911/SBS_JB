@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
@@ -17,7 +19,6 @@ import by.iba.sbs.databinding.InstructionListFragmentBinding
 import by.iba.sbs.ui.instruction.InstructionActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
-import androidx.core.util.Pair
 
 class InstructionListFragment :
     BaseEventsFragment<InstructionListFragmentBinding, InstructionListViewModel, InstructionListViewModel.EventsListener>(),
@@ -49,10 +50,15 @@ class InstructionListFragment :
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as Activity,
                 imageViewPair,
                 textViewPair)
-            startActivity(Intent(activity, InstructionActivity::class.java), options.toBundle())
+            val intent = Intent(activity, InstructionActivity::class.java)
+            intent.putExtra("instructionId", 12)
+            startActivity(intent, options.toBundle())
         }
         instructionsAdapter.onEmptyViewItemClick = {
-            startActivity(Intent(activity, InstructionActivity::class.java))
+            val intent = Intent(activity, InstructionActivity::class.java)
+            intent.putExtra("instructionId", 0)
+           // findNavController().navigate(R.id.navigation_instruction_edit, bundle)
+            startActivity(intent)
         }
     }
 

@@ -6,32 +6,40 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import by.iba.sbs.R
 import com.yalantis.ucrop.UCrop
-import com.yalantis.ucrop.UCropActivity;
-import com.yalantis.ucrop.UCropFragment;
-import com.yalantis.ucrop.UCropFragmentCallback;
 
 
 class InstructionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.instruction_activity)
+        val instructionId = intent?.getIntExtra("instructionId", 0) ?: 0
+        val bundle = Bundle()
+        bundle.putInt("instructionId", instructionId)
+
+        findNavController(R.id.fragment_navigation_instruction).navigate(
+            if (instructionId == 0) R.id.navigation_instruction_edit else R.id.navigation_instruction_view,
+            bundle
+        )
+
     }
 
-    fun callInstructionEditor() {
-        findNavController(R.id.fragment_navigation_instruction).navigate(R.id.navigation_instruction_edit)
+    fun callInstructionEditor(instructionId:Int) {
+        val bundle = Bundle()
+        bundle.putInt("instructionId", instructionId)
+        findNavController(R.id.fragment_navigation_instruction).navigate(R.id.navigation_instruction_edit,bundle)
     }
 
-        fun callImageSelector(){
+    fun callImageSelector() {
 //        UCrop
 //            .of(sourceUri, destinationUri)
 //            .withAspectRatio(16F, 9F)
 //         //  .withMaxResultSize(maxWidth, maxHeight)
 //            .start(this)
     }
+
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,

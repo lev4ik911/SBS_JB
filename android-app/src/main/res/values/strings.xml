@@ -43,6 +43,6 @@
     <string name="create_step">Add step</string>
     <string name="transition_name_img_view">ImageViewTransitionName</string>
     <string name="transition_name_txt_view">TextViewTransitionName</string>
-    <string name="hint_instruction_name">Instruction name</string>
-    <string name="hint_instruction_description">Description (optional)</string>
+    <string name="hint_instruction_name">Enter instruction name</string>
+    <string name="hint_instruction_description">Enter description (optional)</string>
 </resources>

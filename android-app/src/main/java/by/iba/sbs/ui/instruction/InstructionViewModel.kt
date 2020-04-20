@@ -32,12 +32,12 @@ class InstructionViewModel : BaseViewModel(),
     }
     fun onActionButtonClick() {
         if (isInstructionOwner.value!!)
-            eventsDispatcher.dispatchEvent { onCallInstructionEditor() }
+            eventsDispatcher.dispatchEvent { onCallInstructionEditor(2) }
         else isFavorite.value = !isFavorite.value!!
     }
 
     interface EventsListener {
-        fun onCallInstructionEditor()
+        fun onCallInstructionEditor(instructionId:Int)
     }
 
 }

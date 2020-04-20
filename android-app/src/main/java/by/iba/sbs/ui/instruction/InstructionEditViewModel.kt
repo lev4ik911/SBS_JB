@@ -11,18 +11,26 @@ import java.util.*
 class InstructionEditViewModel : BaseViewModel(),
     EventsDispatcherOwner<InstructionEditViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
-    val name = MutableLiveData("Отпадный шашлычок!")
-    val description = MutableLiveData("Отпадный шашлычок!")
+    val name = MutableLiveData("")
+    val description = MutableLiveData("")
     val steps = MutableLiveData<List<ExampleListModel>>().apply {
-        val mData = ArrayList<ExampleListModel>()
-        mData.add(ExampleListModel("Свиную шею нарезать одинаковыми кусочками, не мелкими."))
-        mData.add(ExampleListModel(" Лук нарезать тонкими кольцами и помять руками (или измельчить лук с помощью кухонной техники)."))
-        mData.add(ExampleListModel("Уложить на дно емкости слой мяса, сверху посолить, поперчить."))
-        mData.add(ExampleListModel(" Хорошо перемешать мясо с луком и остальными ингредиентами маринада."))
-        mData.add(ExampleListModel("Оставить свинину в маринаде на несколько часов в холодильнике."))
-        mData.add(ExampleListModel(" Затем нанизывать кусочки маринованного мяса на шампуры и жарить шашлык из свинины."))
 
-        this.postValue(mData)
+    }
+
+    fun loadInstruction(instructionId: Int) {
+        if (instructionId != 0) {
+            name.value = "Отпадный шашлычок!"
+            description.value = "Отпадный шашлычок (desc)!"
+            val mData = ArrayList<ExampleListModel>()
+            mData.add(ExampleListModel("Свиную шею нарезать одинаковыми кусочками, не мелкими."))
+            mData.add(ExampleListModel(" Лук нарезать тонкими кольцами и помять руками (или измельчить лук с помощью кухонной техники)."))
+            mData.add(ExampleListModel("Уложить на дно емкости слой мяса, сверху посолить, поперчить."))
+            mData.add(ExampleListModel(" Хорошо перемешать мясо с луком и остальными ингредиентами маринада."))
+            mData.add(ExampleListModel("Оставить свинину в маринаде на несколько часов в холодильнике."))
+            mData.add(ExampleListModel(" Затем нанизывать кусочки маринованного мяса на шампуры и жарить шашлык из свинины."))
+
+            steps.postValue(mData)
+        }
     }
 
     fun onActionButtonClick() {

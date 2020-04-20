@@ -59,7 +59,7 @@
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:navigationIcon="@drawable/chevron_left"
                     app:title="Recipe Detail"
-                    app:titleTextColor="?attr/colorPrimaryDark"></androidx.appcompat.widget.Toolbar>
+                    app:titleTextColor="?attr/colorPrimaryDark"/>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
