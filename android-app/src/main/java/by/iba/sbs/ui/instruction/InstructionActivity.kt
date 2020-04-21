@@ -16,7 +16,6 @@ class InstructionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.instruction_activity)
-        setupKoinFragmentFactory()
         val instructionId = intent?.getIntExtra("instructionId", 0) ?: 0
         val bundle = Bundle()
         bundle.putInt("instructionId", instructionId)

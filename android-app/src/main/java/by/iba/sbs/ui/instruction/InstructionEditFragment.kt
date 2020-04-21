@@ -15,6 +15,7 @@ import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionEditFragmentBinding
+import by.iba.sbs.library.model.Step
 import by.iba.sbs.ui.login.LoginActivity
 import com.yalantis.ucrop.UCrop
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -56,16 +57,16 @@ class InstructionEditFragment : BaseEventsFragment<InstructionEditFragmentBindin
     }
     @SuppressLint("ResourceType")
     private val stepsAdapter =
-        EmptyViewAdapter<ExampleListModel>(
+        EmptyViewAdapter<Step>(
             R.layout.instruction_edit_step_list_item,
             onBind = { view, item, _ ->
-                view.findViewById<TextView>(R.id.tv_info)?.text = item.info
+                view.findViewById<TextView>(R.id.tv_info)?.text = item.description
                 view.findViewById<ImageView>(R.id.iv_camera)?.setOnClickListener {
                     (activity as InstructionActivity).callImageSelector()
                 }
             },
             isItemsEquals = { oldItem, newItem ->
-                oldItem.info == newItem.info
+                oldItem.description == newItem.description
             }).also {
             it.emptyViewId = R.layout.new_step
             it.dragLayoutId = R.id.iv_drag

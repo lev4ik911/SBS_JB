@@ -11,15 +11,15 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="by.iba.sbs.ui.instruction.StepsFragment">
+        tools:context="by.iba.sbs.ui.instruction.FeedbackFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_steps"
+            android:id="@+id/rv_feedback"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginVertical="@dimen/spacing_xsmall"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/instruction_step_list_item" />
+            tools:listitem="@layout/instruction_feedback_list_item" />
 
     </FrameLayout>
 </layout>

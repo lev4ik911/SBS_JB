@@ -5,11 +5,10 @@ import by.iba.mvvmbase.BaseViewModel
 import by.iba.mvvmbase.dispatcher.EventsDispatcher
 import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
 import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
-import java.util.ArrayList
+import by.iba.sbs.library.model.Feedback
+import by.iba.sbs.library.model.Step
+import java.util.*
 
-class ExampleListModel(val info: String) {
-
-}
 
 class InstructionViewModel : BaseViewModel(),
     EventsDispatcherOwner<InstructionViewModel.EventsListener> {
@@ -19,17 +18,49 @@ class InstructionViewModel : BaseViewModel(),
     val rating = MutableLiveData(100500)
     val isFavorite = MutableLiveData(true)
     val isInstructionOwner = MutableLiveData(true)
-    val steps = MutableLiveData<List<ExampleListModel>>().apply {
-        val mData = ArrayList<ExampleListModel>()
-        mData.add(ExampleListModel("Свиную шею нарезать одинаковыми кусочками, не мелкими."))
-        mData.add(ExampleListModel("Лук нарезать тонкими кольцами и помять руками (или измельчить лук с помощью кухонной техники)."))
-        mData.add(ExampleListModel("Уложить на дно емкости слой мяса, сверху посолить, поперчить."))
-        mData.add(ExampleListModel("Хорошо перемешать мясо с луком и остальными ингредиентами маринада."))
-        mData.add(ExampleListModel("Оставить свинину в маринаде на несколько часов в холодильнике."))
-        mData.add(ExampleListModel("Затем нанизывать кусочки маринованного мяса на шампуры и жарить шашлык из свинины."))
-
-        this.postValue( mData)
+    val feedback = MutableLiveData<List<Feedback>>().apply {
+        val mData = ArrayList<Feedback>()
+        mData.add(Feedback("Charlize Theron", "Something I really appreciate about you is your aptitude for problem solving in a proactive way."))
+        mData.add(Feedback("Matt Damon", "I really think you have a superpower around making new hires feel welcome."))
+        this.postValue(mData)
     }
+    val steps = MutableLiveData<List<Step>>().apply {
+        val mData = ArrayList<Step>()
+        mData.add(Step(1, description = "Свиную шею нарезать одинаковыми кусочками, не мелкими."))
+        mData.add(
+            Step(
+                1,
+                description = "Лук нарезать тонкими кольцами и помять руками (или измельчить лук с помощью кухонной техники)."
+            )
+        )
+        mData.add(
+            Step(
+                1,
+                description = "Уложить на дно емкости слой мяса, сверху посолить, поперчить."
+            )
+        )
+        mData.add(
+            Step(
+                1,
+                description = "Хорошо перемешать мясо с луком и остальными ингредиентами маринада."
+            )
+        )
+        mData.add(
+            Step(
+                1,
+                description = "Оставить свинину в маринаде на несколько часов в холодильнике."
+            )
+        )
+        mData.add(
+            Step(
+                1,
+                description = "Затем нанизывать кусочки маринованного мяса на шампуры и жарить шашлык из свинины."
+            )
+        )
+
+        this.postValue(mData)
+    }
+
     fun onActionButtonClick() {
         if (isInstructionOwner.value!!)
             eventsDispatcher.dispatchEvent { onCallInstructionEditor(2) }
@@ -37,7 +68,7 @@ class InstructionViewModel : BaseViewModel(),
     }
 
     interface EventsListener {
-        fun onCallInstructionEditor(instructionId:Int)
+        fun onCallInstructionEditor(instructionId: Int)
     }
 
 }
