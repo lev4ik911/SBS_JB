@@ -33,5 +33,17 @@
     <color name="colorLightRed">#FF7D78</color>
     <color name="colorLightYellow">#ffdc73</color>
     <color name="colorLightGreen">#5ac18e</color>
+    <array name="array_dot_active">
+        <item>@color/colorPrimaryVariant</item>
+        <item>@color/colorPrimaryVariant</item>
+        <item>@color/colorPrimaryVariant</item>
+        <item>@color/colorPrimaryVariant</item>
+    </array>
 
+    <array name="array_dot_inactive">
+        <item>@color/colorPrimary</item>
+        <item>@color/colorPrimary</item>
+        <item>@color/colorPrimary</item>
+        <item>@color/colorPrimary</item>
+    </array>
 </resources>

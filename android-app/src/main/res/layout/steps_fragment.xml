@@ -8,18 +8,13 @@
             type="by.iba.sbs.ui.instruction.InstructionViewModel" />
     </data>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="by.iba.sbs.ui.instruction.StepsFragment">
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_steps"
+            android:nestedScrollingEnabled="false"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/spacing_xsmall"
+            tools:context="by.iba.sbs.ui.instruction.StepsFragment"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/instruction_step_list_item" />
-
-    </FrameLayout>
 </layout>

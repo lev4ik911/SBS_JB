@@ -22,18 +22,22 @@
         <item name="colorTextDisabled">@color/textColorTertiary</item>
         <item name="textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
     </style>
-    <style name="Card" >
+
+    <style name="Card">
         <item name="android:elevation">@dimen/spacing_xxxsmall</item>
         <item name="cardCornerRadius">@dimen/corner_radius</item>
         <item name="android:layout_gravity">center</item>
     </style>
+
     <style name="Text" parent="TextAppearance.MaterialComponents.Body1">
-    <item name="android:textColor">?android:attr/textColorTertiary</item>
-    <item name="android:textSize">@dimen/text_size_normal</item>
-</style>
+        <item name="android:textColor">?android:attr/textColorTertiary</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+    </style>
+
     <style name="Text.Inverse" parent="Text">
         <item name="android:textColor">?attr/textColorPrimaryInverse</item>
     </style>
+
     <style name="Text.FragmentTitle" parent="Text">
         <item name="android:textSize">@dimen/text_size_large</item>
         <item name="android:textColor">?attr/colorPrimaryDark</item>
@@ -57,10 +61,10 @@
     <style name="Text.Email" parent="Text">
         <item name="android:autoLink">web|email</item>
     </style>
+
     <style name="Text.Phone" parent="Text">
         <item name="android:autoLink">phone</item>
     </style>
-
 
 
     <style name="Image.Clickable" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -72,9 +76,11 @@
     <style name="Text.Main.Bold" parent="Text">
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="Text.Main.Link" parent="Text">
         <item name="android:autoLink">web|email</item>
     </style>
+
     <style name="Text.Description" parent="Text">
         <item name="android:textColor">?android:attr/textColorTertiary</item>
         <item name="android:textSize">@dimen/text_size_small</item>
@@ -95,12 +101,14 @@
     <style name="Text.DayOfWeek.Weekend" parent="Text.DayOfWeek">
         <item name="android:textColor">?attr/colorTextDayOfWeek</item>
     </style>
+
     <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxCornerRadiusBottomEnd">@dimen/corner_radius</item>
         <item name="boxCornerRadiusTopEnd">@dimen/corner_radius</item>
         <item name="boxCornerRadiusBottomStart">@dimen/corner_radius</item>
         <item name="boxCornerRadiusTopStart">@dimen/corner_radius</item>
     </style>
+
     <style name="Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:paddingTop">@dimen/spacing_xsmall</item>
         <item name="android:paddingBottom">@dimen/spacing_xsmall</item>
@@ -141,5 +149,14 @@
             @transition/open_activity_transition
         </item>
     </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
