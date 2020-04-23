@@ -1,8 +1,6 @@
 package by.iba.sbs.ui.walkthrough
 
-import android.content.Context
 import android.text.Html
-import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +23,7 @@ class WalkthroughActivity : BaseActivity<WalkthroughActivityBinding, Walkthrough
     override val layoutId: Int = R.layout.walkthrough_activity
     override val viewModel: WalkthroughViewModel by viewModel()
     override val viewModelVariableId: Int = by.iba.sbs.BR.viewmodel
+
     // private var binding: ActivityViewsSliderBinding? = null
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -57,7 +56,8 @@ class WalkthroughActivity : BaseActivity<WalkthroughActivityBinding, Walkthrough
         super.onStart()
         init()
     }
-   fun init() {
+
+    fun init() {
         // layouts of all welcome sliders
         // add few more layouts if you want
         layouts = intArrayOf(
@@ -70,18 +70,18 @@ class WalkthroughActivity : BaseActivity<WalkthroughActivityBinding, Walkthrough
         binding.viewPager.adapter = mAdapter
         binding.viewPager.registerOnPageChangeCallback(pageChangeCallback)
         binding.btnSkip.setOnClickListener { v -> launchHomeScreen() }
-       binding.btnNext.setOnClickListener { v ->
-           // checking for last page
-           // if last page home screen will be launched
-           val current = getItem(+1)
-           if (current < layouts.size) {
-               // move to next screen
-               binding.viewPager.setCurrentItem(current)
-           } else {
-               launchHomeScreen()
-           }
-       }
-       // adding bottom dots
+        binding.btnNext.setOnClickListener { v ->
+            // checking for last page
+            // if last page home screen will be launched
+            val current = getItem(+1)
+            if (current < layouts.size) {
+                // move to next screen
+                binding.viewPager.setCurrentItem(current)
+            } else {
+                launchHomeScreen()
+            }
+        }
+        // adding bottom dots
         addBottomDots(0)
     }
 
@@ -113,7 +113,6 @@ class WalkthroughActivity : BaseActivity<WalkthroughActivityBinding, Walkthrough
     }
 
 
-
     inner class SimpleTransformation : ViewPager2.PageTransformer {
         override fun transformPage(
             page: View,
@@ -121,6 +120,7 @@ class WalkthroughActivity : BaseActivity<WalkthroughActivityBinding, Walkthrough
         ) {
         }
     }
+
     inner class ViewsSliderAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         override fun onCreateViewHolder(
             parent: ViewGroup,

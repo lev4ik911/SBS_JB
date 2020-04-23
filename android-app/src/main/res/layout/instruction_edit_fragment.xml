@@ -108,12 +108,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/te_description"
+                    android:background="@android:color/transparent"
                     android:layout_marginVertical="@dimen/spacing_xsmall"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/instruction_edit_step_list_item" />
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
-        <de.hdodenhof.circleimageview.CircleImageView
+        <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/ivProfile"
             android:layout_width="@dimen/spacing_xlarge"
             android:layout_height="@dimen/spacing_xlarge"
@@ -121,7 +122,10 @@
             android:layout_marginHorizontal="@dimen/spacing_normal"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/ic_profile"
+            android:background="@null"
+            android:onClick="@{() -> viewmodel.onRemoveInstructionClick()}"
+            android:tint="@color/colorAccent"
+            android:src="@drawable/trash_can_outline"
             app:layout_anchor="@id/toolbar_description"
             app:layout_anchorGravity="center|end" />
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -130,7 +134,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_large"
             android:backgroundTint="@android:color/white"
-            android:onClick="@{() -> viewmodel.onActionButtonClick()}"
+            android:onClick="@{() -> viewmodel.onAfterSaveAction()}"
             android:src="@drawable/check_bold"
             android:tint="@color/colorAccent"
             app:borderWidth="0dp"
@@ -143,7 +147,7 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{() -> viewmodel.onActionButtonClick()}"
+            android:onClick="@{() -> viewmodel.onAfterSaveAction()}"
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_navigation_height"
             style="@style/Text.Inverse"

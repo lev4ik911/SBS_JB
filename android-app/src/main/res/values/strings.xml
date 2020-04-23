@@ -55,4 +55,8 @@
     <string name="start">Start</string>
     <string name="title_steps">Steps</string>
     <string name="title_feedback">Feedback</string>
+    <string name="walkthrough_description_1">Search for popular recipes from all over the world</string>
+    <string name="walkthrough_description_2">Create your own recipes and earn your rating</string>
+    <string name="walkthrough_description_3">Create your own recipes and earn your rating</string>
+    <string name="walkthrough_description_4">Create your own recipes and earn your rating</string>
 </resources>

@@ -77,7 +77,12 @@ class InstructionViewModel : BaseViewModel(),
             eventsDispatcher.dispatchEvent { onCallInstructionEditor(2) }
         else isFavorite.value = !isFavorite.value!!
     }
+    fun onAfterSaveAction(){
+        eventsDispatcher.dispatchEvent { onAfterSaveAction() }
+    }
+    fun onRemoveInstructionClick(){
 
+    }
     interface EventsListener {
         fun onCallInstructionEditor(instructionId: Int)
         fun onAfterSaveAction()
