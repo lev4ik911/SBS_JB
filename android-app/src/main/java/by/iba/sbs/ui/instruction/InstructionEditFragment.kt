@@ -9,23 +9,21 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
-import by.iba.mvvmbase.BaseEventsFragment
+import by.iba.mvvmbase.BaseFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionEditFragmentBinding
 import by.iba.sbs.library.model.Step
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
 class InstructionEditFragment :
-    BaseEventsFragment<InstructionEditFragmentBinding, InstructionEditViewModel, InstructionEditViewModel.EventsListener>(),
-    InstructionEditViewModel.EventsListener {
+    BaseFragment<InstructionEditFragmentBinding, InstructionViewModel>() {
 
     override val layoutId: Int = R.layout.instruction_edit_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: InstructionEditViewModel by viewModel()
+    override val viewModel: InstructionViewModel by sharedViewModel()
     var instructionId = 0
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,7 +50,6 @@ class InstructionEditFragment :
         stepsAdapter.onEmptyViewItemClick = {
             // startActivity(Intent(activity, InstructionActivity::class.java))
         }
-
     }
 
     @SuppressLint("ResourceType")
@@ -71,9 +68,4 @@ class InstructionEditFragment :
             it.emptyViewId = R.layout.new_step
             it.dragLayoutId = R.id.iv_drag
         }
-
-    override fun onAfterSaveAction() {
-        activity?.findNavController(R.id.fragment_navigation_instruction)
-            ?.navigate(R.id.navigation_instruction_view)
-    }
 }

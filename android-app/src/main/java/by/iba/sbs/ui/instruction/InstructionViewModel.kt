@@ -24,43 +24,54 @@ class InstructionViewModel : BaseViewModel(),
         mData.add(Feedback("Matt Damon", "I really think you have a superpower around making new hires feel welcome."))
         this.postValue(mData)
     }
-    val steps = MutableLiveData<List<Step>>().apply {
-        val mData = ArrayList<Step>()
-        mData.add(Step(1, description = "Свиную шею нарезать одинаковыми кусочками, не мелкими."))
-        mData.add(
-            Step(
-                1,
-                description = "Лук нарезать тонкими кольцами и помять руками (или измельчить лук с помощью кухонной техники)."
-            )
-        )
-        mData.add(
-            Step(
-                1,
-                description = "Уложить на дно емкости слой мяса, сверху посолить, поперчить."
-            )
-        )
-        mData.add(
-            Step(
-                1,
-                description = "Хорошо перемешать мясо с луком и остальными ингредиентами маринада."
-            )
-        )
-        mData.add(
-            Step(
-                1,
-                description = "Оставить свинину в маринаде на несколько часов в холодильнике."
-            )
-        )
-        mData.add(
-            Step(
-                1,
-                description = "Затем нанизывать кусочки маринованного мяса на шампуры и жарить шашлык из свинины."
-            )
-        )
 
-        this.postValue(mData)
+    val steps = MutableLiveData<List<Step>>()
+
+    fun loadInstruction(instructionId: Int) {
+        if (instructionId != 0) {
+            name.value = "Отпадный шашлычок!"
+            description.value = "Отпадный шашлычок (desc)!"
+            val mData = ArrayList<Step>()
+            mData.add(
+                Step(
+                    1,
+                    description = "Свиную шею нарезать одинаковыми кусочками, не мелкими."
+                )
+            )
+            mData.add(
+                Step(
+                    1,
+                    description = " Лук нарезать тонкими кольцами и помять руками (или измельчить лук с помощью кухонной техники)."
+                )
+            )
+            mData.add(
+                Step(
+                    1,
+                    description = "Уложить на дно емкости слой мяса, сверху посолить, поперчить."
+                )
+            )
+            mData.add(
+                Step(
+                    1,
+                    description = " Хорошо перемешать мясо с луком и остальными ингредиентами маринада."
+                )
+            )
+            mData.add(
+                Step(
+                    1,
+                    description = "Оставить свинину в маринаде на несколько часов в холодильнике."
+                )
+            )
+            mData.add(
+                Step(
+                    1,
+                    description = " Затем нанизывать кусочки маринованного мяса на шампуры и жарить шашлык из свинины."
+                )
+            )
+
+            steps.postValue(mData)
+        }
     }
-
     fun onActionButtonClick() {
         if (isInstructionOwner.value!!)
             eventsDispatcher.dispatchEvent { onCallInstructionEditor(2) }
@@ -69,6 +80,7 @@ class InstructionViewModel : BaseViewModel(),
 
     interface EventsListener {
         fun onCallInstructionEditor(instructionId: Int)
+        fun onAfterSaveAction()
     }
 
 }

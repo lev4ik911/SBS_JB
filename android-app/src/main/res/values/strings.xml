@@ -53,4 +53,6 @@
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="start">Start</string>
+    <string name="title_steps">Steps</string>
+    <string name="title_feedback">Feedback</string>
 </resources>

@@ -7,15 +7,22 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import by.iba.mvvmbase.BaseEventsActivity
 import by.iba.sbs.R
+import by.iba.sbs.databinding.InstructionActivityBinding
+import by.iba.sbs.databinding.InstructionFragmentBinding
 import com.yalantis.ucrop.UCrop
-import org.koin.androidx.fragment.android.setupKoinFragmentFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class InstructionActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.instruction_activity)
+class InstructionActivity : BaseEventsActivity<InstructionActivityBinding, InstructionViewModel, InstructionViewModel.EventsListener>(),
+    InstructionViewModel.EventsListener {
+    override val layoutId: Int = R.layout.instruction_activity
+    override val viewModel: InstructionViewModel by viewModel()
+    override val viewModelVariableId: Int =  by.iba.sbs.BR.viewmodel
+
+    override fun onStart() {
+        super.onStart()
         val instructionId = intent?.getIntExtra("instructionId", 0) ?: 0
         val bundle = Bundle()
         bundle.putInt("instructionId", instructionId)
@@ -24,12 +31,6 @@ class InstructionActivity : AppCompatActivity() {
             if (instructionId == 0) R.id.navigation_instruction_edit else R.id.navigation_instruction_view,
             bundle
         )
-    }
-
-    fun callInstructionEditor(instructionId:Int) {
-        val bundle = Bundle()
-        bundle.putInt("instructionId", instructionId)
-        findNavController(R.id.fragment_navigation_instruction).navigate(R.id.navigation_instruction_edit,bundle)
     }
 
     fun callImageSelector() {
@@ -57,5 +58,14 @@ class InstructionActivity : AppCompatActivity() {
         onBackPressed()
     }
 
+    override fun onCallInstructionEditor(instructionId: Int) {
+        val bundle = Bundle()
+        bundle.putInt("instructionId", instructionId)
+        findNavController(R.id.fragment_navigation_instruction).navigate(R.id.navigation_instruction_edit,bundle)
+    }
 
+    override fun onAfterSaveAction() {
+        findNavController(R.id.fragment_navigation_instruction)
+            .navigate(R.id.navigation_instruction_view)
+    }
 }

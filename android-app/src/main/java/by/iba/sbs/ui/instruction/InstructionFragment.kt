@@ -2,34 +2,37 @@ package by.iba.sbs.ui.instruction
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import by.iba.mvvmbase.BaseEventsFragment
+import by.iba.mvvmbase.BaseFragment
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionFragmentBinding
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class InstructionFragment :
-    BaseEventsFragment<InstructionFragmentBinding, InstructionViewModel, InstructionViewModel.EventsListener>(),
-    InstructionViewModel.EventsListener {
+    BaseFragment<InstructionFragmentBinding, InstructionViewModel>()
+ {
 
     override val layoutId: Int = R.layout.instruction_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: InstructionViewModel by viewModel()
+    override val viewModel: InstructionViewModel by sharedViewModel()
     private lateinit var demoCollectionAdapter: TabsFragmentAdapter
     private lateinit var viewPager: ViewPager2
+     var instructionId = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             activity?.finish()
         }
+        instructionId = arguments?.getInt("instructionId") ?: 0
+        viewModel.loadInstruction(instructionId)
+
         binding.toolbarDescription.apply {
             title = viewModel.name.value
         }
@@ -44,8 +47,8 @@ class InstructionFragment :
 
         TabLayoutMediator(binding.tabsProfile, viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> "Steps"
-                1 -> "Feedback"
+                0 -> getString(R.string.title_steps)
+                1 -> getString(R.string.title_feedback)
                 else -> ""
             }
         }.attach()
@@ -70,26 +73,15 @@ class InstructionFragment :
         }
     }
 
-
-    override fun onCallInstructionEditor(instructionId: Int) {
-        (activity as InstructionActivity).callInstructionEditor(instructionId)
-    }
-
     class TabsFragmentAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
         override fun getItemCount(): Int = 2
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> {
-                    StepsFragment()
-                }
-                1 -> {
-                    FeedbackFragment()
-                }
-                else -> {
-                    StepsFragment()
-                }
+                0 -> StepsFragment()
+                1 -> FeedbackFragment()
+                else -> StepsFragment()
             }
         }
     }
