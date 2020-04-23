@@ -29,7 +29,7 @@ class InstructionListFragment :
     override val viewModel: InstructionListViewModel by viewModel()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<RecyclerView>(R.id.rv_notifications).also {
+        binding.rvNotifications.also {
             it.adapter = instructionsAdapter
             instructionsAdapter.itemTouchHelper.attachToRecyclerView(it)
         }

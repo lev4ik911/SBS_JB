@@ -24,7 +24,7 @@ class ResetFragment :  BaseEventsFragment<ResetFragmentBinding, ResetViewModel, 
         }
     }
     override fun onNextButtonPressed(){
-        view?.findViewById<ViewFlipper>(R.id.flipper_login).also {
+        binding.flipperLogin.also {
             it?.setInAnimation(context, R.anim.slide_in_right)
             it?.setOutAnimation(
                 context,
@@ -34,7 +34,7 @@ class ResetFragment :  BaseEventsFragment<ResetFragmentBinding, ResetViewModel, 
         }
     }
     override fun onBackButtonPressed(){
-        view?.findViewById<ViewFlipper>(R.id.flipper_login).also {
+        binding.flipperLogin.also {
             it?.setInAnimation(context, R.anim.slide_in_left)
             it?.setOutAnimation(context, R.anim.slide_out_right)
             it?.showPrevious()

@@ -1,5 +1,6 @@
 package by.iba.sbs.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -10,6 +11,7 @@ import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileFragmentBinding
+import by.iba.sbs.ui.walkthrough.WalkthroughActivity
 import com.google.android.material.tabs.TabLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -43,4 +45,5 @@ class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewM
             return fragment
         }
     }
+
 }

@@ -1,11 +1,14 @@
 package by.iba.sbs.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import by.iba.ecl.ui.MainViewModel
 import by.iba.mvvmbase.custom.bottomnavigation.BottomNavigation
 import by.iba.sbs.R
+import by.iba.sbs.ui.walkthrough.WalkthroughActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -89,4 +92,5 @@ class MainActivity : AppCompatActivity() {
             invalidateOptionsMenu()
         }
     }
+    fun testClick(view: View) {startActivity(Intent(this, WalkthroughActivity::class.java))}
 }

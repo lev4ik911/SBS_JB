@@ -22,7 +22,7 @@ class StepsFragment : BaseFragment<StepsFragmentBinding, InstructionViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<RecyclerView>(R.id.rv_steps).apply {
+        binding.rvSteps.apply {
             adapter = stepsAdapter
         }
         viewModel.steps.observe(viewLifecycleOwner, androidx.lifecycle.Observer {

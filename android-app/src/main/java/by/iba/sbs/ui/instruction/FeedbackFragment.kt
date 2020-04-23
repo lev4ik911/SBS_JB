@@ -21,7 +21,7 @@ class FeedbackFragment : BaseFragment<FeedbackFragmentBinding, InstructionViewMo
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<RecyclerView>(R.id.rv_feedback).also {
+        binding.rvFeedback.also {
             it.adapter = feedbackAdapter
         }
         viewModel.feedback.observe(viewLifecycleOwner, androidx.lifecycle.Observer {

@@ -30,7 +30,7 @@ class InstructionFragment :
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             activity?.finish()
         }
-        view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_description)?.apply {
+        binding.toolbarDescription.apply {
             title = viewModel.name.value
         }
 
@@ -41,8 +41,8 @@ class InstructionFragment :
         demoCollectionAdapter = TabsFragmentAdapter(this)
         viewPager = view.findViewById(R.id.view_pager)
         viewPager.adapter = demoCollectionAdapter
-        val tabLayout = view.findViewById<TabLayout>(R.id.tabs_profile)
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+
+        TabLayoutMediator(binding.tabsProfile, viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "Steps"
                 1 -> "Feedback"
@@ -52,19 +52,19 @@ class InstructionFragment :
     }
 
     private fun initActionButton() {
-        view?.findViewById<ImageView>(R.id.f_action_button).apply {
+        binding.fActionButton.apply {
             when {
                 viewModel.isInstructionOwner.value!! -> {
-                    this?.setImageResource(R.drawable.file_document_edit_outline)
-                    this?.setColorFilter(resources.getColor(R.color.colorAccent))
+                    this.setImageResource(R.drawable.file_document_edit_outline)
+                    this.setColorFilter(resources.getColor(R.color.colorAccent))
                 }
                 viewModel.isFavorite.value!! -> {
-                    this?.setImageResource(R.drawable.heart)
-                    this?.setColorFilter(resources.getColor(R.color.colorLightRed))
+                    this.setImageResource(R.drawable.heart)
+                    this.setColorFilter(resources.getColor(R.color.colorLightRed))
                 }
                 else -> {
-                    this?.setImageResource(R.drawable.heart_outline)
-                    this?.setColorFilter(resources.getColor(R.color.colorLightRed))
+                    this.setImageResource(R.drawable.heart_outline)
+                    this.setColorFilter(resources.getColor(R.color.colorLightRed))
                 }
             }
         }

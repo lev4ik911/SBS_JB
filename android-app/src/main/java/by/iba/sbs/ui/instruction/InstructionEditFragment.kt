@@ -16,12 +16,11 @@ import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionEditFragmentBinding
 import by.iba.sbs.library.model.Step
-import by.iba.sbs.ui.login.LoginActivity
-import com.yalantis.ucrop.UCrop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class InstructionEditFragment : BaseEventsFragment<InstructionEditFragmentBinding, InstructionEditViewModel, InstructionEditViewModel.EventsListener>(),
+class InstructionEditFragment :
+    BaseEventsFragment<InstructionEditFragmentBinding, InstructionEditViewModel, InstructionEditViewModel.EventsListener>(),
     InstructionEditViewModel.EventsListener {
 
     override val layoutId: Int = R.layout.instruction_edit_fragment
@@ -31,16 +30,16 @@ class InstructionEditFragment : BaseEventsFragment<InstructionEditFragmentBindin
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-          if(instructionId ==0)
-              activity?.finish()
+            if (instructionId == 0)
+                activity?.finish()
             else
-              findNavController().navigate(R.id.navigation_instruction_view)
+                findNavController().navigate(R.id.navigation_instruction_view)
         }
         instructionId = arguments?.getInt("instructionId") ?: 0
         viewModel.loadInstruction(instructionId)
-        view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_description)?.title =
-            viewModel.name.value
-        view.findViewById<RecyclerView>(R.id.rv_steps).apply {
+
+        binding.toolbarDescription.title = viewModel.name.value
+        binding.rvSteps.apply {
             this.adapter = stepsAdapter
             stepsAdapter.itemTouchHelper.attachToRecyclerView(this)
         }
@@ -55,6 +54,7 @@ class InstructionEditFragment : BaseEventsFragment<InstructionEditFragmentBindin
         }
 
     }
+
     @SuppressLint("ResourceType")
     private val stepsAdapter =
         EmptyViewAdapter<Step>(
@@ -73,6 +73,7 @@ class InstructionEditFragment : BaseEventsFragment<InstructionEditFragmentBindin
         }
 
     override fun onAfterSaveAction() {
-       activity?.findNavController(R.id.fragment_navigation_instruction)?.navigate(R.id.navigation_instruction_view)
+        activity?.findNavController(R.id.fragment_navigation_instruction)
+            ?.navigate(R.id.navigation_instruction_view)
     }
 }
