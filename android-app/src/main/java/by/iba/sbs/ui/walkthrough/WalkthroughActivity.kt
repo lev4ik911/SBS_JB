@@ -1,17 +1,18 @@
 package by.iba.sbs.ui.walkthrough
 
+import android.content.Intent
 import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import by.iba.mvvmbase.BaseActivity
 import by.iba.sbs.R
 import by.iba.sbs.databinding.WalkthroughActivityBinding
+import by.iba.sbs.ui.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -108,7 +109,9 @@ class WalkthroughActivity : BaseActivity<WalkthroughActivityBinding, Walkthrough
     }
 
     private fun launchHomeScreen() {
-        Toast.makeText(this, R.string.slides_ended, Toast.LENGTH_LONG).show()
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent)
         finish()
     }
 

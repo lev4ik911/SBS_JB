@@ -1,6 +1,7 @@
 package by.iba.sbs
 
 import android.app.Application
+import android.content.Intent
 import by.iba.sbs.di.serviceModule
 import by.iba.sbs.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -10,7 +11,6 @@ import org.koin.androidx.fragment.koin.fragmentFactory
 import org.koin.core.context.startKoin
 
 class AppStart : Application() {
-
 
 
     override fun onCreate() {
@@ -32,6 +32,12 @@ class AppStart : Application() {
                 )
             )
         }
+        // if (Utils.isAppOnForeground(applicationContext)) {
+        val intent =
+            Intent(applicationContext, by.iba.sbs.ui.walkthrough.WalkthroughActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent)
+        //        }
     }
 
 }
