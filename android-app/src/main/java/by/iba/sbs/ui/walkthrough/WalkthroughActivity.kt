@@ -25,16 +25,6 @@ class WalkthroughActivity : BaseActivity<WalkthroughActivityBinding, Walkthrough
     override val viewModel: WalkthroughViewModel by viewModel()
     override val viewModelVariableId: Int = by.iba.sbs.BR.viewmodel
 
-    // private var binding: ActivityViewsSliderBinding? = null
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        binding = ActivityViewsSliderBinding.inflate(layoutInflater)
-//        setContentView(binding.getRoot())
-//        init()
-//    }
-    /*
-       * ViewPager page change listener
-       */
     var pageChangeCallback: OnPageChangeCallback = object : OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             super.onPageSelected(position)
@@ -53,11 +43,10 @@ class WalkthroughActivity : BaseActivity<WalkthroughActivityBinding, Walkthrough
         }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         init()
     }
-
     fun init() {
         // layouts of all welcome sliders
         // add few more layouts if you want
@@ -94,6 +83,8 @@ class WalkthroughActivity : BaseActivity<WalkthroughActivityBinding, Walkthrough
         val colorsActive = resources.getIntArray(R.array.array_dot_active)
         val colorsInactive = resources.getIntArray(R.array.array_dot_inactive)
         binding.layoutDots.removeAllViews()
+        binding.btnNext.setTextColor(colorsActive[0])
+        binding.btnSkip.setTextColor(colorsActive[0])
         for (i in dots.indices) {
             dots[i] = TextView(this)
             dots[i]!!.text = Html.fromHtml("&#8226;")

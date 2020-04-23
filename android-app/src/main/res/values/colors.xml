@@ -35,15 +35,15 @@
     <color name="colorLightGreen">#5ac18e</color>
     <array name="array_dot_active">
         <item>@color/colorPrimaryVariant</item>
-        <item>@color/colorPrimaryVariant</item>
+        <item>@color/colorPrimary</item>
         <item>@color/colorPrimaryVariant</item>
         <item>@color/colorPrimaryVariant</item>
     </array>
 
     <array name="array_dot_inactive">
-        <item>@color/colorPrimary</item>
-        <item>@color/colorPrimary</item>
-        <item>@color/colorPrimary</item>
-        <item>@color/colorPrimary</item>
+        <item>@color/colorSecondaryVariant</item>
+        <item>@color/colorSecondaryVariant</item>
+        <item>@color/colorSecondaryVariant</item>
+        <item>@color/colorSecondaryVariant</item>
     </array>
 </resources>
