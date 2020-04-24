@@ -5,12 +5,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import by.iba.mvvmbase.BaseEventsActivity
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionActivityBinding
-import by.iba.sbs.databinding.InstructionFragmentBinding
 import com.yalantis.ucrop.UCrop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,9 +18,8 @@ class InstructionActivity : BaseEventsActivity<InstructionActivityBinding, Instr
     override val layoutId: Int = R.layout.instruction_activity
     override val viewModel: InstructionViewModel by viewModel()
     override val viewModelVariableId: Int =  by.iba.sbs.BR.viewmodel
-
-    override fun onStart() {
-        super.onStart()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val instructionId = intent?.getIntExtra("instructionId", 0) ?: 0
         val bundle = Bundle()
         bundle.putInt("instructionId", instructionId)

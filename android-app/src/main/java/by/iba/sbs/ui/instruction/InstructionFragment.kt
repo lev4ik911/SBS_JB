@@ -6,7 +6,6 @@ import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.BaseFragment
 import by.iba.sbs.BR
 import by.iba.sbs.R
@@ -21,7 +20,6 @@ class InstructionFragment :
     override val layoutId: Int = R.layout.instruction_fragment
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: InstructionViewModel by sharedViewModel()
-    private lateinit var demoCollectionAdapter: TabsFragmentAdapter
     private lateinit var viewPager: ViewPager2
      var instructionId = 0
 
@@ -41,9 +39,8 @@ class InstructionFragment :
         viewModel.isFavorite.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             initActionButton()
         })
-        demoCollectionAdapter = TabsFragmentAdapter(this)
-        viewPager = view.findViewById(R.id.view_pager)
-        viewPager.adapter = demoCollectionAdapter
+        viewPager = binding.viewPager
+        viewPager.adapter = TabsFragmentAdapter(this)
 
         TabLayoutMediator(binding.tabsProfile, viewPager) { tab, position ->
             tab.text = when (position) {
@@ -73,7 +70,7 @@ class InstructionFragment :
         }
     }
 
-    class TabsFragmentAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+     inner class TabsFragmentAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
         override fun getItemCount(): Int = 2
 

@@ -83,8 +83,6 @@ class WalkthroughActivity : BaseActivity<WalkthroughActivityBinding, Walkthrough
         val colorsActive = resources.getIntArray(R.array.array_dot_active)
         val colorsInactive = resources.getIntArray(R.array.array_dot_inactive)
         binding.layoutDots.removeAllViews()
-        binding.btnNext.setTextColor(colorsActive[0])
-        binding.btnSkip.setTextColor(colorsActive[0])
         for (i in dots.indices) {
             dots[i] = TextView(this)
             dots[i]!!.text = Html.fromHtml("&#8226;")
