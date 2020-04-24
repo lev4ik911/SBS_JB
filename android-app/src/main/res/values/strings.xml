@@ -13,6 +13,10 @@
     <string name="title_instructions">Instructions</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_steps">Steps</string>
+    <string name="title_feedback">Feedback</string>
+    <string name="title_details">Details</string>
+    <string name="title_subscribers">Subscribers</string>
 
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
@@ -53,12 +57,8 @@
     <string name="skip">Skip</string>
     <string name="next">Next</string>
     <string name="start">Start</string>
-    <string name="title_steps">Steps</string>
-    <string name="title_feedback">Feedback</string>
     <string name="walkthrough_description_1">Search for popular recipes from all over the world</string>
     <string name="walkthrough_description_2">Create your own recipes and earn your rating</string>
     <string name="walkthrough_description_3">Improve your knowledge step by step</string>
     <string name="walkthrough_description_4">Create your own recipes and earn your rating</string>
-    <string name="title_details">Details</string>
-    <string name="title_subscribers">Subscribers</string>
 </resources>
