@@ -89,7 +89,7 @@ class EmptyViewAdapter<T>(
             onBind
         ) else ViewHolder(parent.inflate(emptyViewId), onBind)
         if (dragLayoutId != 0) {
-            holder.itemView.findViewById<View>(dragLayoutId)?.setOnTouchListener { v, event ->
+            holder.itemView.findViewById<View>(dragLayoutId)?.setOnTouchListener { _, event ->
                 if (event.actionMasked == MotionEvent.ACTION_DOWN) {
                     itemTouchHelper.startDrag(holder)
                 }

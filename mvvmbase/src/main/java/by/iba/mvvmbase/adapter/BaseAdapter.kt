@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 open class BaseAdapter<T>(
     @LayoutRes private val layoutId: Int,
     open val onBind: (view: View, item: T, position: Int) -> Unit,
-    open val isSameContent: (oldItem: T, newItem: T) -> Boolean
+    open val isItemsEquals: (oldItem: T, newItem: T) -> Boolean
 ) : RecyclerView.Adapter<BaseAdapter<T>.ViewHolder<T>>(), Filterable {
 
     var charSearch: String = ""
@@ -123,7 +123,7 @@ open class BaseAdapter<T>(
     }
 
     private fun smartUpdate(newItems: List<T>) {
-        val diffCallback = ItemDiffCallback(itemsSource, newItems, isSameContent)
+        val diffCallback = ItemDiffCallback(itemsSource, newItems, isItemsEquals)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         this.itemsSource.clear()
         this.itemsSource.addAll(newItems)

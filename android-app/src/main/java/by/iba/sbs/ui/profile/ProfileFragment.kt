@@ -27,7 +27,7 @@ class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewM
 
         TabLayoutMediator(binding.tabsProfile, viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> getString(R.string.title_details)
+                0 -> getString(R.string.title_instructions)
                 1 -> getString(R.string.title_subscribers)
                 else -> ""
             }
@@ -40,9 +40,9 @@ class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewM
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> ProfileInfoFragment()
+                0 -> ProfileInstructionsFragment()
                 1 -> SubscribersFragment()
-                else -> ProfileInfoFragment()
+                else -> ProfileInstructionsFragment()
             }
         }
     }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
 import by.iba.mvvmbase.BaseFragment
 import by.iba.mvvmbase.adapter.BaseAdapter
 import by.iba.sbs.BR
@@ -40,7 +39,7 @@ class StepsFragment : BaseFragment<StepsFragmentBinding, InstructionViewModel>()
             onBind = { view, item, _ ->
                 view.findViewById<TextView>(R.id.tv_info).text = item.description
             },
-            isSameContent = { oldItem, newItem ->
+            isItemsEquals = { oldItem, newItem ->
                 oldItem.description == newItem.description
             }
         ).also {

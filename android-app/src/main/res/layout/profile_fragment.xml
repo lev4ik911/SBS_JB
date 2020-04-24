@@ -22,7 +22,7 @@
 
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cards"
+                android:id="@+id/cv_profile_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/spacing_xsmall"
@@ -70,22 +70,18 @@
                         android:padding="@dimen/spacing_xxsmall"
                         android:text="@{viewmodel.email}" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1px"
-                        android:layout_marginTop="@dimen/spacing_xsmall"
-                        android:background="@color/colorShadow" />
-
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs_profile"
+                android:layout_below="@id/cv_profile_info"
+                app:tabGravity="fill"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabMode="scrollable"
-                android:layout_below="@id/cards"
+                app:tabMode="fixed"
                 />
+
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/view_pager"
                 android:layout_width="match_parent"
@@ -103,7 +99,7 @@
             android:src="@drawable/ic_profile"
             app:civ_border_color="@color/colorSecondaryVariant"
             app:civ_border_width="@dimen/spacing_xsmall"
-            app:layout_anchor="@id/cards"
+            app:layout_anchor="@id/cv_profile_info"
             app:layout_anchorGravity="top|center" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -122,9 +118,6 @@
             android:tint="@color/colorLightYellow"
             app:layout_anchor="@id/layout_avatar"
             app:layout_anchorGravity="bottom|right"
-
             />
-
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
