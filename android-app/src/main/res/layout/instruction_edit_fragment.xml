@@ -1,22 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.instruction.InstructionEditViewModel" />
+            type="by.iba.sbs.ui.instruction.InstructionViewModel" />
     </data>
-
-    <FrameLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/htab_maincontent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="by.iba.sbs.ui.instruction.InstructionEditFragment">
-
-        <TextView
+        android:fitsSystemWindows="true">
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/white"
+            android:fitsSystemWindows="true">
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/htab_collapse_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:fitsSystemWindows="true"
+                app:contentScrim="@android:color/white"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:titleEnabled="false"
+                app:toolbarId="@+id/toolbar_description">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_collapseMode="parallax">
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_camera"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/spacing_xxlarge"
+                        android:elevation="@dimen/spacing_xsmall"
+                        android:src="@drawable/camera_outline"
+                        android:tint="@android:color/white" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/htab_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fitsSystemWindows="true"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_paneer" />
+                </RelativeLayout>
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:contentInsetStartWithNavigation="0dp"
+                    app:layout_collapseMode="pin"
+                    android:background="@drawable/bg_gradient_top"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:navigationIcon="@drawable/chevron_left"
+                    android:onClick="onToolbarClick"
+                    app:title="Recipe Detail"
+                    app:titleTextColor="?attr/colorPrimaryDark">
+                </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Hello" />
-
-    </FrameLayout>
+            android:background="@drawable/bg_gradient"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/bottom_navigation_height"
+                android:layout_marginTop="@dimen/spacing_xsmall"
+                android:orientation="vertical"
+                >
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cg_categories"
+                    android:layout_marginHorizontal="@dimen/spacing_normal"
+                    android:layout_marginTop="@dimen/spacing_xsmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/te_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_normal"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:layout_marginEnd="@dimen/spacing_xxxxlarge"
+                    android:hint="@string/hint_instruction_name"
+                    android:text="@={viewmodel.name}"
+                    android:textAppearance="@style/Text.Main.Bold" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/te_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/te_name"
+                    android:layout_marginHorizontal="@dimen/spacing_normal"
+                    android:layout_marginTop="@dimen/spacing_xsmall"
+                    android:hint="@string/hint_instruction_description"
+                    android:singleLine="false"
+                    android:text="@={viewmodel.description}"
+                    android:textAppearance="@style/Text" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_steps"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/te_description"
+                    android:background="@android:color/transparent"
+                    android:layout_marginVertical="@dimen/spacing_xsmall"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/instruction_edit_step_list_item" />
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/ivProfile"
+            android:layout_width="@dimen/spacing_xlarge"
+            android:layout_height="@dimen/spacing_xlarge"
+            android:layout_centerVertical="true"
+            android:layout_marginHorizontal="@dimen/spacing_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@null"
+            android:onClick="@{() -> viewmodel.onRemoveInstructionClick()}"
+            android:tint="@color/colorAccent"
+            android:src="@drawable/trash_can_outline"
+            app:layout_anchor="@id/toolbar_description"
+            app:layout_anchorGravity="center|end" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/f_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_large"
+            android:backgroundTint="@android:color/white"
+            android:onClick="@{() -> viewmodel.onAfterSaveAction()}"
+            android:src="@drawable/check_bold"
+            android:tint="@color/colorAccent"
+            app:borderWidth="0dp"
+            app:elevation="@dimen/spacing_xsmall"
+            app:fabSize="normal"
+            app:layout_anchor="@id/htab_collapse_toolbar"
+            app:layout_anchorGravity="bottom|end" />
+        <LinearLayout
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{() -> viewmodel.onAfterSaveAction()}"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_navigation_height"
+            style="@style/Text.Inverse"
+            android:background="@drawable/selector_action_button"
+            >
+            <androidx.appcompat.widget.AppCompatTextView
+                android:text="Save"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

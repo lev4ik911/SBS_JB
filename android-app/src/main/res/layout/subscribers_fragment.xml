@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.profile.SubscribersViewModel" />
+            type="by.iba.sbs.ui.profile.ProfileViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_subscribers"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="by.iba.sbs.ui.profile.SubscribersFragment">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Hello" />
-
-    </FrameLayout>
+        android:layout_marginVertical="@dimen/spacing_xsmall"
+        android:nestedScrollingEnabled="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:context="by.iba.sbs.ui.instruction.StepsFragment"
+        tools:listitem="@layout/instruction_step_list_item" />
 </layout>

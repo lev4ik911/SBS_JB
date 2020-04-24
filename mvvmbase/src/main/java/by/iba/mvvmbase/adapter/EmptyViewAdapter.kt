@@ -17,6 +17,7 @@ class EmptyViewAdapter<T>(
 ) : BaseAdapter<T>(layoutId, onBind, isItemsEquals) {
     @LayoutRes
     var emptyViewId: Int = 0
+
     @LayoutRes
     var dragLayoutId: Int = 0
     val itemTouchHelper by lazy {
@@ -61,7 +62,7 @@ class EmptyViewAdapter<T>(
                     viewHolder.itemView.alpha = 1.0f
                 }
             }
-            ItemTouchHelper(simpleItemTouchCallback)
+        ItemTouchHelper(simpleItemTouchCallback)
     }
 
     fun moveItem(from: Int, to: Int) {
@@ -83,24 +84,18 @@ class EmptyViewAdapter<T>(
 
     @SuppressLint("ResourceType")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder<T> {
-        val holder = if (viewType == 0) ViewHolder(
+        val holder = if (viewType == 0 || emptyViewId == 0) ViewHolder(
             parent.inflate(layoutId),
             onBind
         ) else ViewHolder(parent.inflate(emptyViewId), onBind)
-        if (dragLayoutId == 0) {
-            holder.itemView.setOnTouchListener { v, event ->
+        if (dragLayoutId != 0) {
+            holder.itemView.findViewById<View>(dragLayoutId)?.setOnTouchListener { _, event ->
                 if (event.actionMasked == MotionEvent.ACTION_DOWN) {
                     itemTouchHelper.startDrag(holder)
                 }
                 return@setOnTouchListener true
             }
-        } else
-            holder.itemView.findViewById<View>(dragLayoutId)?.setOnTouchListener { v, event ->
-                if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-                    itemTouchHelper.startDrag(holder)
-                }
-                return@setOnTouchListener true
-            }
+        }
         return holder
     }
 

@@ -1,4 +1,4 @@
-package by.iba.sbs.service
+package by.iba.sbs.tools
 
 import android.annotation.SuppressLint
 import android.content.Context

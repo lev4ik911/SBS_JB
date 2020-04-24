@@ -12,7 +12,7 @@ import com.shashank.sony.fancytoastlib.FancyToast
 
 abstract class BaseFragment<DB : androidx.databinding.ViewDataBinding, VM : BaseViewModel> : Fragment() {
 
-    private lateinit var binding: DB
+    protected lateinit var binding: DB
     protected abstract val layoutId: Int
     protected abstract val viewModelVariableId: Int
     protected abstract val viewModel: VM

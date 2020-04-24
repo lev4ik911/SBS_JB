@@ -15,7 +15,7 @@ import kotlin.math.max
 class SectionsAdapter<T>(
     @LayoutRes private val layoutId: Int,
     override val onBind: (view: View, item: T, position: Int) -> Unit,
-    val isItemsEquals: (oldItem: T, newItem: T) -> Boolean,
+    override val isItemsEquals: (oldItem: T, newItem: T) -> Boolean,
     val getSectionTitle: (item: T) -> String
 ) : BaseAdapter<T>(layoutId, onBind, isItemsEquals), SectionTitleProvider {
 

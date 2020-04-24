@@ -35,10 +35,10 @@ class LoginFragment :
             (activity as LoginActivity).navController.navigate(R.id.navigation_splash)
         }
         viewModel.init()
-        view.findViewById<TextInputEditText>(R.id.et_password)?.setOnEditorActionListener(this)
-        view.findViewById<TextInputEditText>(R.id.et_login)?.setOnEditorActionListener(this)
-        view.findViewById<ShimmerFrameLayout>(R.id.shimmer_view_container).also {
-            it?.waitForLayout { inner ->
+        binding.includePassword.etPassword.setOnEditorActionListener(this)
+        binding.includeEmail.etLogin.setOnEditorActionListener(this)
+        binding.shimmerViewContainer.also {
+            it.waitForLayout { inner ->
                 inner.visibleOrNot(inner.top > 0)
             }
         }
@@ -46,7 +46,7 @@ class LoginFragment :
             val size = resources.getDimension(R.dimen.spacing_large).toInt()
             this.setBounds(0, 0, size, size)
             this.color = resources.getColor(R.color.textColorPrimaryInverse)
-            view.findViewById<MaterialButton>(R.id.btn_login).also {
+            binding.includePassword.btnLogin.also {
                 it.setCompoundDrawables(this, null, null, null)
                 it.setPadding(
                     it.paddingLeft,
@@ -67,12 +67,12 @@ class LoginFragment :
     override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
         if (v != null) {
             if (v.id == R.id.et_login && actionId == EditorInfo.IME_ACTION_NEXT) {
-                view?.findViewById<MaterialButton>(R.id.btn_next)?.callOnClick()
+                binding.includeEmail.btnNext.callOnClick()
                 return true
             }
 
             if (v.id == R.id.et_password && actionId == EditorInfo.IME_ACTION_DONE) {
-                view?.findViewById<MaterialButton>(R.id.btn_login)?.callOnClick()
+                binding.includePassword.btnLogin.callOnClick()
                 return true
             }
         }
@@ -97,21 +97,18 @@ class LoginFragment :
     }
 
     override fun flipToPassword() {
-        view?.findViewById<ViewFlipper>(R.id.flipper_login).also {
-            it?.setInAnimation(context, R.anim.slide_in_right)
-            it?.setOutAnimation(context, R.anim.slide_out_left)
-            it?.showPrevious()
+        binding.flipperLogin.also {
+            it.setInAnimation(context, R.anim.slide_in_right)
+            it.setOutAnimation(context, R.anim.slide_out_left)
+            it.showPrevious()
         }
     }
 
     override fun flipToLogin() {
-        view?.findViewById<ViewFlipper>(R.id.flipper_login).also {
-            it?.setInAnimation(context, android.R.anim.slide_in_left)
-            it?.setOutAnimation(
-                context,
-                android.R.anim.slide_out_right
-            )
-            it?.showNext()
+        binding.flipperLogin.also {
+            it.setInAnimation(context, android.R.anim.slide_in_left)
+            it.setOutAnimation(context, android.R.anim.slide_out_right)
+            it.showNext()
         }
     }
 }

@@ -11,6 +11,7 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/htab_maincontent"
+        tools:ignore="ContentDescription"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -20,13 +21,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
-            android:fitsSystemWindows="true"
-            >
+            android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/htab_collapse_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/profile_image_size"
+                android:layout_height="@dimen/toolbar_height"
                 android:fitsSystemWindows="true"
                 app:contentScrim="@android:color/white"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
@@ -44,31 +44,32 @@
                         android:layout_height="match_parent"
                         android:fitsSystemWindows="true"
                         android:scaleType="fitXY"
-                        android:src="@drawable/ic_paneer" />
-
+                        android:src="@drawable/ic_paneer"
+                        android:transitionName="@string/transition_name_img_view"
+                        />
                 </RelativeLayout>
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar_description"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    android:background="@drawable/bg_gradient_top"
+                    android:onClick="onToolbarClick"
                     app:contentInsetStartWithNavigation="0dp"
                     app:layout_collapseMode="pin"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:navigationIcon="@drawable/chevron_left"
                     app:title="Recipe Detail"
-                    app:titleTextColor="?attr/colorPrimaryDark" />
-
-
+                    app:titleTextColor="?attr/colorPrimaryDark"/>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/bg_gradient"
             android:fillViewport="true"
             android:overScrollMode="never"
-            android:background="@drawable/bg_gradient"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <RelativeLayout
@@ -79,47 +80,41 @@
                 android:paddingBottom="@dimen/spacing_large">
 
                 <TextView
-                    android:id="@+id/tvDishName"
+                    android:id="@+id/tv_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/spacing_normal"
+                    android:layout_marginStart="@dimen/spacing_normal"
                     android:layout_marginTop="@dimen/spacing_small"
-                    android:layout_toStartOf="@id/ivFavourite"
+                    android:layout_marginEnd="@dimen/spacing_xxxxlarge"
                     android:text="@{viewmodel.name}"
-                    android:textAppearance="@style/Text.Main.Bold"
-                     />
-
-                <ImageView
-                    android:id="@+id/ivFavourite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/spacing_normal"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/spacing_small"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/heart"
-                    android:tint="@color/colorLightRed" />
+                    android:textAppearance="@style/Text"
+                    android:transitionName="@string/transition_name_txt_view" />
 
                 <TextView
-                    android:id="@+id/tv_rating"
+                    android:id="@+id/te_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tvDishName"
+                    android:layout_below="@id/tv_name"
                     android:layout_marginHorizontal="@dimen/spacing_normal"
                     android:layout_marginTop="@dimen/spacing_xsmall"
                     android:gravity="center"
                     android:text="@{String.format(@string/text_rating, viewmodel.rating)}"
-                    android:textAppearance="@style/Text.Description"
+                    android:textAppearance="@style/Text.Description" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabs_profile"
+                    app:tabGravity="fill"
+                    app:tabMode="fixed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/te_description"
                      />
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_steps"
-                    android:layout_below="@+id/tv_rating"
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/view_pager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:layout_marginVertical="@dimen/spacing_xsmall"
-                    tools:listitem="@layout/instruction_step_list_item"/>
-
+                    android:layout_below="@id/tabs_profile" />
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
 
@@ -135,7 +130,19 @@
             app:layout_anchor="@id/toolbar_description"
             app:layout_anchorGravity="center|end" />
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/f_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_large"
+            android:backgroundTint="@android:color/white"
+            android:onClick="@{() -> viewmodel.onActionButtonClick()}"
+            android:src="@drawable/heart"
+            android:tint="@color/colorLightRed"
+            app:borderWidth="0dp"
+            app:elevation="@dimen/spacing_xsmall"
+            app:fabSize="normal"
+            app:layout_anchor="@id/htab_collapse_toolbar"
+            app:layout_anchorGravity="bottom|end" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
 </layout>

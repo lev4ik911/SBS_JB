@@ -42,12 +42,6 @@
                 android:layout_marginTop="@dimen/spacing_xxsmall"
                 tools:text="Indian, Fast food" />
         </LinearLayout>
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_drag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="@dimen/spacing_small"
-            android:src="@drawable/drag" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
