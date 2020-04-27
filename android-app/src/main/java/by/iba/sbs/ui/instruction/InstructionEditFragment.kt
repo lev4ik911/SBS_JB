@@ -7,23 +7,23 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.navigation.findNavController
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import by.iba.mvvmbase.BaseFragment
+import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionEditFragmentBinding
 import by.iba.sbs.library.model.Step
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class InstructionEditFragment :
-    BaseFragment<InstructionEditFragmentBinding, InstructionViewModel>() {
+    BaseEventsFragment<InstructionEditFragmentBinding, InstructionEditViewModel, InstructionEditViewModel.EventsListener>() {
 
     override val layoutId: Int = R.layout.instruction_edit_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: InstructionViewModel by sharedViewModel()
+    override val viewModel: InstructionEditViewModel by viewModel()
     var instructionId = 0
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,13 +34,16 @@ class InstructionEditFragment :
                 findNavController().navigate(R.id.navigation_instruction_view)
         }
         instructionId = arguments?.getInt("instructionId") ?: 0
+
         viewModel.loadInstruction(instructionId)
 
-        binding.toolbarDescription.title = viewModel.name.value
         binding.rvSteps.apply {
             this.adapter = stepsAdapter
             stepsAdapter.itemTouchHelper.attachToRecyclerView(this)
         }
+        viewModel.name.observe(viewLifecycleOwner, Observer {
+            binding.toolbarDescription.title = it
+        })
         viewModel.steps.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             stepsAdapter.addItems(it)
         })

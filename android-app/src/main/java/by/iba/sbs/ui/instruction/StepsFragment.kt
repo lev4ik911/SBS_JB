@@ -42,6 +42,5 @@ class StepsFragment : BaseFragment<StepsFragmentBinding, InstructionViewModel>()
             isItemsEquals = { oldItem, newItem ->
                 oldItem.description == newItem.description
             }
-        ).also {
-        }
+        )
 }

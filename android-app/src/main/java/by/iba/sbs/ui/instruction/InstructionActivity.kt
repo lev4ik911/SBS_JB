@@ -61,7 +61,7 @@ class InstructionActivity : BaseEventsActivity<InstructionActivityBinding, Instr
         findNavController(R.id.fragment_navigation_instruction).navigate(R.id.navigation_instruction_edit,bundle)
     }
 
-    override fun onAfterSaveAction() {
+    fun onAfterSaveAction() {
         findNavController(R.id.fragment_navigation_instruction)
             .navigate(R.id.navigation_instruction_view)
     }

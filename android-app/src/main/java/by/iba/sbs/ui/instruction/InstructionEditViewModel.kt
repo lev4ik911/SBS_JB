@@ -10,8 +10,8 @@ import by.iba.sbs.library.model.Step
 import java.util.*
 
 
-class InstructionViewModel : BaseViewModel(),
-    EventsDispatcherOwner<InstructionViewModel.EventsListener> {
+class InstructionEditViewModel : BaseViewModel(),
+    EventsDispatcherOwner<InstructionEditViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
     val name = MutableLiveData("Отпадный шашлычок!")
     val description = MutableLiveData("Отпадный шашлычок desc!")
@@ -20,8 +20,18 @@ class InstructionViewModel : BaseViewModel(),
     val isInstructionOwner = MutableLiveData(true)
     val feedback = MutableLiveData<List<Feedback>>().apply {
         val mData = ArrayList<Feedback>()
-        mData.add(Feedback("Charlize Theron", "Something I really appreciate about you is your aptitude for problem solving in a proactive way."))
-        mData.add(Feedback("Matt Damon", "I really think you have a superpower around making new hires feel welcome."))
+        mData.add(
+            Feedback(
+                "Charlize Theron",
+                "Something I really appreciate about you is your aptitude for problem solving in a proactive way."
+            )
+        )
+        mData.add(
+            Feedback(
+                "Matt Damon",
+                "I really think you have a superpower around making new hires feel welcome."
+            )
+        )
         this.postValue(mData)
     }
 
@@ -68,18 +78,21 @@ class InstructionViewModel : BaseViewModel(),
                     description = " Затем нанизывать кусочки маринованного мяса на шампуры и жарить шашлык из свинины."
                 )
             )
+
             steps.postValue(mData)
         }
     }
 
-    fun onActionButtonClick() {
-        if (isInstructionOwner.value!!)
-            eventsDispatcher.dispatchEvent { onCallInstructionEditor(2) }
-        else isFavorite.value = !isFavorite.value!!
+    fun onAfterSaveAction() {
+        eventsDispatcher.dispatchEvent { onAfterSaveAction() }
+    }
+
+    fun onRemoveInstructionClick() {
+
     }
 
     interface EventsListener {
-        fun onCallInstructionEditor(instructionId: Int)
+        fun onAfterSaveAction()
     }
 
 }

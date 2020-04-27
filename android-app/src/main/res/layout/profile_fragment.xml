@@ -55,7 +55,7 @@
                             android:layout_height="@dimen/profile_image_size"
                             android:layout_margin="@dimen/spacing_normal"
                             android:src="@drawable/ic_profile"
-                            app:civ_border_color="@color/colorSecondaryVariant"
+                            app:civ_border_color="@android:color/white"
                             app:civ_border_width="@dimen/spacing_xsmall"
                             app:layout_anchorGravity="top|center"
                             app:layout_collapseMode="pin" />

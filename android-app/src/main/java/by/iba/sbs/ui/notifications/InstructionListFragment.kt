@@ -45,7 +45,8 @@ class InstructionListFragment :
                  this.transitionName = transitionSharedNameTxtView
                  textViewPair = Pair.create(this, transitionSharedNameTxtView)
              }
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity as Activity,
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                activity as Activity,
                 imageViewPair,
                 textViewPair)
             val intent = Intent(activity, InstructionActivity::class.java)

@@ -3,6 +3,7 @@ package by.iba.sbs.di
 import by.iba.ecl.ui.MainViewModel
 import by.iba.sbs.library.service.SystemInformation
 import by.iba.sbs.tools.SystemInfo
+import by.iba.sbs.ui.instruction.InstructionEditViewModel
 import by.iba.sbs.ui.instruction.InstructionFragment
 import by.iba.sbs.ui.instruction.InstructionViewModel
 import by.iba.sbs.ui.login.LoginViewModel
@@ -25,6 +26,7 @@ val viewModelModule = module {
     viewModel { ResetViewModel() }
     viewModel { ProfileViewModel() }
     viewModel { InstructionViewModel() }
+    viewModel { InstructionEditViewModel() }
     viewModel { InstructionListViewModel() }
     viewModel { WalkthroughViewModel() }
     //viewModel { PostDetailsViewModel(userPostUseCase = get(), commentsUseCase = get()) }
