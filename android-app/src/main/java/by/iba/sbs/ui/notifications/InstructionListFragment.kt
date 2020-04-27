@@ -73,7 +73,6 @@ class InstructionListFragment :
                 oldItem.title == newItem.title
             }).also {
             it.emptyViewId = R.layout.new_item
-            it.dragLayoutId = R.id.iv_drag
         }
 
     class ExampleListModel(val title: String, val author: String) {

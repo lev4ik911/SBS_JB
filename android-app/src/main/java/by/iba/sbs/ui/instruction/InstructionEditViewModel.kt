@@ -5,7 +5,6 @@ import by.iba.mvvmbase.BaseViewModel
 import by.iba.mvvmbase.dispatcher.EventsDispatcher
 import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
 import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
-import by.iba.sbs.library.model.Feedback
 import by.iba.sbs.library.model.Step
 import java.util.*
 
@@ -15,25 +14,6 @@ class InstructionEditViewModel : BaseViewModel(),
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
     val name = MutableLiveData("Отпадный шашлычок!")
     val description = MutableLiveData("Отпадный шашлычок desc!")
-    val rating = MutableLiveData(100500)
-    val isFavorite = MutableLiveData(true)
-    val isInstructionOwner = MutableLiveData(true)
-    val feedback = MutableLiveData<List<Feedback>>().apply {
-        val mData = ArrayList<Feedback>()
-        mData.add(
-            Feedback(
-                "Charlize Theron",
-                "Something I really appreciate about you is your aptitude for problem solving in a proactive way."
-            )
-        )
-        mData.add(
-            Feedback(
-                "Matt Damon",
-                "I really think you have a superpower around making new hires feel welcome."
-            )
-        )
-        this.postValue(mData)
-    }
 
     val steps = MutableLiveData<List<Step>>()
 
@@ -83,7 +63,8 @@ class InstructionEditViewModel : BaseViewModel(),
         }
     }
 
-    fun onAfterSaveAction() {
+
+    fun onSaveAction() {
         eventsDispatcher.dispatchEvent { onAfterSaveAction() }
     }
 

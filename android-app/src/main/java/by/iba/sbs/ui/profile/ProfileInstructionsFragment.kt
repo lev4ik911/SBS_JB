@@ -71,8 +71,8 @@ class ProfileInstructionsFragment :
         EmptyViewAdapter<Instruction>(
             R.layout.instruction_list_item,
             onBind = { view, item, _ ->
-                view.findViewById<TextView>(R.id.tv_title).text = item.name
-                view.findViewById<TextView>(R.id.tv_info).text = item.description
+                view.findViewById<TextView>(R.id.tv_title)?.text = item.name
+                view.findViewById<TextView>(R.id.tv_info)?.text = item.description
             },
             isItemsEquals = { oldItem, newItem ->
                 oldItem.description == newItem.description

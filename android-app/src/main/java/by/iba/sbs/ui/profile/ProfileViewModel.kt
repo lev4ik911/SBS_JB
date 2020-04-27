@@ -12,11 +12,17 @@ class ProfileViewModel : BaseViewModel(), EventsDispatcherOwner<ProfileViewModel
     val email = MutableLiveData("email@email.com")
     val fullName = MutableLiveData("fullName")
     val rating = MutableLiveData("547")
+    val isFavorite = MutableLiveData(true)
+    val isMyProfile = MutableLiveData(true)
     val instructions = MutableLiveData<List<Instruction>>().apply {
         val mData = ArrayList<Instruction>()
         mData.add(Instruction("Как стать счастливым", "Dobry"))
         mData.add(Instruction("Отпадный шашлычок", "Dobry"))
         value = mData
+    }
+
+    fun onActionButtonClick() {
+
     }
     interface EventsListener {
 

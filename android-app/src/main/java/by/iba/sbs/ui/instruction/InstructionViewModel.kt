@@ -17,7 +17,7 @@ class InstructionViewModel : BaseViewModel(),
     val description = MutableLiveData("Отпадный шашлычок desc!")
     val rating = MutableLiveData(100500)
     val isFavorite = MutableLiveData(true)
-    val isInstructionOwner = MutableLiveData(true)
+    val isMyInstruction = MutableLiveData(true)
     val feedback = MutableLiveData<List<Feedback>>().apply {
         val mData = ArrayList<Feedback>()
         mData.add(Feedback("Charlize Theron", "Something I really appreciate about you is your aptitude for problem solving in a proactive way."))
@@ -73,7 +73,7 @@ class InstructionViewModel : BaseViewModel(),
     }
 
     fun onActionButtonClick() {
-        if (isInstructionOwner.value!!)
+        if (isMyInstruction.value!!)
             eventsDispatcher.dispatchEvent { onCallInstructionEditor(2) }
         else isFavorite.value = !isFavorite.value!!
     }

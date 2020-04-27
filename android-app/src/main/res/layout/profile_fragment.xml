@@ -22,7 +22,7 @@
             android:fitsSystemWindows="true">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar"
+                android:id="@+id/htab_collapse_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
@@ -120,7 +120,45 @@
                     app:contentInsetStartWithNavigation="0dp"
                     app:layout_collapseMode="pin"
                     app:layout_scrollFlags="scroll|enterAlways"
-                    app:titleTextColor="?attr/colorPrimaryDark" />
+                    app:titleTextColor="?attr/colorPrimaryDark">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Space
+                            android:layout_width="@dimen/spacing_large"
+                            android:layout_height="@dimen/spacing_large" />
+
+                        <TextView
+                            android:id="@+id/tv_title"
+                            style="@style/Text.FragmentTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:layout_weight="1"
+                            android:gravity="center" />
+
+                        <ImageButton
+                            android:id="@+id/btn_toolbar_action"
+                            android:layout_width="@dimen/spacing_xlarge"
+                            android:layout_height="@dimen/spacing_xlarge"
+                            android:layout_gravity="end|center"
+                            android:background="@null"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:onClick="@{() -> viewmodel.onActionButtonClick()}"
+                            android:src="@drawable/heart"
+                            android:tint="@color/colorLightRed"
+                            android:visibility="invisible" />
+
+                        <Space
+                            android:layout_width="@dimen/spacing_large"
+                            android:layout_height="@dimen/spacing_large" />
+                    </LinearLayout>
+                </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -154,6 +192,20 @@
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/f_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_large"
+            android:backgroundTint="@android:color/white"
+            android:onClick="@{() -> viewmodel.onActionButtonClick()}"
+            android:src="@drawable/heart"
+            android:tint="@color/colorLightRed"
+            app:borderWidth="0dp"
+            app:elevation="@dimen/spacing_xsmall"
+            app:fabSize="normal"
+            app:layout_anchor="@id/htab_collapse_toolbar"
+            app:layout_anchorGravity="bottom|end" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
