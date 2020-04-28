@@ -73,8 +73,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="end"
-                            android:layout_weight="1"
-                            android:gravity="center" />
+                            android:layout_weight="1" />
 
                         <ImageButton
                             android:id="@+id/btn_toolbar_action"
@@ -93,7 +92,6 @@
                             android:id="@+id/ivProfile"
                             android:layout_width="@dimen/spacing_xlarge"
                             android:layout_height="@dimen/spacing_xlarge"
-                            android:layout_centerVertical="true"
                             android:layout_marginHorizontal="@dimen/spacing_normal"
                             android:clickable="true"
                             android:focusable="true"

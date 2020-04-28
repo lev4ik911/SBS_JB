@@ -2,7 +2,7 @@ package by.iba.sbs.ui.profile
 
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AlphaAnimation
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -10,6 +10,7 @@ import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileFragmentBinding
+import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -21,8 +22,8 @@ class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewM
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: ProfileViewModel by viewModel()
     private lateinit var viewPager: ViewPager2
-    private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.6f
-    private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.2f
+    private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
+    private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
     private val ALPHA_ANIMATIONS_DURATION = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
@@ -50,15 +51,15 @@ class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewM
             when {
                 viewModel.isMyProfile.value!! -> {
                     this.setImageResource(R.drawable.file_document_edit_outline)
-                    this.setColorFilter(resources.getColor(R.color.colorAccent))
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 }
                 viewModel.isFavorite.value!! -> {
                     this.setImageResource(R.drawable.heart)
-                    this.setColorFilter(resources.getColor(R.color.colorLightRed))
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
                 }
                 else -> {
                     this.setImageResource(R.drawable.heart_outline)
-                    this.setColorFilter(resources.getColor(R.color.colorLightRed))
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
                 }
             }
         }
@@ -66,15 +67,15 @@ class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewM
             when {
                 viewModel.isMyProfile.value!! -> {
                     this.setImageResource(R.drawable.file_document_edit_outline)
-                    this.setColorFilter(resources.getColor(R.color.colorAccent))
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 }
                 viewModel.isFavorite.value!! -> {
                     this.setImageResource(R.drawable.heart)
-                    this.setColorFilter(resources.getColor(R.color.colorLightRed))
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
                 }
                 else -> {
                     this.setImageResource(R.drawable.heart_outline)
-                    this.setColorFilter(resources.getColor(R.color.colorLightRed))
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
                 }
             }
         }
@@ -128,17 +129,6 @@ class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewM
                 mIsTheTitleContainerVisible = true
             }
         }
-    }
-
-    private fun startAlphaAnimation(v: View, duration: Long, visibility: Int) {
-        val alphaAnimation = if (visibility == View.VISIBLE)
-            AlphaAnimation(0f, 1f)
-        else
-            AlphaAnimation(1f, 0f)
-
-        alphaAnimation.duration = duration
-        alphaAnimation.fillAfter = true
-        v.startAnimation(alphaAnimation)
     }
 
     inner class TabsFragmentAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

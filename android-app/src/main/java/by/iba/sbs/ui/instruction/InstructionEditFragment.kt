@@ -15,18 +15,27 @@ import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionEditFragmentBinding
 import by.iba.sbs.library.model.Step
+import by.iba.sbs.tools.Extentions
+import com.google.android.material.appbar.AppBarLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class InstructionEditFragment :
-    BaseEventsFragment<InstructionEditFragmentBinding, InstructionEditViewModel, InstructionEditViewModel.EventsListener>() {
+    BaseEventsFragment<InstructionEditFragmentBinding, InstructionEditViewModel, InstructionEditViewModel.EventsListener>(),
+    InstructionEditViewModel.EventsListener, AppBarLayout.OnOffsetChangedListener {
 
     override val layoutId: Int = R.layout.instruction_edit_fragment
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: InstructionEditViewModel by viewModel()
+    private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
+    private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
+    private val ALPHA_ANIMATIONS_DURATION = 200L
+    private var mIsTheTitleVisible = false
+    private var mIsTheTitleContainerVisible = true
     var instructionId = 0
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.appBar.addOnOffsetChangedListener(this)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             if (instructionId == 0)
                 activity?.finish()
@@ -53,6 +62,68 @@ class InstructionEditFragment :
         stepsAdapter.onEmptyViewItemClick = {
             // startActivity(Intent(activity, InstructionActivity::class.java))
         }
+    }
+
+    override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
+        val maxScroll = binding.appBar.totalScrollRange
+        val percentage = Math.abs(p1).toFloat() / maxScroll.toFloat()
+        handleAlphaOnTitle(percentage)
+        handleToolbarTitleVisibility(percentage)
+    }
+
+    private fun handleToolbarTitleVisibility(percentage: Float) {
+        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+
+            if (!mIsTheTitleVisible) {
+
+                Extentions.startAlphaAnimation(
+                    binding.tvTitle,
+                    ALPHA_ANIMATIONS_DURATION,
+                    View.VISIBLE
+                )
+                mIsTheTitleVisible = true
+                binding.tvTitle.text = binding.teName.text
+                binding.btnToolbarAction.visibility = View.INVISIBLE
+            }
+        } else {
+            if (mIsTheTitleVisible) {
+                Extentions.startAlphaAnimation(
+                    binding.tvTitle,
+                    ALPHA_ANIMATIONS_DURATION,
+                    View.INVISIBLE
+                )
+                mIsTheTitleVisible = false
+                binding.tvTitle.text = ""
+                binding.btnToolbarAction.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun handleAlphaOnTitle(percentage: Float) {
+        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+            if (mIsTheTitleContainerVisible) {
+                binding.fActionButton.visibility = View.INVISIBLE
+                Extentions.startAlphaAnimation(
+                    binding.btnToolbarAction,
+                    ALPHA_ANIMATIONS_DURATION,
+                    View.VISIBLE
+                )
+                mIsTheTitleContainerVisible = false
+            }
+        } else {
+            if (!mIsTheTitleContainerVisible) {
+                Extentions.startAlphaAnimation(
+                    binding.btnToolbarAction,
+                    ALPHA_ANIMATIONS_DURATION, View.INVISIBLE
+                )
+                binding.fActionButton.visibility = View.VISIBLE
+                mIsTheTitleContainerVisible = true
+            }
+        }
+    }
+
+    override fun onAfterSaveAction() {
+        (activity as InstructionActivity).onAfterSaveAction()
     }
 
     @SuppressLint("ResourceType")

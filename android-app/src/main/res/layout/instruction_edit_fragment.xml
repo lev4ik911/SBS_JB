@@ -59,6 +59,49 @@
                     android:onClick="onToolbarClick"
                     app:title="Recipe Detail"
                     app:titleTextColor="?attr/colorPrimaryDark">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_title"
+                            style="@style/Text.FragmentTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:layout_weight="1" />
+
+                        <ImageButton
+                            android:id="@+id/btn_toolbar_action"
+                            android:layout_width="@dimen/spacing_xlarge"
+                            android:layout_height="@dimen/spacing_xlarge"
+                            android:layout_gravity="end|center"
+                            android:background="@null"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:onClick="@{() -> viewmodel.onSaveAction()}"
+                            android:src="@drawable/check_bold"
+                            android:tint="@color/colorAccent"
+                            android:visibility="invisible"
+                            tools:ignore="ContentDescription" />
+
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/iv_profile"
+                            android:layout_width="@dimen/spacing_xlarge"
+                            android:layout_height="@dimen/spacing_xlarge"
+                            android:layout_marginHorizontal="@dimen/spacing_normal"
+                            android:background="@null"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:onClick="@{() -> viewmodel.onRemoveInstructionClick()}"
+                            android:src="@drawable/trash_can_outline"
+                            android:tint="@color/colorAccent"
+                            app:layout_anchor="@id/toolbar_description"
+                            app:layout_anchorGravity="center|end" />
+                    </LinearLayout>
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -114,20 +157,7 @@
                     tools:listitem="@layout/instruction_edit_step_list_item" />
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/ivProfile"
-            android:layout_width="@dimen/spacing_xlarge"
-            android:layout_height="@dimen/spacing_xlarge"
-            android:layout_centerVertical="true"
-            android:layout_marginHorizontal="@dimen/spacing_normal"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="@null"
-            android:onClick="@{() -> viewmodel.onRemoveInstructionClick()}"
-            android:tint="@color/colorAccent"
-            android:src="@drawable/trash_can_outline"
-            app:layout_anchor="@id/toolbar_description"
-            app:layout_anchorGravity="center|end" />
+
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/f_action_button"
             android:layout_width="wrap_content"
@@ -154,7 +184,7 @@
             android:background="@drawable/selector_action_button"
             >
             <androidx.appcompat.widget.AppCompatTextView
-                android:text="Save"
+                android:text="@string/btn_save"
                 android:textColor="?android:attr/textColorPrimaryInverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>

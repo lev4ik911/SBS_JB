@@ -39,7 +39,7 @@
     <string name="btn_reset">Reset</string>
     <string name="btn_login">Login</string>
     <string name="btn_register">Register</string>
-    <string name="btn_just_look"> I wanna see</string>
+    <string name="btn_just_look"> I want to see</string>
     <string name="caption_register">Register</string>
     <string name="text_rating">Rating: %s</string>
     <string name="create_instruction">Add instruction</string>
@@ -61,4 +61,5 @@
     <string name="walkthrough_description_2">Create your own recipes and earn your rating</string>
     <string name="walkthrough_description_3">Improve your knowledge step by step</string>
     <string name="walkthrough_description_4">Create your own recipes and earn your rating</string>
+    <string name="btn_save">Save</string>
 </resources>
