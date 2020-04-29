@@ -15,6 +15,7 @@ import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import kotlin.math.abs
 
 class InstructionFragment :
     BaseFragment<InstructionFragmentBinding, InstructionViewModel>(),
@@ -27,7 +28,7 @@ class InstructionFragment :
     private lateinit var viewPager: ViewPager2
      private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
      private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
-     private val ALPHA_ANIMATIONS_DURATION = 200L
+     private val mAlphaAnimationsDuration = 200L
      private var mIsTheTitleVisible = false
      private var mIsTheTitleContainerVisible = true
      var instructionId = 0
@@ -98,7 +99,7 @@ class InstructionFragment :
 
      override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
          val maxScroll = binding.appBar.totalScrollRange
-         val percentage = Math.abs(p1).toFloat() / maxScroll.toFloat()
+         val percentage = abs(p1).toFloat() / maxScroll.toFloat()
          handleAlphaOnTitle(percentage)
          handleToolbarTitleVisibility(percentage)
      }
@@ -108,14 +109,14 @@ class InstructionFragment :
 
              if (!mIsTheTitleVisible) {
 
-                 startAlphaAnimation(binding.tvTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE)
+                 startAlphaAnimation(binding.tvTitle, mAlphaAnimationsDuration, View.VISIBLE)
                  mIsTheTitleVisible = true
                  binding.tvTitle.text = binding.tvName.text
                  binding.btnToolbarAction.visibility = View.INVISIBLE
              }
          } else {
              if (mIsTheTitleVisible) {
-                 startAlphaAnimation(binding.tvTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE)
+                 startAlphaAnimation(binding.tvTitle, mAlphaAnimationsDuration, View.INVISIBLE)
                  mIsTheTitleVisible = false
                  binding.tvTitle.text = ""
                  binding.btnToolbarAction.visibility = View.VISIBLE
@@ -129,7 +130,7 @@ class InstructionFragment :
                  binding.fActionButton.visibility = View.INVISIBLE
                  startAlphaAnimation(
                      binding.btnToolbarAction,
-                     ALPHA_ANIMATIONS_DURATION,
+                     mAlphaAnimationsDuration,
                      View.VISIBLE
                  )
                  mIsTheTitleContainerVisible = false
@@ -138,7 +139,7 @@ class InstructionFragment :
              if (!mIsTheTitleContainerVisible) {
                  startAlphaAnimation(
                      binding.btnToolbarAction,
-                     ALPHA_ANIMATIONS_DURATION, View.INVISIBLE
+                     mAlphaAnimationsDuration, View.INVISIBLE
                  )
                  binding.fActionButton.visibility = View.VISIBLE
                  mIsTheTitleContainerVisible = true

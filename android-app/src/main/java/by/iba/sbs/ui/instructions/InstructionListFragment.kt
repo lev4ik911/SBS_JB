@@ -1,4 +1,4 @@
-package by.iba.sbs.ui.notifications
+package by.iba.sbs.ui.instructions
 
 import android.annotation.SuppressLint
 import android.app.Activity

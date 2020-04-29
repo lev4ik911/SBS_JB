@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import by.iba.mvvmbase.BaseEventsActivity
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionActivityBinding
+import by.iba.sbs.ui.profile.ProfileActivity
 import com.yalantis.ucrop.UCrop
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -59,6 +60,13 @@ class InstructionActivity : BaseEventsActivity<InstructionActivityBinding, Instr
         val bundle = Bundle()
         bundle.putInt("instructionId", instructionId)
         findNavController(R.id.fragment_navigation_instruction).navigate(R.id.navigation_instruction_edit,bundle)
+    }
+
+    override fun onOpenProfile(profileId: Int) {
+        val intent = Intent(this, ProfileActivity::class.java)
+        intent.putExtra("profileId", profileId)
+        // findNavController().navigate(R.id.navigation_instruction_edit, bundle)
+        startActivity(intent)
     }
 
     fun onAfterSaveAction() {

@@ -11,11 +11,14 @@ import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileFragmentBinding
 import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
+import by.iba.sbs.ui.MainActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.math.abs
 
-class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewModel, ProfileViewModel.EventsListener>(),
+class ProfileFragment :
+    BaseEventsFragment<ProfileFragmentBinding, ProfileViewModel, ProfileViewModel.EventsListener>(),
     ProfileViewModel.EventsListener, AppBarLayout.OnOffsetChangedListener {
 
     override val layoutId: Int = R.layout.profile_fragment
@@ -24,15 +27,24 @@ class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewM
     private lateinit var viewPager: ViewPager2
     private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
     private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
-    private val ALPHA_ANIMATIONS_DURATION = 200L
+    private val mAlphaAnimationsDuration = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initActionButton()
         viewModel.isFavorite.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             initActionButton()
         })
+        when (activity) {
+            is MainActivity -> {
+                binding.toolbar.navigationIcon = null
+            }
+            is ProfileActivity -> {
+                binding.toolbar.navigationIcon = resources.getDrawable(R.drawable.chevron_left)
+            }
+        }
         binding.appbar.addOnOffsetChangedListener(this)
         viewPager = binding.viewPager
         viewPager.adapter = TabsFragmentAdapter(this)
@@ -83,7 +95,7 @@ class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewM
 
     override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
         val maxScroll = binding.appbar.totalScrollRange
-        val percentage = Math.abs(p1).toFloat() / maxScroll.toFloat()
+        val percentage = abs(p1).toFloat() / maxScroll.toFloat()
         handleAlphaOnTitle(percentage)
         handleToolbarTitleVisibility(percentage)
     }
@@ -93,14 +105,14 @@ class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewM
 
             if (!mIsTheTitleVisible) {
 
-                startAlphaAnimation(binding.tvTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE)
+                startAlphaAnimation(binding.tvTitle, mAlphaAnimationsDuration, View.VISIBLE)
                 mIsTheTitleVisible = true
                 binding.tvTitle.text = binding.tvUserName.text
                 binding.btnToolbarAction.visibility = View.INVISIBLE
             }
         } else {
             if (mIsTheTitleVisible) {
-                startAlphaAnimation(binding.tvTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE)
+                startAlphaAnimation(binding.tvTitle, mAlphaAnimationsDuration, View.INVISIBLE)
                 mIsTheTitleVisible = false
                 binding.tvTitle.text = ""
                 binding.btnToolbarAction.visibility = View.VISIBLE
@@ -114,7 +126,7 @@ class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewM
                 binding.fActionButton.visibility = View.INVISIBLE
                 startAlphaAnimation(
                     binding.btnToolbarAction,
-                    ALPHA_ANIMATIONS_DURATION,
+                    mAlphaAnimationsDuration,
                     View.VISIBLE
                 )
                 mIsTheTitleContainerVisible = false
@@ -123,7 +135,7 @@ class ProfileFragment :  BaseEventsFragment<ProfileFragmentBinding, ProfileViewM
             if (!mIsTheTitleContainerVisible) {
                 startAlphaAnimation(
                     binding.btnToolbarAction,
-                    ALPHA_ANIMATIONS_DURATION, View.INVISIBLE
+                    mAlphaAnimationsDuration, View.INVISIBLE
                 )
                 binding.fActionButton.visibility = View.VISIBLE
                 mIsTheTitleContainerVisible = true

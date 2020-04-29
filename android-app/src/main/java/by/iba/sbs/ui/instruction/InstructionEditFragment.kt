@@ -18,6 +18,7 @@ import by.iba.sbs.library.model.Step
 import by.iba.sbs.tools.Extentions
 import com.google.android.material.appbar.AppBarLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.math.abs
 
 
 class InstructionEditFragment :
@@ -29,7 +30,7 @@ class InstructionEditFragment :
     override val viewModel: InstructionEditViewModel by viewModel()
     private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
     private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
-    private val ALPHA_ANIMATIONS_DURATION = 200L
+    private val mAlphaAnimationsDuration = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
     var instructionId = 0
@@ -66,7 +67,7 @@ class InstructionEditFragment :
 
     override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
         val maxScroll = binding.appBar.totalScrollRange
-        val percentage = Math.abs(p1).toFloat() / maxScroll.toFloat()
+        val percentage = abs(p1).toFloat() / maxScroll.toFloat()
         handleAlphaOnTitle(percentage)
         handleToolbarTitleVisibility(percentage)
     }
@@ -78,7 +79,7 @@ class InstructionEditFragment :
 
                 Extentions.startAlphaAnimation(
                     binding.tvTitle,
-                    ALPHA_ANIMATIONS_DURATION,
+                    mAlphaAnimationsDuration,
                     View.VISIBLE
                 )
                 mIsTheTitleVisible = true
@@ -89,7 +90,7 @@ class InstructionEditFragment :
             if (mIsTheTitleVisible) {
                 Extentions.startAlphaAnimation(
                     binding.tvTitle,
-                    ALPHA_ANIMATIONS_DURATION,
+                    mAlphaAnimationsDuration,
                     View.INVISIBLE
                 )
                 mIsTheTitleVisible = false
@@ -105,7 +106,7 @@ class InstructionEditFragment :
                 binding.fActionButton.visibility = View.INVISIBLE
                 Extentions.startAlphaAnimation(
                     binding.btnToolbarAction,
-                    ALPHA_ANIMATIONS_DURATION,
+                    mAlphaAnimationsDuration,
                     View.VISIBLE
                 )
                 mIsTheTitleContainerVisible = false
@@ -114,7 +115,7 @@ class InstructionEditFragment :
             if (!mIsTheTitleContainerVisible) {
                 Extentions.startAlphaAnimation(
                     binding.btnToolbarAction,
-                    ALPHA_ANIMATIONS_DURATION, View.INVISIBLE
+                    mAlphaAnimationsDuration, View.INVISIBLE
                 )
                 binding.fActionButton.visibility = View.VISIBLE
                 mIsTheTitleContainerVisible = true

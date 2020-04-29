@@ -6,11 +6,11 @@ import by.iba.sbs.tools.SystemInfo
 import by.iba.sbs.ui.instruction.InstructionEditViewModel
 import by.iba.sbs.ui.instruction.InstructionFragment
 import by.iba.sbs.ui.instruction.InstructionViewModel
+import by.iba.sbs.ui.instructions.InstructionListViewModel
 import by.iba.sbs.ui.login.LoginViewModel
 import by.iba.sbs.ui.login.RegisterViewModel
 import by.iba.sbs.ui.login.ResetViewModel
 import by.iba.sbs.ui.login.SplashViewModel
-import by.iba.sbs.ui.notifications.InstructionListViewModel
 import by.iba.sbs.ui.profile.ProfileViewModel
 import by.iba.sbs.ui.walkthrough.WalkthroughViewModel
 import org.koin.android.ext.koin.androidContext

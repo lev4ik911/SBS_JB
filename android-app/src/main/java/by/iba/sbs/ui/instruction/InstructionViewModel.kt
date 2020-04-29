@@ -13,15 +13,25 @@ import java.util.*
 class InstructionViewModel : BaseViewModel(),
     EventsDispatcherOwner<InstructionViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
-    val name = MutableLiveData("Отпадный шашлычок!")
-    val description = MutableLiveData("Отпадный шашлычок desc!")
+    val name = MutableLiveData("")
+    val description = MutableLiveData("")
     val rating = MutableLiveData(100500)
     val isFavorite = MutableLiveData(true)
     val isMyInstruction = MutableLiveData(true)
     val feedback = MutableLiveData<List<Feedback>>().apply {
         val mData = ArrayList<Feedback>()
-        mData.add(Feedback("Charlize Theron", "Something I really appreciate about you is your aptitude for problem solving in a proactive way."))
-        mData.add(Feedback("Matt Damon", "I really think you have a superpower around making new hires feel welcome."))
+        mData.add(
+            Feedback(
+                "Charlize Theron",
+                "Something I really appreciate about you is your aptitude for problem solving in a proactive way."
+            )
+        )
+        mData.add(
+            Feedback(
+                "Matt Damon",
+                "I really think you have a superpower around making new hires feel welcome."
+            )
+        )
         this.postValue(mData)
     }
 
@@ -78,8 +88,13 @@ class InstructionViewModel : BaseViewModel(),
         else isFavorite.value = !isFavorite.value!!
     }
 
+    fun onOpenProfileClick() {
+        eventsDispatcher.dispatchEvent { onOpenProfile(1) }//TODO
+    }
+
     interface EventsListener {
         fun onCallInstructionEditor(instructionId: Int)
+        fun onOpenProfile(profileId: Int)
     }
 
 }

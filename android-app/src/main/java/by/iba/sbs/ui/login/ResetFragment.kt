@@ -3,7 +3,6 @@ package by.iba.sbs.ui.login
 import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.TextView
-import android.widget.ViewFlipper
 import androidx.activity.addCallback
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.sbs.BR
@@ -25,19 +24,19 @@ class ResetFragment :  BaseEventsFragment<ResetFragmentBinding, ResetViewModel, 
     }
     override fun onNextButtonPressed(){
         binding.flipperLogin.also {
-            it?.setInAnimation(context, R.anim.slide_in_right)
-            it?.setOutAnimation(
+            it.setInAnimation(context, R.anim.slide_in_right)
+            it.setOutAnimation(
                 context,
                 R.anim.slide_out_left
             )
-            it?.showNext()
+            it.showNext()
         }
     }
     override fun onBackButtonPressed(){
         binding.flipperLogin.also {
-            it?.setInAnimation(context, R.anim.slide_in_left)
-            it?.setOutAnimation(context, R.anim.slide_out_right)
-            it?.showPrevious()
+            it.setInAnimation(context, R.anim.slide_in_left)
+            it.setOutAnimation(context, R.anim.slide_out_right)
+            it.showPrevious()
         }
     }
     override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {

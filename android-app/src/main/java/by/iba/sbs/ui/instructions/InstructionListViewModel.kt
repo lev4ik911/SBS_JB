@@ -1,4 +1,4 @@
-package by.iba.sbs.ui.notifications
+package by.iba.sbs.ui.instructions
 
 import by.iba.mvvmbase.BaseViewModel
 import by.iba.mvvmbase.dispatcher.EventsDispatcher

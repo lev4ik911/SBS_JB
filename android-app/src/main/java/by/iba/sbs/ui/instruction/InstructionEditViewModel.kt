@@ -12,8 +12,8 @@ import java.util.*
 class InstructionEditViewModel : BaseViewModel(),
     EventsDispatcherOwner<InstructionEditViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
-    val name = MutableLiveData("Отпадный шашлычок!")
-    val description = MutableLiveData("Отпадный шашлычок desc!")
+    val name = MutableLiveData("")
+    val description = MutableLiveData("")
 
     val steps = MutableLiveData<List<Step>>()
 

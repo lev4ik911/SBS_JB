@@ -19,7 +19,7 @@
 
     <fragment
             android:id="@+id/navigation_notifications"
-            android:name="by.iba.sbs.ui.notifications.InstructionListFragment"
+        android:name="by.iba.sbs.ui.instructions.InstructionListFragment"
             android:label="@string/title_notifications"
             tools:layout="@layout/instruction_list_fragment"/>
     <fragment
