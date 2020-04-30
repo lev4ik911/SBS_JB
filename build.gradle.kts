@@ -1,9 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-/*
- * Copyright 2019 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
- */
-
 plugins {
     id("com.gradle.build-scan") version("2.1")
     kotlin("jvm")
@@ -13,6 +9,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
         maven { url = uri("https://jitpack.io") }
         maven { url = uri("https://kotlin.bintray.com/kotlin") }
         maven { url = uri("https://kotlin.bintray.com/kotlinx") }
@@ -36,6 +33,7 @@ allprojects {
 //}
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation("com.squareup.sqldelight:gradle-plugin:1.3.0")
 }
 repositories {
     mavenCentral()

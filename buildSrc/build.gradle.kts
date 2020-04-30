@@ -4,17 +4,17 @@ plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
     kotlin("jvm") version "1.3.31"
+
 }
 
 repositories {
-
     jcenter()
     google()
+    mavenCentral()
     maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
-
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
     }

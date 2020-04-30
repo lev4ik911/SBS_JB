@@ -14,6 +14,7 @@ object Versions {
     private const val mokoResources = "0.9.0"
     private const val mokoNetwork = "0.6.0"
     private const val mokoUnits = "0.3.1" // temporary dev version
+    private const val sqldelight = "1.3.0"
 
     object Plugins {
         const val kotlin = Versions.kotlin
@@ -22,6 +23,8 @@ object Versions {
         const val mokoResources = Versions.mokoResources
         const val mokoNetwork = Versions.mokoNetwork
         const val mokoUnits = Versions.mokoUnits
+        const val sqldelight = Versions.sqldelight
+
     }
 
     object Libs {
@@ -36,7 +39,7 @@ object Versions {
 
         object MultiPlatform {
             const val kotlinStdLib = Versions.kotlin
-
+            const val sqldelight = Versions.sqldelight
             const val coroutines = "1.3.5"
             const val serialization = "0.20.0"
             const val ktorClient = "1.3.2"
