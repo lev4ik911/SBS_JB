@@ -42,7 +42,7 @@ class ProfileFragment :
                 binding.toolbar.navigationIcon = null
             }
             is ProfileActivity -> {
-                binding.toolbar.navigationIcon = resources.getDrawable(R.drawable.chevron_left)
+                binding.toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
             }
         }
         binding.appbar.addOnOffsetChangedListener(this)
@@ -62,7 +62,7 @@ class ProfileFragment :
         binding.fActionButton.apply {
             when {
                 viewModel.isMyProfile.value!! -> {
-                    this.setImageResource(R.drawable.file_document_edit_outline)
+                    this.setImageResource(R.drawable.account_edit_outline)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 }
                 viewModel.isFavorite.value!! -> {
@@ -78,7 +78,7 @@ class ProfileFragment :
         binding.btnToolbarAction.apply {
             when {
                 viewModel.isMyProfile.value!! -> {
-                    this.setImageResource(R.drawable.file_document_edit_outline)
+                    this.setImageResource(R.drawable.account_edit_outline)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 }
                 viewModel.isFavorite.value!! -> {

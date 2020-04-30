@@ -1,12 +1,13 @@
 package by.iba.sbs.ui.login
 
+//import com.github.ybq.android.spinkit.style.FadingCircle
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import android.widget.ViewFlipper
 import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.Extentions.Companion.waitForLayout
@@ -14,11 +15,7 @@ import by.iba.mvvmbase.visibleOrNot
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.LoginFragmentBinding
-import com.facebook.shimmer.ShimmerFrameLayout
 import com.github.ybq.android.spinkit.style.FadingCircle
-//import com.github.ybq.android.spinkit.style.FadingCircle
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -45,7 +42,7 @@ class LoginFragment :
         val mWaveDrawable = FadingCircle().apply {
             val size = resources.getDimension(R.dimen.spacing_large).toInt()
             this.setBounds(0, 0, size, size)
-            this.color = resources.getColor(R.color.textColorPrimaryInverse)
+            this.color = ContextCompat.getColor(requireContext(), R.color.textColorPrimaryInverse)
             binding.includePassword.btnLogin.also {
                 it.setCompoundDrawables(this, null, null, null)
                 it.setPadding(

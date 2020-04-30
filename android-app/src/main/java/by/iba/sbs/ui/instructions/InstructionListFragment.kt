@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
@@ -14,9 +15,9 @@ import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionListFragmentBinding
+import by.iba.sbs.library.model.Instruction
 import by.iba.sbs.ui.instruction.InstructionActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 class InstructionListFragment :
     BaseEventsFragment<InstructionListFragmentBinding, InstructionListViewModel, InstructionListViewModel.EventsListener>(),
@@ -30,25 +31,34 @@ class InstructionListFragment :
         binding.rvInstructions.also {
             it.adapter = instructionsAdapter
             instructionsAdapter.itemTouchHelper.attachToRecyclerView(it)
+            it.layoutAnimation = AnimationUtils.loadLayoutAnimation(
+                requireContext(),
+                R.anim.layout_animation_right_to_left
+            )
         }
-        instructionsAdapter.addItems(getData())
+        viewModel.instructions.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            instructionsAdapter.addItems(it)
+            binding.rvInstructions.scheduleLayoutAnimation()
+        })
+        viewModel.loadInstructions()
         instructionsAdapter.onItemClick = { pos, itemView, item ->
             val transitionSharedNameImgView = this.getString(R.string.transition_name_img_view)
             val transitionSharedNameTxtView = this.getString(R.string.transition_name_txt_view)
             var imageViewPair: Pair<View, String>
             val textViewPair: Pair<View, String>
-             itemView.findViewById<ImageView>(R.id.iv_preview).apply {
-                 this.transitionName = transitionSharedNameImgView
-                 imageViewPair = Pair.create(this, transitionSharedNameImgView)
-             }
-             itemView.findViewById<TextView>(R.id.tv_title).apply {
-                 this.transitionName = transitionSharedNameTxtView
-                 textViewPair = Pair.create(this, transitionSharedNameTxtView)
-             }
+            itemView.findViewById<ImageView>(R.id.iv_preview).apply {
+                this.transitionName = transitionSharedNameImgView
+                imageViewPair = Pair.create(this, transitionSharedNameImgView)
+            }
+            itemView.findViewById<TextView>(R.id.tv_title).apply {
+                this.transitionName = transitionSharedNameTxtView
+                textViewPair = Pair.create(this, transitionSharedNameTxtView)
+            }
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 activity as Activity,
                 imageViewPair,
-                textViewPair)
+                textViewPair
+            )
             val intent = Intent(activity, InstructionActivity::class.java)
             intent.putExtra("instructionId", 12)
             startActivity(intent, options.toBundle())
@@ -56,39 +66,23 @@ class InstructionListFragment :
         instructionsAdapter.onEmptyViewItemClick = {
             val intent = Intent(activity, InstructionActivity::class.java)
             intent.putExtra("instructionId", 0)
-           // findNavController().navigate(R.id.navigation_instruction_edit, bundle)
+            // findNavController().navigate(R.id.navigation_instruction_edit, bundle)
             startActivity(intent)
         }
     }
 
     @SuppressLint("ResourceType")
     private val instructionsAdapter =
-        EmptyViewAdapter<ExampleListModel>(
+        EmptyViewAdapter<Instruction>(
             R.layout.instruction_list_item,
             onBind = { view, item, _ ->
-                view.findViewById<TextView>(R.id.tv_title).text = item.title
+                view.findViewById<TextView>(R.id.tv_title).text = item.name
                 view.findViewById<TextView>(R.id.tv_info).text = item.author
             },
             isItemsEquals = { oldItem, newItem ->
-                oldItem.title == newItem.title
+                oldItem.name == newItem.name
             }).also {
             it.emptyViewId = R.layout.new_item
         }
 
-    class ExampleListModel(val title: String, val author: String) {
-
-    }
-
-    private fun getData(): ArrayList<ExampleListModel> {
-        val mData = ArrayList<ExampleListModel>()
-        mData.add(ExampleListModel("Как сдать СМК на отлично!", "Dobry"))
-        mData.add(ExampleListModel("Как попасть на проект, подготовка к интервью", "Author 2"))
-        mData.add(ExampleListModel("Как стать счастливым", "Dobry"))
-        mData.add(ExampleListModel("Отпадный шашлычок", "Dobry"))
-        mData.add(ExampleListModel("Что делать, если вы заразились", "Доктор"))
-        mData.add(ExampleListModel("Как поставить на учет автомобиль", "Dobry"))
-        mData.add(ExampleListModel("Как оформить командировку", "Dobry"))
-
-        return mData
-    }
 }
