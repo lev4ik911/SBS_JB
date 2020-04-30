@@ -170,7 +170,7 @@
             android:tint="@color/colorLightRed"
             app:borderWidth="0dp"
             app:elevation="@dimen/spacing_xsmall"
-            app:fabSize="normal"
+            app:fabSize="mini"
             app:layout_anchor="@id/htab_collapse_toolbar"
             app:layout_anchorGravity="bottom|end" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
