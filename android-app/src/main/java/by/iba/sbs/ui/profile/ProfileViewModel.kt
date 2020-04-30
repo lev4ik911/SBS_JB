@@ -24,6 +24,9 @@ class ProfileViewModel : BaseViewModel(), EventsDispatcherOwner<ProfileViewModel
     fun onActionButtonClick() {
 
     }
+    fun onLogoutButtonClick() {
+
+    }
     interface EventsListener {
 
     }

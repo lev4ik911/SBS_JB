@@ -71,9 +71,9 @@
 
     <style name="Image.Clickable" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:clickable">true</item>
+        <item name="android:selectable">true</item>
         <item name="android:padding">@dimen/spacing_xsmall</item>
     </style>
-
 
     <style name="Text.Main.Bold" parent="Text">
         <item name="android:textStyle">bold</item>

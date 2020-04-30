@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import by.iba.mvvmbase.BaseEventsFragment
+import by.iba.mvvmbase.visibleOrGone
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileFragmentBinding
@@ -75,6 +76,8 @@ class ProfileFragment :
                 }
             }
         }
+        binding.btnToolbarLogout.visibleOrGone(viewModel.isMyProfile.value!!)
+
         binding.btnToolbarAction.apply {
             when {
                 viewModel.isMyProfile.value!! -> {

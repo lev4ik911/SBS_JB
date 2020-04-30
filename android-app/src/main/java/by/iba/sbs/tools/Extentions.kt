@@ -9,7 +9,10 @@ import androidx.databinding.BindingAdapter
 fun ImageView.srcByBoolean(value: Boolean,  trueRes:Int, falseRes:Int) {
     this.setImageResource(if (value) trueRes else falseRes)
 }
-
+@BindingAdapter("visibleOrGone")
+fun View.visibleOrGone(visible: Boolean) {
+    visibility = if (visible) View.VISIBLE else View.GONE
+}
 class Extentions {
     companion object {
         fun startAlphaAnimation(v: View, duration: Long, visibility: Int) {
