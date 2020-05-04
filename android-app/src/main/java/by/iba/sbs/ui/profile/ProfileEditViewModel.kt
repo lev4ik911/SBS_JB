@@ -17,8 +17,8 @@ class ProfileEditViewModel : BaseViewModel(),
     val isMyProfile = MutableLiveData(true)
     val instructions = MutableLiveData<List<Instruction>>().apply {
         val mData = ArrayList<Instruction>()
-        mData.add(Instruction("Как стать счастливым", "Dobry"))
-        mData.add(Instruction("Отпадный шашлычок", "Dobry"))
+        mData.add(Instruction(1, "Как стать счастливым", "Dobry"))
+        mData.add(Instruction(2, "Отпадный шашлычок", "Dobry"))
         value = mData
     }
 

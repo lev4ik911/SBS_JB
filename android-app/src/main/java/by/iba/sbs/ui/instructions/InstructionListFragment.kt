@@ -60,7 +60,7 @@ class InstructionListFragment :
                 textViewPair
             )
             val intent = Intent(activity, InstructionActivity::class.java)
-            intent.putExtra("instructionId", 12)
+            intent.putExtra("instructionId", item.id)
             startActivity(intent, options.toBundle())
         }
         instructionsAdapter.onEmptyViewItemClick = {

@@ -1,6 +1,7 @@
 package by.iba.sbs.library.model
 
 class Instruction(
+    val id: Int,
     var name: String = "",
     var author: String = "",
     var description: String = ""

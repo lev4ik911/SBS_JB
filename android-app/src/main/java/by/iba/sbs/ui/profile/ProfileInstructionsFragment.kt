@@ -80,6 +80,4 @@ class ProfileInstructionsFragment :
         ).also {
             it.emptyViewId = R.layout.new_item
         }
-
-
 }

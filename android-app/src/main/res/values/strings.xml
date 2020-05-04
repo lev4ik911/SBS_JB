@@ -42,6 +42,8 @@
     <string name="btn_just_look"> I want to see</string>
     <string name="caption_register">Register</string>
     <string name="text_rating">Rating: %s</string>
+    <string name="text_subscribers">Subscribers: %s</string>
+    <string name="text_instructions">Instructions: %s</string>
     <string name="create_instruction">Add instruction</string>
     <string name="instruction_name">Instruction name</string>
     <string name="create_step">Add step</string>
