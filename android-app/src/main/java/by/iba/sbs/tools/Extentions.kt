@@ -2,17 +2,26 @@ package by.iba.sbs.tools
 
 import android.view.View
 import android.view.animation.AlphaAnimation
-import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import by.iba.sbs.R
 
-@BindingAdapter("srcByBoolean", "trueRes", "falseRes")
-fun ImageView.srcByBoolean(value: Boolean,  trueRes:Int, falseRes:Int) {
-    this.setImageResource(if (value) trueRes else falseRes)
-}
+
 @BindingAdapter("visibleOrGone")
 fun View.visibleOrGone(visible: Boolean) {
     visibility = if (visible) View.VISIBLE else View.GONE
 }
+
+@BindingAdapter("textColorByValue")
+fun TextView.textColorByValue(value: Int) {
+    val color = when {
+        value < 0 -> resources.getColor(R.color.colorLightRed)
+        value > 0 -> resources.getColor(R.color.colorLightGreen)
+        else -> resources.getColor(R.color.textColorSecondary)
+    }
+    setTextColor(color)
+}
+
 class Extentions {
     companion object {
         fun startAlphaAnimation(v: View, duration: Long, visibility: Int) {

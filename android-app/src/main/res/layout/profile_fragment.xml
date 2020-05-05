@@ -160,6 +160,7 @@
                                 android:layout_height="@dimen/spacing_xlarge"
                                 android:layout_gravity="end|center"
                                 android:background="@null"
+                            visibleOrGone="@{viewmodel.isMyProfile}"
                                 android:onClick="@{() -> viewmodel.onLogoutButtonClick()}"
                                 android:src="@drawable/logout"
                                 android:tint="@color/colorAccent"

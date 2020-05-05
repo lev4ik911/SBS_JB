@@ -15,6 +15,7 @@ class ProfileEditViewModel : BaseViewModel(),
     val rating = MutableLiveData("547")
     val isFavorite = MutableLiveData(true)
     val isMyProfile = MutableLiveData(true)
+
     val instructions = MutableLiveData<List<Instruction>>().apply {
         val mData = ArrayList<Instruction>()
         mData.add(Instruction(1, "Как стать счастливым", "Dobry"))
@@ -23,7 +24,6 @@ class ProfileEditViewModel : BaseViewModel(),
     }
 
     fun onActionButtonClick() {
-
     }
 
     interface EventsListener {

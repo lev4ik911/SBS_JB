@@ -76,8 +76,8 @@ class InstructionListFragment :
         EmptyViewAdapter<Instruction>(
             R.layout.instruction_list_item,
             onBind = { view, item, _ ->
-                view.findViewById<TextView>(R.id.tv_title).text = item.name
-                view.findViewById<TextView>(R.id.tv_info).text = item.author
+                view.findViewById<TextView>(R.id.tv_title)?.text = item.name
+                view.findViewById<TextView>(R.id.tv_info)?.text = item.author
             },
             isItemsEquals = { oldItem, newItem ->
                 oldItem.name == newItem.name

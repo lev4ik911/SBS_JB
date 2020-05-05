@@ -15,7 +15,7 @@ class InstructionViewModel : BaseViewModel(),
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
     val name = MutableLiveData("")
     val description = MutableLiveData("")
-    val rating = MutableLiveData(100500)
+    val rating = MutableLiveData(0)
     val isFavorite = MutableLiveData(true)
     val isMyInstruction = MutableLiveData(true)
     val feedback = MutableLiveData<List<Feedback>>().apply {
@@ -130,7 +130,15 @@ class InstructionViewModel : BaseViewModel(),
         else isFavorite.value = !isFavorite.value!!
     }
 
+    fun onRatingUpButtonClick() {
+        rating.value = rating.value?.plus(1)
+    }
+
+    fun onRatingDownButtonClick() {
+        rating.value = rating.value?.minus(1)
+    }
     fun onOpenProfileClick() {
+        //get profileId from instruction
         eventsDispatcher.dispatchEvent { onOpenProfile(1) }//TODO
     }
 
