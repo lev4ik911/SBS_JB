@@ -36,6 +36,7 @@ class InstructionViewModel : BaseViewModel(),
     }
 
     val steps = MutableLiveData<List<Step>>()
+    var oldSteps = listOf<Step>()
 
     fun loadInstruction(instructionId: Int) {
         if (instructionId != 0) {
@@ -51,31 +52,31 @@ class InstructionViewModel : BaseViewModel(),
                 )
                 mData.add(
                     Step(
-                        1,
+                        2,
                         description = " Лук нарезать тонкими кольцами и помять руками (или измельчить лук с помощью кухонной техники)."
                     )
                 )
                 mData.add(
                     Step(
-                        1,
+                        3,
                         description = "Уложить на дно емкости слой мяса, сверху посолить, поперчить."
                     )
                 )
                 mData.add(
                     Step(
-                        1,
+                        4,
                         description = " Хорошо перемешать мясо с луком и остальными ингредиентами маринада."
                     )
                 )
                 mData.add(
                     Step(
-                        1,
+                        5,
                         description = "Оставить свинину в маринаде на несколько часов в холодильнике."
                     )
                 )
                 mData.add(
                     Step(
-                        1,
+                        6,
                         description = " Затем нанизывать кусочки маринованного мяса на шампуры и жарить шашлык из свинины."
                     )
                 )
@@ -125,8 +126,11 @@ class InstructionViewModel : BaseViewModel(),
     }
 
     fun onActionButtonClick() {
-        if (isMyInstruction.value!!)
+        if (isMyInstruction.value!!) {
+            if (!steps.value.isNullOrEmpty())
+                oldSteps = steps.value?.map { it.copy() }!!
             eventsDispatcher.dispatchEvent { onCallInstructionEditor(2) }
+        }
         else isFavorite.value = !isFavorite.value!!
     }
 
@@ -142,9 +146,22 @@ class InstructionViewModel : BaseViewModel(),
         eventsDispatcher.dispatchEvent { onOpenProfile(1) }//TODO
     }
 
+    fun onSaveAction() {
+        eventsDispatcher.dispatchEvent { onAfterSaveAction() }
+    }
+
+    fun onRemoveInstructionClick() {
+
+    }
+
+    fun onBackBtnClick() {
+        steps.postValue(oldSteps)
+    }
+
     interface EventsListener {
         fun onCallInstructionEditor(instructionId: Int)
         fun onOpenProfile(profileId: Int)
+        fun onAfterSaveAction()
     }
 
 }

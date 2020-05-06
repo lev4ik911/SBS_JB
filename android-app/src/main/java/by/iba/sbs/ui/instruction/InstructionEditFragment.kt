@@ -1,6 +1,7 @@
 package by.iba.sbs.ui.instruction
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -10,11 +11,14 @@ import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import by.iba.mvvmbase.BaseEventsFragment
+import by.iba.mvvmbase.BaseFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionEditFragmentBinding
 import by.iba.sbs.library.model.Step
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.io.File
 import by.iba.sbs.tools.Extentions
 import com.google.android.material.appbar.AppBarLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -22,30 +26,31 @@ import kotlin.math.abs
 
 
 class InstructionEditFragment :
-    BaseEventsFragment<InstructionEditFragmentBinding, InstructionEditViewModel, InstructionEditViewModel.EventsListener>(),
-    InstructionEditViewModel.EventsListener, AppBarLayout.OnOffsetChangedListener {
+    BaseFragment<InstructionEditFragmentBinding, InstructionViewModel>(),
+    AppBarLayout.OnOffsetChangedListener {
 
     override val layoutId: Int = R.layout.instruction_edit_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: InstructionEditViewModel by viewModel()
+    override val viewModel: InstructionViewModel by sharedViewModel()
     private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
     private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
     private val mAlphaAnimationsDuration = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
-    var instructionId = 0
+    private var instructionId = 0
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.appBar.addOnOffsetChangedListener(this)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             if (instructionId == 0)
                 activity?.finish()
-            else
+            else {
+                viewModel.onBackBtnClick()
                 findNavController().navigate(R.id.navigation_instruction_view)
+            }
         }
         instructionId = arguments?.getInt("instructionId") ?: 0
-
-        viewModel.loadInstruction(instructionId)
 
         binding.rvSteps.apply {
             this.adapter = stepsAdapter
@@ -123,10 +128,6 @@ class InstructionEditFragment :
         }
     }
 
-    override fun onAfterSaveAction() {
-        (activity as InstructionActivity).onAfterSaveAction()
-    }
-
     @SuppressLint("ResourceType")
     private val stepsAdapter =
         EmptyViewAdapter<Step>(
@@ -134,7 +135,16 @@ class InstructionEditFragment :
             onBind = { view, item, _ ->
                 view.findViewById<TextView>(R.id.tv_info)?.text = item.description
                 view.findViewById<ImageView>(R.id.iv_camera)?.setOnClickListener {
-                    (activity as InstructionActivity).callImageSelector()
+                    (activity as InstructionActivity).callImageSelector(item.stepId)
+                }
+                view.findViewById<ImageView>(R.id.iv_preview).apply {
+                    if (item.imagePath.isNotEmpty()) {
+                        val imageUri = Uri.fromFile(File(item.imagePath))
+                        this.setImageURI(imageUri)
+                    }
+                    else
+                        this.setImageResource(R.drawable.ic_paneer)
+                    //TODO(Change ic_paneer on image by default)
                 }
             },
             isItemsEquals = { oldItem, newItem ->

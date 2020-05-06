@@ -64,4 +64,13 @@
     <string name="walkthrough_description_3">Improve your knowledge step by step</string>
     <string name="walkthrough_description_4">Create your own recipes and earn your rating</string>
     <string name="btn_save">Save</string>
+
+    <string name="select_variant_edit_current">Edit current</string>
+    <string name="select_variant_take_photo">Take photo</string>
+    <string name="select_variant_from_gallery">From gallery</string>
+
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="camera_access_required">Camera access required</string>
+    <string name="storage_access_required">Storage access required</string>
+
 </resources>

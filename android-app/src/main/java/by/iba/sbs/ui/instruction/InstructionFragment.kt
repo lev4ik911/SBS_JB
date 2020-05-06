@@ -31,7 +31,6 @@ class InstructionFragment :
      private val mAlphaAnimationsDuration = 200L
      private var mIsTheTitleVisible = false
      private var mIsTheTitleContainerVisible = true
-     var instructionId = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,8 +38,6 @@ class InstructionFragment :
             activity?.finish()
         }
         binding.appBar.addOnOffsetChangedListener(this)
-        instructionId = arguments?.getInt("instructionId") ?: 0
-        viewModel.loadInstruction(instructionId)
 
         binding.toolbarDescription.apply {
             title = viewModel.name.value

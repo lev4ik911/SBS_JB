@@ -1,8 +1,10 @@
 package by.iba.sbs.ui.instruction
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import by.iba.mvvmbase.BaseFragment
@@ -12,6 +14,7 @@ import by.iba.sbs.R
 import by.iba.sbs.databinding.StepsFragmentBinding
 import by.iba.sbs.library.model.Step
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.io.File
 
 
 class StepsFragment : BaseFragment<StepsFragmentBinding, InstructionViewModel>() {
@@ -38,6 +41,15 @@ class StepsFragment : BaseFragment<StepsFragmentBinding, InstructionViewModel>()
             R.layout.instruction_step_list_item,
             onBind = { view, item, _ ->
                 view.findViewById<TextView>(R.id.tv_info).text = item.description
+                view.findViewById<ImageView>(R.id.iv_preview).apply {
+                    if (item.imagePath.isNotEmpty()) {
+                        val imageUri = Uri.fromFile(File(item.imagePath))
+                        this.setImageURI(imageUri)
+                    }
+                    else
+                        this.setImageResource(R.drawable.ic_paneer)
+                    //TODO(Change ic_paneer on image by default)
+                }
             },
             isItemsEquals = { oldItem, newItem ->
                 oldItem.description == newItem.description
