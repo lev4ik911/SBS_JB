@@ -55,17 +55,24 @@ class InstructionEditFragment :
             this.adapter = stepsAdapter
             stepsAdapter.itemTouchHelper.attachToRecyclerView(this)
         }
+
         viewModel.name.observe(viewLifecycleOwner, Observer {
             binding.toolbarDescription.title = it
         })
         viewModel.steps.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             stepsAdapter.addItems(it)
+
         })
         stepsAdapter.onItemClick = { pos, itemView, item ->
             Toast.makeText(context, pos.toString(), Toast.LENGTH_LONG).show()
         }
         stepsAdapter.onEmptyViewItemClick = {
             // startActivity(Intent(activity, InstructionActivity::class.java))
+        }
+        stepsAdapter.onItemMoved = { old, new ->
+            val steps = stepsAdapter.itemsList
+            steps.forEachIndexed { index, step -> step.stepId = index + 1 }
+            // viewModel.steps.postValue( steps)
         }
     }
 
@@ -131,8 +138,8 @@ class InstructionEditFragment :
     private val stepsAdapter =
         EmptyViewAdapter<Step>(
             R.layout.instruction_edit_step_list_item,
-            onBind = { view, item, _ ->
-                view.findViewById<TextView>(R.id.tv_step_number)?.text = item.stepId.toString()
+            onBind = { view, item, pos ->
+                view.findViewById<TextView>(R.id.tv_step_number)?.text = pos.plus(1).toString()
                 view.findViewById<TextView>(R.id.tv_title)?.text = item.name
                 view.findViewById<TextView>(R.id.tv_description)?.apply {
                     text = item.description

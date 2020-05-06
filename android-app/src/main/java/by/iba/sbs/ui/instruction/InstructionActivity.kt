@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -12,26 +11,21 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.view.Menu
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import by.iba.mvvmbase.BaseEventsActivity
 import by.iba.sbs.BuildConfig
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionActivityBinding
 import by.iba.sbs.ui.profile.ProfileActivity
-import by.iba.sbs.library.model.Step
 import com.yalantis.ucrop.UCrop
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.util.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class InstructionActivity :
@@ -163,11 +157,8 @@ class InstructionActivity :
                 }
             }
             WRITE_STORAGE_PERMISSION -> {
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    hasAccessToWrite = true
-                } else {
-                    hasAccessToWrite = false
-                }
+                hasAccessToWrite =
+                    (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             }
         }
         if ((usingCamera && hasAccessToCamera && hasAccessToWrite) ||

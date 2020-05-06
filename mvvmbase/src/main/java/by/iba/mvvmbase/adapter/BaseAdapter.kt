@@ -22,6 +22,7 @@ open class BaseAdapter<T>(
 
     var onItemClick: ((pos: Int, view: View, item: T) -> Unit)? = null
     var onEmptyViewItemClick: (() -> Unit)? = null
+
     var filterCriteria: ((item: T, textToSearch: String) -> Boolean)? = null
 
     init {

@@ -5,7 +5,8 @@
     style="@style/Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/spacing_xsmall">
+    android:layout_marginHorizontal="@dimen/spacing_xsmall"
+    android:layout_marginVertical="@dimen/spacing_xxsmall">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
