@@ -6,12 +6,6 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import by.iba.sbs.R
 
-
-@BindingAdapter("visibleOrGone")
-fun View.visibleOrGone(visible: Boolean) {
-    visibility = if (visible) View.VISIBLE else View.GONE
-}
-
 @BindingAdapter("textColorByValue")
 fun TextView.textColorByValue(value: Int) {
     val color = when {

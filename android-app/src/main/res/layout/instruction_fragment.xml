@@ -71,6 +71,7 @@
                             android:id="@+id/tv_title"
                             style="@style/Text.FragmentTitle"
                             android:layout_width="0dp"
+                            android:singleLine="true"
                             android:layout_height="match_parent"
                             android:layout_gravity="end"
                             android:layout_weight="1" />
@@ -111,8 +112,9 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <RelativeLayout
+
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/spacing_xsmall"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/spacing_large">
@@ -125,22 +127,27 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:layout_marginEnd="@dimen/spacing_xxxxlarge"
                     android:text="@{viewmodel.name}"
-                    android:textAppearance="@style/Text"
+                    style="@style/Text"
                     android:transitionName="@string/transition_name_txt_view" />
 
-
+                <TextView
+                    android:id="@+id/tv_description"
+                    style="@style/Text.Description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_name"
+                    android:layout_marginStart="@dimen/spacing_normal"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:layout_marginEnd="@dimen/spacing_normal"
+                    android:singleLine="false"
+                    android:text="@{viewmodel.description}"
+                    android:transitionName="@string/transition_name_txt_view" />
                 <LinearLayout
                     android:id="@+id/layout_rating"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_name"
+                    android:layout_below="@id/tv_description"
                     android:layout_margin="@dimen/spacing_normal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/text_rating" />
 
                     <ImageButton
                         android:id="@+id/btn_rating_down"
@@ -157,7 +164,7 @@
                         textColorByValue="@{viewmodel.rating}"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:paddingHorizontal="@dimen/spacing_small"
+                        android:paddingHorizontal="@dimen/spacing_normal"
                         android:layout_width="wrap_content"
                         android:text="@{viewmodel.rating.toString()}" />
 

@@ -10,18 +10,17 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.BaseFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
+import by.iba.mvvmbase.visibleOrGone
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionEditFragmentBinding
 import by.iba.sbs.library.model.Step
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.io.File
 import by.iba.sbs.tools.Extentions
 import com.google.android.material.appbar.AppBarLayout
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.io.File
 import kotlin.math.abs
 
 
@@ -133,11 +132,19 @@ class InstructionEditFragment :
         EmptyViewAdapter<Step>(
             R.layout.instruction_edit_step_list_item,
             onBind = { view, item, _ ->
-                view.findViewById<TextView>(R.id.tv_info)?.text = item.description
+                view.findViewById<TextView>(R.id.tv_step_number)?.text = item.stepId.toString()
+                view.findViewById<TextView>(R.id.tv_title)?.text = item.name
+                view.findViewById<TextView>(R.id.tv_description)?.apply {
+                    text = item.description
+                    visibleOrGone(item.description.isNotEmpty())
+                    setOnClickListener {
+                        this.setSingleLine(this.lineCount != 1)
+                    }
+                }
                 view.findViewById<ImageView>(R.id.iv_camera)?.setOnClickListener {
                     (activity as InstructionActivity).callImageSelector(item.stepId)
                 }
-                view.findViewById<ImageView>(R.id.iv_preview).apply {
+                view.findViewById<ImageView>(R.id.iv_preview)?.apply {
                     if (item.imagePath.isNotEmpty()) {
                         val imageUri = Uri.fromFile(File(item.imagePath))
                         this.setImageURI(imageUri)
