@@ -1,66 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/card"
-    style="@style/Card"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/spacing_xsmall"
-    android:layout_marginVertical="@dimen/spacing_xxsmall">
-    <LinearLayout
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="step"
+            type="by.iba.sbs.library.model.Step" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card"
+        style="@style/Card"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_xsmall">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_xsmall"
+        android:layout_marginVertical="@dimen/spacing_xxsmall">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_preview"
-                style="@style/Card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center">
-
-                <ImageView
-                    android:id="@+id/iv_preview"
-                    android:layout_width="@dimen/list_image_size"
-                    android:layout_height="@dimen/list_image_size"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_paneer" />
-            </androidx.cardview.widget.CardView>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/spacing_xsmall">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
 
-                <TextView
-                    android:id="@+id/tv_step_number"
-                    style="@style/Text.Main.Bold"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_preview"
+                    style="@style/Card"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="@dimen/spacing_small"
-                    android:text="1"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/tv_title"
-                    style="@style/Text"
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="Indian, Fast food" />
-            </LinearLayout>
-        </LinearLayout>
+                    android:layout_gravity="center">
 
-        <TextView
-            android:id="@+id/tv_description"
-            style="@style/Text.Description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/spacing_xxsmall"
-            tools:text="Indian, Fast food" />
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
+                    <ImageView
+                        android:id="@+id/iv_preview"
+                        android:layout_width="@dimen/list_image_size"
+                        android:layout_height="@dimen/list_image_size"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_paneer" />
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_step_number"
+                        style="@style/Text.Main.Bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="@dimen/spacing_small"
+                        android:textAlignment="center"
+                        tools:text="@{String.valueOf(step.stepId)}" />
+
+                    <TextView
+                        android:id="@+id/tv_title"
+                        style="@style/Text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:text="@{step.name}" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_description"
+                style="@style/Text.Description"
+                visibleOrGone="@{!step.description.isEmpty()}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/spacing_xxsmall"
+                tools:text="@{step.description}" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
