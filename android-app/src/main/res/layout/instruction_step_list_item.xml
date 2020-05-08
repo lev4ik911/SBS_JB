@@ -6,7 +6,7 @@
 
         <variable
             name="step"
-            type="by.iba.sbs.library.model.Step" />
+            type="by.iba.sbs.binding.StepBinding" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -54,7 +54,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginHorizontal="@dimen/spacing_small"
                         android:textAlignment="center"
-                        tools:text="@{String.valueOf(step.stepId)}" />
+                        tools:text="@{step.stepNo}" />
 
                     <TextView
                         android:id="@+id/tv_title"
