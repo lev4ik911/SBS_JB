@@ -96,11 +96,12 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1) 1 else 0
-    }
+    override fun getItemViewType(position: Int): Int =
+        if (emptyViewId != 0 && position == itemCount - 1) 1 else 0
 
-    override fun getItemCount(): Int = if (emptyViewId == 0) itemsList.size else itemsList.size + 1
+
+    override fun getItemCount(): Int =
+        if (emptyViewId == 0) itemsList.size else itemsList.size + 1
 
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -166,15 +167,18 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
         LayoutInflater.from(context).inflate(layoutRes, this, false)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding: DB = DataBindingUtil.inflate(
-            inflater,
-            layoutId,
-            parent,
-            false
-        )
-        val view = binding.root
-        val holder = BindingHolder(binding, view)
+        val holder = if (viewType == 0 || emptyViewId == 0) {
+            val binding: DB = DataBindingUtil.inflate(
+                LayoutInflater.from(parent.context),
+                layoutId,
+                parent,
+                false
+            )
+            BindingHolder(binding.root, binding)
+        } else {
+            BindingHolder(parent.inflate(emptyViewId))
+        }
+        val view = holder.itemView
         if (dragLayoutId != 0) {
             view.findViewById<View>(dragLayoutId)?.setOnTouchListener { _, event ->
                 if (event.actionMasked == MotionEvent.ACTION_DOWN) {
@@ -186,12 +190,9 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
         return holder
     }
 
-
     override fun onBindViewHolder(holder: BindingHolder, pos: Int) {
         if (pos < itemCount - 1 || emptyViewId == 0)
             holder.bind(itemsList[pos])
-        else
-            holder.bindEmptyView()
     }
 
     private fun smartUpdate(newItems: List<T>) {
@@ -221,11 +222,21 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
         }
     }
 
-    inner class BindingHolder(private var dataBinding: DB, private val view: View) :
-        RecyclerView.ViewHolder(dataBinding.root), View.OnClickListener {
+    inner class BindingHolder(view: View) :
+        RecyclerView.ViewHolder(view), View.OnClickListener {
+        private var _dataBinding: DB? = null
+
+        constructor(view: View, dataBinding: DB) : this(view) {
+            _dataBinding = dataBinding
+        }
+
+        init {
+            view.setOnClickListener(this)
+        }
+
         fun bind(employee: T) {
-            dataBinding.setVariable(viewModelVariableId, employee)
-            dataBinding.executePendingBindings()
+            _dataBinding?.setVariable(viewModelVariableId, employee)
+            _dataBinding?.executePendingBindings()
         }
 
         override fun onClick(p0: View?) {
@@ -233,10 +244,6 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
                 onItemClick?.invoke(adapterPosition, p0!!, itemsList[adapterPosition])
             else
                 onEmptyViewItemClick?.invoke()
-        }
-
-        fun bindEmptyView() {
-            view.setOnClickListener(this)
         }
     }
 }

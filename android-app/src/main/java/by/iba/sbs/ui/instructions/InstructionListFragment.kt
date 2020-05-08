@@ -11,10 +11,11 @@ import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import by.iba.mvvmbase.BaseEventsFragment
-import by.iba.mvvmbase.adapter.EmptyViewAdapter
+import by.iba.mvvmbase.adapter.BaseBindingAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionListFragmentBinding
+import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Instruction
 import by.iba.sbs.ui.instruction.InstructionActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -73,12 +74,9 @@ class InstructionListFragment :
 
     @SuppressLint("ResourceType")
     private val instructionsAdapter =
-        EmptyViewAdapter<Instruction>(
+        BaseBindingAdapter<Instruction, InstructionListItemBinding>(
             R.layout.instruction_list_item,
-            onBind = { view, item, _ ->
-                view.findViewById<TextView>(R.id.tv_title)?.text = item.name
-                view.findViewById<TextView>(R.id.tv_info)?.text = item.author
-            },
+            BR.instruction,
             isItemsEquals = { oldItem, newItem ->
                 oldItem.name == newItem.name
             }).also {
