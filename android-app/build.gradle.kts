@@ -88,6 +88,7 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
     implementation("com.github.yalantis:ucrop:2.2.4")
+    implementation("com.github.bumptech.glide:glide:4.11.0")
     implementation(project(":mpp-library"))
     implementation(project(":mvvmbase"))
 }
