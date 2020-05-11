@@ -160,14 +160,24 @@
                         android:tint="@color/colorLightRed" />
 
                     <TextView
-                        android:id="@+id/tv_rating"
-                        textColorByValue="@{viewmodel.rating}"
+                        android:id="@+id/tv_rating_down"
+                        visibleOrNot="@{viewmodel.ratingDown>0}"
+                        android:layout_width="wrap_content"
+                        android:paddingHorizontal="@dimen/spacing_small"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:paddingHorizontal="@dimen/spacing_normal"
-                        android:layout_width="wrap_content"
-                        android:text="@{viewmodel.rating.toString()}" />
+                        android:text="@{viewmodel.ratingDown.toString()}"
+                        android:textColor="@color/colorLightRed" />
 
+                    <TextView
+                        android:id="@+id/tv_rating_up"
+                        visibleOrNot="@{viewmodel.ratingUp>0}"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:paddingHorizontal="@dimen/spacing_small"
+                        android:text="@{viewmodel.ratingUp.toString()}"
+                        android:textColor="@color/colorLightGreen" />
                     <ImageButton
                         android:id="@+id/btn_rating_up"
                         android:layout_width="@dimen/spacing_xlarge"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="colorButtonAction" format="reference|color" />
+    <attr name="colorTextEditBorder" format="reference|color" />
     <attr name="colorBadgeNotification" format="reference|color" />
     <attr name="colorTextDayOfWeek" format="reference|color" />
     <attr name="colorTextDisabled" format="reference|color" />
