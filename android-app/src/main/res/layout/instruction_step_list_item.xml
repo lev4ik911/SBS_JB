@@ -6,7 +6,7 @@
 
         <variable
             name="step"
-            type="by.iba.sbs.binding.StepBinding" />
+            type="by.iba.sbs.library.model.Step" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -40,7 +40,7 @@
                         android:layout_width="@dimen/list_image_size"
                         android:layout_height="@dimen/list_image_size"
                         android:scaleType="fitXY"
-                        android:src="@drawable/ic_paneer" />
+                        imageFromPath="@{ step.imagePath }" />
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout
@@ -54,7 +54,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginHorizontal="@dimen/spacing_small"
                         android:textAlignment="center"
-                        tools:text="@{step.stepNo}" />
+                        tools:text="@{Integer.toString(step.stepId)}"/>
 
                     <TextView
                         android:id="@+id/tv_title"
