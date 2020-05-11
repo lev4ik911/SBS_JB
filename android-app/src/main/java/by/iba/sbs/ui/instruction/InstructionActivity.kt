@@ -362,6 +362,15 @@ class InstructionActivity :
         startActivity(intent)
     }
 
+    override fun onEditStep(stepId: Int) {
+        val bundle = Bundle().apply {
+            putInt("stepId", stepId)
+        }
+
+        findNavController(R.id.fragment_navigation_instruction)
+            .navigate(R.id.navigation_step_edit, bundle)
+    }
+
     override fun onAfterSaveAction() {
         findNavController(R.id.fragment_navigation_instruction)
             .navigate(R.id.navigation_instruction_view)

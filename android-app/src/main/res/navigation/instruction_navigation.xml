@@ -21,4 +21,13 @@
             app:argType="integer"
             android:defaultValue="0" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_step_edit"
+        android:name="by.iba.sbs.ui.instruction.StepEditFragment"
+        android:label="StepEditFragment">
+        <argument
+            android:name="stepId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
 </navigation>

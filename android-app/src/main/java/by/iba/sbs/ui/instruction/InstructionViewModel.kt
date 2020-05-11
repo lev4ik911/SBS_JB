@@ -167,6 +167,7 @@ class InstructionViewModel : BaseViewModel(),
     interface EventsListener {
         fun onCallInstructionEditor(instructionId: Int)
         fun onOpenProfile(profileId: Int)
+        fun onEditStep(stepId: Int)
         fun onAfterSaveAction()
     }
 

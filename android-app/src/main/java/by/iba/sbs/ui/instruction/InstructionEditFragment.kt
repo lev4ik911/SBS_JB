@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -64,7 +63,8 @@ class InstructionEditFragment :
 
         })
         stepsAdapter.onItemClick = { pos, itemView, item ->
-            Toast.makeText(context, pos.toString(), Toast.LENGTH_LONG).show()
+            (activity as InstructionActivity).onEditStep(item.stepId)
+            // Toast.makeText(context, pos.toString(), Toast.LENGTH_LONG).show()
         }
         stepsAdapter.onEmptyViewItemClick = {
             // startActivity(Intent(activity, InstructionActivity::class.java))

@@ -51,6 +51,7 @@
     <string name="transition_name_txt_view">TextViewTransitionName</string>
     <string name="hint_instruction_name">Enter instruction name</string>
     <string name="hint_instruction_description">Enter description (optional)</string>
+    <string name="hint_step_description">Enter description</string>
     <string name="slides_ended">All slides ended. Launch your activity here!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -72,5 +73,6 @@
     <string name="something_went_wrong">Something went wrong</string>
     <string name="camera_access_required">Camera access required</string>
     <string name="storage_access_required">Storage access required</string>
+    <string name="hint_step_name">Enter step name</string>
 
 </resources>
