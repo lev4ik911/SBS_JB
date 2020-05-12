@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="step"
+            type="by.iba.sbs.library.model.Step" />
+    </data>
+
+<androidx.cardview.widget.CardView
     android:id="@+id/card"
     style="@style/Card"
     android:layout_width="match_parent"
@@ -31,7 +40,7 @@
                     android:layout_width="@dimen/list_image_size"
                     android:layout_height="@dimen/list_image_size"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_paneer" />
+                    imageFromPath="@{ step.imagePath }"  />
 
                 <ImageView
                     android:id="@+id/iv_camera"
@@ -57,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="@dimen/spacing_small"
-                    android:text="1"
+                    tools:text="@{Integer.toString(step.stepId)}"
                     android:textAlignment="center" />
 
                 <TextView
@@ -65,7 +74,7 @@
                     style="@style/Text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="Indian, Fast food" />
+                    tools:text="@{step.name}" />
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -80,10 +89,12 @@
         <TextView
             android:id="@+id/tv_description"
             style="@style/Text.Description"
+            visibleOrGone="@{!step.description.isEmpty()}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:padding="@dimen/spacing_xxsmall"
-            tools:text="Indian, Fast food" />
+            tools:text="@{step.description}" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
+</layout>

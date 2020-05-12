@@ -1,20 +1,20 @@
 package by.iba.sbs.ui.instruction
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import by.iba.mvvmbase.BaseFragment
-import by.iba.mvvmbase.adapter.EmptyViewAdapter
-import by.iba.mvvmbase.visibleOrGone
+import by.iba.mvvmbase.adapter.BaseBindingAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionEditFragmentBinding
+import by.iba.sbs.databinding.InstructionEditStepListItemBinding
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.tools.Extentions
 import com.google.android.material.appbar.AppBarLayout
@@ -72,7 +72,10 @@ class InstructionEditFragment :
         stepsAdapter.onItemMoved = { old, new ->
             val steps = stepsAdapter.itemsList
             steps.forEachIndexed { index, step -> step.stepId = index + 1 }
-            // viewModel.steps.postValue( steps)
+            viewModel.steps.postValue(steps)
+        }
+        stepsAdapter.onCameraClick = {
+            (activity as InstructionActivity).callImageSelector(it.stepId)
         }
     }
 
@@ -136,35 +139,14 @@ class InstructionEditFragment :
 
     @SuppressLint("ResourceType")
     private val stepsAdapter =
-        EmptyViewAdapter<Step>(
+        BaseBindingAdapter<Step, InstructionEditStepListItemBinding>(
             R.layout.instruction_edit_step_list_item,
-            onBind = { view, item, pos ->
-                view.findViewById<TextView>(R.id.tv_step_number)?.text = pos.plus(1).toString()
-                view.findViewById<TextView>(R.id.tv_title)?.text = item.name
-                view.findViewById<TextView>(R.id.tv_description)?.apply {
-                    text = item.description
-                    visibleOrGone(item.description.isNotEmpty())
-                    setOnClickListener {
-                        this.setSingleLine(this.lineCount != 1)
-                    }
-                }
-                view.findViewById<ImageView>(R.id.iv_camera)?.setOnClickListener {
-                    (activity as InstructionActivity).callImageSelector(item.stepId)
-                }
-                view.findViewById<ImageView>(R.id.iv_preview)?.apply {
-                    if (item.imagePath.isNotEmpty()) {
-                        val imageUri = Uri.fromFile(File(item.imagePath))
-                        this.setImageURI(imageUri)
-                    }
-                    else
-                        this.setImageResource(R.drawable.ic_paneer)
-                    //TODO(Change ic_paneer on image by default)
-                }
-            },
+            BR.step,
             isItemsEquals = { oldItem, newItem ->
                 oldItem.description == newItem.description
             }).also {
             it.emptyViewId = R.layout.new_step
             it.dragLayoutId = R.id.iv_drag
+            it.cameraImageId = R.id.iv_camera
         }
 }
