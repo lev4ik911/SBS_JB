@@ -24,12 +24,16 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
 
     @LayoutRes
     var dragLayoutId: Int = 0
+    var cameraImageId: Int = 0
     var charSearch: String = ""
     private val itemsSource = ArrayList<T>()
     var itemsList = ArrayList<T>()
 
     var onItemClick: ((pos: Int, view: View, item: T) -> Unit)? = null
     var onEmptyViewItemClick: (() -> Unit)? = null
+    var onCameraClick: ((step: T) -> Unit)? = null
+    var onItemMoved: ((from: Int, to: Int) -> Unit)? = null
+
 
     var filterCriteria: ((item: T, textToSearch: String) -> Boolean)? = null
     private var mRecyclerView: RecyclerView? = null
@@ -44,6 +48,8 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
                 ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END,
                 0
             ) {
+                var dragFrom = -1
+                var dragTo = -1
 
                 override fun onMove(
                     recyclerView: RecyclerView,
@@ -54,9 +60,14 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
                     val adapter = recyclerView.adapter as BaseBindingAdapter<*, *>
                     val from = viewHolder.adapterPosition
                     val to = target.adapterPosition
+
+                    if(dragFrom == -1) {
+                        dragFrom =  from
+                    }
+                    dragTo = to
+
                     adapter.moveItem(from, to)
                     adapter.notifyItemMoved(from, to)
-                    // onItemMoved?.invoke(from, to)
                     return true
                 }
 
@@ -80,6 +91,11 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
                 ) {
                     super.clearView(recyclerView, viewHolder)
                     viewHolder.itemView.alpha = 1.0f
+                    if(dragFrom != -1 && dragTo != -1 && dragFrom != dragTo) {
+                        onItemMoved?.invoke(dragFrom, dragTo)
+                    }
+                    dragFrom = -1
+                    dragTo = -1
                 }
             }
         ItemTouchHelper(simpleItemTouchCallback)
@@ -187,6 +203,11 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
                 return@setOnTouchListener true
             }
         }
+        if (cameraImageId != 0){
+            view.findViewById<View>(cameraImageId)?.setOnClickListener() {
+                onCameraClick?.invoke(itemsList[holder.adapterPosition])
+            }
+        }
         return holder
     }
 
@@ -198,8 +219,10 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
     private fun smartUpdate(newItems: List<T>) {
         val diffCallback = ItemDiffCallback(itemsSource, newItems, isItemsEquals)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
+        val tempList = arrayListOf<T>()
+        tempList.addAll(newItems)
         this.itemsSource.clear()
-        this.itemsSource.addAll(newItems)
+        this.itemsSource.addAll(tempList)
         diffResult.dispatchUpdatesTo(this)
     }
 
