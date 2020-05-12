@@ -1,6 +1,5 @@
 package by.iba.sbs.ui.instruction
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -21,6 +20,16 @@ class StepsFragment : BaseFragment<StepsFragmentBinding, InstructionViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val stepsAdapter =
+            BaseBindingAdapter<Step, InstructionStepListItemBinding, InstructionViewModel>(
+                R.layout.instruction_step_list_item,
+                BR.step,
+                BR.viewmodel,
+                viewModel,
+                isItemsEquals = { oldItem, newItem ->
+                    oldItem.description == newItem.description
+                }
+            )
         binding.rvSteps.apply {
             adapter = stepsAdapter
         }
@@ -33,13 +42,5 @@ class StepsFragment : BaseFragment<StepsFragmentBinding, InstructionViewModel>()
         }
     }
 
-    @SuppressLint("ResourceType")
-    private val stepsAdapter =
-        BaseBindingAdapter<Step, InstructionStepListItemBinding>(
-            R.layout.instruction_step_list_item,
-            BR.step,
-            isItemsEquals = { oldItem, newItem ->
-                oldItem.description == newItem.description
-            }
-        )
+
 }

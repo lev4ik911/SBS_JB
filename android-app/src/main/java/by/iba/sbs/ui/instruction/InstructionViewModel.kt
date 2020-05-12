@@ -17,6 +17,7 @@ class InstructionViewModel : BaseViewModel(),
     val description = MutableLiveData("")
     val ratingUp = MutableLiveData(0)
     val ratingDown = MutableLiveData(0)
+
     val isFavorite = MutableLiveData(true)
     val isMyInstruction = MutableLiveData(true)
     val feedback = MutableLiveData<List<Feedback>>().apply {
@@ -136,8 +137,7 @@ class InstructionViewModel : BaseViewModel(),
             if (!steps.value.isNullOrEmpty())
                 oldSteps = steps.value?.map { it.copy() }!!
             eventsDispatcher.dispatchEvent { onCallInstructionEditor(2) }
-        }
-        else isFavorite.value = !isFavorite.value!!
+        } else isFavorite.value = !isFavorite.value!!
     }
 
     fun onRatingUpButtonClick() {
@@ -147,9 +147,18 @@ class InstructionViewModel : BaseViewModel(),
     fun onRatingDownButtonClick() {
         ratingDown.value = ratingDown.value?.plus(1)
     }
+
     fun onOpenProfileClick() {
         //get profileId from instruction
         eventsDispatcher.dispatchEvent { onOpenProfile(1) }//TODO
+    }
+
+    fun onEditStepClick(step: Step) {
+        eventsDispatcher.dispatchEvent { onEditStep(step.stepId) }
+    }
+
+    fun onEditImageClick(step: Step) {
+        eventsDispatcher.dispatchEvent { onEditImage(step.stepId) }
     }
 
     fun onSaveAction() {
@@ -168,6 +177,7 @@ class InstructionViewModel : BaseViewModel(),
         fun onCallInstructionEditor(instructionId: Int)
         fun onOpenProfile(profileId: Int)
         fun onEditStep(stepId: Int)
+        fun onEditImage(stepId: Int)
         fun onAfterSaveAction()
     }
 

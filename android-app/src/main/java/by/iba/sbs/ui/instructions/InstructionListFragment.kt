@@ -1,6 +1,5 @@
 package by.iba.sbs.ui.instructions
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -29,6 +28,18 @@ class InstructionListFragment :
     override val viewModel: InstructionListViewModel by viewModel()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val instructionsAdapter =
+            BaseBindingAdapter<Instruction, InstructionListItemBinding, InstructionListViewModel>(
+                R.layout.instruction_list_item,
+                BR.instruction,
+                BR.viewmodel,
+                viewModel,
+                isItemsEquals = { oldItem, newItem ->
+                    oldItem.name == newItem.name
+                }).also {
+                it.emptyViewId = R.layout.new_item
+            }
+
         binding.rvInstructions.also {
             it.adapter = instructionsAdapter
             instructionsAdapter.itemTouchHelper.attachToRecyclerView(it)
@@ -72,15 +83,5 @@ class InstructionListFragment :
         }
     }
 
-    @SuppressLint("ResourceType")
-    private val instructionsAdapter =
-        BaseBindingAdapter<Instruction, InstructionListItemBinding>(
-            R.layout.instruction_list_item,
-            BR.instruction,
-            isItemsEquals = { oldItem, newItem ->
-                oldItem.name == newItem.name
-            }).also {
-            it.emptyViewId = R.layout.new_item
-        }
 
 }

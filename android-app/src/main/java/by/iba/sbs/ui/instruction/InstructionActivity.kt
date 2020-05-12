@@ -371,6 +371,39 @@ class InstructionActivity :
             .navigate(R.id.navigation_step_edit, bundle)
     }
 
+    override fun onEditImage(StepId: Int) {
+        stepId = StepId
+        val stepHasImage =
+            viewModel.steps.value!!.any { step -> step.stepId == stepId && step.imagePath.isNotEmpty() }
+        val builder = AlertDialog.Builder(this)
+        val listOfResolvedActions = ImageActions.values().filter {
+            (stepHasImage && it == ImageActions.EditCurrent) || (it != ImageActions.EditCurrent)
+        }
+
+        builder
+            //.setTitle("Upload from")
+            .setItems(listOfResolvedActions.map { resources.getString(it.stringId) }
+                .toTypedArray()) { _, key ->
+                selectedAction = key
+                if (!stepHasImage)
+                    selectedAction += 1
+
+                when (selectedAction) {
+                    ImageActions.EditCurrent.key, ImageActions.FromGallery.key -> {
+                        usingCamera = false
+                    }
+                    ImageActions.TakePhoto.key -> {
+                        usingCamera = true
+                    }
+                }
+                checkPermissions()
+            }
+        //builder.setNegativeButton("Cancel", null);
+        val dialog = builder.create()
+        dialog.show()
+
+    }
+
     override fun onAfterSaveAction() {
         findNavController(R.id.fragment_navigation_instruction)
             .navigate(R.id.navigation_instruction_view)

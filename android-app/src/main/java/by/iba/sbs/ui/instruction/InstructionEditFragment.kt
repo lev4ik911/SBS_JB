@@ -1,11 +1,7 @@
 package by.iba.sbs.ui.instruction
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -19,7 +15,6 @@ import by.iba.sbs.library.model.Step
 import by.iba.sbs.tools.Extentions
 import com.google.android.material.appbar.AppBarLayout
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import java.io.File
 import kotlin.math.abs
 
 
@@ -50,6 +45,18 @@ class InstructionEditFragment :
         }
         instructionId = arguments?.getInt("instructionId") ?: 0
 
+        val stepsAdapter =
+            BaseBindingAdapter<Step, InstructionEditStepListItemBinding, InstructionViewModel>(
+                R.layout.instruction_edit_step_list_item,
+                BR.step,
+                BR.viewmodel,
+                viewModel,
+                isItemsEquals = { oldItem, newItem ->
+                    oldItem.description == newItem.description
+                }).also {
+                it.emptyViewId = R.layout.new_step
+                it.dragLayoutId = R.id.iv_drag
+            }
         binding.rvSteps.apply {
             this.adapter = stepsAdapter
             stepsAdapter.itemTouchHelper.attachToRecyclerView(this)
@@ -67,15 +74,12 @@ class InstructionEditFragment :
             // Toast.makeText(context, pos.toString(), Toast.LENGTH_LONG).show()
         }
         stepsAdapter.onEmptyViewItemClick = {
-            // startActivity(Intent(activity, InstructionActivity::class.java))
+            (activity as InstructionActivity).onEditStep(-1)
         }
         stepsAdapter.onItemMoved = { old, new ->
             val steps = stepsAdapter.itemsList
             steps.forEachIndexed { index, step -> step.stepId = index + 1 }
             viewModel.steps.postValue(steps)
-        }
-        stepsAdapter.onCameraClick = {
-            (activity as InstructionActivity).callImageSelector(it.stepId)
         }
     }
 
@@ -137,16 +141,5 @@ class InstructionEditFragment :
         }
     }
 
-    @SuppressLint("ResourceType")
-    private val stepsAdapter =
-        BaseBindingAdapter<Step, InstructionEditStepListItemBinding>(
-            R.layout.instruction_edit_step_list_item,
-            BR.step,
-            isItemsEquals = { oldItem, newItem ->
-                oldItem.description == newItem.description
-            }).also {
-            it.emptyViewId = R.layout.new_step
-            it.dragLayoutId = R.id.iv_drag
-            it.cameraImageId = R.id.iv_camera
-        }
+
 }

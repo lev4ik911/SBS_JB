@@ -11,27 +11,28 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import by.iba.mvvmbase.BaseViewModel
 
 
-open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
+open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM : BaseViewModel>(
     @LayoutRes private val layoutId: Int,
+    @LayoutRes val collectionVariableId: Int,
     @LayoutRes val viewModelVariableId: Int,
+    val viewModel: VM,
     open val isItemsEquals: (oldItem: T, newItem: T) -> Boolean
-) : RecyclerView.Adapter<BaseBindingAdapter<T, DB>.BindingHolder>(), Filterable {
+) : RecyclerView.Adapter<BaseBindingAdapter<T, DB, VM>.BindingHolder>(), Filterable {
 
     @LayoutRes
     var emptyViewId: Int = 0
 
     @LayoutRes
     var dragLayoutId: Int = 0
-    var cameraImageId: Int = 0
     var charSearch: String = ""
     private val itemsSource = ArrayList<T>()
     var itemsList = ArrayList<T>()
 
     var onItemClick: ((pos: Int, view: View, item: T) -> Unit)? = null
     var onEmptyViewItemClick: (() -> Unit)? = null
-    var onCameraClick: ((step: T) -> Unit)? = null
     var onItemMoved: ((from: Int, to: Int) -> Unit)? = null
 
 
@@ -57,7 +58,7 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
                     target: RecyclerView.ViewHolder
                 ): Boolean {
                     if (dragLayoutId == 0) return false
-                    val adapter = recyclerView.adapter as BaseBindingAdapter<*, *>
+                    val adapter = recyclerView.adapter as BaseBindingAdapter<*, *, *>
                     val from = viewHolder.adapterPosition
                     val to = target.adapterPosition
 
@@ -203,11 +204,6 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
                 return@setOnTouchListener true
             }
         }
-        if (cameraImageId != 0){
-            view.findViewById<View>(cameraImageId)?.setOnClickListener() {
-                onCameraClick?.invoke(itemsList[holder.adapterPosition])
-            }
-        }
         return holder
     }
 
@@ -258,7 +254,8 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding>(
         }
 
         fun bind(employee: T) {
-            _dataBinding?.setVariable(viewModelVariableId, employee)
+            _dataBinding?.setVariable(collectionVariableId, employee)
+            _dataBinding?.setVariable(viewModelVariableId, viewModel)
             _dataBinding?.executePendingBindings()
         }
 
