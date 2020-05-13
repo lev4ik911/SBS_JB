@@ -1,4 +1,4 @@
-package by.iba.sbs.ui.instruction
+package by.iba.sbs.ui.guideline
 
 import android.Manifest
 import android.app.AlertDialog
@@ -28,11 +28,11 @@ import java.io.File
 import java.util.*
 
 
-class InstructionActivity :
-    BaseEventsActivity<InstructionActivityBinding, InstructionViewModel, InstructionViewModel.EventsListener>(),
-    InstructionViewModel.EventsListener {
+class GuidelineActivity :
+    BaseEventsActivity<InstructionActivityBinding, GuidelineViewModel, GuidelineViewModel.EventsListener>(),
+    GuidelineViewModel.EventsListener {
     override val layoutId: Int = R.layout.instruction_activity
-    override val viewModel: InstructionViewModel by viewModel()
+    override val viewModel: GuidelineViewModel by viewModel()
     override val viewModelVariableId: Int = by.iba.sbs.BR.viewmodel
 
 
@@ -195,7 +195,7 @@ class InstructionActivity :
                             val destinationUri = createTempImageFileInInternalStorage()
                             UCrop.of(sourcePath, destinationUri)
                                 .withAspectRatio(1f, 1f)
-                                .start(this@InstructionActivity)
+                                .start(this@GuidelineActivity)
                         }
                     }
 

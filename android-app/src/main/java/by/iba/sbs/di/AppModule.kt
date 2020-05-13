@@ -3,9 +3,9 @@ package by.iba.sbs.di
 import by.iba.ecl.ui.MainViewModel
 import by.iba.sbs.library.service.SystemInformation
 import by.iba.sbs.tools.SystemInfo
-import by.iba.sbs.ui.instruction.InstructionFragment
-import by.iba.sbs.ui.instruction.InstructionViewModel
-import by.iba.sbs.ui.instructions.InstructionListViewModel
+import by.iba.sbs.ui.guideline.GuidelineFragment
+import by.iba.sbs.ui.guideline.GuidelineViewModel
+import by.iba.sbs.ui.guidelines.GuidelineListViewModel
 import by.iba.sbs.ui.login.LoginViewModel
 import by.iba.sbs.ui.login.RegisterViewModel
 import by.iba.sbs.ui.login.ResetViewModel
@@ -24,8 +24,8 @@ val viewModelModule = module {
     viewModel { RegisterViewModel() }
     viewModel { ResetViewModel() }
     viewModel { ProfileViewModel() }
-    viewModel { InstructionViewModel() }
-    viewModel { InstructionListViewModel() }
+    viewModel { GuidelineViewModel() }
+    viewModel { GuidelineListViewModel() }
     viewModel { WalkthroughViewModel() }
     //viewModel { PostDetailsViewModel(userPostUseCase = get(), commentsUseCase = get()) }
 }
@@ -33,5 +33,5 @@ val serviceModule = module {
     single<SystemInformation> { SystemInfo(androidContext()) }
 }
 val fragmentModule = module {
-        fragment { InstructionFragment() }
+    fragment { GuidelineFragment() }
 }

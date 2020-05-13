@@ -16,6 +16,6 @@
         android:layout_marginVertical="@dimen/spacing_xsmall"
         android:nestedScrollingEnabled="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:context="by.iba.sbs.ui.instruction.StepsFragment"
+        tools:context="by.iba.sbs.ui.guideline.StepsFragment"
         tools:listitem="@layout/instruction_step_list_item" />
 </layout>

@@ -5,7 +5,7 @@ import by.iba.mvvmbase.BaseViewModel
 import by.iba.mvvmbase.dispatcher.EventsDispatcher
 import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
 import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
-import by.iba.sbs.library.model.Instruction
+import by.iba.sbs.library.model.Guideline
 
 class ProfileEditViewModel : BaseViewModel(),
     EventsDispatcherOwner<ProfileEditViewModel.EventsListener> {
@@ -16,10 +16,10 @@ class ProfileEditViewModel : BaseViewModel(),
     val isFavorite = MutableLiveData(true)
     val isMyProfile = MutableLiveData(true)
 
-    val instructions = MutableLiveData<List<Instruction>>().apply {
-        val mData = ArrayList<Instruction>()
-        mData.add(Instruction(1, "Как стать счастливым", "Dobry"))
-        mData.add(Instruction(2, "Отпадный шашлычок", "Dobry"))
+    val instructions = MutableLiveData<List<Guideline>>().apply {
+        val mData = ArrayList<Guideline>()
+        mData.add(Guideline(1, "Как стать счастливым", "Dobry"))
+        mData.add(Guideline(2, "Отпадный шашлычок", "Dobry"))
         value = mData
     }
 

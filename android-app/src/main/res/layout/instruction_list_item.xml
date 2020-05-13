@@ -7,7 +7,7 @@
 
         <variable
             name="instruction"
-            type="by.iba.sbs.library.model.Instruction" />
+            type="by.iba.sbs.library.model.Guideline" />
     </data>
 
     <androidx.cardview.widget.CardView

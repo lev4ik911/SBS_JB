@@ -1,4 +1,4 @@
-package by.iba.sbs.ui.instruction
+package by.iba.sbs.ui.guideline
 
 import android.os.Bundle
 import android.view.View
@@ -13,15 +13,15 @@ import by.iba.sbs.library.model.Step
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class StepsFragment : BaseFragment<StepsFragmentBinding, InstructionViewModel>() {
+class StepsFragment : BaseFragment<StepsFragmentBinding, GuidelineViewModel>() {
     override val layoutId: Int = R.layout.steps_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: InstructionViewModel by sharedViewModel()
+    override val viewModel: GuidelineViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val stepsAdapter =
-            BaseBindingAdapter<Step, InstructionStepListItemBinding, InstructionViewModel>(
+            BaseBindingAdapter<Step, InstructionStepListItemBinding, GuidelineViewModel>(
                 R.layout.instruction_step_list_item,
                 BR.step,
                 BR.viewmodel,

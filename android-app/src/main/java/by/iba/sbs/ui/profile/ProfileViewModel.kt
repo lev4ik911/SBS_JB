@@ -6,7 +6,7 @@ import by.iba.mvvmbase.dispatcher.EventsDispatcher
 import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
 import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
 import by.iba.sbs.library.model.Author
-import by.iba.sbs.library.model.Instruction
+import by.iba.sbs.library.model.Guideline
 
 class ProfileViewModel : BaseViewModel(), EventsDispatcherOwner<ProfileViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
@@ -15,10 +15,10 @@ class ProfileViewModel : BaseViewModel(), EventsDispatcherOwner<ProfileViewModel
     val rating = MutableLiveData("547")
     val isFavorite = MutableLiveData(true)
     val isMyProfile = MutableLiveData(true)
-    val instructions = MutableLiveData<List<Instruction>>().apply {
-        val mData = ArrayList<Instruction>()
-        mData.add(Instruction(1, "Как стать счастливым", "Dobry"))
-        mData.add(Instruction(2, "Отпадный шашлычок", "Dobry"))
+    val instructions = MutableLiveData<List<Guideline>>().apply {
+        val mData = ArrayList<Guideline>()
+        mData.add(Guideline(1, "Как стать счастливым", "Dobry"))
+        mData.add(Guideline(2, "Отпадный шашлычок", "Dobry"))
         value = mData
     }
     val subscribers = MutableLiveData<List<Author>>().apply {

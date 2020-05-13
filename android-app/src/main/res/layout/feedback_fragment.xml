@@ -5,13 +5,13 @@
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.instruction.InstructionViewModel" />
+            type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="by.iba.sbs.ui.instruction.FeedbackFragment">
+        tools:context="by.iba.sbs.ui.guideline.FeedbackFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_feedback"

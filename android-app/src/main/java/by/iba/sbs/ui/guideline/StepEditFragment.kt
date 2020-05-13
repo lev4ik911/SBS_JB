@@ -1,4 +1,4 @@
-package by.iba.sbs.ui.instruction
+package by.iba.sbs.ui.guideline
 
 import androidx.fragment.app.Fragment
 import by.iba.mvvmbase.BaseFragment
@@ -11,10 +11,10 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 /**
  * A simple [Fragment] subclass.
  */
-class StepEditFragment : BaseFragment<StepEditFragmentBinding, InstructionViewModel>() {
+class StepEditFragment : BaseFragment<StepEditFragmentBinding, GuidelineViewModel>() {
 
     override val layoutId: Int = R.layout.step_edit_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: InstructionViewModel by sharedViewModel()
+    override val viewModel: GuidelineViewModel by sharedViewModel()
 
 }

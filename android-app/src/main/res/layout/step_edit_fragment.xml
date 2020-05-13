@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.instruction.InstructionViewModel" />
+            type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

@@ -15,8 +15,8 @@ import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileInstructionsFragmentBinding
-import by.iba.sbs.library.model.Instruction
-import by.iba.sbs.ui.instruction.InstructionActivity
+import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.ui.guideline.GuidelineActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 /**
@@ -54,12 +54,12 @@ class ProfileInstructionsFragment :
                 imageViewPair,
                 textViewPair
             )
-            val intent = Intent(activity, InstructionActivity::class.java)
+            val intent = Intent(activity, GuidelineActivity::class.java)
             intent.putExtra("instructionId", 12)
             startActivity(intent, options.toBundle())
         }
         instructionsAdapter.onEmptyViewItemClick = {
-            val intent = Intent(activity, InstructionActivity::class.java)
+            val intent = Intent(activity, GuidelineActivity::class.java)
             intent.putExtra("instructionId", 0)
             // findNavController().navigate(R.id.navigation_instruction_edit, bundle)
             startActivity(intent)
@@ -68,7 +68,7 @@ class ProfileInstructionsFragment :
 
     @SuppressLint("ResourceType")
     private val instructionsAdapter =
-        EmptyViewAdapter<Instruction>(
+        EmptyViewAdapter<Guideline>(
             R.layout.instruction_list_item,
             onBind = { view, item, _ ->
                 view.findViewById<TextView>(R.id.tv_title)?.text = item.name

@@ -1,11 +1,10 @@
-package by.iba.sbs.ui.instruction
+package by.iba.sbs.ui.guideline
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
 import by.iba.mvvmbase.BaseFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
@@ -14,10 +13,10 @@ import by.iba.sbs.databinding.FeedbackFragmentBinding
 import by.iba.sbs.library.model.Feedback
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class FeedbackFragment : BaseFragment<FeedbackFragmentBinding, InstructionViewModel>() {
+class FeedbackFragment : BaseFragment<FeedbackFragmentBinding, GuidelineViewModel>() {
     override val layoutId: Int = R.layout.feedback_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: InstructionViewModel by sharedViewModel()
+    override val viewModel: GuidelineViewModel by sharedViewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

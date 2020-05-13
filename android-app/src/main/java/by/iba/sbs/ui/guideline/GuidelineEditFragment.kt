@@ -1,4 +1,4 @@
-package by.iba.sbs.ui.instruction
+package by.iba.sbs.ui.guideline
 
 import android.os.Bundle
 import android.view.View
@@ -18,13 +18,13 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.abs
 
 
-class InstructionEditFragment :
-    BaseFragment<InstructionEditFragmentBinding, InstructionViewModel>(),
+class GuidelineEditFragment :
+    BaseFragment<InstructionEditFragmentBinding, GuidelineViewModel>(),
     AppBarLayout.OnOffsetChangedListener {
 
     override val layoutId: Int = R.layout.instruction_edit_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: InstructionViewModel by sharedViewModel()
+    override val viewModel: GuidelineViewModel by sharedViewModel()
     private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
     private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
     private val mAlphaAnimationsDuration = 200L
@@ -46,7 +46,7 @@ class InstructionEditFragment :
         instructionId = arguments?.getInt("instructionId") ?: 0
 
         val stepsAdapter =
-            BaseBindingAdapter<Step, InstructionEditStepListItemBinding, InstructionViewModel>(
+            BaseBindingAdapter<Step, InstructionEditStepListItemBinding, GuidelineViewModel>(
                 R.layout.instruction_edit_step_list_item,
                 BR.step,
                 BR.viewmodel,
@@ -70,11 +70,11 @@ class InstructionEditFragment :
 
         })
         stepsAdapter.onItemClick = { pos, itemView, item ->
-            (activity as InstructionActivity).onEditStep(item.stepId)
+            (activity as GuidelineActivity).onEditStep(item.stepId)
             // Toast.makeText(context, pos.toString(), Toast.LENGTH_LONG).show()
         }
         stepsAdapter.onEmptyViewItemClick = {
-            (activity as InstructionActivity).onEditStep(-1)
+            (activity as GuidelineActivity).onEditStep(-1)
         }
         stepsAdapter.onItemMoved = { old, new ->
             val steps = stepsAdapter.itemsList

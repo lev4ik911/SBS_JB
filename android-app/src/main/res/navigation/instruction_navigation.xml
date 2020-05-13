@@ -8,12 +8,12 @@
 
     <fragment
         android:id="@+id/navigation_instruction_view"
-        android:name="by.iba.sbs.ui.instruction.InstructionFragment"
+        android:name="by.iba.sbs.ui.guideline.GuidelineFragment"
         android:label=""
         tools:layout="@layout/instruction_fragment" />
     <fragment
         android:id="@+id/navigation_instruction_edit"
-        android:name="by.iba.sbs.ui.instruction.InstructionEditFragment"
+        android:name="by.iba.sbs.ui.guideline.GuidelineEditFragment"
         android:label="instruction_edit_fragment"
         tools:layout="@layout/instruction_edit_fragment" >
         <argument
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_step_edit"
-        android:name="by.iba.sbs.ui.instruction.StepEditFragment"
+        android:name="by.iba.sbs.ui.guideline.StepEditFragment"
         android:label="StepEditFragment">
         <argument
             android:name="stepId"

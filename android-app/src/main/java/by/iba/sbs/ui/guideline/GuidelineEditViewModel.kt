@@ -1,4 +1,4 @@
-package by.iba.sbs.ui.instruction
+package by.iba.sbs.ui.guideline
 
 import androidx.lifecycle.MutableLiveData
 import by.iba.mvvmbase.BaseViewModel
@@ -9,8 +9,8 @@ import by.iba.sbs.library.model.Step
 import java.util.*
 
 
-class InstructionEditViewModel : BaseViewModel(),
-    EventsDispatcherOwner<InstructionEditViewModel.EventsListener> {
+class GuidelineEditViewModel : BaseViewModel(),
+    EventsDispatcherOwner<GuidelineEditViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
     val name = MutableLiveData("")
     val description = MutableLiveData("")

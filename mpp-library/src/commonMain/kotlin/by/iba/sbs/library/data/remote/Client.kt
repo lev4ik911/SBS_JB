@@ -1,5 +1,6 @@
 package by.iba.sbs.library.data.remote
 
+import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.service.LocalSettings
 import com.github.aakira.napier.Napier
 import com.russhwolf.settings.Settings
@@ -22,6 +23,7 @@ import io.ktor.http.*
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.builtins.list
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import kotlinx.serialization.serializer
@@ -130,7 +132,6 @@ class Client(settings: Settings) {
         needAuth: Boolean = true,
         deserializer: DeserializationStrategy<T>? = null
     ): Remote<T> {
-
         return try {
             ktor
                 .request<HttpResponse>(route) {
@@ -177,5 +178,12 @@ class Client(settings: Settings) {
         } catch (ex: Exception) {
             Remote.error(ex, null)
         }
+    }
+
+    suspend fun getAllGuidelines(): Remote<List<Guideline>> {
+        return get(
+            Routes.Guidelines.URL_GUIDELINES,
+            deserializer = Guideline::class.serializer().list
+        )
     }
 }

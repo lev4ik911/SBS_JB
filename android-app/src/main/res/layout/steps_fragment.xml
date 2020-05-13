@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.instruction.InstructionViewModel" />
+            type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
     </data>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/spacing_xsmall"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:context="by.iba.sbs.ui.instruction.StepsFragment"
+            tools:context="by.iba.sbs.ui.guideline.StepsFragment"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/instruction_step_list_item" />
 </layout>

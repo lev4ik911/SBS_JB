@@ -1,4 +1,4 @@
-package by.iba.sbs.ui.instruction
+package by.iba.sbs.ui.guideline
 
 import android.os.Bundle
 import android.view.View
@@ -17,14 +17,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.abs
 
-class InstructionFragment :
-    BaseFragment<InstructionFragmentBinding, InstructionViewModel>(),
+class GuidelineFragment :
+    BaseFragment<InstructionFragmentBinding, GuidelineViewModel>(),
     AppBarLayout.OnOffsetChangedListener
  {
 
     override val layoutId: Int = R.layout.instruction_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: InstructionViewModel by sharedViewModel()
+     override val viewModel: GuidelineViewModel by sharedViewModel()
     private lateinit var viewPager: ViewPager2
      private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
      private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f

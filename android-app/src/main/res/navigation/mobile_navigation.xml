@@ -19,7 +19,7 @@
 
     <fragment
             android:id="@+id/navigation_notifications"
-        android:name="by.iba.sbs.ui.instructions.InstructionListFragment"
+        android:name="by.iba.sbs.ui.guidelines.GuidelineListFragment"
             android:label="@string/title_notifications"
             tools:layout="@layout/instruction_list_fragment"/>
     <fragment
@@ -29,7 +29,7 @@
         tools:layout="@layout/profile_fragment" />
     <activity
         android:id="@+id/navigation_instructionActivity"
-        android:name="by.iba.sbs.ui.instruction.InstructionActivity"
+        android:name="by.iba.sbs.ui.guideline.GuidelineActivity"
         android:label="instruction_activity"
         tools:layout="@layout/instruction_activity" />
 </navigation>
