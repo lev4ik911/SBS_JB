@@ -128,11 +128,15 @@ object Deps {
                 iosArm64 = "com.github.aakira:napier-iosArm64:${Versions.Libs.MultiPlatform.napier}"
             )
             val SQLDelight = MultiPlatformLibrary(
-                android = "com.squareup.sqldelight:android-driver:${Versions.Libs.MultiPlatform.sqldelight}",
-                common = "com.squareup.sqldelight:sqlite-driver:${Versions.Libs.MultiPlatform.sqldelight}",
-                ios = "com.squareup.sqldelight:native-driver:${Versions.Libs.MultiPlatform.sqldelight}"
+                common = "com.squareup.sqldelight:runtime-jvm:${Versions.Libs.MultiPlatform.sqldelight}"
+                //common = "com.squareup.sqldelight:runtime-metadata:${Versions.Libs.MultiPlatform.sqldelight}"
             )
-
+            val SQLDelightDriver = MultiPlatformLibrary(
+                android = "com.squareup.sqldelight:android-driver:${Versions.Libs.MultiPlatform.sqldelight}",
+              //  common = "com.squareup.sqldelight:sqlite-driver:${Versions.Libs.MultiPlatform.sqldelight}",
+                iosX64 = "com.squareup.sqldelight:native-driver:${Versions.Libs.MultiPlatform.sqldelight}",
+                iosArm64 = "com.squareup.sqldelight:native-driver:${Versions.Libs.MultiPlatform.sqldelight}"
+            )
         }
     }
 

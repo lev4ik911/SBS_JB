@@ -28,7 +28,8 @@ val mppLibs = listOf(
     Deps.Libs.MultiPlatform.mokoResources,
     Deps.Libs.MultiPlatform.mokoMvvm,
     Deps.Libs.MultiPlatform.mokoUnits,
-    Deps.Libs.MultiPlatform.SQLDelight
+ //   Deps.Libs.MultiPlatform.SQLDelight
+    Deps.Libs.MultiPlatform.SQLDelightDriver
 )
 val ktorLibs = listOf(
     Deps.Libs.MultiPlatform.ktorClient,
