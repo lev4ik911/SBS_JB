@@ -13,8 +13,8 @@ allprojects {
         maven { url = uri("https://jitpack.io") }
         maven { url = uri("https://kotlin.bintray.com/kotlin") }
         maven { url = uri("https://kotlin.bintray.com/kotlinx") }
-        maven { url = uri("https://dl.bintray.com/icerockdev/moko") }
         maven { url = uri("https://kotlin.bintray.com/ktor") }
+        maven { url = uri("https://dl.bintray.com/icerockdev/moko") }
         maven { url = uri("https://dl.bintray.com/aakira/maven") }
         maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
     }
@@ -23,15 +23,13 @@ allprojects {
 //    configurations.create("compileClasspath")
 }
 
-//buildScan {
-//    termsOfServiceUrl = "https://gradle.com/terms-of-service"
-//    termsOfServiceAgree = "yes"
-//}
+buildScan {
+    termsOfServiceUrl = "https://gradle.com/terms-of-service"
+    termsOfServiceAgree = "yes"
+}
 
-//tasks.register("clean", Delete::class).configure {
-//    delete(rootProject.buildDir)
-//}
 dependencies {
+    implementation(kotlin("stdlib-jdk7"))
     implementation(kotlin("stdlib-jdk8"))
     implementation("com.squareup.sqldelight:gradle-plugin:1.3.0")
 }

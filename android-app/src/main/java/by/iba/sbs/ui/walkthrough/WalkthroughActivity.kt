@@ -47,6 +47,7 @@ class WalkthroughActivity : BaseActivity<WalkthroughActivityBinding, Walkthrough
         super.onResume()
         init()
     }
+
     fun init() {
         // layouts of all welcome sliders
         // add few more layouts if you want

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+>
 
     <data>
         <variable
-                name="viewmodel"
-                type="by.iba.sbs.ui.login.SplashViewModel" />
+            name="viewmodel"
+            type="by.iba.sbs.ui.login.SplashViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content_login"
@@ -40,7 +40,7 @@
                 <ImageView
                     android:layout_width="@dimen/image_padding"
                     android:layout_height="@dimen/image_padding"
-                    android:src="@drawable/lightbulb_on_outline" />
+                    android:src="@drawable/lightbulb_on_outline"/>
 
                 <TextView
                     style="@style/Text.Logo"
@@ -48,51 +48,51 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:singleLine="false"
-                    android:text="@string/app_description" />
+                    android:text="@string/app_description"/>
 
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
 
-<LinearLayout
-    app:layout_constraintTop_toBottomOf="@id/shimmer_view_container"
-    android:paddingHorizontal="@dimen/spacing_small"
-    android:paddingVertical="@dimen/spacing_large"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_login"
-        style="@style/Button.Action"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/spacing_small"
-        android:onClick="@{() -> viewmodel.onLoginButtonClick()}"
-        android:paddingHorizontal="@dimen/spacing_xlarge"
-        android:text="@string/btn_login" />
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_register"
-        style="@style/Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/spacing_small"
-        android:onClick="@{() -> viewmodel.onRegisterButtonClick()}"
-        android:paddingHorizontal="@dimen/spacing_xlarge"
-        android:text="@string/btn_register" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_margin="@dimen/spacing_normal"
-        android:background="@color/colorShadow"/>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_just_look"
-        style="@style/Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/spacing_small"
-        android:onClick="@{() -> viewmodel.onJustLookButtonClick()}"
-        android:paddingHorizontal="@dimen/spacing_xlarge"
-        android:text="@string/btn_just_look" />
-</LinearLayout>
+        <LinearLayout
+            app:layout_constraintTop_toBottomOf="@id/shimmer_view_container"
+            android:paddingHorizontal="@dimen/spacing_small"
+            android:paddingVertical="@dimen/spacing_large"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_login"
+                style="@style/Button.Action"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/spacing_small"
+                android:onClick="@{() -> viewmodel.onLoginButtonClick()}"
+                android:paddingHorizontal="@dimen/spacing_xlarge"
+                android:text="@string/btn_login"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_register"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/spacing_small"
+                android:onClick="@{() -> viewmodel.onRegisterButtonClick()}"
+                android:paddingHorizontal="@dimen/spacing_xlarge"
+                android:text="@string/btn_register"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/spacing_normal"
+                android:background="@color/colorShadow"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_just_look"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/spacing_small"
+                android:onClick="@{() -> viewmodel.onJustLookButtonClick()}"
+                android:paddingHorizontal="@dimen/spacing_xlarge"
+                android:text="@string/btn_just_look"/>
+        </LinearLayout>
         <TextView
             android:id="@+id/tv_version"
             style="@style/Text.Description"
@@ -101,12 +101,13 @@
             android:layout_marginVertical="@dimen/spacing_small"
             android:gravity="center"
             android:text="@{String.format(@string/app_version_str, viewmodel.appVersion)}"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
-    </androidx.constraintlayout.widget.ConstraintLayout></layout>
+            app:layout_constraintGuide_percent="0.5"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
+            type="by.iba.sbs.ui.guideline.GuidelineViewModel"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -45,7 +45,7 @@
                         android:layout_margin="@dimen/spacing_xxlarge"
                         android:elevation="@dimen/spacing_xsmall"
                         android:src="@drawable/camera_outline"
-                        android:tint="@android:color/white" />
+                        android:tint="@android:color/white"/>
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/htab_header"
@@ -53,7 +53,7 @@
                         android:layout_height="match_parent"
                         android:fitsSystemWindows="true"
                         android:scaleType="fitXY"
-                        android:src="@drawable/ic_paneer" />
+                        android:src="@drawable/ic_paneer"/>
                 </RelativeLayout>
 
                 <androidx.appcompat.widget.Toolbar
@@ -81,7 +81,7 @@
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="end"
-                            android:layout_weight="1" />
+                            android:layout_weight="1"/>
 
                         <ImageButton
                             android:id="@+id/btn_toolbar_action"
@@ -93,7 +93,7 @@
                             android:src="@drawable/check_bold"
                             android:tint="@color/colorAccent"
                             android:visibility="invisible"
-                            tools:ignore="ContentDescription" />
+                            tools:ignore="ContentDescription"/>
 
                         <androidx.appcompat.widget.AppCompatImageButton
                             android:id="@+id/iv_profile"
@@ -105,7 +105,7 @@
                             android:src="@drawable/trash_can_outline"
                             android:tint="@color/colorAccent"
                             app:layout_anchor="@id/toolbar_description"
-                            app:layout_anchorGravity="center|end" />
+                            app:layout_anchorGravity="center|end"/>
                     </LinearLayout>
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -131,7 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/spacing_normal"
-                    android:layout_marginTop="@dimen/spacing_xsmall" />
+                    android:layout_marginTop="@dimen/spacing_xsmall"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/ti_name"
@@ -150,7 +150,7 @@
 
                         android:hint="@string/hint_step_name"
                         android:text="@={viewmodel.name}"
-                        android:textAppearance="@style/Text" />
+                        android:textAppearance="@style/Text"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -174,7 +174,7 @@
                         android:lines="10"
                         android:singleLine="false"
                         android:text="@={viewmodel.description}"
-                        android:textAppearance="@style/Text.Description" />
+                        android:textAppearance="@style/Text.Description"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
@@ -192,7 +192,7 @@
             app:elevation="@dimen/spacing_xsmall"
             app:fabSize="mini"
             app:layout_anchor="@id/htab_collapse_toolbar"
-            app:layout_anchorGravity="bottom|end" />
+            app:layout_anchorGravity="bottom|end"/>
 
         <LinearLayout
             style="@style/Text.Inverse"
@@ -209,7 +209,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/btn_save"
-                android:textColor="?android:attr/textColorPrimaryInverse" />
+                android:textColor="?android:attr/textColorPrimaryInverse"/>
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

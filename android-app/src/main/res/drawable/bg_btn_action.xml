@@ -8,5 +8,5 @@
         android:startColor="@color/colorPrimaryVariant"
         android:centerColor="@color/colorAccent"
         android:endColor="@color/colorPrimaryVariant"
-        />
+    />
 </shape>

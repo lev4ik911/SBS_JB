@@ -8,8 +8,8 @@ plugins {
 }
 
 repositories {
-    jcenter()
     google()
+    jcenter()
     mavenCentral()
     maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
 }
@@ -26,6 +26,7 @@ dependencies {
     implementation("org.koin:koin-gradle-plugin:2.1.5")
     implementation("com.android.tools.build:gradle:3.6.3")
 
+    implementation(kotlin("stdlib-jdk7"))
     implementation(kotlin("stdlib-jdk8"))
 }
 

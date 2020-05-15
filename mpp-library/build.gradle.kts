@@ -5,6 +5,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.multiplatform")
+
     id("kotlin-android-extensions")
     id("kotlinx-serialization")
     id("dev.icerock.mobile.multiplatform")
@@ -23,13 +24,13 @@ android {
 val mppLibs = listOf(
     Deps.Libs.MultiPlatform.settings,
     Deps.Libs.MultiPlatform.napier,
+    //Deps.Libs.MultiPlatform.SQLDelight,
+    Deps.Libs.MultiPlatform.SQLDelightDriver,
     Deps.Libs.MultiPlatform.mokoParcelize,
     Deps.Libs.MultiPlatform.mokoNetwork,
     Deps.Libs.MultiPlatform.mokoResources,
     Deps.Libs.MultiPlatform.mokoMvvm,
-    Deps.Libs.MultiPlatform.mokoUnits,
- //   Deps.Libs.MultiPlatform.SQLDelight
-    Deps.Libs.MultiPlatform.SQLDelightDriver
+    Deps.Libs.MultiPlatform.mokoUnits
 )
 val ktorLibs = listOf(
     Deps.Libs.MultiPlatform.ktorClient,

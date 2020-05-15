@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.login.LoginViewModel" />
+            type="by.iba.sbs.ui.login.LoginViewModel"/>
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -33,14 +33,14 @@
                 android:hint="@string/caption_work_email"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress|textNoSuggestions"
-                android:text="@={viewmodel.login}" />
+                android:text="@={viewmodel.login}"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.checkbox.MaterialCheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/spacing_normal"
             android:checked="@={viewmodel.keepLogin}"
-            android:text="@string/caption_remember_me" />
+            android:text="@string/caption_remember_me"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_next"
@@ -50,6 +50,6 @@
             android:enabled="@{viewmodel.isLoginEnabled}"
             android:onClick="@{() -> viewmodel.onNextButtonClick()}"
             android:paddingHorizontal="@dimen/spacing_xlarge"
-            android:text="@string/btn_next" />
+            android:text="@string/btn_next"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

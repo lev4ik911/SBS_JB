@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.profile.ProfileEditViewModel" />
+            type="by.iba.sbs.ui.profile.ProfileEditViewModel"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -40,7 +40,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/toolbar_height"
 
-                        />
+                    />
 
                     <androidx.coordinatorlayout.widget.CoordinatorLayout
                         android:id="@+id/profile_layout"
@@ -57,7 +57,7 @@
                             app:civ_border_color="@android:color/white"
                             app:civ_border_width="@dimen/spacing_xsmall"
                             app:layout_anchorGravity="top|center"
-                            app:layout_collapseMode="pin" />
+                            app:layout_collapseMode="pin"/>
 
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:id="@+id/layout_avatar"
@@ -76,7 +76,7 @@
                             android:src="@drawable/star"
                             android:tint="@color/colorLightYellow"
                             app:layout_anchor="@id/layout_avatar"
-                            app:layout_anchorGravity="bottom|right" />
+                            app:layout_anchorGravity="bottom|right"/>
                     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
                     <LinearLayout
@@ -96,7 +96,7 @@
                             android:gravity="center"
 
                             android:padding="@dimen/spacing_xxsmall"
-                            android:text="@{viewmodel.fullName}" />
+                            android:text="@{viewmodel.fullName}"/>
 
                         <TextView
                             android:id="@+id/tv_user_email"
@@ -106,7 +106,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:padding="@dimen/spacing_xxsmall"
-                            android:text="@{viewmodel.email}" />
+                            android:text="@{viewmodel.email}"/>
 
                     </LinearLayout>
                 </RelativeLayout>
@@ -129,7 +129,7 @@
 
                         <Space
                             android:layout_width="@dimen/spacing_large"
-                            android:layout_height="@dimen/spacing_large" />
+                            android:layout_height="@dimen/spacing_large"/>
 
                         <TextView
                             android:id="@+id/tv_title"
@@ -138,7 +138,7 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="end"
                             android:layout_weight="1"
-                            android:gravity="center" />
+                            android:gravity="center"/>
 
                         <ImageButton
                             android:id="@+id/btn_toolbar_action"
@@ -151,11 +151,11 @@
                             android:onClick="@{() -> viewmodel.onActionButtonClick()}"
                             android:src="@drawable/heart"
                             android:tint="@color/colorLightRed"
-                            android:visibility="invisible" />
+                            android:visibility="invisible"/>
 
                         <Space
                             android:layout_width="@dimen/spacing_large"
-                            android:layout_height="@dimen/spacing_large" />
+                            android:layout_height="@dimen/spacing_large"/>
                     </LinearLayout>
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -184,7 +184,7 @@
             app:elevation="@dimen/spacing_xsmall"
             app:fabSize="mini"
             app:layout_anchor="@id/htab_collapse_toolbar"
-            app:layout_anchorGravity="bottom|end" />
+            app:layout_anchorGravity="bottom|end"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -106,11 +106,7 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
         if (from == itemCount - 1 || to == itemCount - 1) return
         val dragItem = itemsList[from]
         itemsList.removeAt(from)
-        if (to < from) {
             itemsList.add(to, dragItem)
-        } else {
-            itemsList.add(to - 1, dragItem)
-        }
     }
 
     override fun getItemViewType(position: Int): Int =

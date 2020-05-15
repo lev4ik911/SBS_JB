@@ -4,7 +4,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.walkthrough.WalkthroughViewModel" />
+            type="by.iba.sbs.ui.walkthrough.WalkthroughViewModel"/>
     </data>
 
     <RelativeLayout
@@ -14,7 +14,7 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
 
         <LinearLayout
             android:id="@+id/layoutDots"
@@ -29,7 +29,7 @@
             android:layout_height="1dp"
             android:layout_above="@id/layoutDots"
             android:alpha=".5"
-            android:background="@android:color/white" />
+            android:background="@android:color/white"/>
 
         <Button
             android:id="@+id/btn_next"
@@ -39,7 +39,7 @@
             android:layout_alignParentBottom="true"
             android:background="@null"
             android:text="@string/next"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"/>
 
         <Button
             android:id="@+id/btn_skip"
@@ -49,7 +49,7 @@
             android:layout_alignParentBottom="true"
             android:background="@null"
             android:text="@string/skip"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"/>
 
     </RelativeLayout>
 </layout>

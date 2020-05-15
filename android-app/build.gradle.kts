@@ -49,7 +49,7 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
-    tasks.withType < org.jetbrains.kotlin.gradle.tasks.KotlinCompile > {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = "1.8"
     }
 
@@ -66,7 +66,7 @@ dependencies {
     implementation(Deps.Libs.Android.constraintLayout.name)
     implementation(Deps.Libs.Android.recyclerView.name)
 
-    implementation(Deps.Libs.MultiPlatform.napier.android !!)
+    implementation(Deps.Libs.MultiPlatform.napier.android!!)
 
     implementation("com.google.android.material:material:1.1.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta4")

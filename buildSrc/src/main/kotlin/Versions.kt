@@ -1,6 +1,3 @@
-/*
- * Copyright 2019 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
- */
 
 object Versions {
     object Android {
@@ -9,7 +6,7 @@ object Versions {
         const val minSdk = 21
     }
 
-    const val kotlin = "1.3.72"
+    const val kotlin = "1.3.31"
 
     private const val mokoResources = "0.9.0"
     private const val mokoNetwork = "0.6.0"

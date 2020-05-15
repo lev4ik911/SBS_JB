@@ -68,7 +68,7 @@ class GuidelineActivity :
 
     fun callImageSelector(_stepId: Int) {
         stepId = _stepId
-        val stepHasImage = viewModel.steps.value!!.any { step -> step.stepId == stepId && step.imagePath.isNotEmpty()}
+        val stepHasImage = viewModel.steps.value!!.any { step -> step.stepId == stepId && step.imagePath.isNotEmpty() }
         val builder = AlertDialog.Builder(this)
         val listOfResolvedActions = ImageActions.values().filter {
             (stepHasImage && it == ImageActions.EditCurrent) || (it != ImageActions.EditCurrent)
@@ -76,7 +76,7 @@ class GuidelineActivity :
 
         builder
             //.setTitle("Upload from")
-            .setItems(listOfResolvedActions.map {resources.getString(it.stringId) }.toTypedArray()) { _, key ->
+            .setItems(listOfResolvedActions.map { resources.getString(it.stringId) }.toTypedArray()) { _, key ->
                 selectedAction = key
                 if (!stepHasImage)
                     selectedAction += 1
@@ -188,7 +188,7 @@ class GuidelineActivity :
         when (selectedAction) {
             ImageActions.EditCurrent.key -> {
                 try {
-                     viewModel.steps.value?.find { step -> step.stepId == stepId && step.imagePath.isNotEmpty() }.apply {
+                    viewModel.steps.value?.find { step -> step.stepId == stepId && step.imagePath.isNotEmpty() }.apply {
 
                         if (!(this?.imagePath).isNullOrEmpty()) {
                             val sourcePath = Uri.fromFile(File(this?.imagePath))

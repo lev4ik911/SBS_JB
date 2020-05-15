@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.guidelines.GuidelineListViewModel" />
+            type="by.iba.sbs.ui.guidelines.GuidelineListViewModel"/>
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:layout_height="@dimen/spacing_small"
             android:layout_alignParentTop="true"
             android:indeterminate="true"
-            />
+        />
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/l_swipe_refresh"
             android:layout_below="@id/progressBar"
@@ -34,7 +34,7 @@
                 android:clipToPadding="false"
                 android:overScrollMode="never"
                 android:paddingBottom="@dimen/bottom_navigation_height"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </RelativeLayout>

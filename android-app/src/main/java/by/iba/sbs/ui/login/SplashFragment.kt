@@ -18,6 +18,7 @@ class SplashFragment :
         super.onCreate(savedInstanceState)
         viewModel.checkCredentials()
     }
+
     override fun routeToLoginScreen() {
         (activity as LoginActivity).navController.navigate(R.id.navigation_login)
     }

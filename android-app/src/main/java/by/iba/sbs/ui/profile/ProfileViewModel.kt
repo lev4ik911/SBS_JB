@@ -27,12 +27,15 @@ class ProfileViewModel : BaseViewModel(), EventsDispatcherOwner<ProfileViewModel
         mData.add(Author("Mario Speedwagon", 33, 21, 123))
         value = mData
     }
+
     fun onActionButtonClick() {
 
     }
+
     fun onLogoutButtonClick() {
 
     }
+
     interface EventsListener {
 
     }

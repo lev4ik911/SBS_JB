@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    Underwater Scene Color Palette-->
-<!--    <color name="colorAccent">#005582</color>-->
-<!--    <color name="colorPrimaryVariant">#0086ad</color>-->
-<!--    <color name="colorPrimary">#00c2c7</color>-->
-<!--    <color name="colorSecondary">#97ebdb</color>-->
-<!--    <color name="colorSecondaryVariant">#daf8e3</color>-->
+    <!--    Underwater Scene Color Palette-->
+    <!--    <color name="colorAccent">#005582</color>-->
+    <!--    <color name="colorPrimaryVariant">#0086ad</color>-->
+    <!--    <color name="colorPrimary">#00c2c7</color>-->
+    <!--    <color name="colorSecondary">#97ebdb</color>-->
+    <!--    <color name="colorSecondaryVariant">#daf8e3</color>-->
 
     <color name="colorPrimary">#367b92</color>
     <color name="colorPrimaryVariant">#12415b</color>
     <color name="colorSecondary">#bbc0e1</color>
     <color name="colorSecondaryVariant">#e8eaf5</color>
     <color name="colorAccent">#1e309b</color>
-<!--    <color name="colorPrimary">#cc5c5c</color>-->
-<!--    <color name="colorPrimaryVariant">#652d2d</color>-->
-<!--    <color name="colorSecondary">#ffc7c7</color>-->
-<!--    <color name="colorSecondaryVariant">#fff3f3</color>-->
-<!--    <color name="colorAccent">#f6546a</color>-->
+    <!--    <color name="colorPrimary">#cc5c5c</color>-->
+    <!--    <color name="colorPrimaryVariant">#652d2d</color>-->
+    <!--    <color name="colorSecondary">#ffc7c7</color>-->
+    <!--    <color name="colorSecondaryVariant">#fff3f3</color>-->
+    <!--    <color name="colorAccent">#f6546a</color>-->
 
     <color name="colorLightBlue">#D2E8F5</color>
 

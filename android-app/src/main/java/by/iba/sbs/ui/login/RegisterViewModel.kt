@@ -7,6 +7,7 @@ import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
 
 class RegisterViewModel : BaseViewModel(), EventsDispatcherOwner<RegisterViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<RegisterViewModel.EventsListener> = eventsDispatcherOnMain()
+
     interface EventsListener {
     }
 

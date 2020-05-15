@@ -11,7 +11,7 @@ import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.service.SystemInformation
 import com.russhwolf.settings.AndroidSettings
 
-class LoginViewModel(context: Context, systemInfo:SystemInformation) : BaseViewModel(),
+class LoginViewModel(context: Context, systemInfo: SystemInformation) : BaseViewModel(),
     EventsDispatcherOwner<LoginViewModel.EventsListener> {
 
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
@@ -56,12 +56,14 @@ class LoginViewModel(context: Context, systemInfo:SystemInformation) : BaseViewM
         eventsDispatcher.dispatchEvent { flipToLogin() }
     }
 
-   fun  onResetPasswordClick(){
-       eventsDispatcher.dispatchEvent { onResetPassword() }
-   }
-    fun  onRegisterClick(){
+    fun onResetPasswordClick() {
+        eventsDispatcher.dispatchEvent { onResetPassword() }
+    }
+
+    fun onRegisterClick() {
         eventsDispatcher.dispatchEvent { onRegister() }
     }
+
     interface EventsListener {
         fun onResetPassword()
         fun onRegister()

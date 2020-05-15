@@ -10,7 +10,7 @@ import by.iba.sbs.R
 import by.iba.sbs.databinding.ResetFragmentBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ResetFragment :  BaseEventsFragment<ResetFragmentBinding, ResetViewModel, ResetViewModel.EventsListener>(),
+class ResetFragment : BaseEventsFragment<ResetFragmentBinding, ResetViewModel, ResetViewModel.EventsListener>(),
     ResetViewModel.EventsListener, TextView.OnEditorActionListener {
 
     override val layoutId: Int = R.layout.reset_fragment
@@ -22,7 +22,8 @@ class ResetFragment :  BaseEventsFragment<ResetFragmentBinding, ResetViewModel, 
             (activity as LoginActivity).navController.navigate(R.id.navigation_login)
         }
     }
-    override fun onNextButtonPressed(){
+
+    override fun onNextButtonPressed() {
         binding.flipperLogin.also {
             it.setInAnimation(context, R.anim.slide_in_right)
             it.setOutAnimation(
@@ -32,13 +33,15 @@ class ResetFragment :  BaseEventsFragment<ResetFragmentBinding, ResetViewModel, 
             it.showNext()
         }
     }
-    override fun onBackButtonPressed(){
+
+    override fun onBackButtonPressed() {
         binding.flipperLogin.also {
             it.setInAnimation(context, R.anim.slide_in_left)
             it.setOutAnimation(context, R.anim.slide_out_right)
             it.showPrevious()
         }
     }
+
     override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
         TODO("Not yet implemented")
     }

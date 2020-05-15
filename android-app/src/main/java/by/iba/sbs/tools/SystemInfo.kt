@@ -6,7 +6,7 @@ import android.os.Build
 import android.provider.Settings
 import by.iba.sbs.library.service.SystemInformation
 
-class SystemInfo(private val context: Context):SystemInformation {
+class SystemInfo(private val context: Context) : SystemInformation {
     override fun getDeviceName(): String {
         val manufacturer = Build.MANUFACTURER
         val model = Build.MODEL
@@ -16,11 +16,10 @@ class SystemInfo(private val context: Context):SystemInformation {
     }
 
     @SuppressLint("HardwareIds")
-    override fun getDeviceID(): String
-        = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+    override fun getDeviceID(): String = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
 
 
-    override fun getAppVersion(): String  =
+    override fun getAppVersion(): String =
         context.packageManager.getPackageInfo(context.packageName, 0).versionName
 
 }

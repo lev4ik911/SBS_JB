@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/spacing_xsmall"
-    android:layout_marginHorizontal="@dimen/spacing_xsmall"
-    android:clickable="true"
-    android:focusable="true"
-    style="@style/Card"
-    >
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   android:layout_marginBottom="@dimen/spacing_xsmall"
+                                   android:layout_marginHorizontal="@dimen/spacing_xsmall"
+                                   android:clickable="true"
+                                   android:focusable="true"
+                                   style="@style/Card"
+>
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmer_view_container"
@@ -33,14 +33,14 @@
                 android:layout_width="@dimen/spacing_xxlarge"
                 android:layout_height="@dimen/spacing_xxlarge"
                 android:layout_gravity="center"
-                android:src="@drawable/plus" />
+                android:src="@drawable/plus"/>
 
             <TextView
                 style="@style/Text.FragmentTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/spacing_xxsmall"
-                android:text="@string/create_step" />
+                android:text="@string/create_step"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </com.facebook.shimmer.ShimmerFrameLayout>
 </androidx.cardview.widget.CardView>

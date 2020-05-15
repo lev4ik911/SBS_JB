@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         ID_SEARCH(3),
         ID_PROFILE(4)
     }
+
     private val viewModel: MainViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,5 +93,8 @@ class MainActivity : AppCompatActivity() {
             invalidateOptionsMenu()
         }
     }
-    fun testClick(view: View) {startActivity(Intent(this, WalkthroughActivity::class.java))}
+
+    fun testClick(view: View) {
+        startActivity(Intent(this, WalkthroughActivity::class.java))
+    }
 }

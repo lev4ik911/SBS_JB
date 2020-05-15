@@ -6,30 +6,30 @@
             app:startDestination="@+id/navigation_search">
 
     <fragment
-            android:id="@+id/navigation_search"
-            android:name="by.iba.sbs.ui.search.SearchFragment"
-            android:label="@string/title_instructions"
-            tools:layout="@layout/home_fragment"/>
+        android:id="@+id/navigation_search"
+        android:name="by.iba.sbs.ui.search.SearchFragment"
+        android:label="@string/title_instructions"
+        tools:layout="@layout/home_fragment"/>
 
     <fragment
-            android:id="@+id/navigation_dashboard"
-            android:name="by.iba.sbs.ui.dashboard.DashboardFragment"
-            android:label="@string/title_dashboard"
-            tools:layout="@layout/dashboard_fragment"/>
+        android:id="@+id/navigation_dashboard"
+        android:name="by.iba.sbs.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/dashboard_fragment"/>
 
     <fragment
-            android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_notifications"
         android:name="by.iba.sbs.ui.guidelines.GuidelineListFragment"
-            android:label="@string/title_notifications"
-            tools:layout="@layout/instruction_list_fragment"/>
+        android:label="@string/title_notifications"
+        tools:layout="@layout/instruction_list_fragment"/>
     <fragment
         android:id="@+id/navigation_profile"
         android:name="by.iba.sbs.ui.profile.ProfileFragment"
         android:label="profile_fragment"
-        tools:layout="@layout/profile_fragment" />
+        tools:layout="@layout/profile_fragment"/>
     <activity
         android:id="@+id/navigation_instructionActivity"
         android:name="by.iba.sbs.ui.guideline.GuidelineActivity"
         android:label="instruction_activity"
-        tools:layout="@layout/instruction_activity" />
+        tools:layout="@layout/instruction_activity"/>
 </navigation>

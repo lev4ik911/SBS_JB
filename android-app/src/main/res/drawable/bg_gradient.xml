@@ -7,5 +7,5 @@
         android:angle="45"
         android:endColor="@android:color/white"
         android:startColor="?attr/colorSecondaryVariant"
-        />
+    />
 </shape>

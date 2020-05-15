@@ -14,15 +14,19 @@ class ResetViewModel : BaseViewModel(),
     val newPassword = MutableLiveData("")
     val newPasswordConfirm = MutableLiveData("")
     val isPasswordValid = MutableLiveData(false)
-    fun onConfirmButtonPressed(){}
-    fun onBackButtonPressed(){ eventsDispatcher.dispatchEvent { onBackButtonPressed() }}
-    fun onNextButtonPressed(){
+    fun onConfirmButtonPressed() {}
+    fun onBackButtonPressed() {
+        eventsDispatcher.dispatchEvent { onBackButtonPressed() }
+    }
+
+    fun onNextButtonPressed() {
         eventsDispatcher.dispatchEvent { onNextButtonPressed() }
     }
+
     interface EventsListener {
-        fun onConfirmButtonPressed(){}
-        fun onBackButtonPressed(){}
-        fun onNextButtonPressed(){}
+        fun onConfirmButtonPressed() {}
+        fun onBackButtonPressed() {}
+        fun onNextButtonPressed() {}
     }
 
 }
