@@ -35,9 +35,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("com.squareup.sqldelight:gradle-plugin:1.3.0")
 }
-repositories {
-    mavenCentral()
-}
+
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
     jvmTarget = "1.8"

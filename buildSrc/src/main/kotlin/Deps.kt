@@ -15,7 +15,7 @@ object Deps {
         const val mokoUnits =
             "dev.icerock.moko:units-generator:${Versions.Plugins.mokoUnits}"
         const val SQLDelight =
-            "com.squareup.sqldelight:${Versions.Plugins.sqldelight}"
+            "com.squareup.sqldelight:${Versions.Plugins.SQLDelight}"
 
     }
 
@@ -128,14 +128,14 @@ object Deps {
                 iosArm64 = "com.github.aakira:napier-iosArm64:${Versions.Libs.MultiPlatform.napier}"
             )
             val SQLDelight = MultiPlatformLibrary(
-                common = "com.squareup.sqldelight:runtime-jvm:${Versions.Libs.MultiPlatform.sqldelight}"
+                common = "com.squareup.sqldelight:runtime-jvm:${Versions.Libs.MultiPlatform.SQLDelight}"
                 //common = "com.squareup.sqldelight:runtime-metadata:${Versions.Libs.MultiPlatform.sqldelight}"
             )
             val SQLDelightDriver = MultiPlatformLibrary(
-                android = "com.squareup.sqldelight:android-driver:${Versions.Libs.MultiPlatform.sqldelight}",
+                android = "com.squareup.sqldelight:android-driver:${Versions.Libs.MultiPlatform.SQLDelight}",
               //  common = "com.squareup.sqldelight:sqlite-driver:${Versions.Libs.MultiPlatform.sqldelight}",
-                iosX64 = "com.squareup.sqldelight:native-driver:${Versions.Libs.MultiPlatform.sqldelight}",
-                iosArm64 = "com.squareup.sqldelight:native-driver:${Versions.Libs.MultiPlatform.sqldelight}"
+                iosX64 = "com.squareup.sqldelight:native-driver:${Versions.Libs.MultiPlatform.SQLDelight}",
+                iosArm64 = "com.squareup.sqldelight:native-driver:${Versions.Libs.MultiPlatform.SQLDelight}"
             )
         }
     }
