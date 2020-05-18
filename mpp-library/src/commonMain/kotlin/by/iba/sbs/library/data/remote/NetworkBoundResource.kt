@@ -7,13 +7,13 @@ import kotlin.coroutines.coroutineContext
 
 abstract class NetworkBoundResource<ResultType, RequestType> {
 
-    private val result = MutableLiveData<Remote<ResultType>>(Remote.unauthorized())
+    private val result = MutableLiveData<Response<ResultType>>(Response.unauthorized())
     private val supervisorJob = SupervisorJob()
     private val errors = MutableLiveData<String>("")
     suspend fun build(): NetworkBoundResource<ResultType, RequestType> {
         withContext(Dispatchers.Main) {
             result.value =
-                Remote.loading(null)
+                Response.loading(null)
         }
         CoroutineScope(coroutineContext).launch(supervisorJob) {
             val dbResult = loadFromDb()
@@ -21,27 +21,27 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
                 try {
                     fetchFromNetwork(dbResult)
                 } catch (e: Exception) {
-                    setValue(Remote.error(e, loadFromDb()))
+                    setValue(Response.error(e, loadFromDb()))
                 }
             } else {
-                setValue(Remote.success(dbResult))
+                setValue(Response.success(dbResult))
             }
         }
         return this
     }
 
-    fun asLiveData() = result as LiveData<Remote<ResultType>>
+    fun asLiveData() = result as LiveData<Response<ResultType>>
 
     // ---
 
     private suspend fun fetchFromNetwork(dbResult: ResultType) {
-        setValue(Remote.loading(dbResult)) // Dispatch latest value quickly (UX purpose)
+        setValue(Response.loading(dbResult)) // Dispatch latest value quickly (UX purpose)
         val apiResponse = createCallAsync().await()
         saveCallResults(processResponse(apiResponse))
-        setValue(Remote.success(loadFromDb()))
+        setValue(Response.success(loadFromDb()))
     }
 
-    private fun setValue(newValue: Remote<ResultType>) {
+    private fun setValue(newValue: Response<ResultType>) {
         if (result.value != newValue) result.postValue(newValue)
     }
 

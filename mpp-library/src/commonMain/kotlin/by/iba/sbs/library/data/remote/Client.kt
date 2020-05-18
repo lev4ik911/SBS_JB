@@ -68,7 +68,7 @@ class Client(settings: Settings) {
         }
     }
 
-    private suspend inline fun <reified T : Any> HttpResponse.processResponse(deserializer: DeserializationStrategy<T>? = null): Remote<T> {
+    private suspend inline fun <reified T : Any> HttpResponse.processResponse(deserializer: DeserializationStrategy<T>? = null): Response<T> {
         return this.run {
             try {
                 when (this.status) {
@@ -78,24 +78,24 @@ class Client(settings: Settings) {
                             Json.parse(T::class.serializer(), s)
                         else
                             Json.parse(deserializer, s)
-                        Remote.success(res)
+                        Response.success(res)
                     }
                     HttpStatusCode.NoContent -> {
-                        Remote.success(null)
+                        Response.success(null)
                     }
                     HttpStatusCode.Unauthorized -> {
-                        Remote.unauthorized()
+                        Response.unauthorized()
                     }
                     else -> {
                         println(this.status)
                         val s = this.readText()
                         println(s)
                         //val errorInfo = Json.parse(ErrorInfo::class.serializer(), s)
-                        Remote.error(Throwable(s), null)
+                        Response.error(Throwable(s), null)
                     }
                 }
             } catch (e: ResponseException) {
-                Remote.error(e, null)
+                Response.error(e, null)
             }
         }
     }
@@ -105,7 +105,7 @@ class Client(settings: Settings) {
         query: Map<String, String> = mutableMapOf(),
         needAuth: Boolean = true,
         deserializer: DeserializationStrategy<T>? = null
-    ): Remote<T> {
+    ): Response<T> {
 
         return try {
             ktor
@@ -121,7 +121,7 @@ class Client(settings: Settings) {
                 .processResponse(deserializer)
 
         } catch (ex: Exception) {
-            Remote.error(ex, null)
+            Response.error(ex, null)
         }
     }
 
@@ -131,7 +131,7 @@ class Client(settings: Settings) {
         query: Map<String, String> = mutableMapOf(),
         needAuth: Boolean = true,
         deserializer: DeserializationStrategy<T>? = null
-    ): Remote<T> {
+    ): Response<T> {
         return try {
             ktor
                 .request<HttpResponse>(route) {
@@ -148,7 +148,7 @@ class Client(settings: Settings) {
                 .processResponse(deserializer)
 
         } catch (ex: Exception) {
-            Remote.error(ex, null)
+            Response.error(ex, null)
         }
     }
 
@@ -158,7 +158,7 @@ class Client(settings: Settings) {
         query: Map<String, String> = mutableMapOf(),
         needAuth: Boolean = true,
         deserializer: DeserializationStrategy<T>? = null
-    ): Remote<T> {
+    ): Response<T> {
 
         return try {
             ktor
@@ -176,11 +176,11 @@ class Client(settings: Settings) {
                 .processResponse(deserializer)
 
         } catch (ex: Exception) {
-            Remote.error(ex, null)
+            Response.error(ex, null)
         }
     }
 
-    suspend fun getAllGuidelines(): Remote<List<Guideline>> {
+    suspend fun getAllGuidelines(): Response<List<Guideline>> {
         return get(
             Routes.Guidelines.URL_GUIDELINES,
             deserializer = Guideline::class.serializer().list

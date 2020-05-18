@@ -1,11 +1,8 @@
-/*
- * Copyright 2019 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
- */
 
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.multiplatform")
-
+  //  id("com.squareup.sqldelight")
     id("kotlin-android-extensions")
     id("kotlinx-serialization")
     id("dev.icerock.mobile.multiplatform")
@@ -24,7 +21,7 @@ android {
 val mppLibs = listOf(
     Deps.Libs.MultiPlatform.settings,
     Deps.Libs.MultiPlatform.napier,
-    //Deps.Libs.MultiPlatform.SQLDelight,
+    Deps.Libs.MultiPlatform.SQLDelight,
     Deps.Libs.MultiPlatform.SQLDelightDriver,
     Deps.Libs.MultiPlatform.mokoParcelize,
     Deps.Libs.MultiPlatform.mokoNetwork,

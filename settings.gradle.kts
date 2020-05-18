@@ -16,9 +16,13 @@ pluginManagement {
     }
     resolutionStrategy.eachPlugin {
         // part of plugins defined in Deps.Plugins, part in buildSrc/build.gradle.kts.kts
-        val module = Deps.plugins[requested.id.id] ?: return@eachPlugin
+        if (requested.id.id == "com.squareup.sqldelight") {
+            useModule("com.squareup.sqldelight:gradle-plugin:1.2.1")
+        } else {
+            val module = Deps.plugins[requested.id.id] ?: return@eachPlugin
 
-        useModule(module)
+            useModule(module)
+        }
     }
 }
 
