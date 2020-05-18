@@ -2,7 +2,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.multiplatform")
-  //  id("com.squareup.sqldelight")
+    id("com.squareup.sqldelight")
     id("kotlin-android-extensions")
     id("kotlinx-serialization")
     id("dev.icerock.mobile.multiplatform")
@@ -17,11 +17,15 @@ android {
         targetSdkVersion(Versions.Android.targetSdk)
     }
 }
-
+sqldelight {
+    database("SBSDB") {
+        packageName = "by.iba.sbs.db"
+    }
+}
 val mppLibs = listOf(
     Deps.Libs.MultiPlatform.settings,
     Deps.Libs.MultiPlatform.napier,
-    Deps.Libs.MultiPlatform.SQLDelight,
+    //Deps.Libs.MultiPlatform.SQLDelight,
     Deps.Libs.MultiPlatform.SQLDelightDriver,
     Deps.Libs.MultiPlatform.mokoParcelize,
     Deps.Libs.MultiPlatform.mokoNetwork,

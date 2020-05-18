@@ -1,0 +1,16 @@
+CREATE TABLE guidelines (
+    id TEXT NOT NULL UNIQUE PRIMARY KEY,
+    name TEXT NOT NULL DEFAULT "",
+    description TEXT NOT NULL DEFAULT ""
+);
+insertGuideline:
+INSERT OR REPLACE INTO guidelines (id, name, description)
+VALUES (?, ?, ?);
+
+selectAll:
+SELECT *
+FROM guidelines
+ORDER BY name;
+
+selectById:
+SELECT * FROM guidelines WHERE id = ?;
