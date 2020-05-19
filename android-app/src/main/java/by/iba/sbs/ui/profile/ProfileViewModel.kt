@@ -17,8 +17,8 @@ class ProfileViewModel : BaseViewModel(), EventsDispatcherOwner<ProfileViewModel
     val isMyProfile = MutableLiveData(true)
     val instructions = MutableLiveData<List<Guideline>>().apply {
         val mData = ArrayList<Guideline>()
-        mData.add(Guideline(1, "Как стать счастливым", "Dobry"))
-        mData.add(Guideline(2, "Отпадный шашлычок", "Dobry"))
+        mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
+        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
         value = mData
     }
     val subscribers = MutableLiveData<List<Author>>().apply {

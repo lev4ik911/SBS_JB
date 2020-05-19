@@ -4,6 +4,8 @@ import com.russhwolf.settings.Settings
 import com.russhwolf.settings.boolean
 import com.russhwolf.settings.string
 
+//https://github.com/russhwolf/multiplatform-settings
+
 class LocalSettings(settings: Settings) {
     var accessToken by settings.string("pref_token")
     var refreshToken by settings.string("pref_refresh_token")

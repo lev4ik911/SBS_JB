@@ -25,7 +25,7 @@ val viewModelModule = module {
     viewModel { ResetViewModel() }
     viewModel { ProfileViewModel() }
     viewModel { GuidelineViewModel() }
-    viewModel { GuidelineListViewModel() }
+    viewModel { GuidelineListViewModel(androidContext()) }
     viewModel { WalkthroughViewModel() }
     //viewModel { PostDetailsViewModel(userPostUseCase = get(), commentsUseCase = get()) }
 }

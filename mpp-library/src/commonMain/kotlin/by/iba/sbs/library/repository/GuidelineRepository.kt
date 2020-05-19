@@ -6,7 +6,6 @@ import by.iba.sbs.library.data.remote.NetworkBoundResource
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.service.LocalSettings
-import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.livedata.LiveData
 import kotlinx.coroutines.*
 import kotlinx.serialization.ImplicitReflectionSerializer
@@ -19,10 +18,8 @@ interface IGuidelineRepository{
 expect fun createDb(): SBSDB
 
 @ImplicitReflectionSerializer
-class GuidelineRepository @UnstableDefault constructor(private val settings: Settings) :
+class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) :
     IGuidelineRepository {
-    private val localStorage: LocalSettings by lazy { LocalSettings(settings) }
-
     @UnstableDefault
     private val remote = Client(settings)
     private val sbsDb = createDb()
@@ -43,7 +40,7 @@ class GuidelineRepository @UnstableDefault constructor(private val settings: Set
                 data == null || data.isEmpty() || forceRefresh
 
             override suspend fun loadFromDb(): List<Guideline> = coroutineScope {
-                var result: MutableList<Guideline> = mutableListOf()
+                val result: MutableList<Guideline> = mutableListOf()
                 guidelinesQueries.selectAll().executeAsList().forEach {
                     result.add(Guideline(it.id, it.name, it.description))
                 }

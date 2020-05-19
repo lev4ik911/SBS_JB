@@ -3,7 +3,6 @@ package by.iba.sbs.library.data.remote
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.service.LocalSettings
 import com.github.aakira.napier.Napier
-import com.russhwolf.settings.Settings
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
 import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParser
@@ -31,8 +30,7 @@ import kotlinx.serialization.serializer
 
 @UnstableDefault
 @ImplicitReflectionSerializer
-class Client(settings: Settings) {
-   private val localStorage: LocalSettings by lazy { LocalSettings(settings) }
+class Client(val settings: LocalSettings) {
 
     private val json: Json by lazy {
         Json(JsonConfiguration.Default)
@@ -59,7 +57,7 @@ class Client(settings: Settings) {
             install(TokenFeature) {
                 tokenHeaderName = "Authorization"
                 tokenProvider = object : TokenFeature.TokenProvider {
-                    override fun getToken(): String? = localStorage.accessToken
+                    override fun getToken(): String? = settings.accessToken
                 }
             }
 
@@ -111,7 +109,7 @@ class Client(settings: Settings) {
             ktor
                 .request<HttpResponse>(route) {
                     if (needAuth) {
-                        header(HttpHeaders.Authorization, "Bearer ${localStorage.accessToken}")
+                        header(HttpHeaders.Authorization, "Bearer ${settings.accessToken}")
                     }
                     method = HttpMethod.Get
                     query.forEach {
@@ -136,7 +134,7 @@ class Client(settings: Settings) {
             ktor
                 .request<HttpResponse>(route) {
                     if (needAuth) {
-                        header(HttpHeaders.Authorization, "Bearer ${localStorage.accessToken}")
+                        header(HttpHeaders.Authorization, "Bearer ${settings.accessToken}")
                     }
                     contentType(ContentType.Application.Json)
                     method = HttpMethod.Post
@@ -164,7 +162,7 @@ class Client(settings: Settings) {
             ktor
                 .request<HttpResponse>(route) {
                     if (needAuth) {
-                        header(HttpHeaders.Authorization, "Bearer ${localStorage.accessToken}")
+                        header(HttpHeaders.Authorization, "Bearer ${settings.accessToken}")
                     }
                     contentType(ContentType.Application.Json)
                     method = HttpMethod.Put
