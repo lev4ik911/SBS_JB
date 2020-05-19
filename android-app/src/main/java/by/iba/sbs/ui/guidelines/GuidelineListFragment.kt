@@ -17,8 +17,12 @@ import by.iba.sbs.databinding.InstructionListFragmentBinding
 import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.ui.guideline.GuidelineActivity
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+@UnstableDefault
+@ImplicitReflectionSerializer
 class GuidelineListFragment :
     BaseEventsFragment<InstructionListFragmentBinding, GuidelineListViewModel, GuidelineListViewModel.EventsListener>(),
     GuidelineListViewModel.EventsListener {
@@ -52,7 +56,7 @@ class GuidelineListFragment :
             instructionsAdapter.addItems(it)
             binding.rvInstructions.scheduleLayoutAnimation()
         })
-        viewModel.loadInstructions()
+        viewModel.loadInstructions(true)
         instructionsAdapter.onItemClick = { pos, itemView, item ->
             val transitionSharedNameImgView = this.getString(R.string.transition_name_img_view)
             val transitionSharedNameTxtView = this.getString(R.string.transition_name_txt_view)
@@ -82,6 +86,4 @@ class GuidelineListFragment :
             startActivity(intent)
         }
     }
-
-
 }

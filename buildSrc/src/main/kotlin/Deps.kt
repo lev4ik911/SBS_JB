@@ -1,6 +1,3 @@
-/*
- * Copyright 2019 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
- */
 
 object Deps {
     object Plugins {
@@ -133,7 +130,7 @@ object Deps {
             )
             val SQLDelightDriver = MultiPlatformLibrary(
                 android = "com.squareup.sqldelight:android-driver:${Versions.Libs.MultiPlatform.SQLDelight}",
-              //  common = "com.squareup.sqldelight:sqlite-driver:${Versions.Libs.MultiPlatform.sqldelight}",
+                common = "com.squareup.sqldelight:sqlite-driver:${Versions.Libs.MultiPlatform.SQLDelight}",
                 iosX64 = "com.squareup.sqldelight:native-driver:${Versions.Libs.MultiPlatform.SQLDelight}",
                 iosArm64 = "com.squareup.sqldelight:native-driver:${Versions.Libs.MultiPlatform.SQLDelight}"
             )

@@ -75,6 +75,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.2.2")
     implementation("androidx.navigation:navigation-ui-ktx:2.2.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime")
     // Koin AndroidX Scope features
     implementation("org.koin:koin-androidx-scope:2.1.5")
 // Koin AndroidX ViewModel features

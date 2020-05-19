@@ -181,7 +181,7 @@ class Client(val settings: LocalSettings) {
     suspend fun getAllGuidelines(): Response<List<Guideline>> {
         return get(
             Routes.Guidelines.URL_GUIDELINES,
-            deserializer = Guideline::class.serializer().list
+            deserializer = Guideline::class.serializer().list, needAuth = false
         )
     }
 }
