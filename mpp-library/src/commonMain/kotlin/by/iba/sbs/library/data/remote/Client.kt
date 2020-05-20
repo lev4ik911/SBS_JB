@@ -1,6 +1,6 @@
 package by.iba.sbs.library.data.remote
 
-import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.model.response.GuidelineResponse
 import by.iba.sbs.library.service.LocalSettings
 import com.github.aakira.napier.Napier
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
@@ -178,10 +178,10 @@ class Client(val settings: LocalSettings) {
         }
     }
 
-    suspend fun getAllGuidelines(): Response<List<Guideline>> {
+    suspend fun getAllGuidelines(): Response<List<GuidelineResponse>> {
         return get(
             Routes.Guidelines.URL_GUIDELINES,
-            deserializer = Guideline::class.serializer().list, needAuth = false
+            deserializer = GuidelineResponse::class.serializer().list, needAuth = false
         )
     }
 }

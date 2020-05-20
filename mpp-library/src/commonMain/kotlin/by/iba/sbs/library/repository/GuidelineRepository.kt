@@ -51,7 +51,13 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
                 return GlobalScope.async(Dispatchers.Default) {
                     val result = remote.getAllGuidelines()
                     if (result.isSuccess)
-                        result.data!!
+                        result.data!!.map { item ->
+                            Guideline(
+                                item.id,
+                                item.name,
+                                item.description
+                            )
+                        }
                     else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
                         listOf()
