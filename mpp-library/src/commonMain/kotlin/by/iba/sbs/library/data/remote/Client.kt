@@ -13,6 +13,7 @@ import io.ktor.client.features.ResponseException
 import io.ktor.client.features.defaultRequest
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.features.logging.DEFAULT
 import io.ktor.client.features.logging.LogLevel
 import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
@@ -46,7 +47,6 @@ class Client(val settings: LocalSettings) {
                 headers {
                     append("Accept-Language", "en-US")
                     append("Accept", "application/json")
-                    append("Content-Type", "application/json")
                 }
             }
             install(ExceptionFeature) {
@@ -67,6 +67,7 @@ class Client(val settings: LocalSettings) {
                     }
                 }
                 level = LogLevel.ALL
+                logger = Logger.DEFAULT
             }
             install(TokenFeature) {
                 tokenHeaderName = "Authorization"
@@ -86,6 +87,7 @@ class Client(val settings: LocalSettings) {
                 when (this.status) {
                     HttpStatusCode.OK -> {
                         val s = this.readText()
+                        println(s)
                         val res = if (deserializer == null)
                             Json.parse(T::class.serializer(), s)
                         else
