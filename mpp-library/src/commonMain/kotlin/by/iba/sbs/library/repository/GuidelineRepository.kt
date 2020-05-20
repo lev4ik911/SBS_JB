@@ -55,7 +55,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
                             Guideline(
                                 item.id,
                                 item.name,
-                                item.description
+                                item.description!!
                             )
                         }
                     else {

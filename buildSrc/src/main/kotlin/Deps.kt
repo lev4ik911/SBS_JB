@@ -48,6 +48,11 @@ object Deps {
                 common = "io.ktor:ktor-client-core:${Versions.Libs.MultiPlatform.ktorClient}",
                 ios = "io.ktor:ktor-client-ios:${Versions.Libs.MultiPlatform.ktorClient}"
             )
+            val ktorClientSerialization = MultiPlatformLibrary(
+                android = "io.ktor:ktor-client-serialization-jvm:${Versions.Libs.MultiPlatform.ktorClient}",
+                common = "io.ktor:ktor-client-serialization:${Versions.Libs.MultiPlatform.ktorClient}",
+                ios = "io.ktor:ktor-client-serialization-native:${Versions.Libs.MultiPlatform.ktorClient}"
+            )
             val ktorClientLogging = MultiPlatformLibrary(
                 android = "io.ktor:ktor-client-logging-jvm:${Versions.Libs.MultiPlatform.ktorClientLogging}",
                 common = "io.ktor:ktor-client-logging:${Versions.Libs.MultiPlatform.ktorClientLogging}",

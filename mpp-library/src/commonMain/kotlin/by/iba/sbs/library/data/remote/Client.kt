@@ -10,10 +10,14 @@ import dev.icerock.moko.network.features.ExceptionFeature
 import dev.icerock.moko.network.features.TokenFeature
 import io.ktor.client.HttpClient
 import io.ktor.client.features.ResponseException
+import io.ktor.client.features.defaultRequest
+import io.ktor.client.features.json.JsonFeature
+import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.features.logging.LogLevel
 import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
 import io.ktor.client.request.header
+import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.client.request.request
 import io.ktor.client.statement.HttpResponse
@@ -38,6 +42,13 @@ class Client(val settings: LocalSettings) {
 
     private val ktor: HttpClient by lazy {
         HttpClient {
+            defaultRequest {
+                headers {
+                    append("Accept-Language", "en-US")
+                    append("Accept", "application/json")
+                    append("Content-Type", "application/json")
+                }
+            }
             install(ExceptionFeature) {
                 exceptionFactory = HttpExceptionFactory(
                     defaultParser = ErrorExceptionParser(json),
@@ -46,13 +57,16 @@ class Client(val settings: LocalSettings) {
                     )
                 )
             }
+            install(JsonFeature) {
+                serializer = KotlinxSerializer()
+            }
             install(Logging) {
                 logger = object : Logger {
                     override fun log(message: String) {
                         Napier.d(message = message)
                     }
                 }
-                level = LogLevel.HEADERS
+                level = LogLevel.ALL
             }
             install(TokenFeature) {
                 tokenHeaderName = "Authorization"
@@ -181,7 +195,8 @@ class Client(val settings: LocalSettings) {
     suspend fun getAllGuidelines(): Response<List<GuidelineResponse>> {
         return get(
             Routes.Guidelines.URL_GUIDELINES,
-            deserializer = GuidelineResponse::class.serializer().list, needAuth = false
+            deserializer = GuidelineResponse::class.serializer().list,
+            needAuth = false
         )
     }
 }
