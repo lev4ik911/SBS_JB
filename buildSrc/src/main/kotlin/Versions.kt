@@ -6,7 +6,7 @@ object Versions {
         const val minSdk = 21
     }
 
-    const val kotlin = "1.3.31"
+    const val kotlin = "1.3.72"
 
     private const val mokoResources = "0.9.0"
     private const val mokoNetwork = "0.6.0"
@@ -16,7 +16,7 @@ object Versions {
     object Plugins {
         const val kotlin = Versions.kotlin
         const val serialization = Versions.kotlin
-        const val androidExtensions = Versions.kotlin
+        const val androidExt = Versions.kotlin
         const val mokoResources = Versions.mokoResources
         const val mokoNetwork = Versions.mokoNetwork
         const val mokoUnits = Versions.mokoUnits

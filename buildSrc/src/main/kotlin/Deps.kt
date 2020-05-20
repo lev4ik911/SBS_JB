@@ -3,8 +3,8 @@ object Deps {
     object Plugins {
         const val kotlinSerialization =
             "org.jetbrains.kotlin:kotlin-serialization:${Versions.Plugins.serialization}"
-        const val androidExtensions =
-            "org.jetbrains.kotlin:kotlin-android-extensions:${Versions.Plugins.androidExtensions}"
+        const val androidExt =
+            "org.jetbrains.kotlin:kotlin-android-extensions:${Versions.Plugins.androidExt}"
         const val mokoResources =
             "dev.icerock.moko:resources-generator:${Versions.Plugins.mokoResources}"
         const val mokoNetwork =
@@ -143,7 +143,7 @@ object Deps {
     }
 
     val plugins: Map<String, String> = mapOf(
-        "kotlin-android-extensions" to Plugins.androidExtensions,
+        "kotlin-android-extensions" to Plugins.androidExt,
         "kotlinx-serialization" to Plugins.kotlinSerialization,
         "dev.icerock.mobile.multiplatform-resources" to Plugins.mokoResources,
         "dev.icerock.mobile.multiplatform-network-generator" to Plugins.mokoNetwork,

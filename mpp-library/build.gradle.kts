@@ -9,7 +9,9 @@ plugins {
     id("dev.icerock.mobile.multiplatform")
     id("dev.icerock.mobile.multiplatform-resources")
 }
-
+androidExtensions {
+    isExperimental = true
+}
 android {
     compileSdkVersion(Versions.Android.compileSdk)
 
