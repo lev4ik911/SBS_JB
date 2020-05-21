@@ -49,20 +49,17 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
             override fun createCallAsync(): Deferred<List<Guideline>> {
                 return GlobalScope.async(Dispatchers.Default) {
-                    //    val result = remote.getAllGuidelines()
-                    val result = remote.getGuideline("3483dcf1-9497-49be-b12d-e73cd47c8e94")
+                    val result = remote.getAllGuidelines()
+                    //val result = remote.getGuideline("3483dcf1-9497-49be-b12d-e73cd47c8e94")
                     if (result.isSuccess) {
-                        val item = result.data!!
-                        //   result.data!!.map { item ->
-                        listOf<Guideline>(
+                        result.data!!.map { item ->
                             Guideline(
                                 item.id,
                                 item.name,
                                 item.description!!
                             )
-                        )
                         }
-                    else {
+                    } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
                         listOf()
 

@@ -23,6 +23,7 @@ android {
 sqldelight {
     database("SBSDB") {
         packageName = "by.iba.sbs.db"
+        name = "sbs.db"
     }
 }
 val mppLibs = listOf(
