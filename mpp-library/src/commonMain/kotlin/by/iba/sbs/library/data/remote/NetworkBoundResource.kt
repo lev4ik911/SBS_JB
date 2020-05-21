@@ -47,7 +47,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
 
     protected abstract fun processResponse(response: RequestType): ResultType
 
-    protected abstract suspend fun saveCallResults(items: ResultType)
+    protected abstract suspend fun saveCallResults(data: ResultType)
 
     protected abstract fun shouldFetch(data: ResultType?): Boolean
 

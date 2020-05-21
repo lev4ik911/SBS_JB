@@ -1,6 +1,6 @@
 package by.iba.sbs.library.model
 
-class Guideline(
+data class Guideline(
     val id: String = "",
     var name: String = "",
     var description: String = "",

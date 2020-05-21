@@ -16,6 +16,7 @@ import by.iba.sbs.library.service.LocalSettings
 import com.russhwolf.settings.AndroidSettings
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
 
 
 class GuidelineListViewModel(context: Context) : BaseViewModel(),
@@ -28,6 +29,7 @@ class GuidelineListViewModel(context: Context) : BaseViewModel(),
         LocalSettings(settings)
     }
 
+    @OptIn(UnstableDefault::class)
     @ImplicitReflectionSerializer
     private val repository by lazy { GuidelineRepository(localStorage) }
 

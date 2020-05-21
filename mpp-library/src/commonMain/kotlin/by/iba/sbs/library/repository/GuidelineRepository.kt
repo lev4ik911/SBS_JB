@@ -13,6 +13,10 @@ import kotlinx.serialization.UnstableDefault
 
 interface IGuidelineRepository{
     suspend fun getAllGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>>
+    suspend fun getGuideline(
+        guidelineId: String,
+        forceRefresh: Boolean
+    ): LiveData<Response<Guideline>>
 }
 
 expect fun createDb(): SBSDB
@@ -30,8 +34,8 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
 
-            override suspend fun saveCallResults(items: List<Guideline>) = coroutineScope {
-                items.forEach {
+            override suspend fun saveCallResults(data: List<Guideline>) = coroutineScope {
+                data.forEach {
                     guidelinesQueries.insertGuideline(it.id, it.name, it.description)
                 }
             }
@@ -71,4 +75,46 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             .asLiveData()
     }
 
+    @UnstableDefault
+    override suspend fun getGuideline(
+        guidelineId: String,
+        forceRefresh: Boolean
+    ): LiveData<Response<Guideline>> {
+        return object : NetworkBoundResource<Guideline, Guideline>() {
+            override fun processResponse(response: Guideline): Guideline = response
+
+            override suspend fun saveCallResults(data: Guideline) = coroutineScope {
+                guidelinesQueries.insertGuideline(data.id, data.name, data.description)
+            }
+
+            override fun shouldFetch(data: Guideline?): Boolean =
+                data == null || forceRefresh
+
+            override suspend fun loadFromDb(): Guideline = coroutineScope {
+                val item = guidelinesQueries.selectById(guidelineId).executeAsOne()
+                return@coroutineScope Guideline(item.id, item.name, item.description)
+            }
+
+            override fun createCallAsync(): Deferred<Guideline> {
+                return GlobalScope.async(Dispatchers.Default) {
+                    val result = remote.getGuideline(guidelineId)
+                    //val result = remote.getGuideline("3483dcf1-9497-49be-b12d-e73cd47c8e94")
+                    if (result.isSuccess) {
+                        val item = result.data!!
+                        Guideline(
+                            item.id,
+                            item.name,
+                            item.description!!
+                        )
+                    } else {
+                        if (result.status == Response.Status.ERROR) error(result.error!!)
+                        Guideline()
+
+                    }
+                }
+            }
+
+        }.build()
+            .asLiveData()
+    }
 }

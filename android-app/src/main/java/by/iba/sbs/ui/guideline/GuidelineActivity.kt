@@ -43,7 +43,7 @@ class GuidelineActivity :
     private var usingCamera = false
     private var selectedAction = 0
     private var absolutePhotoPath = ""
-    private var stepId: Int = 0
+    private var _stepId: Int = 0
 
 
     private enum class ImageActions(val key: Int, val stringId: Int) {
@@ -54,20 +54,20 @@ class GuidelineActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val instructionId = intent?.getIntExtra("instructionId", 0) ?: 0
+        val instructionId = intent?.getStringExtra("instructionId") ?: ""
         val bundle = Bundle()
-        bundle.putInt("instructionId", instructionId)
+        bundle.putString("instructionId", instructionId)
 
-        viewModel.loadInstruction(instructionId)
+        viewModel.loadInstruction(instructionId, true)
 
         findNavController(R.id.fragment_navigation_instruction).navigate(
-            if (instructionId == 0) R.id.navigation_instruction_edit else R.id.navigation_instruction_view,
+            if (instructionId == "") R.id.navigation_instruction_edit else R.id.navigation_instruction_view,
             bundle
         )
     }
 
-    fun callImageSelector(_stepId: Int) {
-        stepId = _stepId
+    fun callImageSelector(stepId: Int) {
+        _stepId = stepId
         val stepHasImage = viewModel.steps.value!!.any { step -> step.stepId == stepId && step.imagePath.isNotEmpty() }
         val builder = AlertDialog.Builder(this)
         val listOfResolvedActions = ImageActions.values().filter {
@@ -188,10 +188,11 @@ class GuidelineActivity :
         when (selectedAction) {
             ImageActions.EditCurrent.key -> {
                 try {
-                    viewModel.steps.value?.find { step -> step.stepId == stepId && step.imagePath.isNotEmpty() }.apply {
+                    viewModel.steps.value?.find { step -> step.stepId == _stepId && step.imagePath.isNotEmpty() }
+                        .apply {
 
                         if (!(this?.imagePath).isNullOrEmpty()) {
-                            val sourcePath = Uri.fromFile(File(this?.imagePath))
+                            val sourcePath = Uri.fromFile(File(this?.imagePath!!))
                             val destinationUri = createTempImageFileInInternalStorage()
                             UCrop.of(sourcePath, destinationUri)
                                 .withAspectRatio(1f, 1f)
@@ -244,7 +245,7 @@ class GuidelineActivity :
                 if (resultCode == RESULT_OK) {
                     val resultUri: Uri? = UCrop.getOutput(data!!)
                     val _steps = viewModel.steps.value
-                    _steps?.find { step -> step.stepId == stepId }
+                    _steps?.find { step -> step.stepId == _stepId }
                         .apply {
                             if (!(resultUri?.path).isNullOrEmpty())
                                 this?.imagePath = resultUri?.path!!
@@ -371,8 +372,8 @@ class GuidelineActivity :
             .navigate(R.id.navigation_step_edit, bundle)
     }
 
-    override fun onEditImage(StepId: Int) {
-        stepId = StepId
+    override fun onEditImage(stepId: Int) {
+        _stepId = stepId
         val stepHasImage =
             viewModel.steps.value!!.any { step -> step.stepId == stepId && step.imagePath.isNotEmpty() }
         val builder = AlertDialog.Builder(this)
