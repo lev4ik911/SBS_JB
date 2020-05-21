@@ -3,7 +3,7 @@ package by.iba.sbs.library.model.response
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GuidelineResponse(
+data class GuidelineView(
     val id: String = "",
     var name: String = "",
     var description: String? = ""

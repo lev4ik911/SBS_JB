@@ -1,6 +1,6 @@
 package by.iba.sbs.library.data.remote
 
-import by.iba.sbs.library.model.response.GuidelineResponse
+import by.iba.sbs.library.model.response.GuidelineView
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.service.Utils
 import com.github.aakira.napier.Napier
@@ -195,15 +195,15 @@ class Client(val settings: LocalSettings) {
         }
     }
 
-    suspend fun getAllGuidelines(): Response<List<GuidelineResponse>> {
+    suspend fun getAllGuidelines(): Response<List<GuidelineView>> {
         return get(
             Routes.Guidelines.URL_GUIDELINES,
-            deserializer = GuidelineResponse::class.serializer().list,
+            deserializer = GuidelineView::class.serializer().list,
             needAuth = false
         )
     }
 
-    suspend fun getGuideline(id: String): Response<GuidelineResponse> {
+    suspend fun getGuideline(id: String): Response<GuidelineView> {
         return get(
             Utils.formatString(Routes.Guidelines.URL_GUIDELINE_DETAILS, id),
             // deserializer = GuidelineResponse::class.serializer(),
