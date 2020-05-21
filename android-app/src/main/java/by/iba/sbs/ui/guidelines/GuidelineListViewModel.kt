@@ -16,10 +16,8 @@ import by.iba.sbs.library.service.LocalSettings
 import com.russhwolf.settings.AndroidSettings
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.UnstableDefault
 
-@UnstableDefault
-@ImplicitReflectionSerializer
+
 class GuidelineListViewModel(context: Context) : BaseViewModel(),
     EventsDispatcherOwner<GuidelineListViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
@@ -30,8 +28,10 @@ class GuidelineListViewModel(context: Context) : BaseViewModel(),
         LocalSettings(settings)
     }
 
+    @ImplicitReflectionSerializer
     private val repository by lazy { GuidelineRepository(localStorage) }
 
+    @ImplicitReflectionSerializer
     fun loadInstructions(forceRefresh: Boolean) {
         viewModelScope.launch {
             try {

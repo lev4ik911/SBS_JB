@@ -21,8 +21,8 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    implementation("dev.icerock:mobile-multiplatform:0.4.0")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.31")
+    implementation("dev.icerock:mobile-multiplatform:0.6.1")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.70")
     implementation("org.koin:koin-gradle-plugin:2.1.5")
     implementation("com.android.tools.build:gradle:3.6.3")
 

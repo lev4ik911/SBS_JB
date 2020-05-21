@@ -1,10 +1,10 @@
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.multiplatform")// version "1.3.70"
+    id("org.jetbrains.kotlin.multiplatform")
     id("com.squareup.sqldelight")
     id("kotlin-android-extensions") //version "1.3.70"
-    id("kotlinx-serialization") version "1.3.70"
+    //  id("kotlinx-serialization") //version "1.3.70"
     kotlin("plugin.serialization") version "1.3.70"
     id("dev.icerock.mobile.multiplatform")
     id("dev.icerock.mobile.multiplatform-resources")
@@ -28,7 +28,7 @@ sqldelight {
 val mppLibs = listOf(
     Deps.Libs.MultiPlatform.settings,
     Deps.Libs.MultiPlatform.napier,
-    Deps.Libs.MultiPlatform.SQLDelight,
+    //  Deps.Libs.MultiPlatform.SQLDelight,
     Deps.Libs.MultiPlatform.SQLDelightDriver,
     Deps.Libs.MultiPlatform.mokoParcelize,
     Deps.Libs.MultiPlatform.mokoNetwork,
