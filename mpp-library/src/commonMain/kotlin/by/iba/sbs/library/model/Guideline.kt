@@ -1,8 +1,5 @@
 package by.iba.sbs.library.model
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 class Guideline(
     val id: String = "",
     var name: String = "",

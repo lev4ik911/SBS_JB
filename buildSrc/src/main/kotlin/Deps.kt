@@ -53,6 +53,11 @@ object Deps {
                 common = "io.ktor:ktor-client-serialization:${Versions.Libs.MultiPlatform.ktorClient}",
                 ios = "io.ktor:ktor-client-serialization-native:${Versions.Libs.MultiPlatform.ktorClient}"
             )
+            val ktorClientJson = MultiPlatformLibrary(
+                android = "io.ktor:ktor-client-json-jvm:${Versions.Libs.MultiPlatform.ktorClient}",
+                common = "io.ktor:ktor-client-json:${Versions.Libs.MultiPlatform.ktorClient}",
+                ios = "io.ktor:ktor-client-json-native:${Versions.Libs.MultiPlatform.ktorClient}"
+            )
             val ktorClientLogging = MultiPlatformLibrary(
                 android = "io.ktor:ktor-client-logging-jvm:${Versions.Libs.MultiPlatform.ktorClientLogging}",
                 common = "io.ktor:ktor-client-logging:${Versions.Libs.MultiPlatform.ktorClientLogging}",
@@ -130,14 +135,13 @@ object Deps {
                 iosArm64 = "com.github.aakira:napier-iosArm64:${Versions.Libs.MultiPlatform.napier}"
             )
             val SQLDelight = MultiPlatformLibrary(
-                common = "com.squareup.sqldelight:runtime-jvm:${Versions.Libs.MultiPlatform.SQLDelight}"
-                //common = "com.squareup.sqldelight:runtime-metadata:${Versions.Libs.MultiPlatform.sqldelight}"
+                common = "com.squareup.sqldelight:runtime-jvm:${Versions.Libs.MultiPlatform.SQLDelight}",
+                ios = "com.squareup.sqldelight:runtime-native:${Versions.Libs.MultiPlatform.SQLDelight}"
             )
             val SQLDelightDriver = MultiPlatformLibrary(
                 android = "com.squareup.sqldelight:android-driver:${Versions.Libs.MultiPlatform.SQLDelight}",
                 common = "com.squareup.sqldelight:sqlite-driver:${Versions.Libs.MultiPlatform.SQLDelight}",
-                iosX64 = "com.squareup.sqldelight:native-driver:${Versions.Libs.MultiPlatform.SQLDelight}",
-                iosArm64 = "com.squareup.sqldelight:native-driver:${Versions.Libs.MultiPlatform.SQLDelight}"
+                ios = "com.squareup.sqldelight:native-driver:${Versions.Libs.MultiPlatform.SQLDelight}"
             )
         }
     }

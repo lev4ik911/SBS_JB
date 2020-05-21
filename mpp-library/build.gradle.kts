@@ -1,10 +1,10 @@
 
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.multiplatform")
+    id("org.jetbrains.kotlin.multiplatform")// version "1.3.70"
     id("com.squareup.sqldelight")
-    id("kotlin-android-extensions")
-    id("kotlinx-serialization")
+    id("kotlin-android-extensions") //version "1.3.70"
+    id("kotlinx-serialization") version "1.3.70"
     kotlin("plugin.serialization") version "1.3.70"
     id("dev.icerock.mobile.multiplatform")
     id("dev.icerock.mobile.multiplatform-resources")
@@ -28,7 +28,7 @@ sqldelight {
 val mppLibs = listOf(
     Deps.Libs.MultiPlatform.settings,
     Deps.Libs.MultiPlatform.napier,
-    //Deps.Libs.MultiPlatform.SQLDelight,
+    Deps.Libs.MultiPlatform.SQLDelight,
     Deps.Libs.MultiPlatform.SQLDelightDriver,
     Deps.Libs.MultiPlatform.mokoParcelize,
     Deps.Libs.MultiPlatform.mokoNetwork,
@@ -39,6 +39,7 @@ val mppLibs = listOf(
 val ktorLibs = listOf(
     Deps.Libs.MultiPlatform.ktorClient,
     Deps.Libs.MultiPlatform.ktorClientLogging,
+    Deps.Libs.MultiPlatform.ktorClientJson,
     Deps.Libs.MultiPlatform.ktorClientSerialization
 )
 //val mppModules = listOf(
@@ -48,7 +49,7 @@ val ktorLibs = listOf(
 //)
 
 setupFramework(
-    exports = mppLibs //+ mppModules
+    exports = mppLibs + ktorLibs//+ mppModules
 )
 
 dependencies {
@@ -66,4 +67,4 @@ multiplatformResources {
 }
 
 // dependencies graph generator
-//apply(from = "https://raw.githubusercontent.com/JakeWharton/SdkSearch/master/gradle/projectDependencyGraph.gradle")
+apply(from = "https://raw.githubusercontent.com/JakeWharton/SdkSearch/master/gradle/projectDependencyGraph.gradle")

@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     `kotlin-dsl`
     `java-gradle-plugin`
-    kotlin("jvm") version "1.3.31"
+    kotlin("jvm") version "1.3.70"
 
 }
 

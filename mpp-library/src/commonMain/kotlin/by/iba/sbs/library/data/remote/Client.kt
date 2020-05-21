@@ -2,6 +2,7 @@ package by.iba.sbs.library.data.remote
 
 import by.iba.sbs.library.model.response.GuidelineResponse
 import by.iba.sbs.library.service.LocalSettings
+import by.iba.sbs.library.service.Utils
 import com.github.aakira.napier.Napier
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
@@ -89,9 +90,9 @@ class Client(val settings: LocalSettings) {
                         val s = this.readText()
                         println(s)
                         val res = if (deserializer == null)
-                            Json.parse(T::class.serializer(), s)
+                            json.parse(T::class.serializer(), s)
                         else
-                            Json.parse(deserializer, s)
+                            json.parse(deserializer, s)
                         Response.success(res)
                     }
                     HttpStatusCode.NoContent -> {
@@ -198,6 +199,14 @@ class Client(val settings: LocalSettings) {
         return get(
             Routes.Guidelines.URL_GUIDELINES,
             deserializer = GuidelineResponse::class.serializer().list,
+            needAuth = false
+        )
+    }
+
+    suspend fun getGuideline(id: String): Response<GuidelineResponse> {
+        return get(
+            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_DETAILS, id),
+            // deserializer = GuidelineResponse::class.serializer(),
             needAuth = false
         )
     }
