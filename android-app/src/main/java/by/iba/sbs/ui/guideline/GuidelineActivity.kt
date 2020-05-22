@@ -350,9 +350,9 @@ class GuidelineActivity :
         onBackPressed()
     }
 
-    override fun onCallInstructionEditor(instructionId: Int) {
+    override fun onCallInstructionEditor(instructionId: String) {
         val bundle = Bundle()
-        bundle.putInt("instructionId", instructionId)
+        bundle.putString("instructionId", instructionId)
         findNavController(R.id.fragment_navigation_instruction).navigate(R.id.navigation_instruction_edit, bundle)
     }
 

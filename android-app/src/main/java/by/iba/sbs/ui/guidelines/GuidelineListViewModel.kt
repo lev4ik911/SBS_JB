@@ -19,8 +19,6 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 
-
-@UnstableDefault
 class GuidelineListViewModel(context: Context) : BaseViewModel(),
     EventsDispatcherOwner<GuidelineListViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
@@ -31,9 +29,11 @@ class GuidelineListViewModel(context: Context) : BaseViewModel(),
         LocalSettings(settings)
     }
 
+    @UnstableDefault
     @ImplicitReflectionSerializer
     private val repository by lazy { GuidelineRepository(localStorage) }
 
+    @UnstableDefault
     @ImplicitReflectionSerializer
     fun loadInstructions(forceRefresh: Boolean) {
         isLoading.value = true

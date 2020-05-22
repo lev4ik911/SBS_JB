@@ -61,7 +61,7 @@ class GuidelineListFragment :
             instructionsAdapter.addItems(it)
             binding.rvInstructions.scheduleLayoutAnimation()
         })
-        viewModel.loadInstructions(true)
+        viewModel.loadInstructions(false)
         instructionsAdapter.onItemClick = { pos, itemView, item ->
             val transitionSharedNameImgView = this.getString(R.string.transition_name_img_view)
             val transitionSharedNameTxtView = this.getString(R.string.transition_name_txt_view)

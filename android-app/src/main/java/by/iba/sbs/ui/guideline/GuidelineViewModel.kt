@@ -11,6 +11,7 @@ import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
 import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
 import by.iba.mvvmbase.model.ToastMessage
 import by.iba.sbs.library.model.Feedback
+import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.repository.GuidelineRepository
 import by.iba.sbs.library.service.LocalSettings
@@ -34,7 +35,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @OptIn(UnstableDefault::class)
     @ImplicitReflectionSerializer
     private val repository by lazy { GuidelineRepository(localStorage) }
-
+    val guideline = MutableLiveData(Guideline())
     val name = MutableLiveData("")
     val description = MutableLiveData("")
     val ratingUp = MutableLiveData(0)
@@ -71,9 +72,9 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                     val guidelinesLiveData = repository.getGuideline(instructionId, forceRefresh)
                     guidelinesLiveData.addObserver {
                         if (it.isSuccess && it.isNotEmpty) {
-                            val guideline = it.data!!
-                            name.value = guideline.name
-                            description.value = guideline.description
+                            guideline.value = it.data!!
+                            name.value = it.data!!.name
+                            description.value = it.data!!.description
                         } else if (it.error != null) notificationsQueue.value =
                             ToastMessage(it.error!!.toString(), MessageType.ERROR)
                     }
@@ -176,7 +177,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         if (isMyInstruction.value!!) {
             if (!steps.value.isNullOrEmpty())
                 oldSteps = steps.value?.map { it.copy() }!!
-            eventsDispatcher.dispatchEvent { onCallInstructionEditor(2) }
+            eventsDispatcher.dispatchEvent { onCallInstructionEditor(guideline.value!!.id) }
         } else isFavorite.value = !isFavorite.value!!
     }
 
@@ -214,7 +215,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     }
 
     interface EventsListener {
-        fun onCallInstructionEditor(instructionId: Int)
+        fun onCallInstructionEditor(instructionId: String)
         fun onOpenProfile(profileId: Int)
         fun onEditStep(stepId: Int)
         fun onEditImage(stepId: Int)

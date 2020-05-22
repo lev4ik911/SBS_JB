@@ -206,7 +206,6 @@ class Client(val settings: LocalSettings) {
     suspend fun getGuideline(id: String): Response<GuidelineView> {
         return get(
             Utils.formatString(Routes.Guidelines.URL_GUIDELINE_DETAILS, id),
-            // deserializer = GuidelineResponse::class.serializer(),
             needAuth = false
         )
     }

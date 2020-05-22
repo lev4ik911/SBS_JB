@@ -18,8 +18,7 @@
         tools:layout="@layout/instruction_edit_fragment">
         <argument
             android:name="instructionId"
-            app:argType="integer"
-            android:defaultValue="0"/>
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/navigation_step_edit"
