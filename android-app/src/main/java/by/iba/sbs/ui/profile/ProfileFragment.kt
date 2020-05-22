@@ -54,6 +54,7 @@ class ProfileFragment :
             tab.text = when (position) {
                 0 -> getString(R.string.title_instructions)
                 1 -> getString(R.string.title_subscribers)
+                2 -> getString(R.string.title_settings)
                 else -> ""
             }
         }.attach()
@@ -77,7 +78,6 @@ class ProfileFragment :
             }
         }
         binding.btnToolbarLogout.visibleOrGone(viewModel.isMyProfile.value!!)
-
         binding.btnToolbarAction.apply {
             when {
                 viewModel.isMyProfile.value!! -> {
@@ -148,12 +148,13 @@ class ProfileFragment :
 
     inner class TabsFragmentAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-        override fun getItemCount(): Int = 2
+        override fun getItemCount(): Int = if (viewModel.isMyProfile.value!!) 3 else 2
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> ProfileInstructionsFragment()
                 1 -> SubscribersFragment()
+                2 -> SettingsFragment()
                 else -> ProfileInstructionsFragment()
             }
         }

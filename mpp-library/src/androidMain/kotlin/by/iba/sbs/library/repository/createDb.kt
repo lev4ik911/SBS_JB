@@ -7,6 +7,6 @@ import com.squareup.sqldelight.android.AndroidSqliteDriver
 lateinit var appContext: Context
 
 actual fun createDb(): SBSDB {
-    val driver = AndroidSqliteDriver(SBSDB.Schema, appContext, "sbsdb")
+    val driver = AndroidSqliteDriver(SBSDB.Schema, appContext, "sbs.db")
     return SBSDB(driver)
 }

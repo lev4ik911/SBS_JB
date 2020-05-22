@@ -31,12 +31,10 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
     var charSearch: String = ""
     private val itemsSource = ArrayList<T>()
     var itemsList = ArrayList<T>()
-    val IsUpdating = MutableLiveData(false)
+    val isUpdating = MutableLiveData(false)
     var onItemClick: ((pos: Int, view: View?, item: T) -> Unit)? = null
     var onEmptyViewItemClick: (() -> Unit)? = null
     var onItemMoved: ((from: Int, to: Int) -> Unit)? = null
-
-
     var filterCriteria: ((item: T, textToSearch: String) -> Boolean)? = null
     private var mRecyclerView: RecyclerView? = null
 
@@ -130,7 +128,7 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                IsUpdating.postValue(true)
+                isUpdating.postValue(true)
                 charSearch = constraint.toString()
                 itemsList = if (filterCriteria == null || charSearch.isEmpty()) {
                     itemsSource
@@ -152,7 +150,7 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 itemsList = results?.values as ArrayList<T>
                 notifyDataSetChanged()
-                IsUpdating.postValue(false)
+                isUpdating.postValue(false)
             }
 
         }

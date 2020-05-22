@@ -74,5 +74,6 @@
     <string name="camera_access_required">Camera access required</string>
     <string name="storage_access_required">Storage access required</string>
     <string name="hint_step_name">Enter step name</string>
+    <string name="title_settings">Settings</string>
 
 </resources>

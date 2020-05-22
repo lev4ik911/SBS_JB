@@ -90,7 +90,7 @@ class GuidelineListFragment :
             // findNavController().navigate(R.id.navigation_instruction_edit, bundle)
             startActivity(intent)
         }
-        instructionsAdapter.IsUpdating.observe(viewLifecycleOwner, Observer {
+        instructionsAdapter.isUpdating.observe(viewLifecycleOwner, Observer {
             binding.lSwipeRefresh.isRefreshing = it!!
         })
     }
