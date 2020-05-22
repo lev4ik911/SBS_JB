@@ -10,6 +10,7 @@ import by.iba.mvvmbase.dispatcher.EventsDispatcher
 import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
 import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
 import by.iba.mvvmbase.model.ToastMessage
+import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.repository.GuidelineRepository
 import by.iba.sbs.library.service.LocalSettings
@@ -19,6 +20,7 @@ import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 
 
+@UnstableDefault
 class GuidelineListViewModel(context: Context) : BaseViewModel(),
     EventsDispatcherOwner<GuidelineListViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
@@ -29,12 +31,12 @@ class GuidelineListViewModel(context: Context) : BaseViewModel(),
         LocalSettings(settings)
     }
 
-    @OptIn(UnstableDefault::class)
     @ImplicitReflectionSerializer
     private val repository by lazy { GuidelineRepository(localStorage) }
 
     @ImplicitReflectionSerializer
     fun loadInstructions(forceRefresh: Boolean) {
+        isLoading.value = true
         viewModelScope.launch {
             try {
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
@@ -43,8 +45,10 @@ class GuidelineListViewModel(context: Context) : BaseViewModel(),
                         val employees = it.data!!
                         instructions.postValue(employees.sortedBy { item -> item.id }
                             .toList())
-                    } else if (it.error != null) notificationsQueue.value =
-                        ToastMessage(it.error!!.toString(), MessageType.ERROR)
+                    } else if (it.error != null)
+                        notificationsQueue.value =
+                            ToastMessage(it.error!!.toString(), MessageType.ERROR)
+                    isLoading.postValue(it.status == Response.Status.LOADING)
                 }
             } catch (e: Exception) {
                 notificationsQueue.value =

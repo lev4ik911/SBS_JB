@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
+import androidx.lifecycle.Observer
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.BaseBindingAdapter
 import by.iba.sbs.BR
@@ -52,6 +53,10 @@ class GuidelineListFragment :
                 R.anim.layout_animation_right_to_left
             )
         }
+        binding.lSwipeRefresh.setOnRefreshListener {
+            viewModel.loadInstructions(true)
+        }
+
         viewModel.instructions.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             instructionsAdapter.addItems(it)
             binding.rvInstructions.scheduleLayoutAnimation()
@@ -62,12 +67,12 @@ class GuidelineListFragment :
             val transitionSharedNameTxtView = this.getString(R.string.transition_name_txt_view)
             var imageViewPair: Pair<View, String>
             val textViewPair: Pair<View, String>
-            itemView.findViewById<ImageView>(R.id.iv_preview).apply {
-                this.transitionName = transitionSharedNameImgView
+            itemView?.findViewById<ImageView>(R.id.iv_preview).apply {
+                this?.transitionName = transitionSharedNameImgView
                 imageViewPair = Pair.create(this, transitionSharedNameImgView)
             }
-            itemView.findViewById<TextView>(R.id.tv_title).apply {
-                this.transitionName = transitionSharedNameTxtView
+            itemView?.findViewById<TextView>(R.id.tv_title).apply {
+                this?.transitionName = transitionSharedNameTxtView
                 textViewPair = Pair.create(this, transitionSharedNameTxtView)
             }
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
@@ -85,5 +90,8 @@ class GuidelineListFragment :
             // findNavController().navigate(R.id.navigation_instruction_edit, bundle)
             startActivity(intent)
         }
+        instructionsAdapter.IsUpdating.observe(viewLifecycleOwner, Observer {
+            binding.lSwipeRefresh.isRefreshing = it!!
+        })
     }
 }

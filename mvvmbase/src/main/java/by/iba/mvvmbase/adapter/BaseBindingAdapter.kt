@@ -8,6 +8,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -30,8 +31,8 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
     var charSearch: String = ""
     private val itemsSource = ArrayList<T>()
     var itemsList = ArrayList<T>()
-
-    var onItemClick: ((pos: Int, view: View, item: T) -> Unit)? = null
+    val IsUpdating = MutableLiveData(false)
+    var onItemClick: ((pos: Int, view: View?, item: T) -> Unit)? = null
     var onEmptyViewItemClick: (() -> Unit)? = null
     var onItemMoved: ((from: Int, to: Int) -> Unit)? = null
 
@@ -129,6 +130,7 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
+                IsUpdating.postValue(true)
                 charSearch = constraint.toString()
                 itemsList = if (filterCriteria == null || charSearch.isEmpty()) {
                     itemsSource
@@ -150,6 +152,7 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 itemsList = results?.values as ArrayList<T>
                 notifyDataSetChanged()
+                IsUpdating.postValue(false)
             }
 
         }
@@ -257,7 +260,7 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
 
         override fun onClick(p0: View?) {
             if (adapterPosition < itemCount - 1)
-                onItemClick?.invoke(adapterPosition, p0!!, itemsList[adapterPosition])
+                onItemClick?.invoke(adapterPosition, p0, itemsList[adapterPosition])
             else
                 onEmptyViewItemClick?.invoke()
         }
