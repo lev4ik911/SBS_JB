@@ -54,7 +54,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginHorizontal="@dimen/spacing_small"
                         android:textAlignment="center"
-                        tools:text="@{Integer.toString(step.stepId)}"/>
+                        tools:text="@{Integer.toString(step.weight)}" />
 
                     <TextView
                         android:id="@+id/tv_title"

@@ -1,6 +1,6 @@
 package by.iba.sbs.library.repository
 
-import by.iba.sbs.db.SBSDB
+import by.iba.sbs.SBSDB
 import com.squareup.sqldelight.drivers.native.NativeSqliteDriver
 
 actual fun createDb(): SBSDB {

@@ -72,7 +72,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginHorizontal="@dimen/spacing_small"
-                        tools:text="@{Integer.toString(step.stepId)}"
+                        tools:text="@{Integer.toString(step.weight)}"
                         android:textAlignment="center"/>
 
                     <TextView

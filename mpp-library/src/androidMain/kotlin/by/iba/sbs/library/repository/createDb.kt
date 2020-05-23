@@ -1,7 +1,7 @@
 package by.iba.sbs.library.repository
 
 import android.content.Context
-import by.iba.sbs.db.SBSDB
+import by.iba.sbs.SBSDB
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 
 lateinit var appContext: Context

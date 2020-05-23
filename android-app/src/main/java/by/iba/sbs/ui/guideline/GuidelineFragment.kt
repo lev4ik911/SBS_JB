@@ -143,7 +143,6 @@ class GuidelineFragment :
         }
     }
 
-
     inner class TabsFragmentAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
         override fun getItemCount(): Int = 2

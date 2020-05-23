@@ -36,6 +36,8 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @ImplicitReflectionSerializer
     private val repository by lazy { GuidelineRepository(localStorage) }
     val guideline = MutableLiveData(Guideline())
+    val steps = MutableLiveData<List<Step>>()
+    var oldSteps = listOf<Step>()
     val name = MutableLiveData("")
     val description = MutableLiveData("")
     val ratingUp = MutableLiveData(0)
@@ -60,9 +62,8 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         this.postValue(mData)
     }
 
-    val steps = MutableLiveData<List<Step>>()
-    var oldSteps = listOf<Step>()
 
+    @UnstableDefault
     @OptIn(ImplicitReflectionSerializer::class)
     fun loadInstruction(instructionId: String, forceRefresh: Boolean) {
         if (instructionId != "") {
@@ -73,8 +74,20 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                     guidelinesLiveData.addObserver {
                         if (it.isSuccess && it.isNotEmpty) {
                             guideline.value = it.data!!
-                            name.value = it.data!!.name
-                            description.value = it.data!!.description
+                        } else if (it.error != null) notificationsQueue.value =
+                            ToastMessage(it.error!!.toString(), MessageType.ERROR)
+                    }
+                } catch (e: Exception) {
+                    notificationsQueue.value =
+                        ToastMessage(e.toString(), MessageType.ERROR)
+                }
+            }
+            viewModelScope.launch {
+                try {
+                    val stepsLiveData = repository.getAllSteps(instructionId, forceRefresh)
+                    stepsLiveData.addObserver {
+                        if (it.isSuccess && it.isNotEmpty) {
+                            steps.value = it.data!!
                         } else if (it.error != null) notificationsQueue.value =
                             ToastMessage(it.error!!.toString(), MessageType.ERROR)
                     }
@@ -217,8 +230,8 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     interface EventsListener {
         fun onCallInstructionEditor(instructionId: String)
         fun onOpenProfile(profileId: Int)
-        fun onEditStep(stepId: Int)
-        fun onEditImage(stepId: Int)
+        fun onEditStep(stepId: String)
+        fun onEditImage(stepId: String)
         fun onAfterSaveAction()
     }
 

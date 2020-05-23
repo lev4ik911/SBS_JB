@@ -1,6 +1,7 @@
 package by.iba.sbs.library.data.remote
 
 import by.iba.sbs.library.model.response.GuidelineView
+import by.iba.sbs.library.model.response.StepView
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.service.Utils
 import com.github.aakira.napier.Napier
@@ -206,6 +207,21 @@ class Client(val settings: LocalSettings) {
     suspend fun getGuideline(id: String): Response<GuidelineView> {
         return get(
             Utils.formatString(Routes.Guidelines.URL_GUIDELINE_DETAILS, id),
+            needAuth = false
+        )
+    }
+
+    suspend fun getAllSteps(guidelineId: String): Response<List<StepView>> {
+        return get(
+            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEPS, guidelineId),
+            deserializer = StepView::class.serializer().list,
+            needAuth = false
+        )
+    }
+
+    suspend fun getStep(guidelineId: String, stepId: String): Response<StepView> {
+        return get(
+            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEP_DETAILS, guidelineId, stepId),
             needAuth = false
         )
     }

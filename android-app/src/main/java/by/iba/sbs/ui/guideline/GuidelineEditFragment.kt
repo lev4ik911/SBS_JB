@@ -74,11 +74,11 @@ class GuidelineEditFragment :
             // Toast.makeText(context, pos.toString(), Toast.LENGTH_LONG).show()
         }
         stepsAdapter.onEmptyViewItemClick = {
-            (activity as GuidelineActivity).onEditStep(-1)
+            (activity as GuidelineActivity).onEditStep("")
         }
         stepsAdapter.onItemMoved = { old, new ->
             val steps = stepsAdapter.itemsList
-            steps.forEachIndexed { index, step -> step.stepId = index + 1 }
+            steps.forEachIndexed { index, step -> step.weight = index + 1 }
             viewModel.steps.postValue(steps)
         }
     }

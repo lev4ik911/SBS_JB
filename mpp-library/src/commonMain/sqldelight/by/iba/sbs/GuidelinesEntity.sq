@@ -1,0 +1,46 @@
+CREATE TABLE guidelines (
+    id TEXT NOT NULL UNIQUE PRIMARY KEY,
+    name TEXT NOT NULL DEFAULT "",
+    description TEXT NOT NULL DEFAULT ""
+);
+insertGuideline:
+INSERT OR REPLACE INTO guidelines (id, name, description)
+VALUES (?, ?, ?);
+
+selectAllGuidelines:
+SELECT *
+FROM guidelines
+ORDER BY name;
+
+selectGuidelineById:
+SELECT * FROM guidelines WHERE id = ?;
+
+deleteGuidelineById:
+DELETE FROM guidelines WHERE id = ?;
+
+CREATE TABLE steps (
+    id TEXT NOT NULL UNIQUE PRIMARY KEY,
+    guidelineId TEXT NOT NULL,
+    name TEXT NOT NULL DEFAULT "",
+    description TEXT NOT NULL DEFAULT "",
+    weight INTEGER DEFAULT 0
+);
+
+insertStep:
+INSERT OR REPLACE INTO steps (id, guidelineId, name, description, weight)
+VALUES (?, ?, ?, ?, ?);
+
+selectAllSteps:
+SELECT *
+FROM steps
+WHERE guidelineId = ?
+ORDER BY weight;
+
+selectStepById:
+SELECT * FROM steps WHERE guidelineId = ? AND id = ?;
+
+deleteStepById:
+DELETE FROM steps WHERE id = ?;
+
+deleteAllStepsByGuidelineId:
+DELETE FROM steps WHERE guidelineId = ? ;

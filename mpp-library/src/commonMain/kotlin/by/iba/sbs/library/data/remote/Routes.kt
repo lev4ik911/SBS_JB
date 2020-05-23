@@ -12,6 +12,8 @@ object Routes {
     object Guidelines {
         const val URL_GUIDELINES = "$baseRoute/$version/guidelines/list"
         const val URL_GUIDELINE_DETAILS = "$baseRoute/$version/guidelines/item/%s"
-        const val URL_GUIDELINE_STEPS_DETAILS = "$baseRoute/$version/guidelines/item/%s/steps/list"
+        const val URL_GUIDELINE_STEPS = "$baseRoute/$version/guidelines/item/%s/steps/list"
+        const val URL_GUIDELINE_STEP_DETAILS =
+            "$baseRoute/$version/guidelines/item/%s/steps/item/%s"
     }
 }

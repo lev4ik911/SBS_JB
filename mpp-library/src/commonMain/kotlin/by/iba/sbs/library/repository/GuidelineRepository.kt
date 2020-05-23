@@ -1,10 +1,11 @@
 package by.iba.sbs.library.repository
 
-import by.iba.sbs.db.SBSDB
+import by.iba.sbs.SBSDB
 import by.iba.sbs.library.data.remote.Client
 import by.iba.sbs.library.data.remote.NetworkBoundResource
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.service.LocalSettings
 import dev.icerock.moko.mvvm.livedata.LiveData
 import kotlinx.coroutines.*
@@ -17,6 +18,11 @@ interface IGuidelineRepository{
         guidelineId: String,
         forceRefresh: Boolean
     ): LiveData<Response<Guideline>>
+
+    suspend fun getAllSteps(
+        guidelineId: String,
+        forceRefresh: Boolean
+    ): LiveData<Response<List<Step>>>
 }
 
 expect fun createDb(): SBSDB
@@ -44,11 +50,9 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
                 data == null || data.isEmpty() || forceRefresh
 
             override suspend fun loadFromDb(): List<Guideline> = coroutineScope {
-                val result: MutableList<Guideline> = mutableListOf()
-                guidelinesQueries.selectAll().executeAsList().forEach {
-                    result.add(Guideline(it.id, it.name, it.description))
+                return@coroutineScope guidelinesQueries.selectAllGuidelines().executeAsList().map {
+                    Guideline(it.id, it.name, it.description)
                 }
-                return@coroutineScope result
             }
 
             override fun createCallAsync(): Deferred<List<Guideline>> {
@@ -91,7 +95,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
                 data == null || forceRefresh
 
             override suspend fun loadFromDb(): Guideline = coroutineScope {
-                val item = guidelinesQueries.selectById(guidelineId).executeAsOne()
+                val item = guidelinesQueries.selectGuidelineById(guidelineId).executeAsOne()
                 return@coroutineScope Guideline(item.id, item.name, item.description)
             }
 
@@ -109,6 +113,60 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
                         Guideline()
+
+                    }
+                }
+            }
+
+        }.build()
+            .asLiveData()
+    }
+
+    @UnstableDefault
+    override suspend fun getAllSteps(
+        guidelineId: String,
+        forceRefresh: Boolean
+    ): LiveData<Response<List<Step>>> {
+        return object : NetworkBoundResource<List<Step>, List<Step>>() {
+            override fun processResponse(response: List<Step>): List<Step> = response
+
+            override suspend fun saveCallResults(data: List<Step>) = coroutineScope {
+                data.forEach {
+                    guidelinesQueries.insertStep(
+                        it.stepId,
+                        guidelineId,
+                        it.name,
+                        it.description,
+                        it.weight.toLong()
+                    )
+                }
+            }
+
+            override fun shouldFetch(data: List<Step>?): Boolean =
+                data == null || data.isEmpty() || forceRefresh
+
+            override suspend fun loadFromDb(): List<Step> = coroutineScope {
+                return@coroutineScope guidelinesQueries.selectAllSteps(guidelineId).executeAsList()
+                    .map {
+                        Step(it.id, it.name, it.description, it.weight!!.toInt())
+                    }
+            }
+
+            override fun createCallAsync(): Deferred<List<Step>> {
+                return GlobalScope.async(Dispatchers.Default) {
+                    val result = remote.getAllSteps(guidelineId)
+                    if (result.isSuccess) {
+                        result.data!!.map { item ->
+                            Step(
+                                item.id,
+                                item.name,
+                                item.description,
+                                item.weight
+                            )
+                        }
+                    } else {
+                        if (result.status == Response.Status.ERROR) error(result.error!!)
+                        listOf()
 
                     }
                 }

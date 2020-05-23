@@ -43,7 +43,7 @@ class GuidelineActivity :
     private var usingCamera = false
     private var selectedAction = 0
     private var absolutePhotoPath = ""
-    private var _stepId: Int = 0
+    private var _stepId: String = ""
 
 
     private enum class ImageActions(val key: Int, val stringId: Int) {
@@ -66,7 +66,7 @@ class GuidelineActivity :
         )
     }
 
-    fun callImageSelector(stepId: Int) {
+    fun callImageSelector(stepId: String) {
         _stepId = stepId
         val stepHasImage = viewModel.steps.value!!.any { step -> step.stepId == stepId && step.imagePath.isNotEmpty() }
         val builder = AlertDialog.Builder(this)
@@ -363,16 +363,16 @@ class GuidelineActivity :
         startActivity(intent)
     }
 
-    override fun onEditStep(stepId: Int) {
+    override fun onEditStep(stepId: String) {
         val bundle = Bundle().apply {
-            putInt("stepId", stepId)
+            putString("stepId", stepId)
         }
 
         findNavController(R.id.fragment_navigation_instruction)
             .navigate(R.id.navigation_step_edit, bundle)
     }
 
-    override fun onEditImage(stepId: Int) {
+    override fun onEditImage(stepId: String) {
         _stepId = stepId
         val stepHasImage =
             viewModel.steps.value!!.any { step -> step.stepId == stepId && step.imagePath.isNotEmpty() }
