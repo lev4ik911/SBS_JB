@@ -1,31 +1,14 @@
 package by.iba.sbs.ui.dashboard
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders.*
+import by.iba.mvvmbase.BaseFragment
+import by.iba.sbs.BR
 import by.iba.sbs.R
+import by.iba.sbs.databinding.DashboardFragmentBinding
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class DashboardFragment : Fragment() {
-
-    private lateinit var dashboardViewModel: DashboardViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        dashboardViewModel = of(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.dashboard_fragment, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        dashboardViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
-        return root
-    }
+class DashboardFragment : BaseFragment<DashboardFragmentBinding, DashboardViewModel>() {
+    override val layoutId: Int = R.layout.dashboard_fragment
+    override val viewModelVariableId: Int = BR.viewmodel
+    override val viewModel: DashboardViewModel by sharedViewModel()
 }

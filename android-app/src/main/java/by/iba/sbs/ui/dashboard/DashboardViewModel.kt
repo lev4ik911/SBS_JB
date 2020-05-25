@@ -2,9 +2,9 @@ package by.iba.sbs.ui.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import by.iba.mvvmbase.BaseViewModel
 
-class DashboardViewModel : ViewModel() {
+class DashboardViewModel : BaseViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"

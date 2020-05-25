@@ -3,6 +3,7 @@ package by.iba.sbs.di
 import by.iba.ecl.ui.MainViewModel
 import by.iba.sbs.library.service.SystemInformation
 import by.iba.sbs.tools.SystemInfo
+import by.iba.sbs.ui.dashboard.DashboardViewModel
 import by.iba.sbs.ui.guideline.GuidelineFragment
 import by.iba.sbs.ui.guideline.GuidelineViewModel
 import by.iba.sbs.ui.guidelines.GuidelineListViewModel
@@ -20,6 +21,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { MainViewModel() }
+    viewModel { DashboardViewModel() }
     viewModel { SplashViewModel(get()) }
     viewModel { LoginViewModel(androidContext(), get()) }
     viewModel { RegisterViewModel() }
