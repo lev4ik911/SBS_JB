@@ -215,7 +215,10 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         eventsDispatcher.dispatchEvent { onEditImage(step.stepId) }
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     fun onSaveAction() {
+        insertInstruction(Guideline(name = name.value?:"", description = description.value?:""))
         eventsDispatcher.dispatchEvent { onAfterSaveAction() }
     }
 
@@ -235,4 +238,22 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         fun onAfterSaveAction()
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun insertInstruction(guideline: Guideline) {
+        viewModelScope.launch {
+            try {
+                val result = repository.insertGuideline(guideline)
+                if (result.isSuccess && result.isNotEmpty) {
+                    notificationsQueue.value =
+                        ToastMessage("Success insert", MessageType.SUCCESS)
+                    //TODO(Add to total res)
+                } else if (result.error != null) notificationsQueue.value =
+                    ToastMessage(result.error!!.toString(), MessageType.ERROR)
+            } catch (e: Exception) {
+                notificationsQueue.value =
+                    ToastMessage(e.toString(), MessageType.ERROR)
+            }
+        }
+    }
 }

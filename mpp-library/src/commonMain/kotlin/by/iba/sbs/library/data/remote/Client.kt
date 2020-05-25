@@ -1,5 +1,6 @@
 package by.iba.sbs.library.data.remote
 
+import by.iba.sbs.library.model.request.GuidelineCreate
 import by.iba.sbs.library.model.response.GuidelineView
 import by.iba.sbs.library.model.response.StepView
 import by.iba.sbs.library.service.LocalSettings
@@ -87,7 +88,7 @@ class Client(val settings: LocalSettings) {
         return this.run {
             try {
                 when (this.status) {
-                    HttpStatusCode.OK -> {
+                    HttpStatusCode.OK, HttpStatusCode.Created -> {
                         val s = this.readText()
                         println(s)
                         val res = if (deserializer == null)
@@ -222,6 +223,14 @@ class Client(val settings: LocalSettings) {
     suspend fun getStep(guidelineId: String, stepId: String): Response<StepView> {
         return get(
             Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEP_DETAILS, guidelineId, stepId),
+            needAuth = false
+        )
+    }
+
+    suspend fun postGuideline(guideline: GuidelineCreate): Response<GuidelineView> {
+        return post(
+            Routes.Guidelines.URL_GUIDELINES,
+            requestBody = guideline,
             needAuth = false
         )
     }

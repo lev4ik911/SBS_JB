@@ -6,6 +6,8 @@ import by.iba.sbs.library.data.remote.NetworkBoundResource
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.Step
+import by.iba.sbs.library.model.request.GuidelineCreate
+import by.iba.sbs.library.model.response.GuidelineView
 import by.iba.sbs.library.service.LocalSettings
 import dev.icerock.moko.mvvm.livedata.LiveData
 import kotlinx.coroutines.*
@@ -23,6 +25,7 @@ interface IGuidelineRepository{
         guidelineId: String,
         forceRefresh: Boolean
     ): LiveData<Response<List<Step>>>
+    suspend fun insertGuideline(data: Guideline):Response<GuidelineView>
 }
 
 expect fun createDb(): SBSDB
@@ -174,5 +177,17 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
         }.build()
             .asLiveData()
+    }
+
+    @UnstableDefault
+    override suspend fun insertGuideline(data: Guideline): Response<GuidelineView> = coroutineScope {
+        val result = remote.postGuideline(GuidelineCreate(data.name, data.description))
+        if (result.isSuccess) {
+            val item = result.data!!
+            guidelinesQueries.insertGuideline(item.id, item.name, item.description?:"")
+        } else {
+            if (result.status == Response.Status.ERROR) error(result.error!!)
+        }
+        return@coroutineScope result
     }
 }
