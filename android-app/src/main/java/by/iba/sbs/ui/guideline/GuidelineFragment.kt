@@ -39,7 +39,7 @@ class GuidelineFragment :
         binding.appBar.addOnOffsetChangedListener(this)
 
         binding.toolbarDescription.apply {
-            title = viewModel.name.value
+            title = viewModel.guideline.value!!.name
         }
 
         initActionButton()

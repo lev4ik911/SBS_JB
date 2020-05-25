@@ -62,8 +62,8 @@ class GuidelineEditFragment :
             stepsAdapter.itemTouchHelper.attachToRecyclerView(this)
         }
 
-        viewModel.name.observe(viewLifecycleOwner, Observer {
-            binding.toolbarDescription.title = it
+        viewModel.guideline.observe(viewLifecycleOwner, Observer {
+            binding.toolbarDescription.title = it.name
         })
         viewModel.steps.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             stepsAdapter.addItems(it)

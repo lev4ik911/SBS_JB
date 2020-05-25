@@ -149,7 +149,7 @@
                         android:layout_marginStart="@dimen/spacing_normal"
 
                         android:hint="@string/hint_step_name"
-                        android:text="@={viewmodel.name}"
+                        android:text="@={viewmodel.guideline.name}"
                         android:textAppearance="@style/Text"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -173,7 +173,7 @@
                         android:hint="@string/hint_step_description"
                         android:lines="10"
                         android:singleLine="false"
-                        android:text="@={viewmodel.description}"
+                        android:text="@={viewmodel.guideline.description}"
                         android:textAppearance="@style/Text.Description"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </RelativeLayout>

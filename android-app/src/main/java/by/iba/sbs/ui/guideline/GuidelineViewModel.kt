@@ -38,8 +38,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     val guideline = MutableLiveData(Guideline())
     val steps = MutableLiveData<List<Step>>()
     var oldSteps = listOf<Step>()
-    val name = MutableLiveData("")
-    val description = MutableLiveData("")
+
     val ratingUp = MutableLiveData(0)
     val ratingDown = MutableLiveData(0)
 
@@ -218,7 +217,12 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun onSaveAction() {
-        insertInstruction(Guideline(name = name.value?:"", description = description.value?:""))
+        insertInstruction(
+            Guideline(
+                name = guideline.value!!.name,
+                description = guideline.value!!.description
+            )
+        )
         eventsDispatcher.dispatchEvent { onAfterSaveAction() }
     }
 
