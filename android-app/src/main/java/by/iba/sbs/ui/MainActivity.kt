@@ -91,5 +91,4 @@ class MainActivity : AppCompatActivity() {
         }
         navView.show(viewModel.activeTab.value!!)
     }
-
 }

@@ -81,5 +81,6 @@
     <string name="lbl_filter_your_favourite">Your favorite</string>
     <string name="lbl_popular">Popular</string>
     <string name="lbl_categories">Categories</string>
+    <string name="title_search">Search</string>
 
 </resources>

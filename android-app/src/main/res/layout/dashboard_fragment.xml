@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewmodel"
             type="by.iba.sbs.ui.dashboard.DashboardViewModel" />
@@ -35,7 +34,7 @@
                     android:id="@+id/rvCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_small"
+                    android:layout_marginTop="@dimen/spacing_xsmall"
                     android:clipToPadding="false"
                     android:overScrollMode="never"
                     android:paddingStart="@dimen/spacing_xsmall"

@@ -3,6 +3,7 @@ package by.iba.sbs.ui.dashboard
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.iba.mvvmbase.BaseViewModel
+import by.iba.sbs.library.model.Category
 import by.iba.sbs.library.model.Guideline
 
 class DashboardViewModel : BaseViewModel() {
@@ -11,7 +12,20 @@ class DashboardViewModel : BaseViewModel() {
         value = "This is dashboard Fragment"
     }
     val text: LiveData<String> = _text
-
+    val categories = MutableLiveData<List<Category>>().apply {
+        val mData = ArrayList<Category>()
+        mData.add(Category("Кулинария", "", true, "#f08c8c"))
+        mData.add(Category("Медицина", "", false, "#c1cefa"))
+        mData.add(Category("Ремонт авто", "", false, "#fad1c1"))
+        mData.add(Category("Выживание", "", true, "#060054"))
+        mData.add(Category("IBA info", "", true, "#246801"))
+        mData.add(Category("Документы", "", true, "#246801"))
+        mData.add(Category("СМК", "", true, "#246801"))
+        mData.add(Category("Строительство", "", true, "#246801"))
+        mData.add(Category("Экстренная помощь", "", true, "#246801"))
+        mData.add(Category("IBA docs", "", true, "#246801"))
+        value = mData
+    }
     val recommended = MutableLiveData<List<Guideline>>().apply {
         val mData = ArrayList<Guideline>()
         mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
