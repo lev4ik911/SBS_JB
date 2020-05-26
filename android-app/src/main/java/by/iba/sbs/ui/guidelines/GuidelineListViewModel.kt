@@ -55,19 +55,6 @@ class GuidelineListViewModel(context: Context) : BaseViewModel(),
                     ToastMessage(e.toString(), MessageType.ERROR)
             }
         }
-//
-//        instructions.apply {
-//            val mData = ArrayList<Guideline>()
-//            mData.add(Guideline("7", "Как сдать СМК на отлично!", "Dobry", isFavorite = true))
-//            mData.add(Guideline("1", "Как попасть на проект, подготовка к интервью", "Author 2"))
-//            mData.add(Guideline("3", "Как стать счастливым", "Dobry", isFavorite = true))
-//            mData.add(Guideline("2", "Отпадный шашлычок", "Dobry", isFavorite = true))
-//            mData.add(Guideline("4", "Что делать, если вы заразились", "Доктор"))
-//            mData.add(Guideline("5", "Как поставить на учет автомобиль", "Dobry"))
-//            mData.add(Guideline("6", "Как оформить командировку", "Dobry"))
-//
-//            this.value = mData
-//        }
     }
 
     interface EventsListener {
