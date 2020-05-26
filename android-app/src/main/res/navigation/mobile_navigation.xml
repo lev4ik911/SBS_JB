@@ -32,4 +32,8 @@
         android:name="by.iba.sbs.ui.guideline.GuidelineActivity"
         android:label="instruction_activity"
         tools:layout="@layout/instruction_activity"/>
+    <fragment
+        android:id="@+id/navigation_favorites"
+        android:name="by.iba.sbs.ui.dashboard.FavoritesFragment"
+        android:label="FavoritesFragment" />
 </navigation>

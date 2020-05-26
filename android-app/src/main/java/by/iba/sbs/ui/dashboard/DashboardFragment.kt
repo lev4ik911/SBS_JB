@@ -6,10 +6,11 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import by.iba.mvvmbase.BaseFragment
+import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.BaseBindingAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
@@ -22,7 +23,9 @@ import by.iba.sbs.library.model.Guideline
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class DashboardFragment : BaseFragment<DashboardFragmentBinding, DashboardViewModel>() {
+class DashboardFragment :
+    BaseEventsFragment<DashboardFragmentBinding, DashboardViewModel, DashboardViewModel.EventsListener>(),
+    DashboardViewModel.EventsListener {
     override val layoutId: Int = R.layout.dashboard_fragment
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: DashboardViewModel by sharedViewModel()
@@ -116,5 +119,9 @@ class DashboardFragment : BaseFragment<DashboardFragmentBinding, DashboardViewMo
                 return true
             }
         })
+    }
+
+    override fun onViewFavoritesAction() {
+        findNavController().navigate(R.id.navigation_favorites)
     }
 }

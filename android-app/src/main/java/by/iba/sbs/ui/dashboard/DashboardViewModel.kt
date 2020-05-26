@@ -3,11 +3,16 @@ package by.iba.sbs.ui.dashboard
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import by.iba.mvvmbase.BaseViewModel
+import by.iba.mvvmbase.dispatcher.EventsDispatcher
+import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
+import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
 import by.iba.sbs.library.model.Category
 import by.iba.sbs.library.model.Guideline
 
-class DashboardViewModel : BaseViewModel() {
-
+class DashboardViewModel : BaseViewModel(),
+    EventsDispatcherOwner<DashboardViewModel.EventsListener> {
+    override val eventsDispatcher: EventsDispatcher<DashboardViewModel.EventsListener> =
+        eventsDispatcherOnMain()
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"
     }
@@ -53,7 +58,7 @@ class DashboardViewModel : BaseViewModel() {
     }
 
     fun onViewFavoritesClick() {
-
+        eventsDispatcher.dispatchEvent { onViewFavoritesAction() }
     }
 
     fun onViewRecommendedClick() {
@@ -61,6 +66,11 @@ class DashboardViewModel : BaseViewModel() {
     }
 
     fun onViewCategoriesClick() {
+
+    }
+
+    interface EventsListener {
+        fun onViewFavoritesAction()
 
     }
 }
