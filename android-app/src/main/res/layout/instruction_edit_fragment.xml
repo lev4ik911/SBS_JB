@@ -112,9 +112,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/bottom_navigation_height"
-                android:layout_marginTop="@dimen/spacing_xsmall"
                 android:orientation="vertical"
             >
+                <androidx.core.widget.ContentLoadingProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    visibleOrGone="@{viewmodel.isLoading}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/progress_bar_layout_margin"
+                    android:indeterminate="true" />
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/cg_categories"
                     android:layout_marginHorizontal="@dimen/spacing_normal"
