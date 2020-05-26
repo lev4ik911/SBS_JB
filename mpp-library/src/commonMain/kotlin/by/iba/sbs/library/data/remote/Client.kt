@@ -1,6 +1,7 @@
 package by.iba.sbs.library.data.remote
 
 import by.iba.sbs.library.model.request.GuidelineCreate
+import by.iba.sbs.library.model.request.GuidelineEdit
 import by.iba.sbs.library.model.response.GuidelineView
 import by.iba.sbs.library.model.response.StepView
 import by.iba.sbs.library.service.LocalSettings
@@ -230,6 +231,13 @@ class Client(val settings: LocalSettings) {
     suspend fun postGuideline(guideline: GuidelineCreate): Response<GuidelineView> {
         return post(
             Routes.Guidelines.URL_GUIDELINES,
+            requestBody = guideline,
+            needAuth = false
+        )
+    }
+    suspend fun putGuideline(guidelineId: String, guideline: GuidelineEdit): Response<GuidelineView> {
+        return put(
+            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_DETAILS, guidelineId),
             requestBody = guideline,
             needAuth = false
         )

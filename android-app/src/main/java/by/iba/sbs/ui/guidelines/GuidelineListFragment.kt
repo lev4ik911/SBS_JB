@@ -61,7 +61,6 @@ class GuidelineListFragment :
             instructionsAdapter.addItems(it)
             binding.rvInstructions.scheduleLayoutAnimation()
         })
-        viewModel.loadInstructions(false)
         instructionsAdapter.onItemClick = { pos, itemView, item ->
             val transitionSharedNameImgView = this.getString(R.string.transition_name_img_view)
             val transitionSharedNameTxtView = this.getString(R.string.transition_name_txt_view)
@@ -93,5 +92,9 @@ class GuidelineListFragment :
         instructionsAdapter.isUpdating.observe(viewLifecycleOwner, Observer {
             binding.lSwipeRefresh.isRefreshing = it!!
         })
+    }
+    override fun onStart() {
+        super.onStart()
+        viewModel.loadInstructions(false)
     }
 }
