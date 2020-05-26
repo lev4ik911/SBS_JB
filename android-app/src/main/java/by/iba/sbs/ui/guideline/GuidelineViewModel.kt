@@ -10,6 +10,7 @@ import by.iba.mvvmbase.dispatcher.EventsDispatcher
 import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
 import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
 import by.iba.mvvmbase.model.ToastMessage
+import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.Feedback
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.Step
@@ -217,12 +218,11 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun onSaveAction() {
-        insertInstruction(
-            Guideline(
-                name = guideline.value!!.name,
-                description = guideline.value!!.description
-            )
-        )
+        if (guideline.value!!.id.isEmpty())
+            insertInstruction(guideline.value!!)
+        else
+            updateInsruction(guideline.value!!)
+
         eventsDispatcher.dispatchEvent { onAfterSaveAction() }
     }
 
@@ -245,15 +245,38 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun insertInstruction(guideline: Guideline) {
+        isLoading.value = true
         viewModelScope.launch {
             try {
                 val result = repository.insertGuideline(guideline)
                 if (result.isSuccess && result.isNotEmpty) {
                     notificationsQueue.value =
-                        ToastMessage("Success insert", MessageType.SUCCESS)
+                        ToastMessage("Successful insert", MessageType.SUCCESS)
                     //TODO(Add to total res)
                 } else if (result.error != null) notificationsQueue.value =
                     ToastMessage(result.error!!.toString(), MessageType.ERROR)
+                isLoading.postValue(result.status == Response.Status.LOADING)
+            } catch (e: Exception) {
+                notificationsQueue.value =
+                    ToastMessage(e.toString(), MessageType.ERROR)
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun updateInsruction(guideline: Guideline) {
+        isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val result = repository.updateGuideline(guideline)
+                if (result.isSuccess && result.isNotEmpty) {
+                    notificationsQueue.value =
+                        ToastMessage("Successful update", MessageType.SUCCESS)
+                    //TODO(Add to total res)
+                } else if (result.error != null) notificationsQueue.value =
+                    ToastMessage(result.error!!.toString(), MessageType.ERROR)
+                isLoading.postValue(result.status == Response.Status.LOADING)
             } catch (e: Exception) {
                 notificationsQueue.value =
                     ToastMessage(e.toString(), MessageType.ERROR)
