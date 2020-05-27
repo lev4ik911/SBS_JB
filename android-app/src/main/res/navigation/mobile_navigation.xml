@@ -35,5 +35,9 @@
     <fragment
         android:id="@+id/navigation_favorites"
         android:name="by.iba.sbs.ui.dashboard.FavoritesFragment"
-        android:label="FavoritesFragment" />
+        android:label="FavoritesFragment">
+        <argument
+            android:name="Category"
+            app:argType="integer" />
+    </fragment>
 </navigation>

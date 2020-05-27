@@ -47,6 +47,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
+                    visibleOrGone="@{viewmodel.recommended.size() >0}"
                     android:onClick="@{() -> viewmodel.onViewRecommendedClick()}"
                     android:padding="@dimen/spacing_xsmall"
                     android:orientation="horizontal">
@@ -90,6 +91,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
+                    visibleOrGone="@{viewmodel.favorite.size() >0}"
                     android:onClick="@{() -> viewmodel.onViewFavoritesClick()}"
                     android:padding="@dimen/spacing_xsmall"
                     android:orientation="horizontal">
@@ -133,7 +135,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:onClick="@{() -> viewmodel.onViewRecommendedClick()}"
+                    android:onClick="@{() -> viewmodel.onViewPopularClick()}"
                     android:padding="@dimen/spacing_xsmall"
                     android:orientation="horizontal">
 

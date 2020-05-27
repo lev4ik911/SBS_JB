@@ -5,6 +5,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,9 +21,18 @@ import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.databinding.InstructionListItemHorizontalBinding
 import by.iba.sbs.library.model.Category
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.ui.MainActivity
+import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-
+enum class GuidelineCategory {
+    FAVORITE,
+    RECOMMENDED,
+    POPULAR,
+    DEFAULT
+}
 class DashboardFragment :
     BaseEventsFragment<DashboardFragmentBinding, DashboardViewModel, DashboardViewModel.EventsListener>(),
     DashboardViewModel.EventsListener {
@@ -30,6 +40,9 @@ class DashboardFragment :
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: DashboardViewModel by sharedViewModel()
     var lastSearchText: String = ""
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
@@ -83,6 +96,7 @@ class DashboardFragment :
         viewModel.favorite.observe(viewLifecycleOwner, Observer {
             favoritesAdapter.addItems(it)
         })
+        viewModel.loadFavorites(true, 3)
 
         val popularAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemBinding, DashboardViewModel>(
@@ -100,8 +114,16 @@ class DashboardFragment :
         viewModel.popular.observe(viewLifecycleOwner, Observer {
             popularAdapter.addItems(it)
         })
+        viewModel.loadPopular(true, 3)
     }
 
+    override fun onStart() {
+        super.onStart()
+        (activity as MainActivity).toolbar_main.apply {
+            navigationIcon = null
+            title = resources.getString(R.string.title_home)
+        }
+    }
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         //super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_action_menu, menu)
@@ -122,6 +144,17 @@ class DashboardFragment :
     }
 
     override fun onViewFavoritesAction() {
-        findNavController().navigate(R.id.navigation_favorites)
+        val bundle = bundleOf("Category" to GuidelineCategory.FAVORITE.ordinal)
+        findNavController().navigate(R.id.navigation_favorites, bundle)
+    }
+
+    override fun onViewRecommendedAction() {
+        val bundle = bundleOf("Category" to GuidelineCategory.RECOMMENDED.ordinal)
+        findNavController().navigate(R.id.navigation_favorites, bundle)
+    }
+
+    override fun onViewPopularAction() {
+        val bundle = bundleOf("Category" to GuidelineCategory.POPULAR.ordinal)
+        findNavController().navigate(R.id.navigation_favorites, bundle)
     }
 }

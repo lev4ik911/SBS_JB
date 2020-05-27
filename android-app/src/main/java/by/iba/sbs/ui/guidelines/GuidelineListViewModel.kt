@@ -42,8 +42,8 @@ class GuidelineListViewModel(context: Context) : BaseViewModel(),
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
                 guidelinesLiveData.addObserver {
                     if (it.isSuccess && it.isNotEmpty) {
-                        val employees = it.data!!
-                        instructions.postValue(employees.sortedBy { item -> item.id }
+                        val guidelines = it.data!!
+                        instructions.postValue(guidelines.sortedBy { item -> item.id }
                             .toList())
                     } else if (it.error != null)
                         notificationsQueue.value =

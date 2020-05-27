@@ -25,18 +25,6 @@ class MainActivity : AppCompatActivity() {
         val toolbar = this.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_main)
         setSupportActionBar(toolbar)
         val navController = findNavController(R.id.fragment_navigation_main)
-//        // Passing each menu ID as a set of Ids because each
-//        // menu should be considered as top level destinations.
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(
-//                R.id.navigation_home,
-//                R.id.navigation_dashboard,
-//                R.id.navigation_notifications,
-//                R.id.navigation_profile
-//            )
-//        )
-//
-//        setupActionBarWithNavController(navController, appBarConfiguration)
 
         navView.add(
             BottomNavigation.Model(
@@ -67,9 +55,9 @@ class MainActivity : AppCompatActivity() {
         navView.setOnShowListener {
 
             title = when (it.id) {
-                ActiveTabEnum.ID_HOME.index -> "HOME"
-                ActiveTabEnum.ID_INSTRUCTIONS.index -> "INSTRUCTIONS"
-                ActiveTabEnum.ID_SEARCH.index -> "SEARCH"
+                ActiveTabEnum.ID_HOME.index -> resources.getString(R.string.title_home)
+                ActiveTabEnum.ID_INSTRUCTIONS.index -> resources.getString(R.string.title_instructions)
+                ActiveTabEnum.ID_SEARCH.index -> resources.getString(R.string.title_search)
                 ActiveTabEnum.ID_PROFILE.index -> ""
                 else -> ""
             }
