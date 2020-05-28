@@ -44,6 +44,11 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })
+        favoritesAdapter.filterCriteria = { item, text ->
+            item.name.contains(text, true)
+                    || item.description.contains(text, true)
+
+        }
         (activity as MainActivity).apply {
             toolbar_main.navigationIcon =
                 ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
