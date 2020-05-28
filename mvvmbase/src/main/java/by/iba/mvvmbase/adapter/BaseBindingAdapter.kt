@@ -257,10 +257,14 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
         }
 
         override fun onClick(p0: View?) {
-            if (adapterPosition < itemCount - 1)
+            if (emptyViewId != 0) {
+                if (adapterPosition < itemCount - 1)
+                    onItemClick?.invoke(adapterPosition, p0, itemsList[adapterPosition])
+                else
+                    onEmptyViewItemClick?.invoke()
+            } else {
                 onItemClick?.invoke(adapterPosition, p0, itemsList[adapterPosition])
-            else
-                onEmptyViewItemClick?.invoke()
+            }
         }
     }
 }

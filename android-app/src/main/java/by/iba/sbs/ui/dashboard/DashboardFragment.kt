@@ -1,11 +1,17 @@
 package by.iba.sbs.ui.dashboard
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.os.bundleOf
+import androidx.core.util.Pair
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,6 +28,7 @@ import by.iba.sbs.databinding.InstructionListItemHorizontalBinding
 import by.iba.sbs.library.model.Category
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.ui.MainActivity
+import by.iba.sbs.ui.guideline.GuidelineActivity
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -72,6 +79,11 @@ class DashboardFragment :
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })
+                .also {
+                    it.onItemClick = { pos, itemView, item ->
+                        onOpenGuidelineAction(itemView!!, item)
+                    }
+                }
         binding.rvRecommended.apply {
             adapter = recommendedAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
@@ -89,6 +101,11 @@ class DashboardFragment :
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })
+                .also {
+                    it.onItemClick = { pos, itemView, item ->
+                        onOpenGuidelineAction(itemView!!, item)
+                    }
+                }
         binding.rvFavorite.apply {
             adapter = favoritesAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -107,6 +124,11 @@ class DashboardFragment :
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })
+                .also {
+                    it.onItemClick = { pos, itemView, item ->
+                        onOpenGuidelineAction(itemView!!, item)
+                    }
+                }
         binding.rvPopular.apply {
             adapter = popularAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -156,5 +178,29 @@ class DashboardFragment :
     override fun onViewPopularAction() {
         val bundle = bundleOf("Category" to GuidelineCategory.POPULAR.ordinal)
         findNavController().navigate(R.id.navigation_favorites, bundle)
+    }
+
+    override fun onOpenGuidelineAction(view: View, guideline: Guideline) {
+        val transitionSharedNameImgView = this.getString(R.string.transition_name_img_view)
+        val transitionSharedNameTxtView = this.getString(R.string.transition_name_txt_view)
+        var imageViewPair: Pair<View, String>
+        val textViewPair: Pair<View, String>
+        view.findViewById<ImageView>(R.id.iv_preview).apply {
+            this?.transitionName = transitionSharedNameImgView
+            imageViewPair = Pair.create(this, transitionSharedNameImgView)
+        }
+        view.findViewById<TextView>(R.id.tv_title).apply {
+            this?.transitionName = transitionSharedNameTxtView
+            textViewPair = Pair.create(this, transitionSharedNameTxtView)
+        }
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            activity as Activity,
+            imageViewPair,
+            textViewPair
+        )
+        val intent = Intent(activity, GuidelineActivity::class.java)
+        intent.putExtra("instructionId", guideline.id)
+        startActivity(intent, options.toBundle())
+
     }
 }
