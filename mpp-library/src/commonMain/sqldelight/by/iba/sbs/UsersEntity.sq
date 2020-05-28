@@ -1,0 +1,21 @@
+CREATE TABLE users (
+    id TEXT NOT NULL UNIQUE PRIMARY KEY,
+    name TEXT NOT NULL DEFAULT "",
+    email TEXT NOT NULL DEFAULT ""
+);
+
+addUser:
+INSERT OR REPLACE INTO users (id, name, email)
+VALUES (?, ?, ?);
+
+getUser:
+SELECT * FROM users WHERE users.id = ?;
+
+getAllUsers:
+SELECT * FROM users ORDER BY users.name;
+
+deleteUser:
+DELETE FROM users WHERE users.id = ?;
+
+deleteAllUsers:
+DELETE FROM users;

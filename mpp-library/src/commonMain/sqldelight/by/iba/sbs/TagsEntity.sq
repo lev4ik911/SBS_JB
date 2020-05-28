@@ -1,0 +1,20 @@
+CREATE TABLE tags (
+    id TEXT NOT NULL UNIQUE PRIMARY KEY,
+    name TEXT NOT NULL DEFAULT ""
+);
+
+addTag:
+INSERT OR REPLACE INTO tags (id, name)
+VALUES (?, ?);
+
+getTag:
+SELECT * FROM tags WHERE tags.id = ?;
+
+getAllTags:
+SELECT * FROM tags ORDER BY tags.name;
+
+deleteTag:
+DELETE FROM tags WHERE tags.id = ?;
+
+deleteAllTags:
+DELETE FROM tags;

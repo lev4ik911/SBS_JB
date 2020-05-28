@@ -1,6 +1,7 @@
 package by.iba.sbs.library.repository
 
 import by.iba.sbs.SBSDB
+import by.iba.sbs.library.data.local.createDb
 import by.iba.sbs.library.data.remote.Client
 import by.iba.sbs.library.data.remote.NetworkBoundResource
 import by.iba.sbs.library.data.remote.Response
@@ -27,8 +28,6 @@ interface IGuidelineRepository{
     ): LiveData<Response<List<Step>>>
     suspend fun insertGuideline(data: Guideline):Response<GuidelineView>
 }
-
-expect fun createDb(): SBSDB
 
 @ImplicitReflectionSerializer
 class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) :

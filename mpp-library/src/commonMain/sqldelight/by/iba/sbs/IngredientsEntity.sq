@@ -1,0 +1,20 @@
+CREATE TABLE ingredients (
+    id TEXT NOT NULL UNIQUE PRIMARY KEY,
+    name TEXT NOT NULL DEFAULT ""
+);
+
+addIngredient:
+INSERT OR REPLACE INTO ingredients (id, name)
+VALUES (?, ?);
+
+getIngredient:
+SELECT * FROM ingredients WHERE ingredients.id = ?;
+
+getAllIngredients:
+SELECT * FROM ingredients ORDER BY ingredients.name;
+
+deleteIngredient:
+DELETE FROM ingredients WHERE ingredients.id = ?;
+
+deleteAllIngredients:
+DELETE FROM ingredients;

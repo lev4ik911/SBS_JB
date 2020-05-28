@@ -1,4 +1,4 @@
-package by.iba.sbs.library.repository
+package by.iba.sbs.library.data.local
 
 import android.content.Context
 import by.iba.sbs.SBSDB
