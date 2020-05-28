@@ -24,7 +24,7 @@ interface IUsersRepository{
         forceRefresh: Boolean
     ): LiveData<Response<User>>
 
-    suspend fun deleteUser(data: String):Response<Boolean>
+    suspend fun deleteUser(data: String): Response<UserView>
 }
 
 @ImplicitReflectionSerializer
@@ -138,8 +138,15 @@ interface IUsersRepository{
             .asLiveData()
     }
 
-    override suspend fun deleteUser(data: String): Response<Boolean> {
-        TODO("Not yet implemented")
+    override suspend fun deleteUser(userId: String): Response<UserView> = coroutineScope {
+        val result = users.deleteUser(userId)
+        if (result.isSuccess) {
+            val item = result.data!!
+            usersQueries.deleteUser(userId)
+        } else {
+            if (result.status == Response.Status.ERROR) error(result.error!!)
+        }
+        return@coroutineScope result
     }
 
     suspend fun clearCache() {
