@@ -1,10 +1,10 @@
 package by.iba.sbs.library.repository
 
-import by.iba.sbs.SBSDB
 import by.iba.sbs.library.data.local.createDb
-import by.iba.sbs.library.data.remote.Client
+import by.iba.sbs.library.data.remote.Guidelines
 import by.iba.sbs.library.data.remote.NetworkBoundResource
 import by.iba.sbs.library.data.remote.Response
+import by.iba.sbs.library.data.remote.Steps
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.model.request.GuidelineCreate
@@ -33,7 +33,8 @@ interface IGuidelineRepository{
 class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) :
     IGuidelineRepository {
     @UnstableDefault
-    private val remote = Client(settings)
+    private val guidelines = Guidelines(settings)
+    private val steps = Steps(settings)
     private val sbsDb = createDb()
     private val guidelinesQueries = sbsDb.guidelinesEntityQueries
 
@@ -60,7 +61,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
             override fun createCallAsync(): Deferred<List<Guideline>> {
                 return GlobalScope.async(Dispatchers.Default) {
-                    val result = remote.getAllGuidelines()
+                    val result = guidelines.getAllGuidelines()
                     //val result = remote.getGuideline("3483dcf1-9497-49be-b12d-e73cd47c8e94")
                     if (result.isSuccess) {
                         result.data!!.map { item ->
@@ -104,7 +105,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
             override fun createCallAsync(): Deferred<Guideline> {
                 return GlobalScope.async(Dispatchers.Default) {
-                    val result = remote.getGuideline(guidelineId)
+                    val result = guidelines.getGuideline(guidelineId)
                     //val result = remote.getGuideline("3483dcf1-9497-49be-b12d-e73cd47c8e94")
                     if (result.isSuccess) {
                         val item = result.data!!
@@ -125,7 +126,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             .asLiveData()
     }
 
-    suspend fun clearCache() {
+    private fun clearCache() {
         guidelinesQueries.deleteAllSteps()
         guidelinesQueries.deleteAllGuidelines()
     }
@@ -161,7 +162,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
             override fun createCallAsync(): Deferred<List<Step>> {
                 return GlobalScope.async(Dispatchers.Default) {
-                    val result = remote.getAllSteps(guidelineId)
+                    val result = steps.getAllSteps(guidelineId)
                     if (result.isSuccess) {
                         result.data!!.map { item ->
                             Step(
@@ -185,7 +186,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
     @UnstableDefault
     override suspend fun insertGuideline(data: Guideline): Response<GuidelineView> = coroutineScope {
-        val result = remote.postGuideline(GuidelineCreate(data.name, data.description))
+        val result = guidelines.postGuideline(GuidelineCreate(data.name, data.description))
         if (result.isSuccess) {
             val item = result.data!!
             guidelinesQueries.insertGuideline(item.id, item.name, item.description?:"")

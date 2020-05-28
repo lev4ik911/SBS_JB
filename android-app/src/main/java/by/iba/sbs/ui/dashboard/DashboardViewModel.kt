@@ -88,12 +88,12 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
                         favorite.postValue(
                             if (itemsCount == -1)
                                 guidelines
-                                    .filter { item -> item.isFavorite }
+                                    //  .filter { item -> item.isFavorite }
                                     .sortedBy { item -> item.id }
                                     .toList()
                             else
                                 guidelines
-                                    .filter { item -> item.isFavorite }
+                                    // .filter { item -> item.isFavorite }
                                     .take(itemsCount)
                                     .sortedBy { item -> item.id }
                                     .toList()
