@@ -18,6 +18,9 @@ SELECT * FROM guidelines WHERE id = ?;
 deleteGuidelineById:
 DELETE FROM guidelines WHERE id = ?;
 
+deleteAllGuidelines:
+DELETE FROM guidelines;
+
 CREATE TABLE steps (
     id TEXT NOT NULL UNIQUE PRIMARY KEY,
     guidelineId TEXT NOT NULL,
@@ -44,3 +47,6 @@ DELETE FROM steps WHERE id = ?;
 
 deleteAllStepsByGuidelineId:
 DELETE FROM steps WHERE guidelineId = ? ;
+
+deleteAllSteps:
+DELETE FROM steps;

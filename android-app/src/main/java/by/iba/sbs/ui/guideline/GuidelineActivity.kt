@@ -23,6 +23,7 @@ import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionActivityBinding
 import by.iba.sbs.ui.profile.ProfileActivity
 import com.yalantis.ucrop.UCrop
+import kotlinx.serialization.UnstableDefault
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.util.*
@@ -52,6 +53,7 @@ class GuidelineActivity :
         FromGallery(2, R.string.select_variant_from_gallery)
     }
 
+    @UnstableDefault
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val instructionId = intent?.getStringExtra("instructionId") ?: ""

@@ -1,14 +1,11 @@
 package by.iba.sbs.ui
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import by.iba.ecl.ui.MainViewModel
 import by.iba.mvvmbase.custom.bottomnavigation.BottomNavigation
 import by.iba.sbs.R
-import by.iba.sbs.ui.walkthrough.WalkthroughActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -28,18 +25,6 @@ class MainActivity : AppCompatActivity() {
         val toolbar = this.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_main)
         setSupportActionBar(toolbar)
         val navController = findNavController(R.id.fragment_navigation_main)
-//        // Passing each menu ID as a set of Ids because each
-//        // menu should be considered as top level destinations.
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(
-//                R.id.navigation_home,
-//                R.id.navigation_dashboard,
-//                R.id.navigation_notifications,
-//                R.id.navigation_profile
-//            )
-//        )
-//
-//        setupActionBarWithNavController(navController, appBarConfiguration)
 
         navView.add(
             BottomNavigation.Model(
@@ -66,13 +51,13 @@ class MainActivity : AppCompatActivity() {
             )
         )
         navView.setCount(ActiveTabEnum.ID_HOME.index, "15")
-        navView.show(viewModel.activeTab.value!!)
+
         navView.setOnShowListener {
 
             title = when (it.id) {
-                ActiveTabEnum.ID_HOME.index -> "HOME"
-                ActiveTabEnum.ID_INSTRUCTIONS.index -> "INSTRUCTIONS"
-                ActiveTabEnum.ID_SEARCH.index -> "SEARCH"
+                ActiveTabEnum.ID_HOME.index -> resources.getString(R.string.title_home)
+                ActiveTabEnum.ID_INSTRUCTIONS.index -> resources.getString(R.string.title_instructions)
+                ActiveTabEnum.ID_SEARCH.index -> resources.getString(R.string.title_search)
                 ActiveTabEnum.ID_PROFILE.index -> ""
                 else -> ""
             }
@@ -92,9 +77,6 @@ class MainActivity : AppCompatActivity() {
             )
             invalidateOptionsMenu()
         }
-    }
-
-    fun testClick(view: View) {
-        startActivity(Intent(this, WalkthroughActivity::class.java))
+        navView.show(viewModel.activeTab.value!!)
     }
 }

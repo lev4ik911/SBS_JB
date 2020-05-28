@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="by.iba.sbs.tools.Extentions" />
+
+        <variable
+            name="category"
+            type="by.iba.sbs.library.model.Category" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/spacing_xsmall">
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="@{category.active}"
+            android:text="@{category.name}"
+            app:checkedIcon="@drawable/check"
+            app:chipBackgroundColor="@color/colorSecondaryVariant"
+            app:chipIcon="@drawable/heart_outline"
+            app:chipIconTint="@color/colorPrimary" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

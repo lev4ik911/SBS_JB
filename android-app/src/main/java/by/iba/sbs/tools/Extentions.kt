@@ -1,6 +1,7 @@
 package by.iba.sbs.tools
 
 import android.content.Context
+import android.graphics.Color
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.widget.ImageView
@@ -28,7 +29,10 @@ fun ImageView.loadImageFromResources(context: Context, aImageUrl: Int) {
 }
 
 class Extentions {
+
     companion object {
+        fun colorFromHex(colorHex: String) = Color.parseColor(colorHex)
+
         fun startAlphaAnimation(v: View, duration: Long, visibility: Int) {
             val alphaAnimation = if (visibility == View.VISIBLE)
                 AlphaAnimation(0f, 1f)

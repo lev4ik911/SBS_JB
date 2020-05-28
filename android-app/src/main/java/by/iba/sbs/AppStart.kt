@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Intent
 import by.iba.sbs.di.serviceModule
 import by.iba.sbs.di.viewModelModule
-import by.iba.sbs.library.repository.appContext
+import by.iba.sbs.library.data.local.appContext
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
 import org.koin.android.ext.koin.androidLogger

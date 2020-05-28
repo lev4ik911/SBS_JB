@@ -1,6 +1,7 @@
 package by.iba.sbs.library.repository
 
 import by.iba.sbs.SBSDB
+import by.iba.sbs.library.data.local.createDb
 import by.iba.sbs.library.data.remote.Client
 import by.iba.sbs.library.data.remote.NetworkBoundResource
 import by.iba.sbs.library.data.remote.Response
@@ -30,8 +31,6 @@ interface IGuidelineRepository{
     suspend fun updateGuideline(data: Guideline):Response<GuidelineView>
 }
 
-expect fun createDb(): SBSDB
-
 @ImplicitReflectionSerializer
 class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) :
     IGuidelineRepository {
@@ -42,6 +41,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
     @UnstableDefault
     override suspend fun getAllGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>> {
+        if (forceRefresh) clearCache()
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
 
@@ -127,6 +127,10 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             .asLiveData()
     }
 
+    suspend fun clearCache() {
+        guidelinesQueries.deleteAllSteps()
+        guidelinesQueries.deleteAllGuidelines()
+    }
     @UnstableDefault
     override suspend fun getAllSteps(
         guidelineId: String,

@@ -1,0 +1,27 @@
+CREATE TABLE comments (
+    id TEXT NOT NULL UNIQUE PRIMARY KEY,
+    entity TEXT NOT NULL DEFAULT "",
+    comment TEXT NOT NULL DEFAULT ""
+);
+
+addComment:
+INSERT OR REPLACE INTO comments (id, entity, comment)
+VALUES (?, ?, ?);
+
+getCommentById:
+SELECT * FROM comments WHERE comments.id = ?;
+
+getCommentsByEntity:
+SELECT * FROM comments WHERE comments.entity = ?;
+
+getAllComments:
+SELECT * FROM comments ORDER BY comments.entity;
+
+deleteCommentById:
+DELETE FROM comments WHERE comments.id = ?;
+
+deleteCommentsByEntity:
+DELETE FROM comments WHERE comments.entity = ?;
+
+deleteAllComments:
+DELETE FROM comments;
