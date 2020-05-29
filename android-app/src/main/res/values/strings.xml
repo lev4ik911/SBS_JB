@@ -86,4 +86,9 @@
     <string name="title_search">Search</string>
     <string name="title_home">Home</string>
 
+    <string name="delete_instruction_dialog_title">Delete instruction</string>
+    <string name="delete_instruction_dialog_message">Are you sure you want to delete the instruction %s?</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+
 </resources>

@@ -30,20 +30,20 @@ class GuidelineEditFragment :
     private val mAlphaAnimationsDuration = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
-    private var instructionId = 0
+    private var instructionId = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.appBar.addOnOffsetChangedListener(this)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
-            if (instructionId == 0)
+            if (instructionId == "")
                 activity?.finish()
             else {
                 viewModel.onBackBtnClick()
                 findNavController().navigate(R.id.navigation_instruction_view)
             }
         }
-        instructionId = arguments?.getInt("instructionId") ?: 0
+        instructionId = arguments?.getString("instructionId") ?: ""
 
         val stepsAdapter =
             BaseBindingAdapter<Step, InstructionEditStepListItemBinding, GuidelineViewModel>(

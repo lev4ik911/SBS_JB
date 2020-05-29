@@ -222,12 +222,11 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
             insertInstruction(guideline.value!!)
         else
             updateInsruction(guideline.value!!)
-
         eventsDispatcher.dispatchEvent { onAfterSaveAction() }
     }
 
     fun onRemoveInstructionClick() {
-
+        eventsDispatcher.dispatchEvent { onRemoveInstruction() }
     }
 
     fun onBackBtnClick() {
@@ -240,19 +239,24 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         fun onEditStep(stepId: String)
         fun onEditImage(stepId: String)
         fun onAfterSaveAction()
+        fun onAfterDeleteAction()
+        fun onRemoveInstruction()
     }
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun insertInstruction(guideline: Guideline) {
+    fun insertInstruction(newGuideline: Guideline) {
         isLoading.value = true
         viewModelScope.launch {
             try {
-                val result = repository.insertGuideline(guideline)
+                val result = repository.insertGuideline(newGuideline)
                 if (result.isSuccess && result.isNotEmpty) {
                     notificationsQueue.value =
                         ToastMessage("Successful insert", MessageType.SUCCESS)
-                    //TODO(Add to total res)
+                        //TODO(Add to total res)
+                    val resultGuideline = result.data!!
+                    guideline.value = Guideline(id = resultGuideline.id, name = resultGuideline.name, description = resultGuideline.description?:"")
+
                 } else if (result.error != null) notificationsQueue.value =
                     ToastMessage(result.error!!.toString(), MessageType.ERROR)
                 isLoading.postValue(result.status == Response.Status.LOADING)
@@ -277,6 +281,29 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                 } else if (result.error != null) notificationsQueue.value =
                     ToastMessage(result.error!!.toString(), MessageType.ERROR)
                 isLoading.postValue(result.status == Response.Status.LOADING)
+            } catch (e: Exception) {
+                notificationsQueue.value =
+                    ToastMessage(e.toString(), MessageType.ERROR)
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun deleteInstruction(guideline: Guideline) {
+        isLoading.value = true
+        viewModelScope.launch {
+            try {
+                println("MyApp guideline_id " + guideline.id)
+                val result = repository.deleteGuideline(guideline.id)
+                if (result.isSuccess) {
+                    notificationsQueue.value =
+                        ToastMessage("Successful delete", MessageType.SUCCESS)
+                    //TODO(Add to total res)
+                } else if (result.error != null) notificationsQueue.value =
+                    ToastMessage(result.error!!.toString(), MessageType.ERROR)
+                isLoading.postValue(result.status == Response.Status.LOADING)
+                eventsDispatcher.dispatchEvent { onAfterDeleteAction() }
             } catch (e: Exception) {
                 notificationsQueue.value =
                     ToastMessage(e.toString(), MessageType.ERROR)

@@ -29,6 +29,7 @@ interface IGuidelineRepository{
     ): LiveData<Response<List<Step>>>
     suspend fun insertGuideline(data: Guideline):Response<GuidelineView>
     suspend fun updateGuideline(data: Guideline):Response<GuidelineView>
+    suspend fun deleteGuideline(guidelineId: String): Response<String?>
 }
 
 @ImplicitReflectionSerializer
@@ -200,10 +201,22 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
     @UnstableDefault
     override suspend fun updateGuideline(data: Guideline): Response<GuidelineView> = coroutineScope {
-        val result = remote.putGuideline(data.id, GuidelineEdit(data.name, data.description))
+        val result = guidelines.putGuideline(data.id, GuidelineEdit(data.name, data.description))
         if (result.isSuccess) {
             val item = result.data!!
             guidelinesQueries.insertGuideline(item.id, item.name, item.description?:"")
+        } else {
+            if (result.status == Response.Status.ERROR) error(result.error!!)
+        }
+        return@coroutineScope result
+    }
+
+    @UnstableDefault
+    override suspend fun deleteGuideline(guidelineId: String): Response<String?> = coroutineScope {
+        val result = guidelines.deleteGuideline(guidelineId)
+        if (result.isSuccess) {
+            guidelinesQueries.deleteAllStepsByGuidelineId(guidelineId)
+            guidelinesQueries.deleteGuidelineById(guidelineId)
         } else {
             if (result.status == Response.Status.ERROR) error(result.error!!)
         }

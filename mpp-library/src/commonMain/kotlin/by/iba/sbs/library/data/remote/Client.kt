@@ -1,13 +1,6 @@
 package by.iba.sbs.library.data.remote
 
-import by.iba.sbs.library.model.request.GuidelineCreate
-import by.iba.sbs.library.model.request.GuidelineEdit
-import by.iba.sbs.library.model.request.UserCreate
-import by.iba.sbs.library.model.response.GuidelineView
-import by.iba.sbs.library.model.response.StepView
-import by.iba.sbs.library.model.response.UserView
 import by.iba.sbs.library.service.LocalSettings
-import by.iba.sbs.library.service.Utils
 import com.github.aakira.napier.Napier
 import dev.icerock.moko.network.exceptionfactory.HttpExceptionFactory
 import dev.icerock.moko.network.exceptionfactory.parser.ErrorExceptionParser
@@ -33,7 +26,6 @@ import io.ktor.http.*
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
-import kotlinx.serialization.builtins.list
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import kotlinx.serialization.serializer
@@ -172,7 +164,7 @@ open class Client(open val settings: LocalSettings) {
         }
     }
 
-    private suspend inline fun <reified T : Any> put(
+    internal suspend inline fun <reified T : Any> put(
         route: String,
         requestBody: Any,
         query: Map<String, String> = mutableMapOf(),
@@ -200,72 +192,23 @@ open class Client(open val settings: LocalSettings) {
         }
     }
 
-    suspend fun getAllGuidelines(): Response<List<GuidelineView>> {
-        return get(
-            Routes.Guidelines.URL_GUIDELINES,
-            deserializer = GuidelineView::class.serializer().list,
-            needAuth = false
-        )
-    }
+    internal suspend inline fun <reified T : Any> delete(
+        route: String,
+        needAuth: Boolean = true
+    ): Response<T> {
+        return try {
+            ktor
+                .request<HttpResponse>(route) {
 
-    suspend fun getGuideline(id: String): Response<GuidelineView> {
-        return get(
-            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_DETAILS, id),
-            needAuth = false
-        )
-    }
+                    if (needAuth) {
+                        header(HttpHeaders.Authorization, "Bearer ${settings.accessToken}")
+                    }
+                    method = HttpMethod.Delete
+                }
+                .processResponse()
 
-    suspend fun getAllSteps(guidelineId: String): Response<List<StepView>> {
-        return get(
-            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEPS, guidelineId),
-            deserializer = StepView::class.serializer().list,
-            needAuth = false
-        )
+        } catch (ex: Exception) {
+            Response.error(ex, null)
+        }
     }
-
-    suspend fun getStep(guidelineId: String, stepId: String): Response<StepView> {
-        return get(
-            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEP_DETAILS, guidelineId, stepId),
-            needAuth = false
-        )
-    }
-
-    suspend fun postGuideline(guideline: GuidelineCreate): Response<GuidelineView> {
-        return post(
-            Routes.Guidelines.URL_GUIDELINES,
-            requestBody = guideline,
-            needAuth = false
-        )
-    }
-    suspend fun putGuideline(guidelineId: String, guideline: GuidelineEdit): Response<GuidelineView> {
-        return put(
-            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_DETAILS, guidelineId),
-            requestBody = guideline,
-            needAuth = false
-        )
-    }
-
-    suspend fun postUser(user: UserCreate): Response<UserView> {
-        return post(
-            Routes.Users.URL_USERS,
-            requestBody = user,
-            needAuth = false
-        )
-    }
-
-    suspend fun getAllUsers(): Response<List<UserView>> {
-        return get(
-            Routes.Users.URL_USERS,
-            deserializer = UserView::class.serializer().list,
-            needAuth = false
-        )
-    }
-
-    suspend fun getUserById(userId: String): Response<UserView> {
-        return get(
-            Utils.formatString(Routes.Users.URL_USERS, userId),
-            needAuth = false
-        )
-    }
-
 }

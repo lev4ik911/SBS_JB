@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -23,6 +24,7 @@ import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionActivityBinding
 import by.iba.sbs.ui.profile.ProfileActivity
 import com.yalantis.ucrop.UCrop
+import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
@@ -410,5 +412,21 @@ class GuidelineActivity :
     override fun onAfterSaveAction() {
         findNavController(R.id.fragment_navigation_instruction)
             .navigate(R.id.navigation_instruction_view)
+    }
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun onRemoveInstruction() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(resources.getString(R.string.delete_instruction_dialog_title))
+        builder.setMessage(resources.getString(R.string.delete_instruction_dialog_message, viewModel.guideline.value!!.name))
+        builder.setPositiveButton(resources.getString(R.string.yes), { dialogInterface: DialogInterface, i: Int ->
+            viewModel.deleteInstruction(viewModel.guideline.value!!)
+        })
+        builder.setNegativeButton(resources.getString(R.string.cancel), null);
+        val dialog = builder.create()
+        dialog.show()
+    }
+    override fun onAfterDeleteAction() {
+        this.finish()
     }
 }
