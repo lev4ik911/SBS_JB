@@ -5,7 +5,7 @@ plugins {
     id("com.squareup.sqldelight")
     id("kotlin-android-extensions") //version "1.3.70"
     //  id("kotlinx-serialization") //version "1.3.70"
-    kotlin("plugin.serialization") version "1.3.70"
+    kotlin("plugin.serialization") version "1.3.71"
     id("dev.icerock.mobile.multiplatform")
     id("dev.icerock.mobile.multiplatform-resources")
 }
@@ -13,12 +13,17 @@ androidExtensions {
     isExperimental = true
 }
 android {
-    compileSdkVersion(Versions.Android.compileSdk)
+    compileSdkVersion(28)
 
     defaultConfig {
         minSdkVersion(Versions.Android.minSdk)
         targetSdkVersion(Versions.Android.targetSdk)
     }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion = "30.0.0 rc4"
 }
 sqldelight {
     database("SBSDB") {
@@ -29,7 +34,7 @@ sqldelight {
 val mppLibs = listOf(
     Deps.Libs.MultiPlatform.settings,
     Deps.Libs.MultiPlatform.napier,
-    //  Deps.Libs.MultiPlatform.SQLDelight,
+    Deps.Libs.MultiPlatform.SQLDelight,
     Deps.Libs.MultiPlatform.SQLDelightDriver,
     Deps.Libs.MultiPlatform.mokoParcelize,
     Deps.Libs.MultiPlatform.mokoNetwork,

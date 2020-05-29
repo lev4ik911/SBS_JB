@@ -43,7 +43,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
     @UnstableDefault
     override suspend fun getAllGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>> {
-        if (forceRefresh) clearCache()
+     //   if (forceRefresh) clearCache()
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
 
@@ -65,7 +65,6 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             override fun createCallAsync(): Deferred<List<Guideline>> {
                 return GlobalScope.async(Dispatchers.Default) {
                     val result = guidelines.getAllGuidelines()
-                    //val result = remote.getGuideline("3483dcf1-9497-49be-b12d-e73cd47c8e94")
                     if (result.isSuccess) {
                         result.data!!.map { item ->
                             Guideline(
