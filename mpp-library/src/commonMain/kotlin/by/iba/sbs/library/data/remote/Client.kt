@@ -41,7 +41,7 @@ import kotlinx.serialization.serializer
 
 @UnstableDefault
 @ImplicitReflectionSerializer
-class Client(val settings: LocalSettings) {
+open class Client(open val settings: LocalSettings) {
 
     private val json: Json by lazy {
         Json(JsonConfiguration.Default)
@@ -120,7 +120,7 @@ class Client(val settings: LocalSettings) {
         }
     }
 
-    private suspend inline fun <reified T : Any> get(
+    internal suspend inline fun <reified T : Any> get(
         route: String,
         query: Map<String, String> = mutableMapOf(),
         needAuth: Boolean = true,
@@ -145,7 +145,7 @@ class Client(val settings: LocalSettings) {
         }
     }
 
-    private suspend inline fun <reified T : Any> post(
+    internal suspend inline fun <reified T : Any> post(
         route: String,
         requestBody: Any,
         query: Map<String, String> = mutableMapOf(),

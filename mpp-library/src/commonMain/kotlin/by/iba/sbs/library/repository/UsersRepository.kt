@@ -1,10 +1,9 @@
 package by.iba.sbs.library.repository
 
-import by.iba.sbs.SBSDB
 import by.iba.sbs.library.data.local.createDb
-import by.iba.sbs.library.data.remote.Client
 import by.iba.sbs.library.data.remote.NetworkBoundResource
 import by.iba.sbs.library.data.remote.Response
+import by.iba.sbs.library.data.remote.Users
 import by.iba.sbs.library.model.User
 
 import by.iba.sbs.library.model.request.UserCreate
@@ -25,20 +24,20 @@ interface IUsersRepository{
         forceRefresh: Boolean
     ): LiveData<Response<User>>
 
-    suspend fun deleteUser(data: String):Response<Boolean>
+    suspend fun deleteUser(data: String): Response<UserView>
 }
 
 @ImplicitReflectionSerializer
  class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
     IUsersRepository {
     @UnstableDefault
-    private val remote = Client(settings)
+    private val users = Users(settings)
     private val sbsDb = createDb()
     private val usersQueries = sbsDb.usersEntityQueries;
 
     @UnstableDefault
     override suspend fun addUser(data: User): Response<UserView> = coroutineScope {
-        val result = remote.postUser(UserCreate(data.name, data.email))
+        val result = users.postUser(UserCreate(data.name, data.email))
         if (result.isSuccess) {
             val item = result.data!!
             usersQueries.addUser(item.id, item.name, item.email)
@@ -75,7 +74,7 @@ interface IUsersRepository{
 
             override fun createCallAsync(): Deferred<List<User>> {
                 return GlobalScope.async(Dispatchers.Default) {
-                    val result = remote.getAllUsers()
+                    val result = users.getAllUsers()
                     if (result.isSuccess) {
                         result.data!!.map { item ->
                             User(
@@ -120,7 +119,7 @@ interface IUsersRepository{
 
             override fun createCallAsync(): Deferred<User> {
                 return GlobalScope.async(Dispatchers.Default) {
-                    val result = remote.getUserById(userId)
+                    val result = users.getUserById(userId)
                     if (result.isSuccess) {
                         val item = result.data!!
                         User(
@@ -139,8 +138,15 @@ interface IUsersRepository{
             .asLiveData()
     }
 
-    override suspend fun deleteUser(data: String): Response<Boolean> {
-        TODO("Not yet implemented")
+    override suspend fun deleteUser(userId: String): Response<UserView> = coroutineScope {
+        val result = users.deleteUser(userId)
+        if (result.isSuccess) {
+            val item = result.data!!
+            usersQueries.deleteUser(userId)
+        } else {
+            if (result.status == Response.Status.ERROR) error(result.error!!)
+        }
+        return@coroutineScope result
     }
 
     suspend fun clearCache() {

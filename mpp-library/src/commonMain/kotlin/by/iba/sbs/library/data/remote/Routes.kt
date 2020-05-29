@@ -16,4 +16,10 @@ object Routes {
         const val URL_GUIDELINE_STEP_DETAILS =
             "$baseRoute/$version/guidelines/item/%s/steps/item/%s"
     }
+
+    object Ratings {
+        const val URL_GUIDELINE_RATINGS = "$baseRoute/$version/guidelines/item/%s/ratings/list"
+        const val URL_GUIDELINE_RATING_DETAILS =
+            "$baseRoute/$version/guidelines/item/%s/ratings/item/%s"
+    }
 }

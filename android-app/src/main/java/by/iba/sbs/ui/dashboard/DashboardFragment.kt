@@ -72,18 +72,14 @@ class DashboardFragment :
         })
         val recommendedAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemHorizontalBinding, DashboardViewModel>(
-                R.layout.instruction_list_item_horizontal,
+                R.layout.favorites_instruction_list_item,
                 BR.instruction,
                 BR.viewmodel,
                 viewModel,
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })
-                .also {
-                    it.onItemClick = { pos, itemView, item ->
-                        onOpenGuidelineAction(itemView!!, item)
-                    }
-                }
+
         binding.rvRecommended.apply {
             adapter = recommendedAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
@@ -94,18 +90,14 @@ class DashboardFragment :
 
         val favoritesAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemBinding, DashboardViewModel>(
-                R.layout.instruction_list_item,
+                R.layout.favorites_instruction_list_item,
                 BR.instruction,
                 BR.viewmodel,
                 viewModel,
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })
-                .also {
-                    it.onItemClick = { pos, itemView, item ->
-                        onOpenGuidelineAction(itemView!!, item)
-                    }
-                }
+
         binding.rvFavorite.apply {
             adapter = favoritesAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -117,18 +109,14 @@ class DashboardFragment :
 
         val popularAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemBinding, DashboardViewModel>(
-                R.layout.instruction_list_item,
+                R.layout.favorites_instruction_list_item,
                 BR.instruction,
                 BR.viewmodel,
                 viewModel,
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })
-                .also {
-                    it.onItemClick = { pos, itemView, item ->
-                        onOpenGuidelineAction(itemView!!, item)
-                    }
-                }
+
         binding.rvPopular.apply {
             adapter = popularAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
