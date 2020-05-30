@@ -28,6 +28,7 @@ import by.iba.sbs.databinding.InstructionListItemHorizontalBinding
 import by.iba.sbs.library.model.Category
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.ui.MainActivity
+import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.guideline.GuidelineActivity
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.serialization.ImplicitReflectionSerializer
@@ -40,6 +41,7 @@ enum class GuidelineCategory {
     POPULAR,
     DEFAULT
 }
+
 class DashboardFragment :
     BaseEventsFragment<DashboardFragmentBinding, DashboardViewModel, DashboardViewModel.EventsListener>(),
     DashboardViewModel.EventsListener {
@@ -47,18 +49,18 @@ class DashboardFragment :
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: DashboardViewModel by sharedViewModel()
     var lastSearchText: String = ""
-
+    private val mainViewModel: MainViewModel by sharedViewModel()
     @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         val categoriesAdapter =
-            BaseBindingAdapter<Category, CategoriesListItemBinding, DashboardViewModel>(
+            BaseBindingAdapter<Category, CategoriesListItemBinding, MainViewModel>(
                 R.layout.categories_list_item,
                 BR.category,
                 BR.viewmodel,
-                viewModel,
+                mainViewModel,
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })
@@ -71,11 +73,11 @@ class DashboardFragment :
             categoriesAdapter.addItems(it)
         })
         val recommendedAdapter =
-            BaseBindingAdapter<Guideline, InstructionListItemHorizontalBinding, DashboardViewModel>(
+            BaseBindingAdapter<Guideline, InstructionListItemHorizontalBinding, MainViewModel>(
                 R.layout.favorites_instruction_list_item,
                 BR.instruction,
                 BR.viewmodel,
-                viewModel,
+                mainViewModel,
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })
@@ -89,11 +91,11 @@ class DashboardFragment :
         })
 
         val favoritesAdapter =
-            BaseBindingAdapter<Guideline, InstructionListItemBinding, DashboardViewModel>(
+            BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>(
                 R.layout.favorites_instruction_list_item,
                 BR.instruction,
                 BR.viewmodel,
-                viewModel,
+                mainViewModel,
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })
@@ -108,11 +110,11 @@ class DashboardFragment :
         viewModel.loadFavorites(true, 3)
 
         val popularAdapter =
-            BaseBindingAdapter<Guideline, InstructionListItemBinding, DashboardViewModel>(
+            BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>(
                 R.layout.favorites_instruction_list_item,
                 BR.instruction,
                 BR.viewmodel,
-                viewModel,
+                mainViewModel,
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })

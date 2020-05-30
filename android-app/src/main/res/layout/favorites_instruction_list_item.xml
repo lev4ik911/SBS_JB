@@ -8,7 +8,7 @@
         <import type="android.view.View" />
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.dashboard.DashboardViewModel" />
+            type="by.iba.sbs.ui.MainViewModel" />
 
         <variable
             name="instruction"
