@@ -6,6 +6,7 @@
     <dimen name="profile_image_size">200dp</dimen>
     <dimen name="image_padding">128dp</dimen>
     <dimen name="list_image_size">64dp</dimen>
+    <dimen name="list_image_size_land">168dp</dimen>
     <dimen name="bottom_navigation_height">48dp</dimen>
     <dimen name="spacing_xxxxlarge">64dp</dimen>
     <dimen name="spacing_xxxlarge">48dp</dimen>

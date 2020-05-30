@@ -74,7 +74,7 @@ class DashboardFragment :
         })
         val recommendedAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemHorizontalBinding, MainViewModel>(
-                R.layout.favorites_instruction_list_item,
+                R.layout.instruction_list_item_horizontal,
                 BR.instruction,
                 BR.viewmodel,
                 mainViewModel,
@@ -89,7 +89,7 @@ class DashboardFragment :
         viewModel.recommended.observe(viewLifecycleOwner, Observer {
             recommendedAdapter.addItems(it)
         })
-
+        viewModel.loadRecommended(true, 3)
         val favoritesAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>(
                 R.layout.favorites_instruction_list_item,
