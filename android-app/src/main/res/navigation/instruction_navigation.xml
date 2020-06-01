@@ -26,7 +26,6 @@
         android:label="StepEditFragment">
         <argument
             android:name="stepId"
-            android:defaultValue="-1"
-            app:argType="integer"/>
+            app:argType="string"/>
     </fragment>
 </navigation>

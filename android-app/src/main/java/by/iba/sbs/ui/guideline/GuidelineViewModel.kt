@@ -225,8 +225,21 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         eventsDispatcher.dispatchEvent { onAfterSaveAction() }
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun onSaveStepAction(step: Step) {
+        if (step.stepId.isEmpty())
+            insertStep(guideline.value!!.id, step)
+        else
+            updateStep(guideline.value!!.id, step)
+    }
+
     fun onRemoveInstructionClick() {
         eventsDispatcher.dispatchEvent { onRemoveInstruction() }
+    }
+
+    fun onRemoveStepClick(step: Step) {
+        eventsDispatcher.dispatchEvent { onRemoveStep(step) }
     }
 
     fun onBackBtnClick() {
@@ -241,6 +254,8 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         fun onAfterSaveAction()
         fun onAfterDeleteAction()
         fun onRemoveInstruction()
+        fun onAfterSaveStepAction()
+        fun onRemoveStep(step: Step)
     }
 
     @UnstableDefault
@@ -294,7 +309,6 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         isLoading.value = true
         viewModelScope.launch {
             try {
-                println("MyApp guideline_id " + guideline.id)
                 val result = repository.deleteGuideline(guideline.id)
                 if (result.isSuccess) {
                     notificationsQueue.value =
@@ -304,6 +318,80 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                     ToastMessage(result.error!!.toString(), MessageType.ERROR)
                 isLoading.postValue(result.status == Response.Status.LOADING)
                 eventsDispatcher.dispatchEvent { onAfterDeleteAction() }
+            } catch (e: Exception) {
+                notificationsQueue.value =
+                    ToastMessage(e.toString(), MessageType.ERROR)
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun insertStep(guidelineId: String, newStep: Step) {
+        isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val result = repository.insertStep(guidelineId, newStep)
+                if (result.isSuccess && result.isNotEmpty) {
+                    notificationsQueue.value =
+                        ToastMessage("Successful insert", MessageType.SUCCESS)
+                    //TODO(Add to total res)
+                    val resultStep = result.data!!
+                    val stepArr = steps.value?.toMutableList()
+                    stepArr?.add(Step(stepId = resultStep.id, name = resultStep.name, description = resultStep.description, weight = resultStep.weight))
+                    steps.value = stepArr
+                    eventsDispatcher.dispatchEvent { onAfterSaveStepAction() }
+                } else if (result.error != null) notificationsQueue.value =
+                    ToastMessage(result.error!!.toString(), MessageType.ERROR)
+                isLoading.postValue(result.status == Response.Status.LOADING)
+            } catch (e: Exception) {
+                notificationsQueue.value =
+                    ToastMessage(e.toString(), MessageType.ERROR)
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun updateStep(guidelineId: String, step: Step) {
+        isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val result = repository.updateStep(guidelineId, step)
+                if (result.isSuccess && result.isNotEmpty) {
+                    notificationsQueue.value =
+                        ToastMessage("Successful update", MessageType.SUCCESS)
+                    //TODO(Add to total res)
+                    eventsDispatcher.dispatchEvent { onAfterSaveStepAction() }
+                } else if (result.error != null) notificationsQueue.value =
+                    ToastMessage(result.error!!.toString(), MessageType.ERROR)
+                isLoading.postValue(result.status == Response.Status.LOADING)
+            } catch (e: Exception) {
+                notificationsQueue.value =
+                    ToastMessage(e.toString(), MessageType.ERROR)
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun deleteStep(guidelineId: String, step: Step) {
+        isLoading.value = true
+        viewModelScope.launch {
+            try {
+                val result = repository.deleteStep(guidelineId, step.stepId)
+                if (result.isSuccess) {
+                    notificationsQueue.value =
+                        ToastMessage("Successful delete", MessageType.SUCCESS)
+                    //TODO(Add to total res)
+                    val stepArr = steps.value?.toMutableList()
+                    stepArr?.remove(step)
+                    steps.value = stepArr
+
+                } else if (result.error != null) notificationsQueue.value =
+                    ToastMessage(result.error!!.toString(), MessageType.ERROR)
+                isLoading.postValue(result.status == Response.Status.LOADING)
+                eventsDispatcher.dispatchEvent { onAfterSaveStepAction() }
             } catch (e: Exception) {
                 notificationsQueue.value =
                     ToastMessage(e.toString(), MessageType.ERROR)

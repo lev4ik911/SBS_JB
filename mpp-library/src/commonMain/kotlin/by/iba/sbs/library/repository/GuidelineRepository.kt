@@ -9,7 +9,10 @@ import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.model.request.GuidelineCreate
 import by.iba.sbs.library.model.request.GuidelineEdit
+import by.iba.sbs.library.model.request.StepCreate
+import by.iba.sbs.library.model.request.StepEdit
 import by.iba.sbs.library.model.response.GuidelineView
+import by.iba.sbs.library.model.response.StepView
 import by.iba.sbs.library.service.LocalSettings
 import dev.icerock.moko.mvvm.livedata.LiveData
 import kotlinx.coroutines.*
@@ -30,6 +33,9 @@ interface IGuidelineRepository{
     suspend fun insertGuideline(data: Guideline):Response<GuidelineView>
     suspend fun updateGuideline(data: Guideline):Response<GuidelineView>
     suspend fun deleteGuideline(guidelineId: String): Response<String?>
+    suspend fun insertStep(guidelineId: String, data: Step): Response<StepView>
+    suspend fun updateStep(guidelineId: String, data: Step): Response<StepView>
+    suspend fun deleteStep(guidelineId: String, stepId: String): Response<String?>
 }
 
 @ImplicitReflectionSerializer
@@ -217,6 +223,54 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
         if (result.isSuccess) {
             guidelinesQueries.deleteAllStepsByGuidelineId(guidelineId)
             guidelinesQueries.deleteGuidelineById(guidelineId)
+        } else {
+            if (result.status == Response.Status.ERROR) error(result.error!!)
+        }
+        return@coroutineScope result
+    }
+
+    @UnstableDefault
+    override suspend fun insertStep(guidelineId: String, data: Step): Response<StepView> = coroutineScope {
+        val result = steps.postStep(guidelineId, StepCreate(data.name, data.description, data.weight))
+        if (result.isSuccess) {
+            val item = result.data!!
+            guidelinesQueries.insertStep(
+                item.id,
+                guidelineId,
+                item.name,
+                item.description,
+                item.weight.toLong()
+            )
+        } else {
+            if (result.status == Response.Status.ERROR) error(result.error!!)
+        }
+        return@coroutineScope result
+    }
+
+
+    @UnstableDefault
+    override suspend fun updateStep(guidelineId: String, data: Step): Response<StepView> = coroutineScope {
+        val result = steps.putStep(guidelineId, data.stepId, StepEdit(name = data.name, description = data.description, weight = data.weight))
+        if (result.isSuccess) {
+            val item = result.data!!
+            guidelinesQueries.insertStep(
+                item.id,
+                guidelineId,
+                item.name,
+                item.description,
+                item.weight.toLong()
+            )
+        } else {
+            if (result.status == Response.Status.ERROR) error(result.error!!)
+        }
+        return@coroutineScope result
+    }
+
+    @UnstableDefault
+    override suspend fun deleteStep(guidelineId: String, stepId: String): Response<String?> = coroutineScope {
+        val result = steps.deleteStep(guidelineId, stepId)
+        if (result.isSuccess) {
+            guidelinesQueries.deleteStepById(stepId)
         } else {
             if (result.status == Response.Status.ERROR) error(result.error!!)
         }
