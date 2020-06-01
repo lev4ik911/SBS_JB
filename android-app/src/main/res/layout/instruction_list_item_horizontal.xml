@@ -42,8 +42,8 @@
 
                 <ImageView
                     android:id="@+id/iv_preview"
-                    android:layout_width="@dimen/list_image_size_land"
-                    android:layout_height="@dimen/list_image_size"
+                    android:layout_width="@dimen/list_image_width_land"
+                    android:layout_height="@dimen/list_image_height_land"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_paneer" />
 
@@ -59,7 +59,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginHorizontal="@dimen/spacing_xsmall"
+                android:layout_marginVertical="@dimen/spacing_xsmall"
                 android:layout_weight="1"
                 android:orientation="vertical">
 

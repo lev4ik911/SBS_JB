@@ -26,7 +26,7 @@ val viewModelModule = module {
     viewModel { LoginViewModel(androidContext(), get()) }
     viewModel { RegisterViewModel() }
     viewModel { ResetViewModel() }
-    viewModel { ProfileViewModel() }
+    viewModel { ProfileViewModel(androidContext()) }
     viewModel { GuidelineViewModel(androidContext()) }
     viewModel { GuidelineListViewModel(androidContext()) }
     viewModel { WalkthroughViewModel() }

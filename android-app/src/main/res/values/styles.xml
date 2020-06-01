@@ -154,6 +154,11 @@
         <item name="backgroundTint">?attr/colorButtonAction</item>
     </style>
 
+    <style name="TabLayout">
+        <item name="tabSelectedTextColor">@color/colorAccent</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabGravity">fill</item>
+    </style>
 
     <style name="Theme.ui.MainActivity" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowActivityTransitions">true</item>

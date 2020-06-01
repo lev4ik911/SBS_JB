@@ -90,5 +90,7 @@
     <string name="delete_instruction_dialog_message">Are you sure you want to delete the instruction %s?</string>
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
+    <string name="title_home_settings">Home screen settings</string>
+    <string name="lbl_show_recommended">Show recommended guidelines</string>
 
 </resources>
