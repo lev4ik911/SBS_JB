@@ -34,6 +34,7 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
     override val viewModel: DashboardViewModel by sharedViewModel()
     private val mainViewModel: MainViewModel by sharedViewModel()
     var lastSearchText: String = ""
+    var activeCategory: Int = 0
     lateinit var favoritesAdapter: BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,6 +82,14 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                 return true
             }
         })
+//        mSearchView.setOnCloseListener {
+//            when (activeCategory) {
+//                GuidelineCategory.RECOMMENDED.ordinal ->  toolbar_main.title = resources.getString(R.string.title_recommended)
+//                GuidelineCategory.FAVORITE.ordinal ->toolbar_main.title = resources.getString(R.string.title_favorites)
+//                GuidelineCategory.POPULAR.ordinal -> toolbar_main.title = resources.getString(R.string.title_popular)
+//            }
+//            return@setOnCloseListener true
+//        }
     }
 
     @UnstableDefault
@@ -88,7 +97,8 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
     override fun onStart() {
         super.onStart()
         (activity as MainActivity).apply {
-            when (arguments?.getInt("Category")) {
+            activeCategory = arguments?.getInt("Category") ?: 0
+            when (activeCategory) {
                 GuidelineCategory.RECOMMENDED.ordinal -> {
                     toolbar_main.title = resources.getString(R.string.title_recommended)
                     binding.rvFavorites.apply {

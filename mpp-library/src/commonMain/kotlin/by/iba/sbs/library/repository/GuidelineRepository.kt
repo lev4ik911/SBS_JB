@@ -12,6 +12,7 @@ import by.iba.sbs.library.model.request.GuidelineEdit
 import by.iba.sbs.library.model.request.StepCreate
 import by.iba.sbs.library.model.request.StepEdit
 import by.iba.sbs.library.model.response.GuidelineView
+import by.iba.sbs.library.model.response.RatingSummary
 import by.iba.sbs.library.model.response.StepView
 import by.iba.sbs.library.service.LocalSettings
 import dev.icerock.moko.mvvm.livedata.LiveData
@@ -120,7 +121,12 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
                         Guideline(
                             item.id,
                             item.name,
-                            item.description!!
+                            item.description!!,
+                            rating = RatingSummary(
+                                item.rating.positive,
+                                item.rating.negative,
+                                item.rating.overall
+                            )
                         )
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)

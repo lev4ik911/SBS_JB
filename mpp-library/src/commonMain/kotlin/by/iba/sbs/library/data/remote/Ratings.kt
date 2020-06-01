@@ -1,6 +1,6 @@
 package by.iba.sbs.library.data.remote
 
-import by.iba.sbs.library.model.response.StepView
+import by.iba.sbs.library.model.response.RatingSummary
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.service.Utils
 import kotlinx.serialization.ImplicitReflectionSerializer
@@ -11,10 +11,10 @@ import kotlinx.serialization.serializer
 @UnstableDefault
 @ImplicitReflectionSerializer
 class Ratings(override val settings: LocalSettings) : Client(settings) {
-    suspend fun getAllRatings(guidelineId: String): Response<List<StepView>> {
+    suspend fun getRatingSummary(guidelineId: String): Response<List<RatingSummary>> {
         return get(
-            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEPS, guidelineId),
-            deserializer = StepView::class.serializer().list,
+            Utils.formatString(Routes.Ratings.URL_GUIDELINE_RATINGS, guidelineId),
+            deserializer = RatingSummary::class.serializer().list,
             needAuth = false
         )
     }

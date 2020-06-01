@@ -14,6 +14,7 @@ import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.Feedback
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.Step
+import by.iba.sbs.library.model.response.RatingSummary
 import by.iba.sbs.library.repository.GuidelineRepository
 import by.iba.sbs.library.service.LocalSettings
 import com.russhwolf.settings.AndroidSettings
@@ -36,10 +37,14 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @OptIn(UnstableDefault::class)
     @ImplicitReflectionSerializer
     private val repository by lazy { GuidelineRepository(localStorage) }
-    val guideline = MutableLiveData(Guideline())
+    val ratingSummary = MutableLiveData(RatingSummary())
     val steps = MutableLiveData<List<Step>>()
+    val guideline = MutableLiveData(Guideline()).apply {
+        observeForever {
+            ratingSummary.value = it.rating
+        }
+    }
     var oldSteps = listOf<Step>()
-
     val ratingUp = MutableLiveData(0)
     val ratingDown = MutableLiveData(0)
 
@@ -195,11 +200,11 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     }
 
     fun onRatingUpButtonClick() {
-        ratingUp.value = ratingUp.value?.plus(1)
+        ratingSummary.value?.positive?.plus(1)
     }
 
     fun onRatingDownButtonClick() {
-        ratingDown.value = ratingDown.value?.plus(1)
+        ratingSummary.value?.negative?.plus(1)
     }
 
     fun onOpenProfileClick() {

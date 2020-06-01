@@ -160,29 +160,29 @@
 
                     <TextView
                         android:id="@+id/tv_rating_down"
-                        visibleOrNot="@{viewmodel.ratingDown>0}"
+                        visibleOrNot="@{viewmodel.ratingSummary.negative>0}"
                         android:layout_width="wrap_content"
                         android:paddingHorizontal="@dimen/spacing_small"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:text="@{viewmodel.ratingDown.toString()}"
+                        android:text="@{Integer.toString(viewmodel.ratingSummary.negative)}"
                         android:textColor="@color/colorLightRed"/>
 
                     <TextView
                         android:id="@+id/tv_rating_zero"
-                        visibleOrNot="@{(viewmodel.ratingDown+viewmodel.ratingUp)==0}"
+                        visibleOrNot="@{(viewmodel.ratingSummary.negative+viewmodel.ratingSummary.positive)==0}"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="0"/>
                     <TextView
                         android:id="@+id/tv_rating_up"
-                        visibleOrNot="@{viewmodel.ratingUp>0}"
+                        visibleOrNot="@{viewmodel.ratingSummary.positive>0}"
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:paddingHorizontal="@dimen/spacing_small"
-                        android:text="@{viewmodel.ratingUp.toString()}"
+                        android:text="@{Integer.toString(viewmodel.ratingSummary.positive)}"
                         android:textColor="@color/colorLightGreen"/>
                     <ImageButton
                         android:id="@+id/btn_rating_up"
