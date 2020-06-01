@@ -7,6 +7,9 @@
         <variable
             name="viewmodel"
             type="by.iba.sbs.ui.guideline.GuidelineViewModel"/>
+        <variable
+            name="step"
+            type="by.iba.sbs.library.model.Step"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -88,7 +91,7 @@
                             android:layout_height="@dimen/spacing_xlarge"
                             android:layout_gravity="end|center"
                             android:background="@null"
-                            android:onClick="@{() -> viewmodel.onSaveAction()}"
+                            android:onClick="@{() -> viewmodel.onSaveStepAction(step)}"
                             android:src="@drawable/check_bold"
                             android:tint="@color/colorAccent"
                             android:visibility="invisible"
@@ -100,7 +103,7 @@
                             android:layout_height="@dimen/spacing_xlarge"
                             android:layout_marginHorizontal="@dimen/spacing_normal"
                             android:background="@null"
-                            android:onClick="@{() -> viewmodel.onRemoveInstructionClick()}"
+                            android:onClick="@{() -> viewmodel.onRemoveStepClick(step)}"
                             android:src="@drawable/trash_can_outline"
                             android:tint="@color/colorAccent"
                             app:layout_anchor="@id/toolbar_description"
@@ -121,16 +124,23 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_xsmall"
                 android:orientation="vertical"
                 android:paddingBottom="@dimen/bottom_navigation_height">
+                <androidx.core.widget.ContentLoadingProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    visibleOrGone="@{viewmodel.isLoading}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/progress_bar_layout_margin"
+                    android:indeterminate="true" />
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/cg_categories"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/spacing_normal"
-                    android:layout_marginTop="@dimen/spacing_xsmall"/>
+                    android:layout_marginTop="@dimen/spacing_small"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/ti_name"
@@ -148,7 +158,7 @@
                         android:layout_marginStart="@dimen/spacing_normal"
 
                         android:hint="@string/hint_step_name"
-                        android:text="@={viewmodel.guideline.name}"
+                        android:text="@={step.name}"
                         android:textAppearance="@style/Text"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -172,7 +182,7 @@
                         android:hint="@string/hint_step_description"
                         android:lines="10"
                         android:singleLine="false"
-                        android:text="@={viewmodel.guideline.description}"
+                        android:text="@={step.description}"
                         android:textAppearance="@style/Text.Description"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </RelativeLayout>
@@ -184,7 +194,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_large"
             android:backgroundTint="@android:color/white"
-            android:onClick="@{() -> viewmodel.onSaveAction()}"
+            android:onClick="@{() -> viewmodel.onSaveStepAction(step)}"
             android:src="@drawable/check_bold"
             android:tint="@color/colorAccent"
             app:borderWidth="0dp"
@@ -202,7 +212,7 @@
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
-            android:onClick="@{() -> viewmodel.onSaveAction()}">
+            android:onClick="@{() -> viewmodel.onSaveStepAction(step)}">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"

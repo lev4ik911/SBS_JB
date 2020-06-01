@@ -17,11 +17,13 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import by.iba.mvvmbase.BaseEventsActivity
 import by.iba.sbs.BuildConfig
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionActivityBinding
+import by.iba.sbs.library.model.Step
 import by.iba.sbs.ui.profile.ProfileActivity
 import com.yalantis.ucrop.UCrop
 import kotlinx.serialization.ImplicitReflectionSerializer
@@ -368,10 +370,7 @@ class GuidelineActivity :
     }
 
     override fun onEditStep(stepId: String) {
-        val bundle = Bundle().apply {
-            putString("stepId", stepId)
-        }
-
+        val bundle = bundleOf("stepId" to stepId)
         findNavController(R.id.fragment_navigation_instruction)
             .navigate(R.id.navigation_step_edit, bundle)
     }
@@ -416,17 +415,39 @@ class GuidelineActivity :
     @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onRemoveInstruction() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(resources.getString(R.string.delete_instruction_dialog_title))
-        builder.setMessage(resources.getString(R.string.delete_instruction_dialog_message, viewModel.guideline.value!!.name))
-        builder.setPositiveButton(resources.getString(R.string.yes), { dialogInterface: DialogInterface, i: Int ->
-            viewModel.deleteInstruction(viewModel.guideline.value!!)
-        })
-        builder.setNegativeButton(resources.getString(R.string.cancel), null);
+        val builder = AlertDialog.Builder(this).apply{
+            setTitle(resources.getString(R.string.title_delete_instruction_dialog))
+            setMessage(resources.getString(R.string.msg_delete_instruction_dialog, viewModel.guideline.value!!.name))
+            setPositiveButton(resources.getString(R.string.btn_delete), { dialogInterface: DialogInterface, i: Int ->
+                viewModel.deleteInstruction(viewModel.guideline.value!!)
+            })
+            setNegativeButton(resources.getString(R.string.btn_cancel), null)
+        }
         val dialog = builder.create()
         dialog.show()
     }
     override fun onAfterDeleteAction() {
         this.finish()
+    }
+
+    override fun onAfterSaveStepAction() {
+        findNavController(R.id.fragment_navigation_instruction).navigate(
+            R.id.navigation_instruction_edit
+        )
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun onRemoveStep(step: Step) {
+        val builder = AlertDialog.Builder(this).apply{
+            setTitle(resources.getString(R.string.title_delete_step_dialog))
+            setMessage(resources.getString(R.string.msg_delete_step_dialog, step.name))
+            setPositiveButton(resources.getString(R.string.btn_delete), { dialogInterface: DialogInterface, i: Int ->
+                viewModel.deleteStep(viewModel.guideline.value!!.id, step)
+            })
+            setNegativeButton(resources.getString(R.string.btn_cancel), null)
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 }
