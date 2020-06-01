@@ -1,18 +1,12 @@
 package by.iba.sbs.ui.dashboard
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.widget.SearchView
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
-import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +20,6 @@ import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.ui.MainActivity
 import by.iba.sbs.ui.MainViewModel
-import by.iba.sbs.ui.guideline.GuidelineActivity
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -43,34 +36,6 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
     var lastSearchText: String = ""
     lateinit var favoritesAdapter: BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>
 
-    inner class FavoritesHandler() {
-        fun onOpenGuidelineAction(view: View, guideline: Guideline) {
-            val transitionSharedNameImgView =
-                requireContext().getString(R.string.transition_name_img_view)
-            val transitionSharedNameTxtView =
-                requireContext().getString(R.string.transition_name_txt_view)
-            var imageViewPair: Pair<View, String>
-            val textViewPair: Pair<View, String>
-            view.findViewById<ImageView>(R.id.iv_preview).apply {
-                this?.transitionName = transitionSharedNameImgView
-                imageViewPair = Pair.create(this, transitionSharedNameImgView)
-            }
-            view.findViewById<TextView>(R.id.tv_title).apply {
-                this?.transitionName = transitionSharedNameTxtView
-                textViewPair = Pair.create(this, transitionSharedNameTxtView)
-            }
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                activity as Activity,
-                imageViewPair,
-                textViewPair
-            )
-            val intent = Intent(activity, GuidelineActivity::class.java)
-            intent.putExtra("instructionId", guideline.id)
-            startActivity(intent, options.toBundle())
-
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
@@ -83,10 +48,12 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })
-        favoritesAdapter.filterCriteria = { item, text ->
-            item.name.contains(text, true)
-                    || item.description.contains(text, true)
-
+        favoritesAdapter.apply {
+            filterCriteria = { item, text ->
+                item.name.contains(text, true)
+                        || item.description.contains(text, true)
+            }
+            emptyViewId = R.layout.new_item
         }
         (activity as MainActivity).apply {
             toolbar_main.navigationIcon =
@@ -115,12 +82,11 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
             }
         })
     }
+
     @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onStart() {
         super.onStart()
-
-
         (activity as MainActivity).apply {
             when (arguments?.getInt("Category")) {
                 GuidelineCategory.RECOMMENDED.ordinal -> {
@@ -135,6 +101,7 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                     }
                     viewModel.recommended.observe(viewLifecycleOwner, Observer {
                         favoritesAdapter.addItems(it)
+                        binding.lSwipeRefresh.isRefreshing = false
                     })
                     viewModel.loadRecommended(false)
                 }
@@ -150,6 +117,7 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                     }
                     viewModel.favorite.observe(viewLifecycleOwner, Observer {
                         favoritesAdapter.addItems(it)
+                        binding.lSwipeRefresh.isRefreshing = false
                     })
                     viewModel.loadFavorites(false)
                 }
@@ -165,6 +133,7 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                     }
                     viewModel.popular.observe(viewLifecycleOwner, Observer {
                         favoritesAdapter.addItems(it)
+                        binding.lSwipeRefresh.isRefreshing = false
                     })
                     viewModel.loadPopular(false)
                 }

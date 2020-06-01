@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
-import androidx.fragment.app.Fragment
 import by.iba.mvvmbase.BaseFragment
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
@@ -19,9 +18,6 @@ import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.ui.guideline.GuidelineActivity
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-/**
- * A simple [Fragment] subclass.
- */
 class ProfileInstructionsFragment :
     BaseFragment<ProfileInstructionsFragmentBinding, ProfileViewModel>() {
     override val layoutId: Int = R.layout.profile_instructions_fragment

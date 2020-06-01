@@ -111,7 +111,9 @@ class DashboardFragment :
                 mainViewModel,
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
-                })
+                }).also {
+                it.emptyViewId = R.layout.new_item
+            }
 
         binding.rvPopular.apply {
             adapter = popularAdapter
@@ -119,8 +121,14 @@ class DashboardFragment :
         }
         viewModel.popular.observe(viewLifecycleOwner, Observer {
             popularAdapter.addItems(it)
+            binding.lSwipeRefresh.isRefreshing = false
         })
         viewModel.loadPopular(true, 3)
+        binding.lSwipeRefresh.setOnRefreshListener {
+            viewModel.loadRecommended(true, 4)
+            viewModel.loadFavorites(true, 3)
+            viewModel.loadPopular(true, 3)
+        }
     }
 
     override fun onStart() {

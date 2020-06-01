@@ -56,37 +56,6 @@ class GuidelineListFragment :
             instructionsAdapter.addItems(it)
             binding.rvInstructions.scheduleLayoutAnimation()
         })
-//        instructionsAdapter.onItemClick = { pos, itemView, item ->
-//            val transitionSharedNameImgView = this.getString(R.string.transition_name_img_view)
-//            val transitionSharedNameTxtView = this.getString(R.string.transition_name_txt_view)
-//            var imageViewPair: Pair<View, String>
-//            val textViewPair: Pair<View, String>
-//            itemView?.findViewById<ImageView>(R.id.iv_preview).apply {
-//                this?.transitionName = transitionSharedNameImgView
-//                imageViewPair = Pair.create(this, transitionSharedNameImgView)
-//            }
-//            itemView?.findViewById<TextView>(R.id.tv_title).apply {
-//                this?.transitionName = transitionSharedNameTxtView
-//                textViewPair = Pair.create(this, transitionSharedNameTxtView)
-//            }
-//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                activity as Activity,
-//                imageViewPair,
-//                textViewPair
-//            )
-//            val intent = Intent(activity, GuidelineActivity::class.java)
-//            intent.putExtra("instructionId", item.id)
-//            startActivity(intent, options.toBundle())
-//        }
-//        instructionsAdapter.onEmptyViewItemClick = {
-//            val intent = Intent(activity, GuidelineActivity::class.java)
-//            intent.putExtra("instructionId", 0)
-//            // findNavController().navigate(R.id.navigation_instruction_edit, bundle)
-//            startActivity(intent)
-//        }
-//        instructionsAdapter.isUpdating.observe(viewLifecycleOwner, Observer {
-//            binding.lSwipeRefresh.isRefreshing = it!!
-//        })
     }
     override fun onStart() {
         super.onStart()
