@@ -20,8 +20,11 @@ class ProfileViewModel(context: Context) : BaseViewModel(),
         val settings = AndroidSettings(sharedPrefs)
         LocalSettings(settings)
     }
-    val showRecommended = MutableLiveData(true).also {
-        it.value = localStorage.showRecommended
+    val showRecommended = MutableLiveData(true).apply {
+        value = localStorage.showRecommended
+        observeForever {
+            localStorage.showRecommended = it
+        }
     }
 
     val email = MutableLiveData("email@email.com")

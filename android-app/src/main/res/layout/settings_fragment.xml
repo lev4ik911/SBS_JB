@@ -1,6 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -24,8 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/spacing_small"
-                android:text="@string/title_home_settings"
-                android:textAlignment="center" />
+                android:text="@string/title_home_settings" />
         </LinearLayout>
 
         <LinearLayout
@@ -36,8 +34,8 @@
             android:padding="@dimen/spacing_small">
 
             <androidx.appcompat.widget.AppCompatTextView
-                style="@style/Text"
-                android:layout_width="match_parent"
+                style="@style/Text.Title"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/lbl_show_recommended" />
@@ -46,8 +44,7 @@
                 android:id="@+id/chb_show_recommended"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@={viewmodel.showRecommended}"
-                app:layout_constraintRight_toRightOf="parent" />
+                android:checked="@={viewmodel.showRecommended}" />
         </LinearLayout>
     </LinearLayout>
 </layout>

@@ -15,7 +15,7 @@ import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
 import by.iba.sbs.ui.MainActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.abs
 
 class ProfileFragment :
@@ -24,7 +24,7 @@ class ProfileFragment :
 
     override val layoutId: Int = R.layout.profile_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: ProfileViewModel by viewModel()
+    override val viewModel: ProfileViewModel by sharedViewModel()
     private lateinit var viewPager: ViewPager2
     private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
     private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f

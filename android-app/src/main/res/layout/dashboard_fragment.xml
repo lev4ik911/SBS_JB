@@ -44,10 +44,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/selector_list_item"
+                    visibleOrGone="@{viewmodel.showRecommended }"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    visibleOrGone="@{viewmodel.recommended.size() >0}"
+
                     android:onClick="@{() -> viewmodel.onViewRecommendedClick()}"
                     android:padding="@dimen/spacing_xsmall"
                     android:orientation="horizontal">
@@ -77,6 +78,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvRecommended"
+                    visibleOrGone="@{viewmodel.showRecommended }"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_xsmall"

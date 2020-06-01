@@ -31,6 +31,16 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
         val settings = AndroidSettings(sharedPrefs)
         LocalSettings(settings)
     }
+    val showRecommended = MutableLiveData(true).apply {
+        value = localStorage.showRecommended
+        observeForever {
+            localStorage.showRecommended = it
+        }
+    }
+
+    fun update() {
+        showRecommended.value = localStorage.showRecommended
+    }
 
     @UnstableDefault
     @ImplicitReflectionSerializer

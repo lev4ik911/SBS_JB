@@ -126,7 +126,7 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:layout_marginEnd="@dimen/spacing_xxxxlarge"
                     android:text="@{viewmodel.guideline.name}"
-                    style="@style/Text"
+                    style="@style/Text.Title"
                     android:transitionName="@string/transition_name_txt_view"/>
 
                 <TextView

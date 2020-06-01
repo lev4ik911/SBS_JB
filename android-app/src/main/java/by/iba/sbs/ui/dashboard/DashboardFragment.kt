@@ -55,6 +55,7 @@ class DashboardFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
+
         val categoriesAdapter =
             BaseBindingAdapter<Category, CategoriesListItemBinding, MainViewModel>(
                 R.layout.categories_list_item,
@@ -192,5 +193,10 @@ class DashboardFragment :
         intent.putExtra("instructionId", guideline.id)
         startActivity(intent, options.toBundle())
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.update()
     }
 }

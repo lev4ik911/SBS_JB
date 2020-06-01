@@ -1,23 +1,17 @@
 package by.iba.sbs.ui.profile
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import by.iba.mvvmbase.BaseFragment
+import by.iba.sbs.BR
 import by.iba.sbs.R
+import by.iba.sbs.databinding.SettingsFragmentBinding
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 /**
  * A simple [Fragment] subclass.
  */
-class SettingsFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.settings_fragment, container, false)
-    }
-
+class SettingsFragment : BaseFragment<SettingsFragmentBinding, ProfileViewModel>() {
+    override val layoutId: Int = R.layout.settings_fragment
+    override val viewModelVariableId: Int = BR.viewmodel
+    override val viewModel: ProfileViewModel by sharedViewModel()
 }
