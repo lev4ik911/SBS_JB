@@ -46,7 +46,7 @@ class MainActivity :
         navView.add(
             BottomNavigation.Model(
                 ActiveTabEnum.ID_INSTRUCTIONS.index,
-                R.drawable.clipboard_list_outline
+                R.drawable.heart_outline
             )
         )
         navView.add(

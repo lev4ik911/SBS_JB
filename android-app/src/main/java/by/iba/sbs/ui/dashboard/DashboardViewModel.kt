@@ -2,7 +2,6 @@ package by.iba.sbs.ui.dashboard
 
 import android.content.Context
 import android.preference.PreferenceManager
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import by.iba.mvvmbase.BaseViewModel
@@ -203,13 +202,9 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
 
     }
 
-    fun onOpenGuidelineClick(view: View, guideline: Guideline) {
-        eventsDispatcher.dispatchEvent { onOpenGuidelineAction(view, guideline) }
-    }
     interface EventsListener {
         fun onViewFavoritesAction()
         fun onViewRecommendedAction()
         fun onViewPopularAction()
-        fun onOpenGuidelineAction(view: View, guideline: Guideline)
     }
 }

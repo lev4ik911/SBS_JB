@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="android.view.View" />
-        <variable
-            name="viewmodel"
-            type="by.iba.sbs.ui.MainViewModel" />
-
         <variable
             name="instruction"
-            type="by.iba.sbs.library.model.Guideline" />
+            type="by.iba.sbs.library.model.Guideline"/>
     </data>
 
     <androidx.cardview.widget.CardView
@@ -20,7 +15,6 @@
         style="@style/Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{(view)-> viewmodel.onOpenGuidelineClick(view, instruction)}"
         android:layout_marginHorizontal="@dimen/spacing_xsmall"
         android:layout_marginBottom="@dimen/spacing_xsmall"
         tools:ignore="ContentDescription">
@@ -43,7 +37,7 @@
                     android:layout_width="@dimen/list_image_size"
                     android:layout_height="@dimen/list_image_size"
                     android:scaleType="fitXY"
-                    android:src="@drawable/ic_paneer" />
+                    android:src="@drawable/ic_paneer"/>
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"
@@ -51,7 +45,7 @@
                     android:layout_gravity="bottom|end"
                     android:elevation="@dimen/spacing_xxsmall"
                     android:src="@{instruction.favorite ? @drawable/heart : @drawable/heart_outline}"
-                    android:tint="@color/colorLightRed" />
+                    android:tint="@color/colorLightRed"/>
             </androidx.cardview.widget.CardView>
 
             <LinearLayout
@@ -67,7 +61,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="0dp"
-                    tools:text="@{instruction.name}" />
+                    tools:text="@{instruction.name}"/>
 
                 <TextView
                     android:id="@+id/tv_info"
@@ -76,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_xxsmall"
                     android:singleLine="true"
-                    tools:text="@{instruction.description}" />
+                    tools:text="@{instruction.description}"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -92,7 +86,7 @@
                         android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/spacing_xxsmall"
                         android:gravity="center"
-                        tools:text="@{instruction.author}" />
+                        tools:text="@{instruction.author}"/>
 
                     <View
                         android:layout_width="1dp"
@@ -100,7 +94,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/spacing_xxsmall"
                         android:background="@android:color/white"
-                        android:gravity="center" />
+                        android:gravity="center"/>
 
                     <androidx.appcompat.widget.AppCompatRatingBar
                         style="?android:attr/ratingBarStyleSmall"
@@ -108,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_xxsmall"
                         android:gravity="center"
-                        android:rating="3" />
+                        android:rating="3"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

@@ -76,7 +76,7 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
         setHasOptionsMenu(true)
         favoritesAdapter =
             BaseBindingAdapter(
-                R.layout.favorites_instruction_list_item,
+                R.layout.instruction_list_item,
                 BR.instruction,
                 BR.viewmodel,
                 mainViewModel,
