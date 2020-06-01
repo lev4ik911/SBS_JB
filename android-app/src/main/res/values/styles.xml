@@ -41,8 +41,14 @@
         <item name="android:textColor">?android:attr/colorAccent</item>
         <item name="android:textStyle">normal</item>
     </style>
+
     <style name="Text" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+    </style>
+
+    <style name="Text.Title" parent="Text">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">@dimen/text_size_normal</item>
     </style>
 
@@ -148,6 +154,11 @@
         <item name="backgroundTint">?attr/colorButtonAction</item>
     </style>
 
+    <style name="TabLayout">
+        <item name="tabSelectedTextColor">@color/colorAccent</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabGravity">fill</item>
+    </style>
 
     <style name="Theme.ui.MainActivity" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowActivityTransitions">true</item>

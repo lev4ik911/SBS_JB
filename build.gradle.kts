@@ -20,7 +20,7 @@ allprojects {
     }
 
     // workaround for https://youtrack.jetbrains.com/issue/KT-27170
-//    configurations.create("compileClasspath")
+    // configurations.create("compileClasspath")
 }
 
 buildScan {
@@ -31,7 +31,7 @@ buildScan {
 dependencies {
     implementation(kotlin("stdlib-jdk7"))
     implementation(kotlin("stdlib-jdk8"))
-    implementation("com.squareup.sqldelight:gradle-plugin:1.3.0")
+    //   implementation("com.squareup.sqldelight:gradle-plugin:1.3.0")
 }
 
 val compileKotlin: KotlinCompile by tasks

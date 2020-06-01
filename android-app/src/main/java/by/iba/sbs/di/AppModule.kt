@@ -1,8 +1,8 @@
 package by.iba.sbs.di
 
-import by.iba.ecl.ui.MainViewModel
 import by.iba.sbs.library.service.SystemInformation
 import by.iba.sbs.tools.SystemInfo
+import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.dashboard.DashboardViewModel
 import by.iba.sbs.ui.guideline.GuidelineFragment
 import by.iba.sbs.ui.guideline.GuidelineViewModel
@@ -26,7 +26,7 @@ val viewModelModule = module {
     viewModel { LoginViewModel(androidContext(), get()) }
     viewModel { RegisterViewModel() }
     viewModel { ResetViewModel() }
-    viewModel { ProfileViewModel() }
+    viewModel { ProfileViewModel(androidContext()) }
     viewModel { GuidelineViewModel(androidContext()) }
     viewModel { GuidelineListViewModel(androidContext()) }
     viewModel { WalkthroughViewModel() }

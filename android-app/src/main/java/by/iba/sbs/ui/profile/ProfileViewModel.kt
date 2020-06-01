@@ -1,5 +1,7 @@
 package by.iba.sbs.ui.profile
 
+import android.content.Context
+import android.preference.PreferenceManager
 import androidx.lifecycle.MutableLiveData
 import by.iba.mvvmbase.BaseViewModel
 import by.iba.mvvmbase.dispatcher.EventsDispatcher
@@ -7,9 +9,24 @@ import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
 import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
 import by.iba.sbs.library.model.Author
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.service.LocalSettings
+import com.russhwolf.settings.AndroidSettings
 
-class ProfileViewModel : BaseViewModel(), EventsDispatcherOwner<ProfileViewModel.EventsListener> {
+class ProfileViewModel(context: Context) : BaseViewModel(),
+    EventsDispatcherOwner<ProfileViewModel.EventsListener> {
     override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
+    private val localStorage: LocalSettings by lazy {
+        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val settings = AndroidSettings(sharedPrefs)
+        LocalSettings(settings)
+    }
+    val showRecommended = MutableLiveData(true).apply {
+        value = localStorage.showRecommended
+        observeForever {
+            localStorage.showRecommended = it
+        }
+    }
+
     val email = MutableLiveData("email@email.com")
     val fullName = MutableLiveData("John Doe")
     val rating = MutableLiveData("547")

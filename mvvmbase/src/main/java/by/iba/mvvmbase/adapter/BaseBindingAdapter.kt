@@ -1,5 +1,6 @@
 package by.iba.mvvmbase.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -37,7 +38,7 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
     var onItemMoved: ((from: Int, to: Int) -> Unit)? = null
     var filterCriteria: ((item: T, textToSearch: String) -> Boolean)? = null
     private var mRecyclerView: RecyclerView? = null
-
+    lateinit var binding: DB
     init {
         itemsList.addAll(itemsSource)
     }
@@ -180,9 +181,10 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
     infix fun ViewGroup.inflate(layoutRes: Int): View =
         LayoutInflater.from(context).inflate(layoutRes, this, false)
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingHolder {
         val holder = if (viewType == 0 || emptyViewId == 0) {
-            val binding: DB = DataBindingUtil.inflate(
+            binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
                 layoutId,
                 parent,

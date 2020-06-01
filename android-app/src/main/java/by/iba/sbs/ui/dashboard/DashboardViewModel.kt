@@ -31,6 +31,16 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
         val settings = AndroidSettings(sharedPrefs)
         LocalSettings(settings)
     }
+    val showRecommended = MutableLiveData(true).apply {
+        value = localStorage.showRecommended
+        observeForever {
+            localStorage.showRecommended = it
+        }
+    }
+
+    fun update() {
+        showRecommended.value = localStorage.showRecommended
+    }
 
     @UnstableDefault
     @ImplicitReflectionSerializer
@@ -51,11 +61,11 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
         value = mData
     }
     val recommended = MutableLiveData<List<Guideline>>().apply {
-        val mData = ArrayList<Guideline>()
-        mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
-        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
-        mData.add(Guideline("1", "Как попасть на проект, подготовка к интервью", "Author 2"))
-        value = mData
+//        val mData = ArrayList<Guideline>()
+//        mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
+//        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
+//        mData.add(Guideline("1", "Как попасть на проект, подготовка к интервью", "Author 2"))
+//        value = mData
     }
     val favorite = MutableLiveData<List<Guideline>>().apply {
         val mData = ArrayList<Guideline>()

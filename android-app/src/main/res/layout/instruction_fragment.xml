@@ -126,7 +126,7 @@
                     android:layout_marginTop="@dimen/spacing_small"
                     android:layout_marginEnd="@dimen/spacing_xxxxlarge"
                     android:text="@{viewmodel.guideline.name}"
-                    style="@style/Text"
+                    style="@style/Text.Title"
                     android:transitionName="@string/transition_name_txt_view"/>
 
                 <TextView
@@ -200,8 +200,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/layout_rating"
-                    app:tabGravity="fill"
-                    app:tabMode="fixed"/>
+                    style="@style/TabLayout" />
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/view_pager"
