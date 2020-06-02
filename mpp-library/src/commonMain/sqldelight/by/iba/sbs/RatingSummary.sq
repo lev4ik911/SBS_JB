@@ -1,0 +1,25 @@
+CREATE TABLE rating_summary (
+    id TEXT NOT NULL UNIQUE PRIMARY KEY,
+    positive INTEGER DEFAULT 0,
+    negative INTEGER DEFAULT 0,
+    overall INTEGER DEFAULT 0
+);
+
+insertRating:
+INSERT OR REPLACE INTO rating_summary (id,  positive, negative, overall)
+VALUES (?, ?, ?, ?);
+
+selectRatingByGuidelineId:
+SELECT *
+FROM rating_summary
+WHERE id = ?;
+
+selectAllRatings:
+SELECT *
+FROM rating_summary;
+
+deleteRatingByGuidelineId:
+DELETE FROM rating_summary WHERE id = ? ;
+
+deleteRatings:
+DELETE FROM rating_summary;
