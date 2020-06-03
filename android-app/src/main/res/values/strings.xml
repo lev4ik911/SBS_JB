@@ -93,5 +93,6 @@
     <string name="btn_cancel">Cancel</string>
     <string name="title_home_settings">Home screen settings</string>
     <string name="lbl_show_recommended">Show recommended guidelines</string>
+    <string name="lbl_show_favorites">Show favorite guidelines</string>
 
 </resources>

@@ -37,6 +37,8 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
     var activeCategory: Int = 0
     lateinit var favoritesAdapter: BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
@@ -61,6 +63,13 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                 ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
             toolbar_main.setNavigationOnClickListener {
                 onBackPressed()
+            }
+        }
+        binding.lSwipeRefresh.setOnRefreshListener {
+            when (activeCategory) {
+                GuidelineCategory.RECOMMENDED.ordinal -> viewModel.loadRecommended(true)
+                GuidelineCategory.POPULAR.ordinal -> viewModel.loadPopular(true)
+                else -> viewModel.loadFavorites(true)
             }
         }
     }
@@ -115,22 +124,6 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                     })
                     viewModel.loadRecommended(false)
                 }
-                GuidelineCategory.FAVORITE.ordinal -> {
-                    toolbar_main.title = resources.getString(R.string.title_favorites)
-                    binding.rvFavorites.apply {
-                        adapter = favoritesAdapter
-                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
-                            requireContext(),
-                            R.anim.layout_animation_right_to_left
-                        )
-                    }
-                    viewModel.favorite.observe(viewLifecycleOwner, Observer {
-                        favoritesAdapter.addItems(it)
-                        binding.lSwipeRefresh.isRefreshing = false
-                    })
-                    viewModel.loadFavorites(false)
-                }
                 GuidelineCategory.POPULAR.ordinal -> {
                     toolbar_main.title = resources.getString(R.string.title_popular)
                     binding.rvFavorites.apply {
@@ -147,11 +140,42 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                     })
                     viewModel.loadPopular(false)
                 }
+                GuidelineCategory.FAVORITE.ordinal -> {
+                    toolbar_main.title = resources.getString(R.string.title_favorites)
+                    binding.rvFavorites.apply {
+                        adapter = favoritesAdapter
+                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
+                            requireContext(),
+                            R.anim.layout_animation_right_to_left
+                        )
+                    }
+                    viewModel.favorite.observe(viewLifecycleOwner, Observer {
+                        favoritesAdapter.addItems(it)
+                        binding.lSwipeRefresh.isRefreshing = false
+                    })
+                    viewModel.loadFavorites(false)
+                }
                 else -> {
-
+                    toolbar_main.navigationIcon = null
+                    toolbar_main.title = resources.getString(R.string.title_favorites)
+                    binding.rvFavorites.apply {
+                        adapter = favoritesAdapter
+                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
+                            requireContext(),
+                            R.anim.layout_animation_right_to_left
+                        )
+                    }
+                    viewModel.favorite.observe(viewLifecycleOwner, Observer {
+                        favoritesAdapter.addItems(it)
+                        binding.lSwipeRefresh.isRefreshing = false
+                    })
+                    viewModel.loadFavorites(false)
                 }
             }
         }
+
     }
 
 }

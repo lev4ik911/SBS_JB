@@ -107,7 +107,7 @@
                         android:paddingStart="@dimen/spacing_xsmall" />
 
                     <LinearLayout
-                        visibleOrGone="@{viewmodel.favorite.size() >0}"
+                        visibleOrGone="@{viewmodel.showFavorites }"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/selector_list_item"
@@ -142,6 +142,7 @@
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
+                        visibleOrGone="@{viewmodel.showFavorites }"
                         android:id="@+id/rv_favorite"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

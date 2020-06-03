@@ -29,10 +29,10 @@ import kotlinx.serialization.UnstableDefault
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 enum class GuidelineCategory {
+    DEFAULT,
     FAVORITE,
     RECOMMENDED,
-    POPULAR,
-    DEFAULT
+    POPULAR
 }
 
 class DashboardFragment :

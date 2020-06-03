@@ -12,5 +12,6 @@ class LocalSettings(settings: Settings) {
     var language by settings.string("pref_language")
     var login by settings.string("pref_login")
     var keepLogin by settings.boolean("pref_remember_login")
-    var showRecommended by settings.boolean("pref_show_recommended")
+    var showRecommended by settings.boolean("pref_show_recommended", defaultValue = true)
+    var showFavorites by settings.boolean("pref_show_favorites", defaultValue = true)
 }

@@ -32,13 +32,14 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
     }
     val showRecommended = MutableLiveData(true).apply {
         value = localStorage.showRecommended
-        observeForever {
-            localStorage.showRecommended = it
-        }
+    }
+    val showFavorites = MutableLiveData(true).apply {
+        value = localStorage.showRecommended
     }
 
     fun update() {
         showRecommended.value = localStorage.showRecommended
+        showFavorites.value = localStorage.showFavorites
     }
 
     @UnstableDefault

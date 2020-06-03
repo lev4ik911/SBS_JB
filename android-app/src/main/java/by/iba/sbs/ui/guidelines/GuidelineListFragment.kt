@@ -39,7 +39,13 @@ class GuidelineListFragment :
                 }).also {
                 it.emptyViewId = R.layout.new_item
             }
-
+        instructionsAdapter.apply {
+            filterCriteria = { item, text ->
+                item.name.contains(text, true)
+                        || item.description.contains(text, true)
+            }
+            emptyViewId = R.layout.new_item
+        }
         binding.rvInstructions.also {
             it.adapter = instructionsAdapter
             instructionsAdapter.itemTouchHelper.attachToRecyclerView(it)
