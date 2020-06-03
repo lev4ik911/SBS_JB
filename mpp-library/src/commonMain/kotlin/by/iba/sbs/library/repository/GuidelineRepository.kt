@@ -45,7 +45,6 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
     IGuidelineRepository {
     @UnstableDefault
     private val guidelines = Guidelines(settings)
-
     @UnstableDefault
     private val steps = Steps(settings)
     private val sbsDb = createDb()
@@ -76,17 +75,21 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
                 data == null || data.isEmpty() || forceRefresh
 
             override suspend fun loadFromDb(): List<Guideline> = coroutineScope {
-                val ratingSummary = ratingSummaryQueries.selectAllRatings().executeAsList()
+                val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
                 return@coroutineScope guidelinesQueries.selectAllGuidelines().executeAsList().map {
-                    val rating = ratingSummary.first { rating -> rating.id == it.id }
-                    Guideline(
-                        it.id, it.name, it.description,
-                        rating = RatingSummary(
-                            rating.positive!!.toInt(),
-                            rating.negative!!.toInt(),
-                            rating.overall!!.toInt()
+                    val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
+                    if (rating != null) {
+                        Guideline(
+                            it.id, it.name, it.description,
+                            rating = RatingSummary(
+                                rating.positive!!.toInt(),
+                                rating.negative!!.toInt(),
+                                rating.overall!!.toInt()
+                            )
                         )
-                    )
+                    } else {
+                        Guideline(it.id, it.name, it.description)
+                    }
                 }
             }
 
@@ -97,17 +100,20 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
                     val result = guidelines.getAllGuidelines()
                     if (result.isSuccess) {
                         result.data!!.map { item ->
-                            val rating = ratingSummary.first { rating -> rating.id == item.id }
-                            Guideline(
-                                item.id,
-                                item.name,
-                                item.description!!,
-                                rating = RatingSummary(
-                                    rating.positive!!.toInt(),
-                                    rating.negative!!.toInt(),
-                                    rating.overall!!.toInt()
+                            val rating =
+                                ratingSummary.firstOrNull { rating -> rating.id == item.id }
+                            if (rating != null) {
+                                Guideline(
+                                    item.id, item.name, item.description ?: "",
+                                    rating = RatingSummary(
+                                        rating.positive!!.toInt(),
+                                        rating.negative!!.toInt(),
+                                        rating.overall!!.toInt()
+                                    )
                                 )
-                            )
+                            } else {
+                                Guideline(item.id, item.name, item.description ?: "")
+                            }
                         }
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
@@ -161,7 +167,6 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             override fun createCallAsync(): Deferred<Guideline> {
                 return GlobalScope.async(Dispatchers.Default) {
                     val result = guidelines.getGuideline(guidelineId)
-                    //val result = remote.getGuideline("3483dcf1-9497-49be-b12d-e73cd47c8e94")
                     if (result.isSuccess) {
                         val item = result.data!!
                         Guideline(

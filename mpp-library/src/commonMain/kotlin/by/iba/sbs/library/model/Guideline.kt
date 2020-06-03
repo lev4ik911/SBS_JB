@@ -1,7 +1,9 @@
 package by.iba.sbs.library.model
 
 import by.iba.sbs.library.model.response.RatingSummary
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Guideline(
     val id: String = "",
     var name: String = "",

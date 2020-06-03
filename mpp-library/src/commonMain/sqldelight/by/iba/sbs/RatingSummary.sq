@@ -19,7 +19,7 @@ SELECT *
 FROM rating_summary;
 
 deleteRatingByGuidelineId:
-DELETE FROM rating_summary WHERE id = ? ;
+DELETE FROM rating_summary WHERE id = ?;
 
 deleteRatings:
 DELETE FROM rating_summary;
