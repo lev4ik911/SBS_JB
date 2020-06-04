@@ -1,18 +1,14 @@
 package by.iba.sbs.library.repository
 
 import by.iba.sbs.library.data.local.createDb
-import by.iba.sbs.library.data.remote.Guidelines
-import by.iba.sbs.library.data.remote.NetworkBoundResource
-import by.iba.sbs.library.data.remote.Response
-import by.iba.sbs.library.data.remote.Steps
+import by.iba.sbs.library.data.remote.*
+import by.iba.sbs.library.model.Feedback
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.Step
-import by.iba.sbs.library.model.request.GuidelineCreate
-import by.iba.sbs.library.model.request.GuidelineEdit
-import by.iba.sbs.library.model.request.StepCreate
-import by.iba.sbs.library.model.request.StepEdit
+import by.iba.sbs.library.model.request.*
 import by.iba.sbs.library.model.response.GuidelineView
 import by.iba.sbs.library.model.response.RatingSummary
+import by.iba.sbs.library.model.response.RatingView
 import by.iba.sbs.library.model.response.StepView
 import by.iba.sbs.library.service.LocalSettings
 import dev.icerock.moko.mvvm.livedata.LiveData
@@ -32,12 +28,20 @@ interface IGuidelineRepository {
         forceRefresh: Boolean
     ): LiveData<Response<List<Step>>>
 
+    suspend fun getAllFeedbacks(
+        guidelineId: String,
+        forceRefresh: Boolean
+    ): LiveData<Response<List<Feedback>>>
+
     suspend fun insertGuideline(data: Guideline): Response<GuidelineView>
     suspend fun updateGuideline(data: Guideline): Response<GuidelineView>
     suspend fun deleteGuideline(guidelineId: String): Response<String?>
     suspend fun insertStep(guidelineId: String, data: Step): Response<StepView>
     suspend fun updateStep(guidelineId: String, data: Step): Response<StepView>
     suspend fun deleteStep(guidelineId: String, stepId: String): Response<String?>
+    suspend fun insertRating(guidelineId: String, data: Feedback): Response<RatingView>
+    suspend fun updateRating(guidelineId: String, data: Feedback): Response<RatingView>
+    suspend fun deleteRating(guidelineId: String, stepId: String): Response<String?>
 }
 
 @ImplicitReflectionSerializer
@@ -45,11 +49,16 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
     IGuidelineRepository {
     @UnstableDefault
     private val guidelines = Guidelines(settings)
+
     @UnstableDefault
     private val steps = Steps(settings)
+
+    @UnstableDefault
+    private val feedback = Feedback(settings)
     private val sbsDb = createDb()
     private val guidelinesQueries = sbsDb.guidelinesEntityQueries
     private val ratingSummaryQueries = sbsDb.ratingSummaryQueries
+    private val feedbackQueries = sbsDb.feedbackEntityQueries
 
     @UnstableDefault
     override suspend fun getAllGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>> {
@@ -309,7 +318,6 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             return@coroutineScope result
         }
 
-
     @UnstableDefault
     override suspend fun updateStep(guidelineId: String, data: Step): Response<StepView> =
         coroutineScope {
@@ -344,4 +352,112 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             }
             return@coroutineScope result
         }
+
+    @UnstableDefault
+    override suspend fun getAllFeedbacks(
+        guidelineId: String,
+        forceRefresh: Boolean
+    ): LiveData<Response<List<Feedback>>> {
+        return object : NetworkBoundResource<List<Feedback>, List<Feedback>>() {
+            override fun processResponse(response: List<Feedback>): List<Feedback> = response
+
+            override suspend fun saveCallResults(data: List<Feedback>) = coroutineScope {
+                data.forEach {
+                    feedbackQueries.insertFeedback(
+                        it.id,
+                        guidelineId,
+                        it.rating.toLong(),
+                        it.comment ?: ""
+                    )
+                }
+            }
+
+            override fun shouldFetch(data: List<Feedback>?): Boolean =
+                data == null || data.isEmpty() || forceRefresh
+
+            override suspend fun loadFromDb(): List<Feedback> = coroutineScope {
+                return@coroutineScope feedbackQueries.selectAllFeedbacks(guidelineId)
+                    .executeAsList()
+                    .map {
+                        Feedback(it.id, it.rating.toInt(), it.comment)
+                    }
+            }
+
+            override fun createCallAsync(): Deferred<List<Feedback>> {
+                return GlobalScope.async(Dispatchers.Default) {
+                    val result = feedback.getAllFeedbacks(guidelineId)
+                    if (result.isSuccess) {
+                        result.data!!.map { item ->
+                            Feedback(
+                                item.id,
+                                item.rating,
+                                item.comment
+                            )
+                        }
+                    } else {
+                        if (result.status == Response.Status.ERROR) error(result.error!!)
+                        listOf()
+
+                    }
+                }
+            }
+
+        }.build()
+            .asLiveData()
+    }
+
+    @UnstableDefault
+    override suspend fun insertRating(guidelineId: String, data: Feedback): Response<RatingView> =
+        coroutineScope {
+            val result =
+                feedback.postFeedback(guidelineId, RatingCreate(data.rating, data.comment))
+            if (result.isSuccess) {
+                val item = result.data!!
+
+                feedbackQueries.insertFeedback(
+                    item.id,
+                    guidelineId,
+                    item.rating.toLong(),
+                    item.comment ?: ""
+                )
+            } else {
+                if (result.status == Response.Status.ERROR) error(result.error!!)
+            }
+            return@coroutineScope result
+        }
+
+    @UnstableDefault
+    override suspend fun updateRating(guidelineId: String, data: Feedback): Response<RatingView> =
+        coroutineScope {
+            val result = feedback.putFeedback(
+                guidelineId,
+                data.id,
+                RatingEdit(data.rating, data.comment)
+            )
+            if (result.isSuccess) {
+                val item = result.data!!
+                feedbackQueries.insertFeedback(
+                    item.id,
+                    guidelineId,
+                    item.rating.toLong(),
+                    item.comment ?: ""
+                )
+            } else {
+                if (result.status == Response.Status.ERROR) error(result.error!!)
+            }
+            return@coroutineScope result
+        }
+
+    @UnstableDefault
+    override suspend fun deleteRating(guidelineId: String, feedbackId: String): Response<String?> =
+        coroutineScope {
+            val result = feedback.deleteFeedback(guidelineId, feedbackId)
+            if (result.isSuccess) {
+                feedbackQueries.deleteFeedbackById(feedbackId)
+            } else {
+                if (result.status == Response.Status.ERROR) error(result.error!!)
+            }
+            return@coroutineScope result
+        }
+
 }

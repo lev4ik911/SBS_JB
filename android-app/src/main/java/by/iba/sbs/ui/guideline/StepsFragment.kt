@@ -34,7 +34,6 @@ class StepsFragment : BaseFragment<StepsFragmentBinding, GuidelineViewModel>() {
             adapter = stepsAdapter
         }
         viewModel.steps.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-
             stepsAdapter.addItems(it)
         })
         stepsAdapter.onItemClick = { pos, itemView, item ->
