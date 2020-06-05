@@ -2,7 +2,6 @@ package by.iba.sbs.ui.dashboard
 
 import android.content.Context
 import android.preference.PreferenceManager
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import by.iba.mvvmbase.BaseViewModel
@@ -33,13 +32,14 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
     }
     val showRecommended = MutableLiveData(true).apply {
         value = localStorage.showRecommended
-        observeForever {
-            localStorage.showRecommended = it
-        }
+    }
+    val showFavorites = MutableLiveData(true).apply {
+        value = localStorage.showRecommended
     }
 
     fun update() {
         showRecommended.value = localStorage.showRecommended
+        showFavorites.value = localStorage.showFavorites
     }
 
     @UnstableDefault
@@ -61,28 +61,29 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
         value = mData
     }
     val recommended = MutableLiveData<List<Guideline>>().apply {
-//        val mData = ArrayList<Guideline>()
-//        mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
+        val mData = ArrayList<Guideline>()
+        mData.add(Guideline("1", "Loading guidelines...", "Dobry"))
 //        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
 //        mData.add(Guideline("1", "Как попасть на проект, подготовка к интервью", "Author 2"))
-//        value = mData
+        value = mData
     }
     val favorite = MutableLiveData<List<Guideline>>().apply {
         val mData = ArrayList<Guideline>()
-        mData.add(Guideline("7", "Как сдать СМК на отлично!", "Dobry", isFavorite = true))
-        mData.add(Guideline("3", "Как стать счастливым", "Dobry", isFavorite = true))
-        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry", isFavorite = true))
-        mData.add(Guideline("4", "Что делать, если вы заразились", "Доктор"))
-
+        mData.add(Guideline("1", "Loading guidelines...", "Dobry"))
+//        mData.add(Guideline("7", "Как сдать СМК на отлично!", "Dobry", isFavorite = true))
+//        mData.add(Guideline("3", "Как стать счастливым", "Dobry", isFavorite = true))
+//        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry", isFavorite = true))
+//        mData.add(Guideline("4", "Что делать, если вы заразились", "Доктор"))
+//
         value = mData
     }
     val popular = MutableLiveData<List<Guideline>>().apply {
-        val mData = ArrayList<Guideline>()
-        mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
-        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
-        mData.add(Guideline("5", "Как поставить на учет автомобиль", "Dobry"))
-        mData.add(Guideline("6", "Как оформить командировку", "Dobry"))
-        value = mData
+//        val mData = ArrayList<Guideline>()
+//        mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
+//        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
+//        mData.add(Guideline("5", "Как поставить на учет автомобиль", "Dobry"))
+//        mData.add(Guideline("6", "Как оформить командировку", "Dobry"))
+//        value = mData
     }
 
     @UnstableDefault
@@ -188,6 +189,7 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
             }
         }
     }
+
     fun onViewFavoritesClick() {
         eventsDispatcher.dispatchEvent { onViewFavoritesAction() }
     }
@@ -199,17 +201,14 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
     fun onViewPopularClick() {
         eventsDispatcher.dispatchEvent { onViewPopularAction() }
     }
+
     fun onViewCategoriesClick() {
 
     }
 
-    fun onOpenGuidelineClick(view: View, guideline: Guideline) {
-        eventsDispatcher.dispatchEvent { onOpenGuidelineAction(view, guideline) }
-    }
     interface EventsListener {
         fun onViewFavoritesAction()
         fun onViewRecommendedAction()
         fun onViewPopularAction()
-        fun onOpenGuidelineAction(view: View, guideline: Guideline)
     }
 }

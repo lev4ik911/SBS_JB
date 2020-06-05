@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="@dimen/spacing_small">
+            android:padding="@dimen/spacing_normal">
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="@style/Text.Title"
@@ -45,6 +45,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="@={viewmodel.showRecommended}" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/spacing_normal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lbl_show_favorites" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/chb_show_favorites"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@={viewmodel.showFavorites}" />
         </LinearLayout>
     </LinearLayout>
 </layout>

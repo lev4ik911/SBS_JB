@@ -1,18 +1,12 @@
 package by.iba.sbs.ui.dashboard
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.widget.SearchView
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
-import androidx.core.util.Pair
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +20,6 @@ import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.ui.MainActivity
 import by.iba.sbs.ui.MainViewModel
-import by.iba.sbs.ui.guideline.GuidelineActivity
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -41,58 +34,42 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
     override val viewModel: DashboardViewModel by sharedViewModel()
     private val mainViewModel: MainViewModel by sharedViewModel()
     var lastSearchText: String = ""
+    var activeCategory: Int = 0
     lateinit var favoritesAdapter: BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>
 
-    inner class FavoritesHandler() {
-        fun onOpenGuidelineAction(view: View, guideline: Guideline) {
-            val transitionSharedNameImgView =
-                requireContext().getString(R.string.transition_name_img_view)
-            val transitionSharedNameTxtView =
-                requireContext().getString(R.string.transition_name_txt_view)
-            var imageViewPair: Pair<View, String>
-            val textViewPair: Pair<View, String>
-            view.findViewById<ImageView>(R.id.iv_preview).apply {
-                this?.transitionName = transitionSharedNameImgView
-                imageViewPair = Pair.create(this, transitionSharedNameImgView)
-            }
-            view.findViewById<TextView>(R.id.tv_title).apply {
-                this?.transitionName = transitionSharedNameTxtView
-                textViewPair = Pair.create(this, transitionSharedNameTxtView)
-            }
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                activity as Activity,
-                imageViewPair,
-                textViewPair
-            )
-            val intent = Intent(activity, GuidelineActivity::class.java)
-            intent.putExtra("instructionId", guideline.id)
-            startActivity(intent, options.toBundle())
-
-        }
-    }
-
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
         favoritesAdapter =
             BaseBindingAdapter(
-                R.layout.favorites_instruction_list_item,
+                R.layout.instruction_list_item,
                 BR.instruction,
                 BR.viewmodel,
                 mainViewModel,
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })
-        favoritesAdapter.filterCriteria = { item, text ->
-            item.name.contains(text, true)
-                    || item.description.contains(text, true)
-
+        favoritesAdapter.apply {
+            filterCriteria = { item, text ->
+                item.name.contains(text, true)
+                        || item.description.contains(text, true)
+            }
+            emptyViewId = R.layout.new_item
         }
         (activity as MainActivity).apply {
             toolbar_main.navigationIcon =
                 ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
             toolbar_main.setNavigationOnClickListener {
                 onBackPressed()
+            }
+        }
+        binding.lSwipeRefresh.setOnRefreshListener {
+            when (activeCategory) {
+                GuidelineCategory.RECOMMENDED.ordinal -> viewModel.loadRecommended(true)
+                GuidelineCategory.POPULAR.ordinal -> viewModel.loadPopular(true)
+                else -> viewModel.loadFavorites(true)
             }
         }
     }
@@ -114,15 +91,23 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                 return true
             }
         })
+//        mSearchView.setOnCloseListener {
+//            when (activeCategory) {
+//                GuidelineCategory.RECOMMENDED.ordinal ->  toolbar_main.title = resources.getString(R.string.title_recommended)
+//                GuidelineCategory.FAVORITE.ordinal ->toolbar_main.title = resources.getString(R.string.title_favorites)
+//                GuidelineCategory.POPULAR.ordinal -> toolbar_main.title = resources.getString(R.string.title_popular)
+//            }
+//            return@setOnCloseListener true
+//        }
     }
+
     @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onStart() {
         super.onStart()
-
-
         (activity as MainActivity).apply {
-            when (arguments?.getInt("Category")) {
+            activeCategory = arguments?.getInt("Category") ?: 0
+            when (activeCategory) {
                 GuidelineCategory.RECOMMENDED.ordinal -> {
                     toolbar_main.title = resources.getString(R.string.title_recommended)
                     binding.rvFavorites.apply {
@@ -135,23 +120,9 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                     }
                     viewModel.recommended.observe(viewLifecycleOwner, Observer {
                         favoritesAdapter.addItems(it)
+                        binding.lSwipeRefresh.isRefreshing = false
                     })
                     viewModel.loadRecommended(false)
-                }
-                GuidelineCategory.FAVORITE.ordinal -> {
-                    toolbar_main.title = resources.getString(R.string.title_favorites)
-                    binding.rvFavorites.apply {
-                        adapter = favoritesAdapter
-                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
-                            requireContext(),
-                            R.anim.layout_animation_right_to_left
-                        )
-                    }
-                    viewModel.favorite.observe(viewLifecycleOwner, Observer {
-                        favoritesAdapter.addItems(it)
-                    })
-                    viewModel.loadFavorites(false)
                 }
                 GuidelineCategory.POPULAR.ordinal -> {
                     toolbar_main.title = resources.getString(R.string.title_popular)
@@ -165,14 +136,46 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                     }
                     viewModel.popular.observe(viewLifecycleOwner, Observer {
                         favoritesAdapter.addItems(it)
+                        binding.lSwipeRefresh.isRefreshing = false
                     })
                     viewModel.loadPopular(false)
                 }
+                GuidelineCategory.FAVORITE.ordinal -> {
+                    toolbar_main.title = resources.getString(R.string.title_favorites)
+                    binding.rvFavorites.apply {
+                        adapter = favoritesAdapter
+                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
+                            requireContext(),
+                            R.anim.layout_animation_right_to_left
+                        )
+                    }
+                    viewModel.favorite.observe(viewLifecycleOwner, Observer {
+                        favoritesAdapter.addItems(it)
+                        binding.lSwipeRefresh.isRefreshing = false
+                    })
+                    viewModel.loadFavorites(false)
+                }
                 else -> {
-
+                    toolbar_main.navigationIcon = null
+                    toolbar_main.title = resources.getString(R.string.title_favorites)
+                    binding.rvFavorites.apply {
+                        adapter = favoritesAdapter
+                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
+                            requireContext(),
+                            R.anim.layout_animation_right_to_left
+                        )
+                    }
+                    viewModel.favorite.observe(viewLifecycleOwner, Observer {
+                        favoritesAdapter.addItems(it)
+                        binding.lSwipeRefresh.isRefreshing = false
+                    })
+                    viewModel.loadFavorites(false)
                 }
             }
         }
+
     }
 
 }

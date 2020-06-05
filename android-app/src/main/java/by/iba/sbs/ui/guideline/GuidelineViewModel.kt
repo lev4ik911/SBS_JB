@@ -36,31 +36,37 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @OptIn(UnstableDefault::class)
     @ImplicitReflectionSerializer
     private val repository by lazy { GuidelineRepository(localStorage) }
-    val guideline = MutableLiveData(Guideline())
     val steps = MutableLiveData<List<Step>>()
     var oldSteps = listOf<Step>()
     val updatedStepId = MutableLiveData("")
 
     val ratingUp = MutableLiveData(0)
     val ratingDown = MutableLiveData(0)
+    val guideline = MutableLiveData(Guideline()).apply {
+        observeForever {
+            ratingUp.value = it.rating.positive
+            ratingDown.value = it.rating.negative
+        }
+    }
+    var oldSteps = listOf<Step>()
 
     val isFavorite = MutableLiveData(true)
     val isMyInstruction = MutableLiveData(true)
     val feedback = MutableLiveData<List<Feedback>>().apply {
-        val mData = ArrayList<Feedback>()
-        mData.add(
-            Feedback(
-                "Charlize Theron",
-                "Something I really appreciate about you is your aptitude for problem solving in a proactive way."
-            )
-        )
-        mData.add(
-            Feedback(
-                "Matt Damon",
-                "I really think you have a superpower around making new hires feel welcome."
-            )
-        )
-        this.postValue(mData)
+//        val mData = ArrayList<Feedback>()
+//        mData.add(
+//            Feedback(
+//                "Charlize Theron",
+//                "Something I really appreciate about you is your aptitude for problem solving in a proactive way."
+//            )
+//        )
+//        mData.add(
+//            Feedback(
+//                "Matt Damon",
+//                "I really think you have a superpower around making new hires feel welcome."
+//            )
+//        )
+//        this.postValue(mData)
     }
 
 
@@ -116,7 +122,20 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                         ToastMessage(e.toString(), MessageType.ERROR)
                 }
             }
-
+            viewModelScope.launch {
+                try {
+                    val feedbacksLiveData = repository.getAllFeedbacks(instructionId, forceRefresh)
+                    feedbacksLiveData.addObserver {
+                        if (it.isSuccess && it.isNotEmpty) {
+                            feedback.value = it.data!!
+                        } else if (it.error != null) notificationsQueue.value =
+                            ToastMessage(it.error!!.toString(), MessageType.ERROR)
+                    }
+                } catch (e: Exception) {
+                    notificationsQueue.value =
+                        ToastMessage(e.toString(), MessageType.ERROR)
+                }
+            }
 //            if (instructionId.rem(2) == 0) {
 //                name.value = "Отпадный шашлычок!"
 //                description.value = "Отпадный шашлычок (desc)!"
@@ -419,5 +438,4 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
             }
         }
     }
-
 }

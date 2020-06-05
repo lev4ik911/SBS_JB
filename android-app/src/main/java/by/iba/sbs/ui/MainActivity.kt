@@ -21,7 +21,7 @@ class MainActivity :
     MainViewModel.EventsListener {
     enum class ActiveTabEnum(var index: Int) {
         ID_HOME(1),
-        ID_INSTRUCTIONS(2),
+        ID_FAVORITES(2),
         ID_SEARCH(3),
         ID_PROFILE(4)
     }
@@ -45,8 +45,8 @@ class MainActivity :
         )
         navView.add(
             BottomNavigation.Model(
-                ActiveTabEnum.ID_INSTRUCTIONS.index,
-                R.drawable.clipboard_list_outline
+                ActiveTabEnum.ID_FAVORITES.index,
+                R.drawable.heart_outline
             )
         )
         navView.add(
@@ -67,7 +67,7 @@ class MainActivity :
 
             title = when (it.id) {
                 ActiveTabEnum.ID_HOME.index -> resources.getString(R.string.title_home)
-                ActiveTabEnum.ID_INSTRUCTIONS.index -> resources.getString(R.string.title_instructions)
+                ActiveTabEnum.ID_FAVORITES.index -> resources.getString(R.string.title_favorites)
                 ActiveTabEnum.ID_SEARCH.index -> resources.getString(R.string.title_search)
                 ActiveTabEnum.ID_PROFILE.index -> ""
                 else -> ""
@@ -80,7 +80,7 @@ class MainActivity :
             navController.navigate(
                 when (it.id) {
                     ActiveTabEnum.ID_HOME.index -> R.id.navigation_dashboard
-                    ActiveTabEnum.ID_INSTRUCTIONS.index -> R.id.navigation_search
+                    ActiveTabEnum.ID_FAVORITES.index -> R.id.navigation_favorites
                     ActiveTabEnum.ID_SEARCH.index -> R.id.navigation_notifications
                     ActiveTabEnum.ID_PROFILE.index -> R.id.navigation_profile
                     else -> R.id.navigation_home

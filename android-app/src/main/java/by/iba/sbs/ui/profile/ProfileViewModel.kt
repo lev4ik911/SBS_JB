@@ -26,7 +26,12 @@ class ProfileViewModel(context: Context) : BaseViewModel(),
             localStorage.showRecommended = it
         }
     }
-
+    val showFavorites = MutableLiveData(true).apply {
+        value = localStorage.showFavorites
+        observeForever {
+            localStorage.showFavorites = it
+        }
+    }
     val email = MutableLiveData("email@email.com")
     val fullName = MutableLiveData("John Doe")
     val rating = MutableLiveData("547")
