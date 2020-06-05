@@ -26,12 +26,19 @@ CREATE TABLE steps (
     guidelineId TEXT NOT NULL,
     name TEXT NOT NULL DEFAULT "",
     description TEXT NOT NULL DEFAULT "",
-    weight INTEGER DEFAULT 0
+    weight INTEGER DEFAULT 0,
+    imagePath TEXT NOT NULL DEFAULT "",
+    updateImageTimeSpan INTEGER DEFAULT 0
 );
+
 
 insertStep:
 INSERT OR REPLACE INTO steps (id, guidelineId, name, description, weight)
 VALUES (?, ?, ?, ?, ?);
+
+insertStepWithImage:
+INSERT OR REPLACE INTO steps (id, guidelineId, name, description, weight, imagePath, updateImageTimeSpan)
+VALUES (?, ?, ?, ?, ?, ?, ?);
 
 selectAllSteps:
 SELECT *
@@ -46,7 +53,35 @@ deleteStepById:
 DELETE FROM steps WHERE id = ?;
 
 deleteAllStepsByGuidelineId:
-DELETE FROM steps WHERE guidelineId = ? ;
+DELETE FROM steps WHERE guidelineId = ?;
 
 deleteAllSteps:
 DELETE FROM steps;
+
+-- CREATE TABLE stepImages (
+--     id TEXT NOT NULL UNIQUE PRIMARY KEY,
+--     stepId TEXT NOT NULL,
+--     localPath TEXT NOT NULL DEFAULT "",
+--     updateTimespan INTEGER DEFAULT 0
+-- );
+--
+-- insertStepImage:
+-- INSERT OR REPLACE INTO stepImages (id, stepId,  localPath, updateTimespan)
+-- VALUES (?, ?, ?, ?);
+--
+-- selectImagesForStep:
+-- SELECT *
+-- FROM stepImages
+-- WHERE stepId = ?;
+--
+-- deleteStepImageById:
+-- DELETE FROM stepImages WHERE id = ?;
+--
+-- deleteAllStepsImagesByStepId:
+-- DELETE FROM stepImages WHERE stepId = ?;
+--
+-- deleteAllStepsImagesByGuidelineId:
+-- DELETE FROM stepImages WHERE stepId IN (SELECT id FROM steps WHERE guidelineId = ?);
+--
+-- deleteAllStepsImages:
+-- DELETE FROM stepImages;

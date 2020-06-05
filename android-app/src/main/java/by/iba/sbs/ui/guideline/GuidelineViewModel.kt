@@ -39,6 +39,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     val guideline = MutableLiveData(Guideline())
     val steps = MutableLiveData<List<Step>>()
     var oldSteps = listOf<Step>()
+    val updatedStepId = MutableLiveData("")
 
     val ratingUp = MutableLiveData(0)
     val ratingDown = MutableLiveData(0)
@@ -87,7 +88,26 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                     val stepsLiveData = repository.getAllSteps(instructionId, forceRefresh)
                     stepsLiveData.addObserver {
                         if (it.isSuccess && it.isNotEmpty) {
-                            steps.value = it.data!!
+                            if (forceRefresh) {
+                                //check image info on actual
+                                val tempListOfSteps = it.data!!.toMutableList()
+                                tempListOfSteps.forEach {
+                                    it.updateImageTimeSpan = 1 //TODO (delete fake data!!!)
+                                    if (it.updateImageTimeSpan != 0) {
+                                        viewModelScope.launch {
+                                            val stepFromLocalDB = repository.getStepByIdFromLocaolDB(instructionId, it.stepId)
+                                            if (stepFromLocalDB.updateImageTimeSpan != it.updateImageTimeSpan){
+                                                eventsDispatcher.dispatchEvent { onLoadImageFromAPI(it) }
+                                                }
+                                            it.imagePath = stepFromLocalDB.imagePath
+                                            it.updateImageTimeSpan = stepFromLocalDB.updateImageTimeSpan
+                                        }
+                                    }
+                                }
+                                steps.value = tempListOfSteps
+                            }
+                            else
+                                steps.value = it.data!!
                         } else if (it.error != null) notificationsQueue.value =
                             ToastMessage(it.error!!.toString(), MessageType.ERROR)
                     }
@@ -212,7 +232,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     }
 
     fun onEditImageClick(step: Step) {
-        eventsDispatcher.dispatchEvent { onEditImage(step.stepId) }
+        eventsDispatcher.dispatchEvent { onEditImage(step) }
     }
 
     @UnstableDefault
@@ -250,12 +270,13 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         fun onCallInstructionEditor(instructionId: String)
         fun onOpenProfile(profileId: Int)
         fun onEditStep(stepId: String)
-        fun onEditImage(stepId: String)
+        fun onEditImage(step: Step)
         fun onAfterSaveAction()
         fun onAfterDeleteAction()
         fun onRemoveInstruction()
         fun onAfterSaveStepAction()
         fun onRemoveStep(step: Step)
+        fun onLoadImageFromAPI(step: Step)
     }
 
     @UnstableDefault
@@ -398,4 +419,5 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
             }
         }
     }
+
 }

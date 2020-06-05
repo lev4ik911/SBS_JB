@@ -5,6 +5,7 @@ data class Step(
     var name: String = "",
     var description: String = "",
     var weight: Int = 0,
-    var imagePath: String = ""
+    var imagePath: String = "",
+    var updateImageTimeSpan: Int = 0
 ) {
 }

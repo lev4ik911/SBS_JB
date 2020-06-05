@@ -7,5 +7,7 @@ data class StepView(
     var id: String,
     var name: String,
     var description: String,
-    var weight: Int
+    var weight: Int,
+    var imagePath: String = "",
+    var updateImageTimeSpan: Int = 0
 )

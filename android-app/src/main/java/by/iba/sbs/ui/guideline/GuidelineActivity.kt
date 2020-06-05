@@ -7,10 +7,9 @@ import android.content.ContextWrapper
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
+import android.os.*
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
@@ -25,11 +24,18 @@ import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionActivityBinding
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.ui.profile.ProfileActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.yalantis.ucrop.UCrop
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 
 
@@ -48,7 +54,7 @@ class GuidelineActivity :
     private var usingCamera = false
     private var selectedAction = 0
     private var absolutePhotoPath = ""
-    private var _stepId: String = ""
+    private lateinit var step: Step
 
 
     private enum class ImageActions(val key: Int, val stringId: Int) {
@@ -70,37 +76,6 @@ class GuidelineActivity :
             if (instructionId == "") R.id.navigation_instruction_edit else R.id.navigation_instruction_view,
             bundle
         )
-    }
-
-    fun callImageSelector(stepId: String) {
-        _stepId = stepId
-        val stepHasImage = viewModel.steps.value!!.any { step -> step.stepId == stepId && step.imagePath.isNotEmpty() }
-        val builder = AlertDialog.Builder(this)
-        val listOfResolvedActions = ImageActions.values().filter {
-            (stepHasImage && it == ImageActions.EditCurrent) || (it != ImageActions.EditCurrent)
-        }
-
-        builder
-            //.setTitle("Upload from")
-            .setItems(listOfResolvedActions.map { resources.getString(it.stringId) }.toTypedArray()) { _, key ->
-                selectedAction = key
-                if (!stepHasImage)
-                    selectedAction += 1
-
-                when (selectedAction) {
-                    ImageActions.EditCurrent.key, ImageActions.FromGallery.key -> {
-                        usingCamera = false
-                    }
-                    ImageActions.TakePhoto.key -> {
-                        usingCamera = true
-                    }
-                }
-                checkPermissions()
-            }
-        //builder.setNegativeButton("Cancel", null);
-        val dialog = builder.create()
-        dialog.show()
-
     }
 
     private fun checkPermissions() {
@@ -194,17 +169,13 @@ class GuidelineActivity :
         when (selectedAction) {
             ImageActions.EditCurrent.key -> {
                 try {
-                    viewModel.steps.value?.find { step -> step.stepId == _stepId && step.imagePath.isNotEmpty() }
-                        .apply {
-
-                        if (!(this?.imagePath).isNullOrEmpty()) {
-                            val sourcePath = Uri.fromFile(File(this?.imagePath!!))
+                        if (!step.imagePath.isEmpty()) {
+                            val sourcePath = Uri.fromFile(File(step.imagePath))
                             val destinationUri = createTempImageFileInInternalStorage()
                             UCrop.of(sourcePath, destinationUri)
                                 .withAspectRatio(1f, 1f)
                                 .start(this@GuidelineActivity)
                         }
-                    }
 
                 } catch (ex: Exception) {
                     val toast = Toast.makeText(
@@ -250,13 +221,10 @@ class GuidelineActivity :
             UCrop.REQUEST_CROP -> {
                 if (resultCode == RESULT_OK) {
                     val resultUri: Uri? = UCrop.getOutput(data!!)
-                    val _steps = viewModel.steps.value
-                    _steps?.find { step -> step.stepId == _stepId }
-                        .apply {
-                            if (!(resultUri?.path).isNullOrEmpty())
-                                this?.imagePath = resultUri?.path!!
-                        }
-                    viewModel.steps.value = _steps
+                    if (!(resultUri?.path).isNullOrEmpty())
+                        step.imagePath = resultUri?.path!!
+                    viewModel.steps.value = viewModel.steps.value
+
                 } else if (resultCode == UCrop.RESULT_ERROR) {
                     val toast = Toast.makeText(
                         this,
@@ -375,10 +343,9 @@ class GuidelineActivity :
             .navigate(R.id.navigation_step_edit, bundle)
     }
 
-    override fun onEditImage(stepId: String) {
-        _stepId = stepId
-        val stepHasImage =
-            viewModel.steps.value!!.any { step -> step.stepId == stepId && step.imagePath.isNotEmpty() }
+    override fun onEditImage(editStep: Step) {
+        step = editStep
+        val stepHasImage = step.imagePath.isNotEmpty()
         val builder = AlertDialog.Builder(this)
         val listOfResolvedActions = ImageActions.values().filter {
             (stepHasImage && it == ImageActions.EditCurrent) || (it != ImageActions.EditCurrent)
@@ -449,5 +416,53 @@ class GuidelineActivity :
         }
         val dialog = builder.create()
         dialog.show()
+    }
+
+
+    override fun onLoadImageFromAPI(step: Step) {
+        Glide.with(this)
+            .asBitmap()
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .load("https://avatars.mds.yandex.net/get-pdb/1911901/744af759-4eca-4050-8582-b8211e14a1e2/s1200")
+            .listener(object : RequestListener<Bitmap> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Bitmap>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    //TODO("add handler")
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Bitmap?,
+                    model: Any?,
+                    target: Target<Bitmap>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+
+                    val destFile = File(createTempImageFileInInternalStorage().path)
+                    val fos = FileOutputStream(destFile)
+                    resource?.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+                    step.imagePath = destFile.path
+                    Message().apply {
+                        this.obj = step.stepId
+                        imageHandler.sendMessage(this)
+                    }
+                    return false
+                }
+            })
+            .submit()
+
+    }
+
+    private val imageHandler = object: Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            viewModel.updatedStepId.value = msg.obj as String
+            super.handleMessage(msg)
+        }
     }
 }

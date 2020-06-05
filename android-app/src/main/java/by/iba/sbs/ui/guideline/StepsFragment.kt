@@ -34,13 +34,16 @@ class StepsFragment : BaseFragment<StepsFragmentBinding, GuidelineViewModel>() {
             adapter = stepsAdapter
         }
         viewModel.steps.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-
             stepsAdapter.addItems(it)
         })
         stepsAdapter.onItemClick = { pos, itemView, item ->
             Toast.makeText(context, pos.toString(), Toast.LENGTH_LONG).show()
         }
+        viewModel.updatedStepId.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            stepsAdapter.itemsList.indexOfFirst{step -> step.stepId == it}.apply {
+                stepsAdapter.notifyItemChanged(this)
+            }
+        })
     }
-
 
 }
