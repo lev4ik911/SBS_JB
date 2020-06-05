@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
+import android.text.InputType
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -24,6 +25,9 @@ import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionActivityBinding
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.ui.profile.ProfileActivity
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
+import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -393,6 +397,7 @@ class GuidelineActivity :
         val dialog = builder.create()
         dialog.show()
     }
+
     override fun onAfterDeleteAction() {
         this.finish()
     }
@@ -403,15 +408,39 @@ class GuidelineActivity :
         )
     }
 
+    override fun onRatingDownAction(): String {
+        var result = ""
+        MaterialDialog(this).show {
+            title(R.string.title_dialog_feedback)
+            input(
+                hint = "Leave feedback",
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
+            ) { _, text ->
+                result = text.toString()
+            }
+            lifecycleOwner(this@GuidelineActivity)
+            positiveButton(R.string.btn_send) {
+            }
+            negativeButton(R.string.btn_cancel)
+        }
+        return result
+    }
+
+    override fun onRatingUpAction(): String {
+        TODO("Not yet implemented")
+    }
+
     @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onRemoveStep(step: Step) {
-        val builder = AlertDialog.Builder(this).apply{
+        val builder = AlertDialog.Builder(this).apply {
             setTitle(resources.getString(R.string.title_delete_step_dialog))
             setMessage(resources.getString(R.string.msg_delete_step_dialog, step.name))
-            setPositiveButton(resources.getString(R.string.btn_delete), { dialogInterface: DialogInterface, i: Int ->
-                viewModel.deleteStep(viewModel.guideline.value!!.id, step)
-            })
+            setPositiveButton(
+                resources.getString(R.string.btn_delete),
+                { dialogInterface: DialogInterface, i: Int ->
+                    viewModel.deleteStep(viewModel.guideline.value!!.id, step)
+                })
             setNegativeButton(resources.getString(R.string.btn_cancel), null)
         }
         val dialog = builder.create()

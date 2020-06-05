@@ -40,7 +40,7 @@ interface IGuidelineRepository {
     suspend fun updateStep(guidelineId: String, data: Step): Response<StepView>
     suspend fun deleteStep(guidelineId: String, stepId: String): Response<String?>
     suspend fun getStepByIdFromLocaolDB(guidelineId: String, stepId: String): Step
-    suspend fun insertRating(guidelineId: String, data: Feedback): Response<RatingView>
+    suspend fun insertRating(guidelineId: String, data: RatingCreate): Response<RatingView>
     suspend fun updateRating(guidelineId: String, data: Feedback): Response<RatingView>
     suspend fun deleteRating(guidelineId: String, stepId: String): Response<String?>
 }
@@ -423,10 +423,13 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
     }
 
     @UnstableDefault
-    override suspend fun insertRating(guidelineId: String, data: Feedback): Response<RatingView> =
+    override suspend fun insertRating(
+        guidelineId: String,
+        data: RatingCreate
+    ): Response<RatingView> =
         coroutineScope {
             val result =
-                feedback.postFeedback(guidelineId, RatingCreate(data.rating, data.comment))
+                feedback.postFeedback(guidelineId, data)
             if (result.isSuccess) {
                 val item = result.data!!
 

@@ -94,6 +94,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.11.0")
     implementation("com.afollestad.material-dialogs:core:3.3.0")
     implementation("com.afollestad.material-dialogs:input:3.3.0")
+    implementation("com.afollestad.material-dialogs:lifecycle:3.3.0")
     implementation(project(":mpp-library"))
     implementation(project(":mvvmbase"))
 }
