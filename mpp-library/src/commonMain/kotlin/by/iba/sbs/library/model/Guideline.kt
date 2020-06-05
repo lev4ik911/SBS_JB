@@ -8,7 +8,7 @@ data class Guideline(
     val id: String = "",
     var name: String = "",
     var description: String = "",
-    var author: String = "",
+    var author: String = "Author name",
     var isFavorite: Boolean = false,
     var rating: RatingSummary = RatingSummary()
 //    var steps: MutableList<Step> = mutableListOf(),

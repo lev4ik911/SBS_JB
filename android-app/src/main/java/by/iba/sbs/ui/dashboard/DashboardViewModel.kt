@@ -69,7 +69,7 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
     }
     val favorite = MutableLiveData<List<Guideline>>().apply {
         val mData = ArrayList<Guideline>()
-        mData.add(Guideline("1", "Loading guidelines...", "Dobry"))
+        mData.add(Guideline("1", "Loading guidelines...", "Loading...", "Dobry"))
 //        mData.add(Guideline("7", "Как сдать СМК на отлично!", "Dobry", isFavorite = true))
 //        mData.add(Guideline("3", "Как стать счастливым", "Dobry", isFavorite = true))
 //        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry", isFavorite = true))
