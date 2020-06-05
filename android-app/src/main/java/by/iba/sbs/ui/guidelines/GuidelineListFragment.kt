@@ -66,9 +66,9 @@ class GuidelineListFragment :
                 R.anim.layout_animation_right_to_left
             )
         }
-        binding.lSwipeRefresh.setOnRefreshListener {
-            viewModel.loadInstructions(true)
-        }
+//        binding.lSwipeRefresh.setOnRefreshListener {
+//            viewModel.loadInstructions(true)
+//        }
 
         viewModel.instructions.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             instructionsAdapter.addItems(it)

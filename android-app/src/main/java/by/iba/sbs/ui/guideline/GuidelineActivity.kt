@@ -55,7 +55,7 @@ class GuidelineActivity :
     private var selectedAction = 0
     private var absolutePhotoPath = ""
     private lateinit var step: Step
-
+    internal lateinit var instructionId: String
 
     private enum class ImageActions(val key: Int, val stringId: Int) {
         EditCurrent(0, R.string.select_variant_edit_current),
@@ -66,7 +66,7 @@ class GuidelineActivity :
     @UnstableDefault
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val instructionId = intent?.getStringExtra("instructionId") ?: ""
+        instructionId = intent?.getStringExtra("instructionId") ?: ""
         val bundle = Bundle()
         bundle.putString("instructionId", instructionId)
 

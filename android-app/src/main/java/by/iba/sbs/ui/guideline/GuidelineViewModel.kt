@@ -73,6 +73,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @OptIn(ImplicitReflectionSerializer::class)
     fun loadInstruction(instructionId: String, forceRefresh: Boolean) {
         if (instructionId != "") {
+            isLoading.value = true
             val mData = ArrayList<Step>()
             viewModelScope.launch {
                 try {
@@ -115,6 +116,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                                 steps.value = it.data!!
                         } else if (it.error != null) notificationsQueue.value =
                             ToastMessage(it.error!!.toString(), MessageType.ERROR)
+                        isLoading.postValue(it.status == Response.Status.LOADING)
                     }
                 } catch (e: Exception) {
                     notificationsQueue.value =

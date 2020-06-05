@@ -7,6 +7,7 @@ import android.view.animation.AlphaAnimation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import by.iba.sbs.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -28,6 +29,10 @@ fun ImageView.loadImageFromResources(context: Context, aImageUrl: Int) {
         .into(this)
 }
 
+@BindingAdapter("refreshing")
+fun SwipeRefreshLayout.refreshing(value: Boolean) {
+    this.isRefreshing = value
+}
 class Extentions {
 
     companion object {

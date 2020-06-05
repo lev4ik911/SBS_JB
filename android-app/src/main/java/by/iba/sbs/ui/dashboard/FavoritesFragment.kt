@@ -31,7 +31,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
  * A simple [Fragment] subclass.
  */
 class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewModel>() {
-    override val layoutId: Int = by.iba.sbs.R.layout.favorites_fragment
+    override val layoutId: Int = R.layout.favorites_fragment
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: DashboardViewModel by sharedViewModel()
     private val mainViewModel: MainViewModel by sharedViewModel()
@@ -176,7 +176,6 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                     }
                     viewModel.favorite.observe(viewLifecycleOwner, Observer {
                         favoritesAdapter.addItems(it)
-                        binding.lSwipeRefresh.isRefreshing = false
                     })
                     viewModel.loadFavorites(false)
                 }
