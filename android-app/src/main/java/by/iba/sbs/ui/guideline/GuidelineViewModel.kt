@@ -48,7 +48,6 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
             ratingDown.value = it.rating.negative
         }
     }
-    var oldSteps = listOf<Step>()
 
     val isFavorite = MutableLiveData(true)
     val isMyInstruction = MutableLiveData(true)
