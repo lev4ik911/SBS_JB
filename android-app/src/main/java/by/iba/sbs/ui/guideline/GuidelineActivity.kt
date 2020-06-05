@@ -24,6 +24,7 @@ import by.iba.sbs.BuildConfig
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionActivityBinding
 import by.iba.sbs.library.model.Step
+import by.iba.sbs.library.model.request.RatingCreate
 import by.iba.sbs.ui.profile.ProfileActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
@@ -408,7 +409,9 @@ class GuidelineActivity :
         )
     }
 
-    override fun onRatingDownAction(): String {
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun onRatingDownAction() {
         var result = ""
         MaterialDialog(this).show {
             title(R.string.title_dialog_feedback)
@@ -419,15 +422,31 @@ class GuidelineActivity :
                 result = text.toString()
             }
             lifecycleOwner(this@GuidelineActivity)
-            positiveButton(R.string.btn_send) {
-            }
+            positiveButton(R.string.btn_send, click = {
+                viewModel.createFeedback(RatingCreate(-1, result))
+            })
             negativeButton(R.string.btn_cancel)
         }
-        return result
     }
 
-    override fun onRatingUpAction(): String {
-        TODO("Not yet implemented")
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun onRatingUpAction() {
+        var result = ""
+        MaterialDialog(this).show {
+            title(R.string.title_dialog_feedback)
+            input(
+                hint = "Leave feedback",
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
+            ) { _, text ->
+                result = text.toString()
+            }
+            lifecycleOwner(this@GuidelineActivity)
+            positiveButton(R.string.btn_send, click = {
+                viewModel.createFeedback(RatingCreate(1, result))
+            })
+            negativeButton(R.string.btn_cancel)
+        }
     }
 
     @UnstableDefault

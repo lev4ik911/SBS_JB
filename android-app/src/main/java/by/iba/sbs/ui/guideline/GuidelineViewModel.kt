@@ -247,25 +247,27 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @ImplicitReflectionSerializer
     fun onRatingUpButtonClick() {
         eventsDispatcher.dispatchEvent {
-            val feedback = onRatingDownAction()
-            ratingUp.value = ratingUp.value?.plus(1)
-            viewModelScope.launch {
-                repository.insertRating(guideline.value!!.id, RatingCreate(1, feedback))
-            }
+            onRatingUpAction()
         }
+    }
 
+
+    fun onRatingDownButtonClick() {
+        eventsDispatcher.dispatchEvent {
+            onRatingDownAction()
+        }
     }
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun onRatingDownButtonClick() {
-        eventsDispatcher.dispatchEvent {
-            val feedback = onRatingDownAction()
-            ratingDown.value = ratingDown.value?.plus(1)
-            viewModelScope.launch {
-                repository.insertRating(guideline.value!!.id, RatingCreate(-1, feedback))
-            }
+    fun createFeedback(feedback: RatingCreate) {
+        viewModelScope.launch {
+            repository.insertRating(guideline.value!!.id, feedback)
         }
+        if (feedback.rating > 0)
+            ratingUp.value = ratingUp.value?.plus(1)
+        else
+            ratingDown.value = ratingDown.value?.plus(1)
     }
 
     fun onOpenProfileClick() {
@@ -321,8 +323,8 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         fun onAfterDeleteAction()
         fun onRemoveInstruction()
         fun onAfterSaveStepAction()
-        fun onRatingDownAction(): String
-        fun onRatingUpAction(): String
+        fun onRatingDownAction()
+        fun onRatingUpAction()
         fun onRemoveStep(step: Step)
         fun onLoadImageFromAPI(step: Step)
     }
