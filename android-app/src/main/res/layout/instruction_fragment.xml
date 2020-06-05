@@ -167,32 +167,14 @@
                         android:layout_margin="@dimen/spacing_normal">
 
                         <ImageButton
-                            android:id="@+id/btn_rating_down"
+                            android:id="@+id/btn_rating_up"
                             android:layout_width="@dimen/spacing_xlarge"
                             android:layout_height="@dimen/spacing_xlarge"
                             android:layout_gravity="end|center"
                             android:background="@null"
-                            android:onClick="@{() -> viewmodel.onRatingDownButtonClick()}"
-                            android:src="@drawable/thumb_down"
-                            android:tint="@color/colorLightRed" />
-
-                        <TextView
-                            android:id="@+id/tv_rating_down"
-                            visibleOrNot="@{viewmodel.ratingDown>0}"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:paddingHorizontal="@dimen/spacing_small"
-                            android:text="@{Integer.toString(viewmodel.ratingDown)}"
-                            android:textColor="@color/colorLightRed" />
-
-                        <TextView
-                            android:id="@+id/tv_rating_zero"
-                            visibleOrNot="@{(viewmodel.ratingDown+viewmodel.ratingUp)==0}"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="0" />
+                            android:onClick="@{() -> viewmodel.onRatingUpButtonClick()}"
+                            android:src="@drawable/thumb_up"
+                            android:tint="@color/colorLightGreen" />
 
                         <TextView
                             android:id="@+id/tv_rating_up"
@@ -204,15 +186,34 @@
                             android:text="@{Integer.toString(viewmodel.ratingUp)}"
                             android:textColor="@color/colorLightGreen" />
 
+                        <TextView
+                            android:id="@+id/tv_rating_zero"
+                            visibleOrNot="@{(viewmodel.ratingDown+viewmodel.ratingUp)==0}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="0" />
+
+                        <TextView
+                            android:id="@+id/tv_rating_down"
+                            visibleOrNot="@{viewmodel.ratingDown>0}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingHorizontal="@dimen/spacing_small"
+                            android:text="@{Integer.toString(viewmodel.ratingDown)}"
+                            android:textColor="@color/colorLightRed" />
+
                         <ImageButton
-                            android:id="@+id/btn_rating_up"
+                            android:id="@+id/btn_rating_down"
                             android:layout_width="@dimen/spacing_xlarge"
                             android:layout_height="@dimen/spacing_xlarge"
                             android:layout_gravity="end|center"
                             android:background="@null"
-                            android:onClick="@{() -> viewmodel.onRatingUpButtonClick()}"
-                            android:src="@drawable/thumb_up"
-                            android:tint="@color/colorLightGreen" />
+                            android:onClick="@{() -> viewmodel.onRatingDownButtonClick()}"
+                            android:src="@drawable/thumb_down"
+                            android:tint="@color/colorLightRed" />
+
                     </LinearLayout>
 
                     <com.google.android.material.tabs.TabLayout

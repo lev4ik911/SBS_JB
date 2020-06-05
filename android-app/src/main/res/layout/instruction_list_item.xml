@@ -102,16 +102,15 @@
                         android:layout_marginStart="@dimen/spacing_xxsmall"
                         android:background="@android:color/white"
                         android:gravity="center" />
-
                     <TextView
-                        android:id="@+id/tv_rating_down"
-                        style="@style/Text.Description"
+                        android:id="@+id/tv_rating_up"
                         android:layout_width="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:layout_height="wrap_content"
+                        style="@style/Text.Description"
+                        android:layout_gravity="center_vertical"
                         android:paddingHorizontal="@dimen/spacing_xxxsmall"
                         android:text="@{Integer.toString(instruction.rating.positive)}"
-                        android:textColor="@color/colorLightRed" />
+                        android:textColor="@color/colorLightGreen" />
 
                     <TextView
                         android:id="@+id/tv_rating_zero"
@@ -122,14 +121,16 @@
                         android:text="/" />
 
                     <TextView
-                        android:id="@+id/tv_rating_up"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_rating_down"
                         style="@style/Text.Description"
+                        android:layout_width="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_height="wrap_content"
                         android:paddingHorizontal="@dimen/spacing_xxxsmall"
                         android:text="@{Integer.toString(instruction.rating.negative)}"
-                        android:textColor="@color/colorLightGreen" />
+                        android:textColor="@color/colorLightRed" />
+
+
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
