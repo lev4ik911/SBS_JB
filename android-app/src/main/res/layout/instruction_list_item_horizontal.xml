@@ -70,19 +70,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="0dp"
                     tools:text="@{instruction.name}" />
-
-                <TextView
-                    android:id="@+id/tv_info"
-                    style="@style/Text.Description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_xxsmall"
-                    android:singleLine="true"
-                    tools:text="@{instruction.description}" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginTop="@dimen/spacing_xxsmall"
                     android:orientation="horizontal">
@@ -92,8 +82,6 @@
                         style="@style/Text.Description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/spacing_xxsmall"
-                        android:gravity="center"
                         tools:text="@{instruction.author}" />
 
                     <View
@@ -132,6 +120,17 @@
                         android:text="@{Integer.toString(instruction.rating.negative)}"
                         android:textColor="@color/colorLightRed" />
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_info"
+                    style="@style/Text.Description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xxsmall"
+                    android:singleLine="true"
+                    tools:text="@{instruction.description}" />
+
+
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

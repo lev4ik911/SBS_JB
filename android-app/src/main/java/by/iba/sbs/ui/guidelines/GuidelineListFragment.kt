@@ -63,7 +63,7 @@ class GuidelineListFragment :
             instructionsAdapter.itemTouchHelper.attachToRecyclerView(it)
             it.layoutAnimation = AnimationUtils.loadLayoutAnimation(
                 requireContext(),
-                R.anim.layout_animation_right_to_left
+                R.anim.layout_animation_left_to_right
             )
         }
 //        binding.lSwipeRefresh.setOnRefreshListener {

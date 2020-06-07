@@ -70,15 +70,6 @@
                     android:layout_marginBottom="0dp"
                     tools:text="@{instruction.name}" />
 
-                <TextView
-                    android:id="@+id/tv_info"
-                    style="@style/Text.Description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_xxsmall"
-                    android:singleLine="true"
-                    tools:text="@{instruction.description}" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -102,11 +93,12 @@
                         android:layout_marginStart="@dimen/spacing_xxsmall"
                         android:background="@android:color/white"
                         android:gravity="center" />
+
                     <TextView
                         android:id="@+id/tv_rating_up"
+                        style="@style/Text.Description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/Text.Description"
                         android:layout_gravity="center_vertical"
                         android:paddingHorizontal="@dimen/spacing_xxxsmall"
                         android:text="@{Integer.toString(instruction.rating.positive)}"
@@ -124,14 +116,23 @@
                         android:id="@+id/tv_rating_down"
                         style="@style/Text.Description"
                         android:layout_width="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:paddingHorizontal="@dimen/spacing_xxxsmall"
                         android:text="@{Integer.toString(instruction.rating.negative)}"
                         android:textColor="@color/colorLightRed" />
 
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_info"
+                    style="@style/Text.Description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xxsmall"
+                    android:singleLine="true"
+                    tools:text="@{instruction.description}" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
