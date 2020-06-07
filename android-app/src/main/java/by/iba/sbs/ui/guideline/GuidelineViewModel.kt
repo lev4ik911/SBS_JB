@@ -2,6 +2,7 @@ package by.iba.sbs.ui.guideline
 
 import android.content.Context
 import android.preference.PreferenceManager
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import by.iba.mvvmbase.BaseViewModel
@@ -275,6 +276,10 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         eventsDispatcher.dispatchEvent { onOpenProfile(1) }//TODO
     }
 
+    fun onPreviewStepClick(view: View, step: Step) {
+        eventsDispatcher.dispatchEvent { onPreviewStepAction(view, step) }
+    }
+
     fun onEditStepClick(step: Step) {
         eventsDispatcher.dispatchEvent { onEditStep(step.stepId) }
     }
@@ -319,6 +324,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         fun onOpenProfile(profileId: Int)
         fun onEditStep(stepId: String)
         fun onEditImage(step: Step)
+        fun onPreviewStepAction(view: View, step: Step)
         fun onAfterSaveAction()
         fun onAfterDeleteAction()
         fun onRemoveInstruction()

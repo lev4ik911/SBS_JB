@@ -12,17 +12,22 @@ import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
 import android.text.InputType
+import android.view.Gravity
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import by.iba.mvvmbase.BaseEventsActivity
 import by.iba.sbs.BuildConfig
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionActivityBinding
+import by.iba.sbs.databinding.StepPreviewLayoutBinding
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.model.request.RatingCreate
 import by.iba.sbs.ui.profile.ProfileActivity
@@ -50,7 +55,7 @@ class GuidelineActivity :
     override val layoutId: Int = R.layout.instruction_activity
     override val viewModel: GuidelineViewModel by viewModel()
     override val viewModelVariableId: Int = by.iba.sbs.BR.viewmodel
-
+    lateinit var mPopupWindow: PopupWindow
 
     private val PICK_IMAGE_GALLERY_REQUEST_CODE = 609
     private val CAMERA_ACTION_PICK_REQUEST_CODE = 610
@@ -380,14 +385,36 @@ class GuidelineActivity :
 
     }
 
+    override fun onPreviewStepAction(view: View, step: Step) {
+        val contentView = layoutInflater.inflate(R.layout.step_preview_layout, null)
+        val binding = DataBindingUtil.bind<StepPreviewLayoutBinding>(contentView)
+        binding!!.step = step
+        mPopupWindow = PopupWindow(
+            contentView,
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).also {
+            it.isOutsideTouchable = false
+            it.isFocusable = true
+            it.elevation = 25.0f
+            it.animationStyle = R.style.AnimationZoom
+        }
+        binding.btnClose.setOnClickListener {
+            mPopupWindow.dismiss()
+        }
+
+        mPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+    }
+
     override fun onAfterSaveAction() {
         findNavController(R.id.fragment_navigation_instruction)
             .navigate(R.id.navigation_instruction_view)
     }
+
     @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onRemoveInstruction() {
-        val builder = AlertDialog.Builder(this).apply{
+        val builder = AlertDialog.Builder(this).apply {
             setTitle(resources.getString(R.string.title_delete_instruction_dialog))
             setMessage(resources.getString(R.string.msg_delete_instruction_dialog, viewModel.guideline.value!!.name))
             setPositiveButton(resources.getString(R.string.btn_delete), { dialogInterface: DialogInterface, i: Int ->
