@@ -276,12 +276,21 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         eventsDispatcher.dispatchEvent { onOpenProfile(1) }//TODO
     }
 
-    fun onClosePreviewStepClick() {
-        eventsDispatcher.dispatchEvent { onClosePreviewStepAction() }
-    }
 
     fun onPreviewStepClick(view: View, step: Step) {
         eventsDispatcher.dispatchEvent { onPreviewStepAction(view, step) }
+    }
+
+    fun onPreviewStepCloseClick() {
+        eventsDispatcher.dispatchEvent { onClosePreviewStepAction() }
+    }
+
+    fun onPreviewStepNextClick(currentStep: Step) {
+        eventsDispatcher.dispatchEvent { onPreviewStepNextAction(currentStep) }
+    }
+
+    fun onPreviewStepPreviousClick(currentStep: Step) {
+        eventsDispatcher.dispatchEvent { onPreviewStepPreviousAction(currentStep) }
     }
 
     fun onEditStepClick(step: Step) {
@@ -330,6 +339,8 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         fun onEditImage(step: Step)
         fun onPreviewStepAction(view: View, step: Step)
         fun onClosePreviewStepAction()
+        fun onPreviewStepNextAction(currentStep: Step)
+        fun onPreviewStepPreviousAction(currentStep: Step)
         fun onAfterSaveAction()
         fun onAfterDeleteAction()
         fun onRemoveInstruction()

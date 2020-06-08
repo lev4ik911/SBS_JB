@@ -33,7 +33,7 @@
                 android:elevation="@dimen/spacing_xsmall"
                 android:src="@drawable/window_close"
                 android:tint="@color/textColorSecondary"
-                android:onClick="@{()-> viewmodel.onClosePreviewStepClick()}"
+                android:onClick="@{()-> viewmodel.onPreviewStepCloseClick()}"
                 tools:ignore="ContentDescription" />
 
             <androidx.recyclerview.widget.RecyclerView

@@ -62,6 +62,7 @@ class GuidelineActivity :
     override val viewModel: GuidelineViewModel by viewModel()
     override val viewModelVariableId: Int = by.iba.sbs.BR.viewmodel
     lateinit var mPopupWindow: PopupWindow
+    var bindingPopup: StepPreviewLayoutBinding? = null
 
     // lateinit var bindingPopup?: StepPreviewLayoutBinding
     private val PICK_IMAGE_GALLERY_REQUEST_CODE = 609
@@ -71,7 +72,7 @@ class GuidelineActivity :
     private var usingCamera = false
     private var selectedAction = 0
     private var absolutePhotoPath = ""
-    private lateinit var step: Step
+    private lateinit var _editStep: Step
     internal lateinit var instructionId: String
 
     private enum class ImageActions(val key: Int, val stringId: Int) {
@@ -186,8 +187,8 @@ class GuidelineActivity :
         when (selectedAction) {
             ImageActions.EditCurrent.key -> {
                 try {
-                    if (!step.imagePath.isEmpty()) {
-                        val sourcePath = Uri.fromFile(File(step.imagePath))
+                    if (!_editStep.imagePath.isEmpty()) {
+                        val sourcePath = Uri.fromFile(File(_editStep.imagePath))
                         val destinationUri = createTempImageFileInInternalStorage()
                         UCrop.of(sourcePath, destinationUri)
                             .withAspectRatio(1f, 1f)
@@ -239,7 +240,7 @@ class GuidelineActivity :
                 if (resultCode == RESULT_OK) {
                     val resultUri: Uri? = UCrop.getOutput(data!!)
                     if (!(resultUri?.path).isNullOrEmpty())
-                        step.imagePath = resultUri?.path!!
+                        _editStep.imagePath = resultUri?.path!!
                     viewModel.steps.value = viewModel.steps.value
 
                 } else if (resultCode == UCrop.RESULT_ERROR) {
@@ -364,8 +365,8 @@ class GuidelineActivity :
     }
 
     override fun onEditImage(editStep: Step) {
-        step = editStep
-        val stepHasImage = step.imagePath.isNotEmpty()
+        _editStep = editStep
+        val stepHasImage = _editStep.imagePath.isNotEmpty()
         val builder = AlertDialog.Builder(this)
         val listOfResolvedActions = ImageActions.values().filter {
             (stepHasImage && it == ImageActions.EditCurrent) || (it != ImageActions.EditCurrent)
@@ -398,9 +399,9 @@ class GuidelineActivity :
     override fun onPreviewStepAction(view: View, step: Step) {
 
         val contentView = layoutInflater.inflate(R.layout.step_preview_layout, null)
-        var bindingPopup = DataBindingUtil.bind<StepPreviewLayoutBinding>(contentView)
+        bindingPopup = DataBindingUtil.bind<StepPreviewLayoutBinding>(contentView)
         if (bindingPopup != null) {
-            bindingPopup.viewmodel = viewModel
+            bindingPopup!!.viewmodel = viewModel
             mPopupWindow = PopupWindow(
                 contentView,
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -424,7 +425,7 @@ class GuidelineActivity :
 //            bindingPopup.btnClose.setOnClickListener {
 //                mPopupWindow.dismiss()
 //            }
-            bindingPopup.rvSteps.apply {
+            bindingPopup!!.rvSteps.apply {
                 this.layoutManager = LinearLayoutManager(
                     context,
                     LinearLayoutManager.HORIZONTAL, false
@@ -436,18 +437,9 @@ class GuidelineActivity :
             }
             viewModel.steps.observe(this, androidx.lifecycle.Observer {
                 stepsAdapter.addItems(it)
-                bindingPopup.rvSteps.scrollToPosition(step.weight - 1)
+                bindingPopup!!.rvSteps.scrollToPosition(step.weight - 1)
             })
 
-//            bindingPopup.btnNext.setOnClickListener {
-//                if(bindingPopup.step != null) {
-//                    val nextStep =
-//                        viewModel.steps.value?.firstOrNull { it.weight == bindingPopup.step!!.weight + 1 }
-//                    if (nextStep != null) {
-//                        bindingPopup.step = nextStep
-//                    }
-//                }
-//            }
             mPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
         }
 
@@ -455,6 +447,14 @@ class GuidelineActivity :
 
     override fun onClosePreviewStepAction() {
         mPopupWindow.dismiss()
+    }
+
+    override fun onPreviewStepNextAction(currentStep: Step) {
+        bindingPopup?.rvSteps?.scrollToPosition(currentStep.weight)
+    }
+
+    override fun onPreviewStepPreviousAction(currentStep: Step) {
+        bindingPopup?.rvSteps?.scrollToPosition(currentStep.weight - 2)
     }
 
     override fun onAfterSaveAction() {
