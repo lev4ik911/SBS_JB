@@ -39,7 +39,7 @@ interface IGuidelineRepository {
     suspend fun insertStep(guidelineId: String, data: Step): Response<StepView>
     suspend fun updateStep(guidelineId: String, data: Step): Response<StepView>
     suspend fun deleteStep(guidelineId: String, stepId: String): Response<String?>
-    suspend fun getStepByIdFromLocaolDB(guidelineId: String, stepId: String): Step
+    suspend fun getStepByIdFromLocalDB(guidelineId: String, stepId: String): Step
     suspend fun insertRating(guidelineId: String, data: RatingCreate): Response<RatingView>
     suspend fun updateRating(guidelineId: String, data: Feedback): Response<RatingView>
     suspend fun deleteRating(guidelineId: String, stepId: String): Response<String?>
@@ -356,17 +356,18 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
         return@coroutineScope result
     }
 
-    override suspend fun getStepByIdFromLocaolDB (guidelineId: String, stepId: String): Step = coroutineScope {
-        val result = Step()
-        guidelinesQueries.selectStepById(guidelineId, stepId).executeAsOne().apply {
-            result.stepId = this.id
-            result.name = this.name
-            result.description = this.description
-            result.weight = this.weight!!.toInt()
-            result.imagePath = this.imagePath
-            result.updateImageTimeSpan = this.updateImageTimeSpan!!.toInt()
-        }
-        return@coroutineScope result
+    override suspend fun getStepByIdFromLocalDB(guidelineId: String, stepId: String): Step =
+        coroutineScope {
+            val result = Step()
+            guidelinesQueries.selectStepById(guidelineId, stepId).executeAsOne().apply {
+                result.stepId = this.id
+                result.name = this.name
+                result.description = this.description
+                result.weight = this.weight!!.toInt()
+                result.imagePath = this.imagePath
+                result.updateImageTimeSpan = this.updateImageTimeSpan!!.toInt()
+            }
+            return@coroutineScope result
     }
 
     @UnstableDefault

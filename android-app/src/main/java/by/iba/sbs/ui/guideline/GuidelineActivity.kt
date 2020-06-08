@@ -426,6 +426,7 @@ class GuidelineActivity :
                     context,
                     LinearLayoutManager.HORIZONTAL, false
                 )
+
                 adapter = stepsAdapter
                 val snapHelperStart: SnapHelper = PagerSnapHelper()
                 snapHelperStart.attachToRecyclerView(this)

@@ -104,7 +104,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                                     if (it.updateImageTimeSpan != 0) {
                                         viewModelScope.launch {
                                             val stepFromLocalDB =
-                                                repository.getStepByIdFromLocaolDB(
+                                                repository.getStepByIdFromLocalDB(
                                                     instructionId,
                                                     it.stepId
                                                 )

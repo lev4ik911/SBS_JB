@@ -17,7 +17,7 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:elevation="@dimen/spacing_xxsmall">
 
         <RelativeLayout
@@ -27,15 +27,6 @@
             android:background="@color/colorBackgroundAlpha"
             android:gravity="center"
             android:padding="@dimen/spacing_xxsmall">
-
-            <TextView
-                android:id="@+id/tv_step_number"
-                style="@style/Text.Main.Bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@id/rv_steps"
-                android:padding="@dimen/spacing_small"
-                tools:text="@{Integer.toString(step.weight)}" />
 
             <ImageButton
                 android:id="@+id/btn_close"
@@ -52,8 +43,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_steps"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/spacing_large" />
+                android:layout_height="wrap_content" />
 
         </RelativeLayout>
 
