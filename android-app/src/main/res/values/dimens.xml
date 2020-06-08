@@ -10,6 +10,7 @@
     <dimen name="list_image_width_land">168dp</dimen>
     <dimen name="list_image_height_land">80dp</dimen>
     <dimen name="preview_minimal_width">320dp</dimen>
+    <dimen name="horizontal_item_width">240dp</dimen>
     <dimen name="preview_image_width_land">240dp</dimen>
     <dimen name="preview_image_height_land">120dp</dimen>
     <dimen name="bottom_navigation_height">48dp</dimen>

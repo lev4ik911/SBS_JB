@@ -20,7 +20,7 @@
         android:id="@+id/card"
         style="@style/Card"
         android:onClick="@{(view)-> viewmodel.onOpenGuidelineClick(view, instruction)}"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/horizontal_item_width"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_xsmall"
         android:layout_marginBottom="@dimen/spacing_xsmall"

@@ -23,10 +23,16 @@ import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.SnapHelper
 import by.iba.mvvmbase.BaseEventsActivity
+import by.iba.mvvmbase.adapter.BaseBindingAdapter
+import by.iba.sbs.BR
 import by.iba.sbs.BuildConfig
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionActivityBinding
+import by.iba.sbs.databinding.StepPreviewItemBinding
 import by.iba.sbs.databinding.StepPreviewLayoutBinding
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.model.request.RatingCreate
@@ -57,6 +63,7 @@ class GuidelineActivity :
     override val viewModelVariableId: Int = by.iba.sbs.BR.viewmodel
     lateinit var mPopupWindow: PopupWindow
 
+    // lateinit var bindingPopup?: StepPreviewLayoutBinding
     private val PICK_IMAGE_GALLERY_REQUEST_CODE = 609
     private val CAMERA_ACTION_PICK_REQUEST_CODE = 610
     private val WRITE_STORAGE_PERMISSION = 611
@@ -179,13 +186,13 @@ class GuidelineActivity :
         when (selectedAction) {
             ImageActions.EditCurrent.key -> {
                 try {
-                        if (!step.imagePath.isEmpty()) {
-                            val sourcePath = Uri.fromFile(File(step.imagePath))
-                            val destinationUri = createTempImageFileInInternalStorage()
-                            UCrop.of(sourcePath, destinationUri)
-                                .withAspectRatio(1f, 1f)
-                                .start(this@GuidelineActivity)
-                        }
+                    if (!step.imagePath.isEmpty()) {
+                        val sourcePath = Uri.fromFile(File(step.imagePath))
+                        val destinationUri = createTempImageFileInInternalStorage()
+                        UCrop.of(sourcePath, destinationUri)
+                            .withAspectRatio(1f, 1f)
+                            .start(this@GuidelineActivity)
+                    }
 
                 } catch (ex: Exception) {
                     val toast = Toast.makeText(
@@ -337,7 +344,10 @@ class GuidelineActivity :
     override fun onCallInstructionEditor(instructionId: String) {
         val bundle = Bundle()
         bundle.putString("instructionId", instructionId)
-        findNavController(R.id.fragment_navigation_instruction).navigate(R.id.navigation_instruction_edit, bundle)
+        findNavController(R.id.fragment_navigation_instruction).navigate(
+            R.id.navigation_instruction_edit,
+            bundle
+        )
     }
 
     override fun onOpenProfile(profileId: Int) {
@@ -386,24 +396,61 @@ class GuidelineActivity :
     }
 
     override fun onPreviewStepAction(view: View, step: Step) {
+
         val contentView = layoutInflater.inflate(R.layout.step_preview_layout, null)
-        val binding = DataBindingUtil.bind<StepPreviewLayoutBinding>(contentView)
-        binding!!.step = step
-        mPopupWindow = PopupWindow(
-            contentView,
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        ).also {
-            it.isOutsideTouchable = false
-            it.isFocusable = true
-            it.elevation = 25.0f
-            it.animationStyle = R.style.AnimationZoom
-        }
-        binding.btnClose.setOnClickListener {
-            mPopupWindow.dismiss()
+        var bindingPopup = DataBindingUtil.bind<StepPreviewLayoutBinding>(contentView)
+        if (bindingPopup != null) {
+            bindingPopup!!.step = step
+            mPopupWindow = PopupWindow(
+                contentView,
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).also {
+                it.isOutsideTouchable = false
+                it.isFocusable = true
+                it.elevation = 25.0f
+                it.animationStyle = R.style.AnimationZoom
+            }
+            val stepsAdapter =
+                BaseBindingAdapter<Step, StepPreviewItemBinding, GuidelineViewModel>(
+                    R.layout.step_preview_item,
+                    BR.step,
+                    BR.viewmodel,
+                    viewModel,
+                    isItemsEquals = { oldItem, newItem ->
+                        oldItem.weight == newItem.weight
+                    }
+                )
+            bindingPopup.rvSteps.apply {
+                this.layoutManager = LinearLayoutManager(
+                    context,
+                    LinearLayoutManager.HORIZONTAL, false
+                )
+                adapter = stepsAdapter
+                val snapHelperStart: SnapHelper = PagerSnapHelper()
+                snapHelperStart.attachToRecyclerView(this)
+            }
+            viewModel.steps.observe(this, androidx.lifecycle.Observer {
+                stepsAdapter.addItems(it)
+                bindingPopup.rvSteps.scrollToPosition(step.weight - 1)
+            })
+
+//            bindingPopup.btnNext.setOnClickListener {
+//                if(bindingPopup.step != null) {
+//                    val nextStep =
+//                        viewModel.steps.value?.firstOrNull { it.weight == bindingPopup.step!!.weight + 1 }
+//                    if (nextStep != null) {
+//                        bindingPopup.step = nextStep
+//                    }
+//                }
+//            }
+            mPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
         }
 
-        mPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+    }
+
+    override fun onClosePreviewStepAction() {
+        mPopupWindow.dismiss()
     }
 
     override fun onAfterSaveAction() {
@@ -416,10 +463,17 @@ class GuidelineActivity :
     override fun onRemoveInstruction() {
         val builder = AlertDialog.Builder(this).apply {
             setTitle(resources.getString(R.string.title_delete_instruction_dialog))
-            setMessage(resources.getString(R.string.msg_delete_instruction_dialog, viewModel.guideline.value!!.name))
-            setPositiveButton(resources.getString(R.string.btn_delete), { dialogInterface: DialogInterface, i: Int ->
-                viewModel.deleteInstruction(viewModel.guideline.value!!)
-            })
+            setMessage(
+                resources.getString(
+                    R.string.msg_delete_instruction_dialog,
+                    viewModel.guideline.value!!.name
+                )
+            )
+            setPositiveButton(
+                resources.getString(R.string.btn_delete),
+                { dialogInterface: DialogInterface, i: Int ->
+                    viewModel.deleteInstruction(viewModel.guideline.value!!)
+                })
             setNegativeButton(resources.getString(R.string.btn_cancel), null)
         }
         val dialog = builder.create()
@@ -534,7 +588,7 @@ class GuidelineActivity :
 
     }
 
-    private val imageHandler = object: Handler(Looper.getMainLooper()) {
+    private val imageHandler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             viewModel.updatedStepId.value = msg.obj as String
             super.handleMessage(msg)

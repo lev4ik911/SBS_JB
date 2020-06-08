@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="android.view.View" />
+
+        <variable
+            name="viewmodel"
+            type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
 
         <variable
             name="step"
@@ -21,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/bg_gradient"
+            android:background="@color/colorBackgroundAlpha"
             android:gravity="center"
             android:padding="@dimen/spacing_xxsmall">
 
@@ -30,87 +33,30 @@
                 style="@style/Text.Main.Bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/cards"
+                android:layout_alignStart="@id/rv_steps"
                 android:padding="@dimen/spacing_small"
                 tools:text="@{Integer.toString(step.weight)}" />
 
             <ImageButton
                 android:id="@+id/btn_close"
                 style="@style/Widget.AppCompat.ActionButton.Overflow"
+                android:layout_alignEnd="@id/rv_steps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@id/cards"
+                android:elevation="@dimen/spacing_xsmall"
                 android:src="@drawable/window_close"
                 android:tint="@color/colorSecondary"
+                android:onClick="@{()-> viewmodel.onClosePreviewStepClick()}"
                 tools:ignore="ContentDescription" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cards"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_steps"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/spacing_xsmall"
-                android:layout_marginTop="@dimen/list_image_height_land"
-                android:layout_marginBottom="@dimen/spacing_xsmall"
-                android:elevation="@dimen/spacing_normal"
-                android:minWidth="@dimen/preview_minimal_width"
-                android:padding="@dimen/spacing_small"
-                app:cardCornerRadius="@dimen/corner_radius">
-
-                <ImageButton
-                    android:id="@+id/btn_open_profile"
-                    style="@style/Widget.AppCompat.ActionButton.Overflow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:src="@drawable/baseline_open_in_new_24"
-                    android:tint="@color/textColorSecondary"
-                    android:visibility="gone" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/spacing_small"
-                    android:layout_marginTop="@dimen/spacing_xxxxlarge"
-                    android:layout_marginBottom="@dimen/spacing_small"
-
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_user_name"
-                        style="@style/Text.Main.Bold"
-                        visibleOrGone="@{step.name.length() != 0}"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center"
-                        android:padding="@dimen/spacing_xxsmall"
-                        android:text="@{step.name}" />
-
-                    <TextView
-                        android:id="@+id/tv_off_reason"
-                        style="@style/Text"
-                        visibleOrGone="@{step.description.length() != 0}"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:padding="@dimen/spacing_xxsmall"
-                        android:text="@{step.description}" />
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
+                android:paddingTop="@dimen/spacing_large" />
 
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/iv_profile"
-            android:layout_width="@dimen/preview_image_width_land"
-            android:layout_height="@dimen/preview_image_height_land"
-            android:layout_margin="@dimen/spacing_normal"
-            android:src="@drawable/ic_paneer"
-            app:civ_border_color="@color/colorSecondaryVariant"
-            app:civ_border_width="@dimen/spacing_xsmall"
-            app:layout_anchor="@id/cards"
-            app:layout_anchorGravity="top|center" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
