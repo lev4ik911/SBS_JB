@@ -8,6 +8,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="viewmodel"
+            type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
+
+        <variable
             name="step"
             type="by.iba.sbs.library.model.Step" />
     </data>
@@ -48,6 +52,7 @@
 
                 <ImageButton
                     android:id="@+id/btn_previous"
+                    visibleOrGone="@{step.weight!=1}"
                     style="@style/Widget.AppCompat.ActionButton.Overflow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

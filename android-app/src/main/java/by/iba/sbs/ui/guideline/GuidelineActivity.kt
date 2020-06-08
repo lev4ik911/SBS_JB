@@ -400,11 +400,11 @@ class GuidelineActivity :
         val contentView = layoutInflater.inflate(R.layout.step_preview_layout, null)
         var bindingPopup = DataBindingUtil.bind<StepPreviewLayoutBinding>(contentView)
         if (bindingPopup != null) {
-            bindingPopup!!.step = step
+            bindingPopup.viewmodel = viewModel
             mPopupWindow = PopupWindow(
                 contentView,
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
+                LinearLayout.LayoutParams.MATCH_PARENT
             ).also {
                 it.isOutsideTouchable = false
                 it.isFocusable = true
@@ -421,6 +421,9 @@ class GuidelineActivity :
                         oldItem.weight == newItem.weight
                     }
                 )
+//            bindingPopup.btnClose.setOnClickListener {
+//                mPopupWindow.dismiss()
+//            }
             bindingPopup.rvSteps.apply {
                 this.layoutManager = LinearLayoutManager(
                     context,

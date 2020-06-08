@@ -6,13 +6,9 @@
 
         <import type="android.view.View" />
 
-        <variable
-            name="viewmodel"
-            type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
-
-        <variable
-            name="step"
-            type="by.iba.sbs.library.model.Step" />
+            <variable
+                name="viewmodel"
+                type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -24,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@color/colorBackgroundAlpha"
+            android:background="@color/colorSecondary"
             android:gravity="center"
             android:padding="@dimen/spacing_xxsmall">
 
@@ -36,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:elevation="@dimen/spacing_xsmall"
                 android:src="@drawable/window_close"
-                android:tint="@color/colorSecondary"
+                android:tint="@color/textColorSecondary"
                 android:onClick="@{()-> viewmodel.onClosePreviewStepClick()}"
                 tools:ignore="ContentDescription" />
 
