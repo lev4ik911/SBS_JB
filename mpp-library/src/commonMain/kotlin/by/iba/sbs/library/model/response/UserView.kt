@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class UserView(
     var id: String,
     var name: String,
-    var email: String
+    var email: String,
+    var activity: ActionSummary = ActionSummary()
 )

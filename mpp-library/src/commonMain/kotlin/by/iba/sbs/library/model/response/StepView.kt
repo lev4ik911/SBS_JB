@@ -9,5 +9,6 @@ data class StepView(
     var description: String,
     var weight: Int,
     var imagePath: String = "",
-    var updateImageTimeSpan: Int = 0
+    var updateImageTimeSpan: Int = 0,
+    var activity: ActionSummary = ActionSummary()
 )
