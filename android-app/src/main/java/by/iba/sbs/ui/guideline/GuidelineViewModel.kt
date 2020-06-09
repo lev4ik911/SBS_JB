@@ -2,6 +2,7 @@ package by.iba.sbs.ui.guideline
 
 import android.content.Context
 import android.preference.PreferenceManager
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import by.iba.mvvmbase.BaseViewModel
@@ -14,6 +15,7 @@ import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.Feedback
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.Step
+import by.iba.sbs.library.model.request.RatingCreate
 import by.iba.sbs.library.repository.GuidelineRepository
 import by.iba.sbs.library.service.LocalSettings
 import com.russhwolf.settings.AndroidSettings
@@ -73,6 +75,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @OptIn(ImplicitReflectionSerializer::class)
     fun loadInstruction(instructionId: String, forceRefresh: Boolean) {
         if (instructionId != "") {
+            isLoading.value = true
             val mData = ArrayList<Step>()
             viewModelScope.launch {
                 try {
@@ -100,21 +103,30 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                                     it.updateImageTimeSpan = 1 //TODO (delete fake data!!!)
                                     if (it.updateImageTimeSpan != 0) {
                                         viewModelScope.launch {
-                                            val stepFromLocalDB = repository.getStepByIdFromLocaolDB(instructionId, it.stepId)
-                                            if (stepFromLocalDB.updateImageTimeSpan != it.updateImageTimeSpan){
-                                                eventsDispatcher.dispatchEvent { onLoadImageFromAPI(it) }
+                                            val stepFromLocalDB =
+                                                repository.getStepByIdFromLocalDB(
+                                                    instructionId,
+                                                    it.stepId
+                                                )
+                                            if (stepFromLocalDB.updateImageTimeSpan != it.updateImageTimeSpan) {
+                                                eventsDispatcher.dispatchEvent {
+                                                    onLoadImageFromAPI(
+                                                        it
+                                                    )
                                                 }
+                                            }
                                             it.imagePath = stepFromLocalDB.imagePath
-                                            it.updateImageTimeSpan = stepFromLocalDB.updateImageTimeSpan
+                                            it.updateImageTimeSpan =
+                                                stepFromLocalDB.updateImageTimeSpan
                                         }
                                     }
                                 }
                                 steps.value = tempListOfSteps
-                            }
-                            else
+                            } else
                                 steps.value = it.data!!
                         } else if (it.error != null) notificationsQueue.value =
                             ToastMessage(it.error!!.toString(), MessageType.ERROR)
+                        isLoading.postValue(it.status == Response.Status.LOADING)
                     }
                 } catch (e: Exception) {
                     notificationsQueue.value =
@@ -233,17 +245,53 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         } else isFavorite.value = !isFavorite.value!!
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     fun onRatingUpButtonClick() {
-        ratingUp.value = ratingUp.value?.plus(1)
+        eventsDispatcher.dispatchEvent {
+            onRatingUpAction()
+        }
     }
 
+
     fun onRatingDownButtonClick() {
-        ratingDown.value = ratingDown.value?.plus(1)
+        eventsDispatcher.dispatchEvent {
+            onRatingDownAction()
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun createFeedback(feedback: RatingCreate) {
+        viewModelScope.launch {
+            repository.insertRating(guideline.value!!.id, feedback)
+        }
+        if (feedback.rating > 0)
+            ratingUp.value = ratingUp.value?.plus(1)
+        else
+            ratingDown.value = ratingDown.value?.plus(1)
     }
 
     fun onOpenProfileClick() {
         //get profileId from instruction
         eventsDispatcher.dispatchEvent { onOpenProfile(1) }//TODO
+    }
+
+
+    fun onPreviewStepClick(view: View, step: Step) {
+        eventsDispatcher.dispatchEvent { onPreviewStepAction(view, step) }
+    }
+
+    fun onPreviewStepCloseClick() {
+        eventsDispatcher.dispatchEvent { onClosePreviewStepAction() }
+    }
+
+    fun onPreviewStepNextClick(currentStep: Step) {
+        eventsDispatcher.dispatchEvent { onPreviewStepNextAction(currentStep) }
+    }
+
+    fun onPreviewStepPreviousClick(currentStep: Step) {
+        eventsDispatcher.dispatchEvent { onPreviewStepPreviousAction(currentStep) }
     }
 
     fun onEditStepClick(step: Step) {
@@ -296,10 +344,16 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         fun onEditStep(stepId: String)
         fun onEditStepImage(step: Step)
         fun onEditGuidelineImage()
+        fun onPreviewStepAction(view: View, step: Step)
+        fun onClosePreviewStepAction()
+        fun onPreviewStepNextAction(currentStep: Step)
+        fun onPreviewStepPreviousAction(currentStep: Step)
         fun onAfterSaveAction()
         fun onAfterDeleteAction()
         fun onRemoveInstruction()
         fun onAfterSaveStepAction()
+        fun onRatingDownAction()
+        fun onRatingUpAction()
         fun onRemoveStep(step: Step)
         fun onLoadImageFromAPI(step: Step)
     }
@@ -314,9 +368,13 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                 if (result.isSuccess && result.isNotEmpty) {
                     notificationsQueue.value =
                         ToastMessage("Successful insert", MessageType.SUCCESS)
-                        //TODO(Add to total res)
+                    //TODO(Add to total res)
                     val resultGuideline = result.data!!
-                    guideline.value = Guideline(id = resultGuideline.id, name = resultGuideline.name, description = resultGuideline.description?:"")
+                    guideline.value = Guideline(
+                        id = resultGuideline.id,
+                        name = resultGuideline.name,
+                        description = resultGuideline.description ?: ""
+                    )
 
                 } else if (result.error != null) notificationsQueue.value =
                     ToastMessage(result.error!!.toString(), MessageType.ERROR)
@@ -384,7 +442,14 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                     //TODO(Add to total res)
                     val resultStep = result.data!!
                     val stepArr = steps.value?.toMutableList()
-                    stepArr?.add(Step(stepId = resultStep.id, name = resultStep.name, description = resultStep.description, weight = resultStep.weight))
+                    stepArr?.add(
+                        Step(
+                            stepId = resultStep.id,
+                            name = resultStep.name,
+                            description = resultStep.description,
+                            weight = resultStep.weight
+                        )
+                    )
                     steps.value = stepArr
                     eventsDispatcher.dispatchEvent { onAfterSaveStepAction() }
                 } else if (result.error != null) notificationsQueue.value =

@@ -14,6 +14,7 @@ import by.iba.sbs.databinding.InstructionFragmentBinding
 import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.serialization.UnstableDefault
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.abs
 
@@ -31,6 +32,7 @@ class GuidelineFragment :
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
 
+    @UnstableDefault
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) {

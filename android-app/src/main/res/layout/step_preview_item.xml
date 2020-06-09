@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewmodel"
+            type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
+
+        <variable
+            name="step"
+            type="by.iba.sbs.library.model.Step" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/spacing_xxsmall">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:padding="@dimen/spacing_xxsmall">
+
+            <TextView
+                android:id="@+id/tv_step_number"
+                style="@style/Text.Main.Bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/cards"
+                android:padding="@dimen/spacing_xsmall"
+                tools:text="@{Integer.toString(step.weight)}" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cards"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/spacing_xsmall"
+                android:layout_marginTop="@dimen/list_image_size"
+                android:layout_marginBottom="@dimen/spacing_xsmall"
+                android:elevation="@dimen/spacing_normal"
+                android:minWidth="@dimen/preview_minimal_width"
+                android:padding="@dimen/spacing_small"
+                app:cardCornerRadius="@dimen/corner_radius">
+
+                <ImageButton
+                    android:id="@+id/btn_previous"
+                    visibleOrGone="@{step.weight!=1}"
+                    android:onClick="@{()-> viewmodel.onPreviewStepPreviousClick(step)}"
+                    style="@style/Widget.AppCompat.ActionButton.Overflow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:src="@drawable/chevron_left"
+                    android:tint="@color/textColorSecondary"
+                    tools:ignore="ContentDescription" />
+
+                <ImageButton
+                    android:id="@+id/btn_next"
+                    android:onClick="@{()-> viewmodel.onPreviewStepNextClick(step)}"
+                    style="@style/Widget.AppCompat.ActionButton.Overflow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/chevron_right"
+                    android:tint="@color/textColorSecondary"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/spacing_small"
+                    android:layout_marginTop="@dimen/spacing_xxxxlarge"
+                    android:layout_marginBottom="@dimen/spacing_small"
+
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_user_name"
+                        style="@style/Text.Main.Bold"
+                        visibleOrGone="@{step.name.length() != 0}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
+                        android:padding="@dimen/spacing_xxsmall"
+                        android:text="@{step.name}" />
+
+                    <TextView
+                        android:id="@+id/tv_off_reason"
+                        style="@style/Text"
+                        visibleOrGone="@{step.description.length() != 0}"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="@dimen/spacing_xxsmall"
+                        android:text="@{step.description}" />
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_step_image"
+            android:layout_width="@dimen/preview_image_width_land"
+            android:layout_height="@dimen/preview_image_height_land"
+            android:layout_margin="@dimen/spacing_small"
+            android:src="@drawable/ic_paneer"
+            app:layout_anchor="@id/cards"
+            app:layout_anchorGravity="top|center"
+            tools:ignore="ContentDescription" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

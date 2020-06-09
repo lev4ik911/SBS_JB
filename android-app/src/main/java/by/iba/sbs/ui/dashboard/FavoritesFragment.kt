@@ -1,5 +1,6 @@
 package by.iba.sbs.ui.dashboard
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -20,6 +21,7 @@ import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.ui.MainActivity
 import by.iba.sbs.ui.MainViewModel
+import by.iba.sbs.ui.guideline.GuidelineActivity
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -29,7 +31,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
  * A simple [Fragment] subclass.
  */
 class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewModel>() {
-    override val layoutId: Int = by.iba.sbs.R.layout.favorites_fragment
+    override val layoutId: Int = R.layout.favorites_fragment
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: DashboardViewModel by sharedViewModel()
     private val mainViewModel: MainViewModel by sharedViewModel()
@@ -57,6 +59,11 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                         || item.description.contains(text, true)
             }
             emptyViewId = R.layout.new_item
+            onEmptyViewItemClick = {
+                val intent = Intent(activity, GuidelineActivity::class.java)
+                intent.putExtra("instructionId", 0)
+                startActivity(intent)
+            }
         }
         (activity as MainActivity).apply {
             toolbar_main.navigationIcon =
@@ -169,7 +176,6 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                     }
                     viewModel.favorite.observe(viewLifecycleOwner, Observer {
                         favoritesAdapter.addItems(it)
-                        binding.lSwipeRefresh.isRefreshing = false
                     })
                     viewModel.loadFavorites(false)
                 }

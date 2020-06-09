@@ -22,9 +22,10 @@
         />
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/l_swipe_refresh"
-
             android:layout_below="@id/progressBar"
             app:layout_constraintTop_toBottomOf="@id/progressBar"
+            app:onRefreshListener="@{() -> viewmodel.loadInstructions(true)}"
+            app:refreshing="@{viewmodel.isLoading}"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
