@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SBS</string>
+    <string name="app_description">Step by step instructions</string>
+    <string name="app_version_str">Version: %s</string>
+
+    <string name="no_data">Нет данных</string>
+    <string name="submit_btn">Подтвердить</string>
+    <string name="token_hint">API token</string>
+    <string name="language_hint">Language code</string>
+    <string name="retry_btn">Повторить</string>
+    <string name="title_activity_main">SBS</string>
+    <string name="title_instructions">Инструкции</string>
+    <string name="title_dashboard">Доска</string>
+    <string name="title_notifications">Уведомления</string>
+    <string name="title_steps">Шаги</string>
+    <string name="title_feedback">Отзывы</string>
+    <string name="title_details">Детали</string>
+    <string name="title_subscribers">Подписки</string>
+    <string name="title_favorites">Избранное</string>
+    <string name="title_recommended">Рекомендации</string>
+    <string name="title_popular">Популярное</string>
+    <string name="invalid_username">Неправильное имя пользователя</string>
+    <string name="invalid_password">Пароль должен быть >5 символов</string>
+    <string name="login_failed">"Ошибка входа"</string>
+    <string name="hint_login">Логин</string>
+    <string name="sign_in">Войти</string>
+    <string name="hint_password">Пароль</string>
+    <string name="caption_remember_me">Запомнить</string>
+    <string name="btn_next">Следующее</string>
+    <string name="caption_work_email">Ваш контактный e-mail</string>
+
+    <string name="caption_reset_password">Сбросить пароль</string>
+    <string name="text_reset_password">Сброс пароля</string>
+    <string name="caption_old_password">Введите старый пароль</string>
+    <string name="hint_old_password">Старый пароль</string>
+    <string name="hint_new_password">Новый пароль</string>
+    <string name="hint_confirm_new_password">Подтвердите новый пароль</string>
+    <string name="caption_new_password">Введите новый пароль</string>
+    <string name="btn_confirm">Подтвердить</string>
+    <string name="btn_reset">Сбросить</string>
+    <string name="btn_login">Войти</string>
+    <string name="btn_register">Зарегистрироваться</string>
+    <string name="btn_just_look">Просто посмотрю</string>
+    <string name="caption_register">Регистрация</string>
+    <string name="text_rating">Рейтинг:</string>
+    <string name="text_subscribers">Подписки: %s</string>
+    <string name="text_instructions">Инструкции: %s</string>
+    <string name="create_instruction">Добавить инструкцию</string>
+    <string name="instruction_name">Название инструкции</string>
+    <string name="create_step">Добавить шаг</string>
+    <string name="transition_name_img_view">ImageViewTransitionName</string>
+    <string name="transition_name_txt_view">TextViewTransitionName</string>
+    <string name="hint_instruction_name">Введите название инструкции</string>
+    <string name="hint_instruction_description">Введите описание (опционально)</string>
+    <string name="hint_step_description">Введите описание</string>
+    <string name="slides_ended">Слайды закончились. Поделитесь Вашими знаниями здесь!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Шаги</string>
+    <string name="action_settings">Настройки</string>
+    <string name="skip">Пропустить</string>
+    <string name="next">Следующий</string>
+    <string name="start">Начать</string>
+    <string name="walkthrough_description_1">Поиск популярных рецептов со всего мира</string>
+    <string name="walkthrough_description_2">Создавайте свои собственные рецепты и зарабатывайте рейтинг</string>
+    <string name="walkthrough_description_3">Улучшайте свои знания шаг за шагом</string>
+    <string name="walkthrough_description_4">Create your own recipes and earn your rating</string>
+    <string name="btn_save">Save</string>
+
+    <string name="select_variant_edit_current">Редактировать текущее</string>
+    <string name="select_variant_take_photo">Сделать фото</string>
+    <string name="select_variant_from_gallery">Из галереи</string>
+
+    <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="camera_access_required">Отсутствует доступ к камере</string>
+    <string name="storage_access_required">Отсутствует доступ к хранилищу</string>
+    <string name="hint_step_name">Введите название шага</string>
+    <string name="title_settings">Настройки</string>
+    <string name="top_picks_for_you">Подборка для Вас</string>
+    <string name="lbl_recommended_dishes">Рекомендации</string>
+    <string name="lbl_view_all">Посмотреть все</string>
+    <string name="lbl_filter_your_favourite">Избранное</string>
+    <string name="lbl_popular">Популярное</string>
+    <string name="lbl_categories">Категории</string>
+    <string name="title_search">Поиск</string>
+    <string name="title_home">Главная</string>
+    <string name="title_delete_instruction_dialog">Удалить инструкцию</string>
+    <string name="msg_delete_instruction_dialog">Вы уверены, что хотите удалить инструкцию %s?</string>
+    <string name="title_delete_step_dialog">Удалить шаг</string>
+    <string name="msg_delete_step_dialog">Вы уверены, что хотите удалить шаг %s?</string>
+    <string name="btn_delete">Удалить</string>
+    <string name="btn_cancel">Отменить</string>
+    <string name="title_home_settings">Настройки главного экрана</string>
+    <string name="lbl_show_recommended">Показывать рекомендованные инструкции</string>
+    <string name="lbl_show_favorites">Показывать понравившиеся инструкции</string>
+
+</resources>

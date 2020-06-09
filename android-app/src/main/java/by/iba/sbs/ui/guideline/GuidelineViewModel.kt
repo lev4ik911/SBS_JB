@@ -48,7 +48,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
             ratingDown.value = it.rating.negative
         }
     }
-
+    var oldGuideline = Guideline()
     val isFavorite = MutableLiveData(true)
     val isMyInstruction = MutableLiveData(true)
     val feedback = MutableLiveData<List<Feedback>>().apply {
@@ -228,6 +228,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         if (isMyInstruction.value!!) {
             if (!steps.value.isNullOrEmpty())
                 oldSteps = steps.value?.map { it.copy() }!!
+            oldGuideline = guideline.value!!.copy()
             eventsDispatcher.dispatchEvent { onCallInstructionEditor(guideline.value!!.id) }
         } else isFavorite.value = !isFavorite.value!!
     }
@@ -249,8 +250,12 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         eventsDispatcher.dispatchEvent { onEditStep(step.stepId) }
     }
 
-    fun onEditImageClick(step: Step) {
-        eventsDispatcher.dispatchEvent { onEditImage(step) }
+    fun onEditStepImageClick(step: Step) {
+        eventsDispatcher.dispatchEvent { onEditStepImage(step) }
+    }
+
+    fun onEditGuidelineImageClick() {
+        eventsDispatcher.dispatchEvent { onEditGuidelineImage() }
     }
 
     @UnstableDefault
@@ -281,14 +286,16 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     }
 
     fun onBackBtnClick() {
-        steps.postValue(oldSteps)
+        steps.value = oldSteps
+        guideline.value = oldGuideline
     }
 
     interface EventsListener {
         fun onCallInstructionEditor(instructionId: String)
         fun onOpenProfile(profileId: Int)
         fun onEditStep(stepId: String)
-        fun onEditImage(step: Step)
+        fun onEditStepImage(step: Step)
+        fun onEditGuidelineImage()
         fun onAfterSaveAction()
         fun onAfterDeleteAction()
         fun onRemoveInstruction()

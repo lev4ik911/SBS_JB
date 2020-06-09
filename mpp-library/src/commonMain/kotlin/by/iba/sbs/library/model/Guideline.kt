@@ -10,7 +10,9 @@ data class Guideline(
     var description: String = "",
     var author: String = "",
     var isFavorite: Boolean = false,
-    var rating: RatingSummary = RatingSummary()
+    var rating: RatingSummary = RatingSummary(),
+    var imagePath: String = "",
+    var updateImageTimeSpan: Int = 0
 //    var steps: MutableList<Step> = mutableListOf(),
 //    var feedback: MutableList<Feedback> = mutableListOf()
 ) {

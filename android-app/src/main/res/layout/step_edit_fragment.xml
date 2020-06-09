@@ -54,8 +54,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fitsSystemWindows="true"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ic_paneer"/>
+                        imageFromPath="@{ step.imagePath }"
+                        android:scaleType="centerCrop"/>
                 </RelativeLayout>
 
                 <androidx.appcompat.widget.Toolbar

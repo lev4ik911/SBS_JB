@@ -37,9 +37,10 @@
 
                     <ImageView
                         android:id="@+id/iv_preview"
+                        visibleOrGone="@{!step.imagePath.isEmpty()}"
                         android:layout_width="@dimen/list_image_size"
                         android:layout_height="@dimen/list_image_size"
-                        android:scaleType="fitXY"
+                        android:scaleType="centerCrop"
                         imageFromPath="@{ step.imagePath }"/>
                 </androidx.cardview.widget.CardView>
 

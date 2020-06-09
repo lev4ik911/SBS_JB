@@ -55,6 +55,7 @@ class GuidelineActivity :
     private var selectedAction = 0
     private var absolutePhotoPath = ""
     private lateinit var step: Step
+    private var isStepEditing = false
 
 
     private enum class ImageActions(val key: Int, val stringId: Int) {
@@ -169,11 +170,12 @@ class GuidelineActivity :
         when (selectedAction) {
             ImageActions.EditCurrent.key -> {
                 try {
-                        if (!step.imagePath.isEmpty()) {
-                            val sourcePath = Uri.fromFile(File(step.imagePath))
+                        val path = if (isStepEditing) step.imagePath else viewModel.guideline.value?.imagePath
+                        if (!path.isNullOrEmpty()) {
+                            val sourcePath = Uri.fromFile(File(path))
                             val destinationUri = createTempImageFileInInternalStorage()
                             UCrop.of(sourcePath, destinationUri)
-                                .withAspectRatio(1f, 1f)
+                                .withAspectRatio(16f, 9f)
                                 .start(this@GuidelineActivity)
                         }
 
@@ -221,9 +223,16 @@ class GuidelineActivity :
             UCrop.REQUEST_CROP -> {
                 if (resultCode == RESULT_OK) {
                     val resultUri: Uri? = UCrop.getOutput(data!!)
-                    if (!(resultUri?.path).isNullOrEmpty())
-                        step.imagePath = resultUri?.path!!
-                    viewModel.steps.value = viewModel.steps.value
+                    if (!(resultUri?.path).isNullOrEmpty()){
+                        if (isStepEditing){
+                            step.imagePath = resultUri!!.path
+                            viewModel.steps.value = viewModel.steps.value
+                        }
+                        else
+                            viewModel.guideline.value?.imagePath = resultUri!!.path
+                            viewModel.guideline.value=viewModel.guideline.value
+                    }
+
 
                 } else if (resultCode == UCrop.RESULT_ERROR) {
                     val toast = Toast.makeText(
@@ -262,7 +271,7 @@ class GuidelineActivity :
                         val photoUri = Uri.parse(absolutePhotoPath)
                         val destinationUri = createTempImageFileInInternalStorage()
                         UCrop.of(photoUri, destinationUri)
-                            .withAspectRatio(1f, 1f)
+                            .withAspectRatio(16f, 9f)
                             .start(this)
                     } catch (ex: Exception) {
                         val toast = Toast.makeText(
@@ -343,12 +352,23 @@ class GuidelineActivity :
             .navigate(R.id.navigation_step_edit, bundle)
     }
 
-    override fun onEditImage(editStep: Step) {
+    override fun onEditStepImage(editStep: Step) {
+        isStepEditing = true
         step = editStep
         val stepHasImage = step.imagePath.isNotEmpty()
+        openAlertDialog(stepHasImage)
+    }
+
+    override fun onEditGuidelineImage() {
+        isStepEditing = false
+        val guidelineHasImage = viewModel.guideline.value!!.imagePath.isNotEmpty()
+        openAlertDialog(guidelineHasImage)
+    }
+
+    private fun openAlertDialog(itemHasImage: Boolean){
         val builder = AlertDialog.Builder(this)
         val listOfResolvedActions = ImageActions.values().filter {
-            (stepHasImage && it == ImageActions.EditCurrent) || (it != ImageActions.EditCurrent)
+            (itemHasImage && it == ImageActions.EditCurrent) || (it != ImageActions.EditCurrent)
         }
 
         builder
@@ -356,7 +376,7 @@ class GuidelineActivity :
             .setItems(listOfResolvedActions.map { resources.getString(it.stringId) }
                 .toTypedArray()) { _, key ->
                 selectedAction = key
-                if (!stepHasImage)
+                if (!itemHasImage)
                     selectedAction += 1
 
                 when (selectedAction) {
@@ -372,7 +392,6 @@ class GuidelineActivity :
         //builder.setNegativeButton("Cancel", null);
         val dialog = builder.create()
         dialog.show()
-
     }
 
     override fun onAfterSaveAction() {
@@ -417,7 +436,6 @@ class GuidelineActivity :
         val dialog = builder.create()
         dialog.show()
     }
-
 
     override fun onLoadImageFromAPI(step: Step) {
         Glide.with(this)

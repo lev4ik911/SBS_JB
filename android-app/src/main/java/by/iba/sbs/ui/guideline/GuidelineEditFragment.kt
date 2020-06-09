@@ -64,6 +64,7 @@ class GuidelineEditFragment :
 
         viewModel.guideline.observe(viewLifecycleOwner, Observer {
             binding.toolbarDescription.title = it.name
+            binding.htabHeader.invalidate()
         })
         viewModel.steps.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             stepsAdapter.addItems(it)
