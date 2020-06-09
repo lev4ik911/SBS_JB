@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.guidelines.GuidelineListViewModel"/>
+            type="by.iba.sbs.library.viewmodel.GuidelineListViewModelShared" />
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,18 +14,19 @@
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            visibleOrGone="@{viewmodel.isLoading}"
+            visibleOrGone="@{viewmodel.isLoading.ld}"
             android:layout_width="match_parent"
             android:layout_height="@dimen/spacing_small"
             android:layout_alignParentTop="true"
             android:indeterminate="true"
         />
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/l_swipe_refresh"
             android:layout_below="@id/progressBar"
-            app:layout_constraintTop_toBottomOf="@id/progressBar"
             app:onRefreshListener="@{() -> viewmodel.loadInstructions(true)}"
-            app:refreshing="@{viewmodel.isLoading}"
+            app:refreshing="@{viewmodel.isLoading.ld}"
+            app:layout_constraintTop_toBottomOf="@id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

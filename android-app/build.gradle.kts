@@ -95,6 +95,7 @@ dependencies {
     implementation("com.afollestad.material-dialogs:core:3.3.0")
     implementation("com.afollestad.material-dialogs:input:3.3.0")
     implementation("com.afollestad.material-dialogs:lifecycle:3.3.0")
+    implementation("com.github.Shashank02051997:FancyToast-Android:0.1.3")
     implementation(project(":mpp-library"))
     implementation(project(":mvvmbase"))
 }
