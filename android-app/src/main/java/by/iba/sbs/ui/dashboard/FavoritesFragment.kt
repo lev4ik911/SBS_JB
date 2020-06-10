@@ -2,6 +2,7 @@ package by.iba.sbs.ui.dashboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -9,19 +10,23 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import by.iba.mvvmbase.BaseFragment
 import by.iba.mvvmbase.adapter.BaseBindingAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.FavoritesFragmentBinding
 import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.viewmodel.DashboardViewModelShared
 import by.iba.sbs.ui.MainActivity
 import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.guideline.GuidelineActivity
+import com.russhwolf.settings.AndroidSettings
+import dev.icerock.moko.mvvm.MvvmFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -30,10 +35,20 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 /**
  * A simple [Fragment] subclass.
  */
-class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewModel>() {
+class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewModelShared>() {
     override val layoutId: Int = R.layout.favorites_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: DashboardViewModel by sharedViewModel()
+
+    override val viewModelClass: Class<DashboardViewModelShared> =
+        DashboardViewModelShared::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        DashboardViewModelShared(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
+            eventsDispatcherOnMain()
+        )
+    }
+
     private val mainViewModel: MainViewModel by sharedViewModel()
     var lastSearchText: String = ""
     var activeCategory: Int = 0
@@ -125,10 +140,10 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                             R.anim.layout_animation_right_to_left
                         )
                     }
-                    viewModel.recommended.observe(viewLifecycleOwner, Observer {
+                    viewModel.recommended.addObserver {
                         favoritesAdapter.addItems(it)
                         binding.lSwipeRefresh.isRefreshing = false
-                    })
+                    }
                     viewModel.loadRecommended(false)
                 }
                 GuidelineCategory.POPULAR.ordinal -> {
@@ -141,10 +156,10 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                             R.anim.layout_animation_right_to_left
                         )
                     }
-                    viewModel.popular.observe(viewLifecycleOwner, Observer {
+                    viewModel.popular.addObserver {
                         favoritesAdapter.addItems(it)
                         binding.lSwipeRefresh.isRefreshing = false
-                    })
+                    }
                     viewModel.loadPopular(false)
                 }
                 GuidelineCategory.FAVORITE.ordinal -> {
@@ -157,10 +172,10 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                             R.anim.layout_animation_right_to_left
                         )
                     }
-                    viewModel.favorite.observe(viewLifecycleOwner, Observer {
+                    viewModel.favorite.addObserver {
                         favoritesAdapter.addItems(it)
                         binding.lSwipeRefresh.isRefreshing = false
-                    })
+                    }
                     viewModel.loadFavorites(false)
                 }
                 else -> {
@@ -174,9 +189,9 @@ class FavoritesFragment : BaseFragment<FavoritesFragmentBinding, DashboardViewMo
                             R.anim.layout_animation_right_to_left
                         )
                     }
-                    viewModel.favorite.observe(viewLifecycleOwner, Observer {
+                    viewModel.favorite.addObserver {
                         favoritesAdapter.addItems(it)
-                    })
+                    }
                     viewModel.loadFavorites(false)
                 }
             }

@@ -6,28 +6,21 @@ import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.repository.GuidelineRepository
-import by.iba.sbs.library.service.LocalSettings
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcherOwner
-import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
-import dev.icerock.moko.mvvm.livedata.readOnly
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
 
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 
 class GuidelineListViewModelShared(
-    private val settings: Settings,
+    settings: Settings,
     override val eventsDispatcher: EventsDispatcher<EventsListener>
-) : ViewModel(),
+) : ViewModelExt(settings),
     EventsDispatcherOwner<GuidelineListViewModelShared.EventsListener> {
     val instructions = MutableLiveData<List<Guideline>>(mutableListOf())
-    val _isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
-    private val localStorage: LocalSettings by lazy { LocalSettings(settings) }
-    var isLoading: LiveData<Boolean> = _isLoading.readOnly()
 
     @UnstableDefault
     @ImplicitReflectionSerializer
@@ -36,7 +29,7 @@ class GuidelineListViewModelShared(
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun loadInstructions(forceRefresh: Boolean) {
-        _isLoading.value = true
+        loading.value = true
         viewModelScope.launch {
             try {
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
@@ -54,7 +47,7 @@ class GuidelineListViewModelShared(
                                 )
                             )
                         }
-                    _isLoading.postValue(it.status == Response.Status.LOADING)
+                    loading.postValue(it.status == Response.Status.LOADING)
                 }
             } catch (e: Exception) {
                 eventsDispatcher.dispatchEvent {

@@ -1,42 +1,37 @@
-package by.iba.sbs.ui.dashboard
+package by.iba.sbs.library.viewmodel
 
-import android.content.Context
-import android.preference.PreferenceManager
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import by.iba.mvvmbase.BaseViewModel
-import by.iba.mvvmbase.MessageType
-import by.iba.mvvmbase.dispatcher.EventsDispatcher
-import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
-import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
-import by.iba.mvvmbase.model.ToastMessage
+
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.Category
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.model.MessageType
+import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.repository.GuidelineRepository
-import by.iba.sbs.library.service.LocalSettings
-import com.russhwolf.settings.AndroidSettings
+
+import com.russhwolf.settings.Settings
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcherOwner
+import dev.icerock.moko.mvvm.livedata.LiveData
+import dev.icerock.moko.mvvm.livedata.MutableLiveData
+import dev.icerock.moko.mvvm.livedata.readOnly
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 
-class DashboardViewModel(context: Context) : BaseViewModel(),
-    EventsDispatcherOwner<DashboardViewModel.EventsListener> {
-    override val eventsDispatcher: EventsDispatcher<DashboardViewModel.EventsListener> =
-        eventsDispatcherOnMain()
+class DashboardViewModelShared(
+    settings: Settings,
+    override val eventsDispatcher: EventsDispatcher<DashboardViewModelShared.EventsListener>
+) : ViewModelExt(settings),
+    EventsDispatcherOwner<DashboardViewModelShared.EventsListener> {
 
-    private val localStorage: LocalSettings by lazy {
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val settings = AndroidSettings(sharedPrefs)
-        LocalSettings(settings)
-    }
     val showRecommended = MutableLiveData(true).apply {
         value = localStorage.showRecommended
     }
     val showFavorites = MutableLiveData(true).apply {
         value = localStorage.showFavorites
     }
-
+    var isShowRecommended: LiveData<Boolean> = showRecommended.readOnly()
+    var isShowFavorites: LiveData<Boolean> = showFavorites.readOnly()
     fun update() {
         showRecommended.value = localStorage.showRecommended
         showFavorites.value = localStorage.showFavorites
@@ -46,7 +41,7 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
     @ImplicitReflectionSerializer
     private val repository by lazy { GuidelineRepository(localStorage) }
 
-    val categories = MutableLiveData<List<Category>>().apply {
+    val categories = MutableLiveData<List<Category>>(mutableListOf()).apply {
         val mData = ArrayList<Category>()
         mData.add(Category("Кулинария", "", true, "#f08c8c"))
         mData.add(Category("Медицина", "", false, "#c1cefa"))
@@ -60,14 +55,14 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
         mData.add(Category("IBA docs", "", true, "#246801"))
         value = mData
     }
-    val recommended = MutableLiveData<List<Guideline>>().apply {
+    val recommended = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
         val mData = ArrayList<Guideline>()
         mData.add(Guideline("1", "Loading guidelines...", "Dobry"))
 //        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
 //        mData.add(Guideline("1", "Как попасть на проект, подготовка к интервью", "Author 2"))
         value = mData
     }
-    val favorite = MutableLiveData<List<Guideline>>().apply {
+    val favorite = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
         val mData = ArrayList<Guideline>()
         mData.add(Guideline("1", "Loading guidelines...", "Loading...", "Dobry"))
 //        mData.add(Guideline("7", "Как сдать СМК на отлично!", "Dobry", isFavorite = true))
@@ -77,7 +72,7 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
 //
         value = mData
     }
-    val popular = MutableLiveData<List<Guideline>>().apply {
+    val popular = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
 //        val mData = ArrayList<Guideline>()
 //        mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
 //        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
@@ -89,7 +84,7 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun loadFavorites(forceRefresh: Boolean, itemsCount: Int = -1) {
-        isLoading.value = true
+        loading.value = true
         viewModelScope.launch {
             try {
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
@@ -111,13 +106,25 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
                         )
 
                     } else if (it.error != null)
-                        notificationsQueue.value =
-                            ToastMessage(it.error!!.toString(), MessageType.ERROR)
-                    isLoading.postValue(it.status == Response.Status.LOADING)
+                        eventsDispatcher.dispatchEvent {
+                            showToast(
+                                ToastMessage(
+                                    it.error.toString(),
+                                    MessageType.ERROR
+                                )
+                            )
+                        }
+                    loading.postValue(it.status == Response.Status.LOADING)
                 }
             } catch (e: Exception) {
-                notificationsQueue.value =
-                    ToastMessage(e.toString(), MessageType.ERROR)
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
             }
         }
     }
@@ -125,7 +132,7 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun loadRecommended(forceRefresh: Boolean, itemsCount: Int = -1) {
-        isLoading.value = true
+        loading.value = true
         viewModelScope.launch {
             try {
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
@@ -145,13 +152,25 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
                         )
 
                     } else if (it.error != null)
-                        notificationsQueue.value =
-                            ToastMessage(it.error!!.toString(), MessageType.ERROR)
-                    isLoading.postValue(it.status == Response.Status.LOADING)
+                        eventsDispatcher.dispatchEvent {
+                            showToast(
+                                ToastMessage(
+                                    it.error.toString(),
+                                    MessageType.ERROR
+                                )
+                            )
+                        }
+                    loading.postValue(it.status == Response.Status.LOADING)
                 }
             } catch (e: Exception) {
-                notificationsQueue.value =
-                    ToastMessage(e.toString(), MessageType.ERROR)
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
             }
         }
     }
@@ -159,7 +178,7 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun loadPopular(forceRefresh: Boolean, itemsCount: Int = -1) {
-        isLoading.value = true
+        loading.value = true
         viewModelScope.launch {
             try {
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
@@ -179,13 +198,25 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
                         )
 
                     } else if (it.error != null)
-                        notificationsQueue.value =
-                            ToastMessage(it.error!!.toString(), MessageType.ERROR)
-                    isLoading.postValue(it.status == Response.Status.LOADING)
+                        eventsDispatcher.dispatchEvent {
+                            showToast(
+                                ToastMessage(
+                                    it.error.toString(),
+                                    MessageType.ERROR
+                                )
+                            )
+                        }
+                    loading.postValue(it.status == Response.Status.LOADING)
                 }
             } catch (e: Exception) {
-                notificationsQueue.value =
-                    ToastMessage(e.toString(), MessageType.ERROR)
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
             }
         }
     }
@@ -210,5 +241,6 @@ class DashboardViewModel(context: Context) : BaseViewModel(),
         fun onViewFavoritesAction()
         fun onViewRecommendedAction()
         fun onViewPopularAction()
+        fun showToast(msg: ToastMessage)
     }
 }

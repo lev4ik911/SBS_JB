@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.dashboard.DashboardViewModel" />
+            type="by.iba.sbs.library.viewmodel.DashboardViewModelShared" />
     </data>
 
     <RelativeLayout
@@ -18,7 +18,7 @@
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            visibleOrGone="@{viewmodel.isLoading}"
+            visibleOrGone="@{viewmodel.isLoading.ld}"
             android:layout_width="match_parent"
             android:layout_height="@dimen/spacing_small"
             android:layout_alignParentTop="true"
@@ -26,7 +26,7 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/l_swipe_refresh"
-            app:refreshing="@{viewmodel.isLoading}"
+            app:refreshing="@{viewmodel.isLoading.ld}"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -63,7 +63,7 @@
                         android:paddingEnd="@dimen/spacing_xsmall" />
 
                     <LinearLayout
-                        visibleOrGone="@{viewmodel.showRecommended }"
+                        visibleOrGone="@{viewmodel.isShowRecommended.ld }"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/selector_list_item"
@@ -100,7 +100,7 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvRecommended"
-                        visibleOrGone="@{viewmodel.showRecommended }"
+                        visibleOrGone="@{viewmodel.isShowRecommended.ld }"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_xsmall"
@@ -109,7 +109,7 @@
                         android:paddingStart="@dimen/spacing_xsmall" />
 
                     <LinearLayout
-                        visibleOrGone="@{viewmodel.showFavorites }"
+                        visibleOrGone="@{viewmodel.isShowFavorites.ld }"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/selector_list_item"
@@ -144,7 +144,7 @@
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        visibleOrGone="@{viewmodel.showFavorites }"
+                        visibleOrGone="@{viewmodel.isShowFavorites.ld }"
                         android:id="@+id/rv_favorite"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
