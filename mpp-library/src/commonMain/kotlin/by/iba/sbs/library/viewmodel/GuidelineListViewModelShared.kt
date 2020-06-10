@@ -70,6 +70,6 @@ class GuidelineListViewModelShared(
     }
 
     interface EventsListener {
-        fun showToast(message: ToastMessage)
+        fun showToast(msg: ToastMessage)
     }
 }
