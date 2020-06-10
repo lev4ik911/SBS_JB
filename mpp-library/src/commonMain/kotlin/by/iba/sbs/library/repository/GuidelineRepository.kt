@@ -42,7 +42,7 @@ interface IGuidelineRepository {
     suspend fun getStepByIdFromLocalDB(guidelineId: String, stepId: String): Step
     suspend fun insertRating(guidelineId: String, data: RatingCreate): Response<RatingView>
     suspend fun updateRating(guidelineId: String, data: Feedback): Response<RatingView>
-    suspend fun deleteRating(guidelineId: String, stepId: String): Response<String?>
+    suspend fun deleteRating(guidelineId: String, feedbackId: String): Response<String?>
 }
 
 @ImplicitReflectionSerializer
