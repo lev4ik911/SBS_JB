@@ -345,26 +345,6 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         guideline.value = oldGuideline
     }
 
-    interface EventsListener {
-        fun onCallInstructionEditor(instructionId: String)
-        fun onOpenProfile(profileId: Int)
-        fun onEditStep(stepWeight: Int)
-        fun onEditStepImage(step: Step)
-        fun onEditGuidelineImage()
-        fun onPreviewStepAction(view: View, step: Step)
-        fun onClosePreviewStepAction()
-        fun onPreviewStepNextAction(currentStep: Step)
-        fun onPreviewStepPreviousAction(currentStep: Step)
-        fun onAfterSaveAction()
-        fun onAfterDeleteAction()
-        fun onRemoveInstruction()
-        fun onAfterSaveStepAction()
-        fun onRatingDownAction()
-        fun onRatingUpAction()
-        fun onRemoveStep(step: Step)
-        fun onLoadImageFromAPI(step: Step)
-    }
-
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun insertInstruction(newGuideline: Guideline) {
@@ -515,7 +495,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     interface EventsListener {
         fun onCallInstructionEditor(instructionId: String)
         fun onOpenProfile(profileId: Int)
-        fun onEditStep(stepId: String)
+        fun onEditStep(stepWeight: Int)
         fun onEditStepImage(step: Step)
         fun onEditGuidelineImage()
         fun onPreviewStepAction(view: View, step: Step)
