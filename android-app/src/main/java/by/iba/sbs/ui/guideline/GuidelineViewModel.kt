@@ -511,4 +511,24 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
             }
         }
     }
+
+    interface EventsListener {
+        fun onCallInstructionEditor(instructionId: String)
+        fun onOpenProfile(profileId: Int)
+        fun onEditStep(stepId: String)
+        fun onEditStepImage(step: Step)
+        fun onEditGuidelineImage()
+        fun onPreviewStepAction(view: View, step: Step)
+        fun onClosePreviewStepAction()
+        fun onPreviewStepNextAction(currentStep: Step)
+        fun onPreviewStepPreviousAction(currentStep: Step)
+        fun onAfterSaveAction()
+        fun onAfterDeleteAction()
+        fun onRemoveInstruction()
+        fun onAfterSaveStepAction()
+        fun onRatingDownAction()
+        fun onRatingUpAction()
+        fun onRemoveStep(step: Step)
+        fun onLoadImageFromAPI(step: Step)
+    }
 }

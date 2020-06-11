@@ -5,7 +5,7 @@ plugins {
     id("com.squareup.sqldelight")
     id("kotlin-android-extensions") //version "1.3.70"
     //  id("kotlinx-serialization") //version "1.3.70"
-    kotlin("plugin.serialization") version "1.3.71"
+    kotlin("plugin.serialization") version "1.3.70"
     id("dev.icerock.mobile.multiplatform")
     id("dev.icerock.mobile.multiplatform-resources")
 }

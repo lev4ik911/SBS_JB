@@ -2,17 +2,18 @@ package by.iba.sbs.ui.dashboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.adapter.BaseBindingAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
@@ -22,9 +23,17 @@ import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.databinding.InstructionListItemHorizontalBinding
 import by.iba.sbs.library.model.Category
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.model.MessageType
+import by.iba.sbs.library.model.ToastMessage
+import by.iba.sbs.library.viewmodel.DashboardViewModelShared
 import by.iba.sbs.ui.MainActivity
 import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.guideline.GuidelineActivity
+import com.russhwolf.settings.AndroidSettings
+import com.shashank.sony.fancytoastlib.FancyToast
+import dev.icerock.moko.mvvm.MvvmEventsFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -38,13 +47,24 @@ enum class GuidelineCategory {
 }
 
 class DashboardFragment :
-    BaseEventsFragment<DashboardFragmentBinding, DashboardViewModel, DashboardViewModel.EventsListener>(),
-    DashboardViewModel.EventsListener {
+    MvvmEventsFragment<DashboardFragmentBinding, DashboardViewModelShared, DashboardViewModelShared.EventsListener>(),
+    DashboardViewModelShared.EventsListener {
     override val layoutId: Int = R.layout.dashboard_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: DashboardViewModel by sharedViewModel()
+
+    override val viewModelClass: Class<DashboardViewModelShared> =
+        DashboardViewModelShared::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        DashboardViewModelShared(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
+            eventsDispatcherOnMain()
+        )
+    }
+
     var lastSearchText: String = ""
     private val mainViewModel: MainViewModel by sharedViewModel()
+
     @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,9 +85,9 @@ class DashboardFragment :
             layoutManager = GridLayoutManager(context, 2, RecyclerView.HORIZONTAL, false)
             //layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         }
-        viewModel.categories.observe(viewLifecycleOwner, Observer {
+        viewModel.categories.addObserver {
             categoriesAdapter.addItems(it)
-        })
+        }
         val recommendedAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemHorizontalBinding, MainViewModel>(
                 R.layout.instruction_list_item_horizontal,
@@ -82,9 +102,9 @@ class DashboardFragment :
             adapter = recommendedAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         }
-        viewModel.recommended.observe(viewLifecycleOwner, Observer {
+        viewModel.recommended.addObserver {
             recommendedAdapter.addItems(it)
-        })
+        }
         viewModel.loadRecommended(true, 4)
         val favoritesAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>(
@@ -100,9 +120,9 @@ class DashboardFragment :
             adapter = favoritesAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         }
-        viewModel.favorite.observe(viewLifecycleOwner, Observer {
+        viewModel.favorite.addObserver {
             favoritesAdapter.addItems(it)
-        })
+        }
         viewModel.loadFavorites(true, 3)
 
         val popularAdapter =
@@ -126,10 +146,10 @@ class DashboardFragment :
             adapter = popularAdapter
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         }
-        viewModel.popular.observe(viewLifecycleOwner, Observer {
+        viewModel.popular.addObserver {
             popularAdapter.addItems(it)
             binding.lSwipeRefresh.isRefreshing = false
-        })
+        }
         viewModel.loadPopular(true, 3)
         binding.lSwipeRefresh.setOnRefreshListener {
             viewModel.loadRecommended(true, 4)
@@ -145,6 +165,7 @@ class DashboardFragment :
             title = resources.getString(R.string.title_home)
         }
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         //super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_action_menu, menu)
@@ -177,6 +198,26 @@ class DashboardFragment :
     override fun onViewPopularAction() {
         val bundle = bundleOf("Category" to GuidelineCategory.POPULAR.ordinal)
         findNavController().navigate(R.id.navigation_favorites, bundle)
+    }
+
+    override fun showToast(msg: ToastMessage) {
+        when (msg.type) {
+            MessageType.ERROR ->
+                Log.e(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.WARNING ->
+                Log.w(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.INFO ->
+                Log.i(viewModel::class.java.name, msg.getLogMessage())
+            else ->
+                Log.v(viewModel::class.java.name, msg.getLogMessage())
+        }
+        FancyToast.makeText(
+            requireContext(),
+            msg.message,
+            FancyToast.LENGTH_LONG,
+            msg.type.index,
+            false
+        ).show()
     }
 
     override fun onResume() {

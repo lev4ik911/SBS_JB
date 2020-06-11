@@ -2,34 +2,74 @@ package by.iba.sbs.ui.guidelines
 
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.widget.SearchView
-import by.iba.mvvmbase.BaseEventsFragment
+import androidx.lifecycle.ViewModelProvider
 import by.iba.mvvmbase.adapter.BaseBindingAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionListFragmentBinding
 import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.model.MessageType
+import by.iba.sbs.library.model.ToastMessage
+import by.iba.sbs.library.viewmodel.GuidelineListViewModelShared
 import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.guideline.GuidelineActivity
+import com.russhwolf.settings.AndroidSettings
+import com.shashank.sony.fancytoastlib.FancyToast
+import dev.icerock.moko.mvvm.MvvmEventsFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @UnstableDefault
 @ImplicitReflectionSerializer
 class GuidelineListFragment :
-    BaseEventsFragment<InstructionListFragmentBinding, GuidelineListViewModel, GuidelineListViewModel.EventsListener>(),
-    GuidelineListViewModel.EventsListener {
+    MvvmEventsFragment<InstructionListFragmentBinding, GuidelineListViewModelShared, GuidelineListViewModelShared.EventsListener>(),
+    GuidelineListViewModelShared.EventsListener {
 
     override val layoutId: Int = R.layout.instruction_list_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: GuidelineListViewModel by viewModel()
+
+    override fun showToast(msg: ToastMessage) {
+        when (msg.type) {
+            MessageType.ERROR ->
+                Log.e(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.WARNING ->
+                Log.w(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.INFO ->
+                Log.i(viewModel::class.java.name, msg.getLogMessage())
+            else ->
+                Log.v(viewModel::class.java.name, msg.getLogMessage())
+        }
+        FancyToast.makeText(
+            requireContext(),
+            msg.message,
+            FancyToast.LENGTH_LONG,
+            msg.type.index,
+            false
+        ).show()
+    }
+
+    override val viewModelClass: Class<GuidelineListViewModelShared> =
+        GuidelineListViewModelShared::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        GuidelineListViewModelShared(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
+            eventsDispatcherOnMain()
+        )
+    }
+
+    //override val viewModel: GuidelineListViewModelShared by viewModel()
     private val mainViewModel: MainViewModel by sharedViewModel()
     var lastSearchText: String = ""
     private lateinit var instructionsAdapter: BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>
@@ -70,10 +110,10 @@ class GuidelineListFragment :
 //            viewModel.loadInstructions(true)
 //        }
 
-        viewModel.instructions.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.instructions.addObserver {
             instructionsAdapter.addItems(it)
             binding.rvInstructions.scheduleLayoutAnimation()
-        })
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

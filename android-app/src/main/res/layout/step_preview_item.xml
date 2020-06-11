@@ -18,15 +18,15 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:elevation="@dimen/spacing_xxsmall">
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:gravity="center"
+            android:gravity="top"
             android:padding="@dimen/spacing_xxsmall">
 
             <TextView
@@ -64,6 +64,7 @@
 
                 <ImageButton
                     android:id="@+id/btn_next"
+                    visibleOrGone="@{step.weight != viewmodel.steps.size()}"
                     android:onClick="@{()-> viewmodel.onPreviewStepNextClick(step)}"
                     style="@style/Widget.AppCompat.ActionButton.Overflow"
                     android:layout_width="wrap_content"
@@ -79,7 +80,6 @@
                     android:layout_marginHorizontal="@dimen/spacing_small"
                     android:layout_marginTop="@dimen/spacing_xxxxlarge"
                     android:layout_marginBottom="@dimen/spacing_small"
-
                     android:orientation="vertical">
 
                     <TextView

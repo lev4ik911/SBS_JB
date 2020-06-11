@@ -6,7 +6,7 @@
 
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.dashboard.DashboardViewModel" />
+            type="by.iba.sbs.library.viewmodel.DashboardViewModelShared" />
     </data>
 
     <RelativeLayout
@@ -17,7 +17,7 @@
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            visibleOrGone="@{viewmodel.isLoading}"
+            visibleOrGone="@{viewmodel.isLoading.ld}"
             android:layout_width="match_parent"
             android:layout_height="@dimen/spacing_small"
             android:layout_alignParentTop="true"
@@ -25,7 +25,7 @@
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/l_swipe_refresh"
-            app:refreshing="@{viewmodel.isLoading}"
+            app:refreshing="@{viewmodel.isLoading.ld}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/progressBar"
