@@ -295,7 +295,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     }
 
     fun onEditStepClick(step: Step) {
-        eventsDispatcher.dispatchEvent { onEditStep(step.stepId) }
+        eventsDispatcher.dispatchEvent { onEditStep(step.weight) }
     }
 
     fun onEditStepImageClick(step: Step) {
@@ -309,6 +309,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun onSaveAction() {
+        isLoading.value = true
         if (guideline.value!!.id.isEmpty())
             insertInstruction(guideline.value!!)
         else
@@ -316,13 +317,19 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         eventsDispatcher.dispatchEvent { onAfterSaveAction() }
     }
 
-    @UnstableDefault
-    @ImplicitReflectionSerializer
     fun onSaveStepAction(step: Step) {
-        if (step.stepId.isEmpty())
-            insertStep(guideline.value!!.id, step)
-        else
-            updateStep(guideline.value!!.id, step)
+        if (step.stepId.isEmpty() && !steps.value!!.contains(step)){
+            val stepArr = steps.value?.toMutableList()
+            stepArr?.add(
+                Step(
+                    name = step.name,
+                    description = step.description,
+                    weight = step.weight
+                )
+            )
+            steps.value = stepArr
+        }
+        eventsDispatcher.dispatchEvent { onAfterSaveStepAction() }
     }
 
     fun onRemoveInstructionClick() {
@@ -341,7 +348,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     interface EventsListener {
         fun onCallInstructionEditor(instructionId: String)
         fun onOpenProfile(profileId: Int)
-        fun onEditStep(stepId: String)
+        fun onEditStep(stepWeight: Int)
         fun onEditStepImage(step: Step)
         fun onEditGuidelineImage()
         fun onPreviewStepAction(view: View, step: Step)
@@ -361,13 +368,12 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun insertInstruction(newGuideline: Guideline) {
-        isLoading.value = true
         viewModelScope.launch {
             try {
                 val result = repository.insertGuideline(newGuideline)
                 if (result.isSuccess && result.isNotEmpty) {
                     notificationsQueue.value =
-                        ToastMessage("Successful insert", MessageType.SUCCESS)
+                        ToastMessage("Successful saved", MessageType.SUCCESS)
                     //TODO(Add to total res)
                     val resultGuideline = result.data!!
                     guideline.value = Guideline(
@@ -375,10 +381,9 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                         name = resultGuideline.name,
                         description = resultGuideline.description ?: ""
                     )
-
+                    saveSteps()
                 } else if (result.error != null) notificationsQueue.value =
                     ToastMessage(result.error!!.toString(), MessageType.ERROR)
-                isLoading.postValue(result.status == Response.Status.LOADING)
             } catch (e: Exception) {
                 notificationsQueue.value =
                     ToastMessage(e.toString(), MessageType.ERROR)
@@ -389,17 +394,16 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun updateInsruction(guideline: Guideline) {
-        isLoading.value = true
         viewModelScope.launch {
             try {
                 val result = repository.updateGuideline(guideline)
                 if (result.isSuccess && result.isNotEmpty) {
                     notificationsQueue.value =
-                        ToastMessage("Successful update", MessageType.SUCCESS)
+                        ToastMessage("Successful saved", MessageType.SUCCESS)
                     //TODO(Add to total res)
+                    saveSteps()
                 } else if (result.error != null) notificationsQueue.value =
                     ToastMessage(result.error!!.toString(), MessageType.ERROR)
-                isLoading.postValue(result.status == Response.Status.LOADING)
             } catch (e: Exception) {
                 notificationsQueue.value =
                     ToastMessage(e.toString(), MessageType.ERROR)
@@ -431,30 +435,34 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun insertStep(guidelineId: String, newStep: Step) {
-        isLoading.value = true
+    fun saveSteps(){
+        //insert / update steps
+        var isNeedSaving = false
+        steps.value?.filter{step-> step.stepId.isEmpty()}.apply {
+            if (!this.isNullOrEmpty()) {
+                isNeedSaving = true
+                insertSteps(guideline.value!!.id, this)
+            }
+        }
+        steps.value?.filter{step-> !step.stepId.isEmpty() && !oldSteps.contains(step)}.apply {
+            if (!this.isNullOrEmpty()) {
+                isNeedSaving = true
+                updateSteps(guideline.value!!.id, this)
+            }
+        }
+        if (!isNeedSaving)
+            isLoading.value = false
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun insertSteps(guidelineId: String, newSteps: List<Step>) {
         viewModelScope.launch {
             try {
-                val result = repository.insertStep(guidelineId, newStep)
-                if (result.isSuccess && result.isNotEmpty) {
-                    notificationsQueue.value =
-                        ToastMessage("Successful insert", MessageType.SUCCESS)
-                    //TODO(Add to total res)
-                    val resultStep = result.data!!
-                    val stepArr = steps.value?.toMutableList()
-                    stepArr?.add(
-                        Step(
-                            stepId = resultStep.id,
-                            name = resultStep.name,
-                            description = resultStep.description,
-                            weight = resultStep.weight
-                        )
-                    )
-                    steps.value = stepArr
-                    eventsDispatcher.dispatchEvent { onAfterSaveStepAction() }
-                } else if (result.error != null) notificationsQueue.value =
+                val result = repository.insertSteps(guidelineId, newSteps)
+                if (result.error != null) notificationsQueue.value =
                     ToastMessage(result.error!!.toString(), MessageType.ERROR)
-                isLoading.postValue(result.status == Response.Status.LOADING)
+                isLoading.value = false
             } catch (e: Exception) {
                 notificationsQueue.value =
                     ToastMessage(e.toString(), MessageType.ERROR)
@@ -464,19 +472,13 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun updateStep(guidelineId: String, step: Step) {
-        isLoading.value = true
+    fun updateSteps(guidelineId: String, updatedSteps: List<Step>) {
         viewModelScope.launch {
             try {
-                val result = repository.updateStep(guidelineId, step)
-                if (result.isSuccess && result.isNotEmpty) {
-                    notificationsQueue.value =
-                        ToastMessage("Successful update", MessageType.SUCCESS)
-                    //TODO(Add to total res)
-                    eventsDispatcher.dispatchEvent { onAfterSaveStepAction() }
-                } else if (result.error != null) notificationsQueue.value =
+                val result = repository.updateSteps(guidelineId, updatedSteps)
+                if (result.error != null) notificationsQueue.value =
                     ToastMessage(result.error!!.toString(), MessageType.ERROR)
-                isLoading.postValue(result.status == Response.Status.LOADING)
+                isLoading.value = false
             } catch (e: Exception) {
                 notificationsQueue.value =
                     ToastMessage(e.toString(), MessageType.ERROR)
@@ -497,8 +499,8 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                     //TODO(Add to total res)
                     val stepArr = steps.value?.toMutableList()
                     stepArr?.remove(step)
+                    stepArr?.forEachIndexed { index, step -> step.weight = index + 1 }
                     steps.value = stepArr
-
                 } else if (result.error != null) notificationsQueue.value =
                     ToastMessage(result.error!!.toString(), MessageType.ERROR)
                 isLoading.postValue(result.status == Response.Status.LOADING)

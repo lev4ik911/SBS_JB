@@ -15,15 +15,18 @@ class StepEditFragment : BaseFragment<StepEditFragmentBinding, GuidelineViewMode
     override val layoutId: Int = R.layout.step_edit_fragment
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModel: GuidelineViewModel by sharedViewModel()
-    private var stepId = ""
+    private var stepWeight = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        stepId = arguments?.getString("stepId") ?: ""
-        if (stepId.isNotEmpty())
-            binding.step = viewModel.steps.value!!.find { step-> step.stepId == stepId}
-        else
+        stepWeight = arguments?.getInt("stepWeight") ?: 0
+        if (stepWeight>0)
+            binding.step = viewModel.steps.value!!.find { step-> step.weight == stepWeight}
+        else {
+            if (viewModel.steps.value.isNullOrEmpty())
+                viewModel.steps.value = listOf()
             binding.step = Step(weight = viewModel.steps.value!!.size.plus(1))
+        }
     }
 
 }

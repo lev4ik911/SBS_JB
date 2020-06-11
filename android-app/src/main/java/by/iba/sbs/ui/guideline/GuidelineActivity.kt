@@ -369,8 +369,8 @@ class GuidelineActivity :
         startActivity(intent)
     }
 
-    override fun onEditStep(stepId: String) {
-        val bundle = bundleOf("stepId" to stepId)
+    override fun onEditStep(stepWeight: Int) {
+        val bundle = bundleOf("stepWeight" to stepWeight)
         findNavController(R.id.fragment_navigation_instruction)
             .navigate(R.id.navigation_step_edit, bundle)
     }
@@ -565,7 +565,16 @@ class GuidelineActivity :
             setPositiveButton(
                 resources.getString(R.string.btn_delete),
                 { dialogInterface: DialogInterface, i: Int ->
-                    viewModel.deleteStep(viewModel.guideline.value!!.id, step)
+                    if (step.stepId.isNotEmpty()) {
+                        viewModel.deleteStep(viewModel.guideline.value!!.id, step)
+                    }
+                    else {
+                        val stepArr = viewModel.steps.value?.toMutableList()
+                        stepArr?.remove(step)
+                        stepArr?.forEachIndexed { index, step -> step.weight = index + 1 }
+                        viewModel.steps.value = stepArr
+                        onAfterSaveStepAction()
+                    }
                 })
             setNegativeButton(resources.getString(R.string.btn_cancel), null)
         }

@@ -36,8 +36,8 @@ interface IGuidelineRepository {
     suspend fun insertGuideline(data: Guideline): Response<GuidelineView>
     suspend fun updateGuideline(data: Guideline): Response<GuidelineView>
     suspend fun deleteGuideline(guidelineId: String): Response<String?>
-    suspend fun insertStep(guidelineId: String, data: Step): Response<StepView>
-    suspend fun updateStep(guidelineId: String, data: Step): Response<StepView>
+    suspend fun insertSteps(guidelineId: String, data: List<Step>): Response<List<StepView>>
+    suspend fun updateSteps(guidelineId: String, data: List<Step>): Response<List<StepView>>
     suspend fun deleteStep(guidelineId: String, stepId: String): Response<String?>
     suspend fun getStepByIdFromLocalDB(guidelineId: String, stepId: String): Step
     suspend fun insertRating(guidelineId: String, data: RatingCreate): Response<RatingView>
@@ -269,6 +269,12 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             if (result.isSuccess) {
                 val item = result.data!!
                 guidelinesQueries.insertGuideline(item.id, item.name, item.description ?: "")
+                ratingSummaryQueries.insertRating(
+                    item.id,
+                    item.rating.positive.toLong(),
+                    item.rating.negative.toLong(),
+                    item.rating.overall.toLong()
+                )
             } else {
                 if (result.status == Response.Status.ERROR) error(result.error!!)
             }
@@ -293,6 +299,8 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
     override suspend fun deleteGuideline(guidelineId: String): Response<String?> = coroutineScope {
         val result = guidelines.deleteGuideline(guidelineId)
         if (result.isSuccess) {
+            feedbackQueries.deleteAllFeedbacksByGuidelineId(guidelineId)
+            ratingSummaryQueries.deleteRatingByGuidelineId(guidelineId)
             guidelinesQueries.deleteAllStepsByGuidelineId(guidelineId)
             guidelinesQueries.deleteGuidelineById(guidelineId)
         } else {
@@ -302,19 +310,24 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
     }
 
     @UnstableDefault
-    override suspend fun insertStep(guidelineId: String, data: Step): Response<StepView> = coroutineScope {
-        val result = steps.postStep(guidelineId, StepCreate(data.name, data.description, data.weight))
+    override suspend fun insertSteps(guidelineId: String, data: List<Step>): Response<List<StepView>> = coroutineScope {
+        val result = steps.postSteps(guidelineId, data.map {
+            StepCreate(it.name, it.description, it.weight)
+        })
         if (result.isSuccess) {
-            val item = result.data!!
-            guidelinesQueries.insertStepWithImage(
-                item.id,
-                guidelineId,
-                item.name,
-                item.description,
-                item.weight.toLong(),
-                data.imagePath, // save local path in db
-                item.updateImageTimeSpan.toLong()
-            )
+            val items = result.data!!
+            items.forEach {
+                guidelinesQueries.insertStepWithImage(
+                    it.id,
+                    guidelineId,
+                    it.name,
+                    it.description,
+                    it.weight.toLong(),
+                    data.first{step -> step.weight == it.weight}.imagePath, // save local path in db
+                    it.updateImageTimeSpan.toLong()
+                )
+            }
+
         } else {
             if (result.status == Response.Status.ERROR) error(result.error!!)
         }
@@ -322,23 +335,25 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
     }
 
     @UnstableDefault
-    override suspend fun updateStep(guidelineId: String, data: Step): Response<StepView> = coroutineScope {
-        val result = steps.putStep(
-            guidelineId,
-            data.stepId,
-            StepEdit(name = data.name, description = data.description, weight = data.weight)
-        )
+    override suspend fun updateSteps(guidelineId: String, data: List<Step>): Response<List<StepView>> = coroutineScope {
+        val stepMap = HashMap<String, StepEdit>()
+        data.forEach {
+            stepMap.put(it.stepId, StepEdit(name = it.name, description = it.description, weight = it.weight))
+        }
+        val result = steps.putSteps(guidelineId, stepMap)
         if (result.isSuccess) {
-            val item = result.data!!
-            guidelinesQueries.insertStepWithImage(
-                item.id,
-                guidelineId,
-                item.name,
-                item.description,
-                item.weight.toLong(),
-                data.imagePath, // save local path in db
-                item.updateImageTimeSpan.toLong()
-            )
+            val items = result.data!!
+            items.forEach {
+                guidelinesQueries.insertStepWithImage(
+                    it.id,
+                    guidelineId,
+                    it.name,
+                    it.description,
+                    it.weight.toLong(),
+                    data.first{step -> step.weight == it.weight}.imagePath, // save local path in db
+                    it.updateImageTimeSpan.toLong()
+                )
+            }
         } else {
             if (result.status == Response.Status.ERROR) error(result.error!!)
         }

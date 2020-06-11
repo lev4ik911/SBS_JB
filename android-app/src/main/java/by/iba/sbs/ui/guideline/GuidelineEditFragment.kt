@@ -71,11 +71,11 @@ class GuidelineEditFragment :
 
         })
         stepsAdapter.onItemClick = { pos, itemView, item ->
-            (activity as GuidelineActivity).onEditStep(item.stepId)
+            (activity as GuidelineActivity).onEditStep(item.weight)
             // Toast.makeText(context, pos.toString(), Toast.LENGTH_LONG).show()
         }
         stepsAdapter.onEmptyViewItemClick = {
-            (activity as GuidelineActivity).onEditStep("")
+            (activity as GuidelineActivity).onEditStep(0)
         }
         stepsAdapter.onItemMoved = { old, new ->
             val steps = stepsAdapter.itemsList

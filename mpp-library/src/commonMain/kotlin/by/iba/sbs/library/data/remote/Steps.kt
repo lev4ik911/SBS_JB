@@ -29,18 +29,20 @@ class Steps(override val settings: LocalSettings) : Client(settings) {
         )
     }
 
-    suspend fun postStep(guidelineId: String, step: StepCreate): Response<StepView> {
+    suspend fun postSteps(guidelineId: String, steps: List<StepCreate>): Response<List<StepView>> {
         return post(
-            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEPS, guidelineId),
-            requestBody = step,
+            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEPS_BATCHING, guidelineId),
+            requestBody = steps,
+            deserializer = StepView::class.serializer().list,
             needAuth = false
         )
     }
 
-    suspend fun putStep(guidelineId: String, stepId: String, step: StepEdit): Response<StepView> {
+    suspend fun putSteps(guidelineId: String, steps: HashMap<String, StepEdit>): Response<List<StepView>> {
         return put(
-            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEP_DETAILS, guidelineId, stepId),
-            requestBody = step,
+            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEPS_BATCHING, guidelineId),
+            requestBody = steps,
+            deserializer = StepView::class.serializer().list,
             needAuth = false
         )
     }
