@@ -156,7 +156,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/spacing_normal"
-
                         android:hint="@string/hint_step_name"
                         android:text="@={step.name}"
                         android:textAppearance="@style/Text"/>
@@ -169,7 +168,7 @@
                     android:layout_below="@id/ti_name"
                     android:layout_marginTop="@dimen/spacing_small"
                     app:counterEnabled="true"
-                    app:counterMaxLength="500">
+                    app:counterMaxLength="800">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/te_description"

@@ -20,14 +20,14 @@ import kotlinx.serialization.UnstableDefault
 
 class DashboardViewModelShared(
     settings: Settings,
-    override val eventsDispatcher: EventsDispatcher<DashboardViewModelShared.EventsListener>
+    override val eventsDispatcher: EventsDispatcher<EventsListener>
 ) : ViewModelExt(settings),
     EventsDispatcherOwner<DashboardViewModelShared.EventsListener> {
 
-    val showRecommended = MutableLiveData(true).apply {
+    private val showRecommended = MutableLiveData(true).apply {
         value = localStorage.showRecommended
     }
-    val showFavorites = MutableLiveData(true).apply {
+    private val showFavorites = MutableLiveData(true).apply {
         value = localStorage.showFavorites
     }
     var isShowRecommended: LiveData<Boolean> = showRecommended.readOnly()

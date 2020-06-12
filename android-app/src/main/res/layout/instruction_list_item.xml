@@ -21,119 +21,149 @@
         style="@style/Card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{(view)-> viewmodel.onOpenGuidelineClick(view, instruction)}"
         android:layout_marginHorizontal="@dimen/spacing_xsmall"
-        android:layout_marginBottom="@dimen/spacing_xsmall"
+        android:layout_marginVertical="@dimen/spacing_xxsmall"
+        android:onClick="@{(view)-> viewmodel.onOpenGuidelineClick(view, instruction)}"
         tools:ignore="ContentDescription">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:orientation="vertical"
             android:padding="@dimen/spacing_xsmall">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/card_preview"
-                style="@style/Card"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center">
 
-                <ImageView
-                    android:id="@+id/iv_preview"
-                    android:layout_width="@dimen/list_image_size"
-                    android:layout_height="@dimen/list_image_size"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_paneer" />
-
-                <androidx.appcompat.widget.AppCompatImageView
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_preview"
+                    style="@style/Card"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|end"
-                    android:elevation="@dimen/spacing_xxsmall"
-                    android:src="@{instruction.favorite ? @drawable/heart : @drawable/heart_outline}"
-                    android:tint="@color/colorLightRed" />
-            </androidx.cardview.widget.CardView>
+                    android:layout_gravity="center">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/spacing_xsmall"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                    <ImageView
+                        android:id="@+id/iv_preview"
+                        android:layout_width="@dimen/list_image_size"
+                        android:layout_height="@dimen/list_image_size"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/ic_paneer" />
 
-                <TextView
-                    android:id="@+id/tv_title"
-                    style="@style/Text.Title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="0dp"
-                    tools:text="@{instruction.name}" />
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:elevation="@dimen/spacing_xxsmall"
+                        android:src="@{instruction.favorite ? @drawable/star : @drawable/star_outline}"
+                        android:tint="@color/colorGold" />
+                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="bottom"
-                    android:layout_marginTop="@dimen/spacing_xxsmall"
-                    android:orientation="horizontal">
+                    android:layout_marginHorizontal="@dimen/spacing_xsmall"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_author"
-                        style="@style/Text.Description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="@dimen/spacing_xxsmall"
-                        android:gravity="center"
-                        tools:text="@{instruction.author}" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
+                        android:id="@+id/tv_title"
+                        style="@style/Text.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/spacing_xxsmall"
-                        android:background="@android:color/white"
-                        android:gravity="center" />
+                        android:layout_marginBottom="0dp"
+                        android:layout_weight="1"
+                        tools:text="@{instruction.name}" />
 
-                    <TextView
-                        android:id="@+id/tv_rating_up"
-                        style="@style/Text.Description"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingHorizontal="@dimen/spacing_xxxsmall"
-                        android:text="@{Integer.toString(instruction.rating.positive)}"
-                        android:textColor="@color/colorLightGreen" />
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="@dimen/spacing_xxsmall"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv_rating_zero"
-                        style="@style/Text.Description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="/" />
+                        <TextView
+                            android:id="@+id/tv_stars_caption"
+                            style="@style/Text.Description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Stars:"
+                            android:textAlignment="viewEnd" />
 
-                    <TextView
-                        android:id="@+id/tv_rating_down"
-                        style="@style/Text.Description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:paddingHorizontal="@dimen/spacing_xxxsmall"
-                        android:text="@{Integer.toString(instruction.rating.negative)}"
-                        android:textColor="@color/colorLightRed" />
+                        <TextView
+                            android:id="@+id/tv_stars"
+                            style="@style/Text.Description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="12345"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/colorGold" />
 
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="@dimen/spacing_xsmall"
+                            android:background="@android:color/darker_gray"
+                            android:gravity="center" />
 
+                        <TextView
+                            android:id="@+id/tv_feedback_caption"
+                            style="@style/Text.Description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Feedback:"
+                            android:textAlignment="viewEnd" />
+
+                        <TextView
+                            android:id="@+id/tv_rating_up"
+                            style="@style/Text.Description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingHorizontal="@dimen/spacing_xxxsmall"
+                            android:text="@{Integer.toString(instruction.rating.positive)}"
+                            android:textColor="@color/colorLightGreen" />
+
+                        <TextView
+                            android:id="@+id/tv_rating_zero"
+                            style="@style/Text.Description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="/" />
+
+                        <TextView
+                            android:id="@+id/tv_rating_down"
+                            style="@style/Text.Description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:paddingHorizontal="@dimen/spacing_xxxsmall"
+                            android:text="@{Integer.toString(instruction.rating.negative)}"
+                            android:textColor="@color/colorLightRed" />
+
+                        <TextView
+                            android:id="@+id/tv_author"
+                            style="@style/Text.Description"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:drawablePadding="@dimen/spacing_xxsmall"
+                            android:textAlignment="viewEnd"
+                            tools:text="@{instruction.author}" />
+                    </LinearLayout>
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tv_info"
-                    style="@style/Text.Description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_xxsmall"
-                    android:singleLine="true"
-                    tools:text="@{instruction.description}" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_info"
+                style="@style/Text.Description"
+                visibleOrGone="@{instruction.description.length()>0}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/spacing_xxxsmall"
+                tools:text="@{instruction.description}" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>
