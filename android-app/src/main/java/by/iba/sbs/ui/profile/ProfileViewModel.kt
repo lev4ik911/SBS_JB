@@ -51,7 +51,7 @@ class ProfileViewModel(context: Context) : BaseViewModel(),
     }
 
     fun onActionButtonClick() {
-
+        eventsDispatcher.dispatchEvent { onActionButtonAction() }
     }
 
     fun onLogoutButtonClick() {
@@ -59,7 +59,7 @@ class ProfileViewModel(context: Context) : BaseViewModel(),
     }
 
     interface EventsListener {
-
+        fun onActionButtonAction()
     }
 
 }

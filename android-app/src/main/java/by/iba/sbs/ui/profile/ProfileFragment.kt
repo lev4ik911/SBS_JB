@@ -6,7 +6,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import by.iba.mvvmbase.BaseEventsFragment
+import by.iba.mvvmbase.BaseFragment
 import by.iba.mvvmbase.visibleOrGone
 import by.iba.sbs.BR
 import by.iba.sbs.R
@@ -19,8 +19,8 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.abs
 
 class ProfileFragment :
-    BaseEventsFragment<ProfileFragmentBinding, ProfileViewModel, ProfileViewModel.EventsListener>(),
-    ProfileViewModel.EventsListener, AppBarLayout.OnOffsetChangedListener {
+    BaseFragment<ProfileFragmentBinding, ProfileViewModel>(),
+    AppBarLayout.OnOffsetChangedListener {
 
     override val layoutId: Int = R.layout.profile_fragment
     override val viewModelVariableId: Int = BR.viewmodel
@@ -159,4 +159,6 @@ class ProfileFragment :
             }
         }
     }
+
+
 }
