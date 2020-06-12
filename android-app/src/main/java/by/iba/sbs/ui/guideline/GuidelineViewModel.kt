@@ -16,6 +16,7 @@ import by.iba.sbs.library.model.Feedback
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.model.request.RatingCreate
+import by.iba.sbs.library.model.response.RatingSummary
 import by.iba.sbs.library.repository.GuidelineRepository
 import by.iba.sbs.library.service.LocalSettings
 import com.russhwolf.settings.AndroidSettings
@@ -263,13 +264,16 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun createFeedback(feedback: RatingCreate) {
-        viewModelScope.launch {
-            repository.insertRating(guideline.value!!.id, feedback)
-        }
         if (feedback.rating > 0)
             ratingUp.value = ratingUp.value?.plus(1)
         else
             ratingDown.value = ratingDown.value?.plus(1)
+
+        val ratingSummary = RatingSummary(positive = ratingUp.value!!, negative = ratingDown.value!!, overall = ratingUp.value!! - ratingDown.value!!)
+
+        viewModelScope.launch {
+            repository.insertRating(guideline.value!!.id, feedback, ratingSummary)
+        }
     }
 
     fun onOpenProfileClick() {

@@ -158,12 +158,17 @@ class DashboardFragment :
         }
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     override fun onStart() {
         super.onStart()
         (activity as MainActivity).toolbar_main.apply {
             navigationIcon = null
             title = resources.getString(R.string.title_home)
         }
+        viewModel.loadRecommended(false, 4)
+        viewModel.loadFavorites(false, 3)
+        viewModel.loadPopular(false, 3)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -224,4 +229,5 @@ class DashboardFragment :
         super.onResume()
         viewModel.update()
     }
+
 }
