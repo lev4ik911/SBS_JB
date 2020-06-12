@@ -22,6 +22,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { MainViewModel() }
     viewModel { DashboardViewModel(androidContext()) }
+   // viewModel { DashboardViewModelShared(get(), get()) }
     viewModel { SplashViewModel(get()) }
     viewModel { LoginViewModel(androidContext(), get()) }
     viewModel { RegisterViewModel() }

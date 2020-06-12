@@ -46,7 +46,7 @@ class MainActivity :
         navView.add(
             BottomNavigation.Model(
                 ActiveTabEnum.ID_FAVORITES.index,
-                R.drawable.heart_outline
+                R.drawable.star_outline
             )
         )
         navView.add(

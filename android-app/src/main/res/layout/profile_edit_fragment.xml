@@ -74,7 +74,7 @@
                             android:layout_height="@dimen/spacing_xxxlarge"
                             android:padding="@dimen/spacing_xxsmall"
                             android:src="@drawable/star"
-                            android:tint="@color/colorLightYellow"
+                            android:tint="@color/colorGold"
                             app:layout_anchor="@id/layout_avatar"
                             app:layout_anchorGravity="bottom|right"/>
                     </androidx.coordinatorlayout.widget.CoordinatorLayout>

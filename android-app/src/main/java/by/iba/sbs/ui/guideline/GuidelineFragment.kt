@@ -68,12 +68,12 @@ class GuidelineFragment :
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 }
                 viewModel.isFavorite.value!! -> {
-                    this.setImageResource(R.drawable.heart)
-                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
+                    this.setImageResource(R.drawable.star)
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorGold))
                 }
                 else -> {
-                    this.setImageResource(R.drawable.heart_outline)
-                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
+                    this.setImageResource(R.drawable.star_outline)
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorGold))
                 }
             }
         }
@@ -84,12 +84,12 @@ class GuidelineFragment :
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 }
                 viewModel.isFavorite.value!! -> {
-                    this.setImageResource(R.drawable.heart)
-                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
+                    this.setImageResource(R.drawable.star)
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorGold))
                 }
                 else -> {
-                    this.setImageResource(R.drawable.heart_outline)
-                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
+                    this.setImageResource(R.drawable.star_outline)
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorGold))
                 }
             }
         }
