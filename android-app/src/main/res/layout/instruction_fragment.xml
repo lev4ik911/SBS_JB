@@ -159,7 +159,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:paddingHorizontal="@dimen/spacing_small"
+                            android:paddingHorizontal="@dimen/spacing_xxsmall"
                             android:text="@{Integer.toString(viewmodel.ratingUp)}"
                             android:textColor="@color/colorLightGreen" />
 
@@ -177,7 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:paddingHorizontal="@dimen/spacing_small"
+                            android:paddingHorizontal="@dimen/spacing_xxsmall"
                             android:text="@{Integer.toString(viewmodel.ratingDown)}"
                             android:textColor="@color/colorLightRed" />
 
