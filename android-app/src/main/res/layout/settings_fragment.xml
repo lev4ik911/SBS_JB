@@ -5,7 +5,7 @@
 
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.profile.ProfileViewModel" />
+            type="by.iba.sbs.library.viewmodel.ProfileViewModel" />
     </data>
 
     <LinearLayout
@@ -44,7 +44,7 @@
                 android:id="@+id/chb_show_recommended"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@={viewmodel.showRecommended}" />
+                android:checked="@={viewmodel.showRecommended.ld}" />
         </LinearLayout>
 
         <LinearLayout
@@ -65,7 +65,7 @@
                 android:id="@+id/chb_show_favorites"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="@={viewmodel.showFavorites}" />
+                android:checked="@={viewmodel.showFavorites.ld}" />
         </LinearLayout>
     </LinearLayout>
 </layout>

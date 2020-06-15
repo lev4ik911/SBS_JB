@@ -9,7 +9,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
 
     private val result = MutableLiveData<Response<ResultType>>(Response.unauthorized())
     private val supervisorJob = SupervisorJob()
-    private val errors = MutableLiveData<String>("")
+    private val errors = MutableLiveData("")
     suspend fun build(): NetworkBoundResource<ResultType, RequestType> {
         withContext(Dispatchers.Main) {
             result.value =
@@ -34,8 +34,9 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
 
     // ---
 
-    private suspend fun fetchFromNetwork(dbResult: ResultType) {
-        setValue(Response.loading(dbResult)) // Dispatch latest value quickly (UX purpose)
+    private suspend fun fetchFromNetwork(dbResult: ResultType?) {
+        if (dbResult != null)
+            setValue(Response.loading(dbResult)) // Dispatch latest value quickly (UX purpose)
         val apiResponse = createCallAsync().await()
         saveCallResults(processResponse(apiResponse))
         setValue(Response.success(loadFromDb()))
@@ -51,7 +52,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
 
     protected abstract fun shouldFetch(data: ResultType?): Boolean
 
-    protected abstract suspend fun loadFromDb(): ResultType
+    protected abstract suspend fun loadFromDb(): ResultType?
 
     protected abstract fun createCallAsync(): Deferred<RequestType>
 }

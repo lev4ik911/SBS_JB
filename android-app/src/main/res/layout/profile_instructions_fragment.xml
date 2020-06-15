@@ -6,7 +6,7 @@
 
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.profile.ProfileViewModel"/>
+            type="by.iba.sbs.library.viewmodel.ProfileViewModel" />
     </data>
 
     <androidx.recyclerview.widget.RecyclerView

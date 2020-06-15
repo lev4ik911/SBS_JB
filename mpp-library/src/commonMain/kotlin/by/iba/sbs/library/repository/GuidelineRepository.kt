@@ -63,7 +63,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
     @UnstableDefault
     override suspend fun getAllGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>> {
-        //   if (forceRefresh) clearCache()
+           if (forceRefresh) clearCache()
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
 
@@ -161,17 +161,21 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             override fun shouldFetch(data: Guideline?): Boolean =
                 data == null || forceRefresh
 
-            override suspend fun loadFromDb(): Guideline = coroutineScope {
-                val item = guidelinesQueries.selectGuidelineById(guidelineId).executeAsOne()
+            override suspend fun loadFromDb(): Guideline? = coroutineScope {
+                val item = guidelinesQueries.selectGuidelineById(guidelineId).executeAsOneOrNull()
                 val ratingSummary =
                     ratingSummaryQueries.selectRatingByGuidelineId(guidelineId).executeAsOne()
-                return@coroutineScope Guideline(
-                    item.id, item.name, item.description, rating = RatingSummary(
-                        ratingSummary.positive!!.toInt(),
-                        ratingSummary.negative!!.toInt(),
-                        ratingSummary.overall!!.toInt()
+                //  return@coroutineScope
+                if (item != null) {
+                    Guideline(
+                        item.id, item.name, item.description, rating = RatingSummary(
+                            ratingSummary.positive!!.toInt(),
+                            ratingSummary.negative!!.toInt(),
+                            ratingSummary.overall!!.toInt()
+                        )
                     )
-                )
+                } else return@coroutineScope null
+
             }
 
             override fun createCallAsync(): Deferred<Guideline> {
@@ -202,6 +206,8 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
     }
 
     private fun clearCache() {
+        feedbackQueries.deleteAllFeedbacks()
+        ratingSummaryQueries.deleteRatings()
         guidelinesQueries.deleteAllSteps()
         guidelinesQueries.deleteAllGuidelines()
     }
@@ -229,10 +235,17 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             override fun shouldFetch(data: List<Step>?): Boolean =
                 data == null || data.isEmpty() || forceRefresh
 
-            override suspend fun loadFromDb(): List<Step> = coroutineScope {
+            override suspend fun loadFromDb(): List<Step>? = coroutineScope {
                 return@coroutineScope guidelinesQueries.selectAllSteps(guidelineId).executeAsList()
                     .map {
-                        Step(it.id, it.name, it.description, it.weight!!.toInt(), it.imagePath, it.updateImageTimeSpan!!.toInt())
+                        Step(
+                            it.id,
+                            it.name,
+                            it.description,
+                            it.weight!!.toInt(),
+                            it.imagePath,
+                            it.updateImageTimeSpan!!.toInt()
+                        )
                     }
             }
 
@@ -407,7 +420,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             override fun shouldFetch(data: List<Feedback>?): Boolean =
                 data == null || data.isEmpty() || forceRefresh
 
-            override suspend fun loadFromDb(): List<Feedback> = coroutineScope {
+            override suspend fun loadFromDb(): List<Feedback>? = coroutineScope {
                 return@coroutineScope feedbackQueries.selectAllFeedbacks(guidelineId)
                     .executeAsList()
                     .map {

@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.login.RegisterViewModel"/>
+            type="by.iba.sbs.ui.login.LoginViewModel" />
     </data>
 
     <FrameLayout

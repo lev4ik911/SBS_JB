@@ -4,34 +4,47 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
-import by.iba.mvvmbase.BaseFragment
+import androidx.lifecycle.ViewModelProvider
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileInstructionsFragmentBinding
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.ui.guideline.GuidelineActivity
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import com.russhwolf.settings.AndroidSettings
+import dev.icerock.moko.mvvm.MvvmFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 
 class ProfileInstructionsFragment :
-    BaseFragment<ProfileInstructionsFragmentBinding, ProfileViewModel>() {
+    MvvmFragment<ProfileInstructionsFragmentBinding, ProfileViewModel>() {
     override val layoutId: Int = R.layout.profile_instructions_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: ProfileViewModel by sharedViewModel()
+    override val viewModelClass: Class<ProfileViewModel> =
+        ProfileViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        ProfileViewModel(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
+            eventsDispatcherOnMain()
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvInstructions.apply {
             adapter = instructionsAdapter
         }
-        viewModel.instructions.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.instructions.addObserver {
             instructionsAdapter.addItems(it)
-        })
+        }
         instructionsAdapter.onItemClick = { pos, itemView, item ->
             val transitionSharedNameImgView = this.getString(R.string.transition_name_img_view)
             val transitionSharedNameTxtView = this.getString(R.string.transition_name_txt_view)

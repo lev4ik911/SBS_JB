@@ -83,8 +83,8 @@
                             android:layout_gravity="end|center"
                             android:background="@null"
                             android:onClick="@{() -> viewmodel.onActionButtonClick()}"
-                            android:src="@drawable/heart"
-                            android:tint="@color/colorLightRed"
+                            android:src="@drawable/star"
+                            android:tint="@color/colorGold"
                             android:visibility="invisible" />
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -120,7 +120,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_gradient">
 
-                <RelativeLayout
+                <LinearLayout
 
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -132,39 +132,16 @@
                         visibleOrGone="@{viewmodel.isLoading}"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/spacing_small"
-                        android:layout_alignParentTop="true"
                         android:indeterminate="true" />
-
-                    <TextView
-                        android:id="@+id/tv_name"
-                        style="@style/Text.Title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_normal"
-                        android:layout_marginTop="@dimen/spacing_small"
-                        android:layout_marginEnd="@dimen/spacing_xxxxlarge"
-                        android:text="@{viewmodel.guideline.name}"
-                        android:transitionName="@string/transition_name_txt_view" />
-
-                    <TextView
-                        android:id="@+id/tv_description"
-                        style="@style/Text.Description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/tv_name"
-                        android:layout_marginStart="@dimen/spacing_normal"
-                        android:layout_marginTop="@dimen/spacing_small"
-                        android:layout_marginEnd="@dimen/spacing_normal"
-                        android:singleLine="false"
-                        android:text="@{viewmodel.guideline.description}"
-                        android:transitionName="@string/transition_name_txt_view" />
 
                     <LinearLayout
                         android:id="@+id/layout_rating"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/tv_description"
-                        android:layout_margin="@dimen/spacing_normal">
+                        android:layout_marginVertical="@dimen/spacing_xsmall"
+                        android:layout_marginStart="@dimen/spacing_normal"
+                        android:layout_marginEnd="@dimen/spacing_xxxxlarge"
+                        android:paddingTop="@dimen/spacing_xxxsmall">
 
                         <ImageButton
                             android:id="@+id/btn_rating_up"
@@ -182,7 +159,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:paddingHorizontal="@dimen/spacing_small"
+                            android:paddingHorizontal="@dimen/spacing_xxsmall"
                             android:text="@{Integer.toString(viewmodel.ratingUp)}"
                             android:textColor="@color/colorLightGreen" />
 
@@ -200,7 +177,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
-                            android:paddingHorizontal="@dimen/spacing_small"
+                            android:paddingHorizontal="@dimen/spacing_xxsmall"
                             android:text="@{Integer.toString(viewmodel.ratingDown)}"
                             android:textColor="@color/colorLightRed" />
 
@@ -214,21 +191,49 @@
                             android:src="@drawable/thumb_down"
                             android:tint="@color/colorLightRed" />
 
+                        <TextView
+                            android:id="@+id/tv_stars"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|end"
+                            android:gravity="end"
+                            android:paddingEnd="@dimen/spacing_xsmall"
+                            android:text="@{viewmodel.starsCount}"
+                            android:textColor="@color/colorGold" />
                     </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_name"
+                        style="@style/Text.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/spacing_normal"
+                        android:text="@{viewmodel.guideline.name}"
+                        android:transitionName="@string/transition_name_txt_view" />
+
+                    <TextView
+                        android:id="@+id/tv_description"
+                        style="@style/Text.Description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:layout_marginHorizontal="@dimen/spacing_normal"
+                        android:singleLine="false"
+                        android:text="@{viewmodel.guideline.description}"
+                        android:transitionName="@string/transition_name_txt_view" />
+
+
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tabs_profile"
                         style="@style/TabLayout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/layout_rating" />
+                        android:layout_height="wrap_content" />
 
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/view_pager"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_below="@id/tabs_profile" />
-                </RelativeLayout>
+                        android:layout_height="match_parent" />
+                </LinearLayout>
             </androidx.core.widget.NestedScrollView>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -239,8 +244,8 @@
             android:layout_margin="@dimen/spacing_large"
             android:backgroundTint="@android:color/white"
             android:onClick="@{() -> viewmodel.onActionButtonClick()}"
-            android:src="@drawable/heart"
-            android:tint="@color/colorLightRed"
+            android:src="@drawable/star"
+            android:tint="@color/colorGold"
             app:borderWidth="0dp"
             app:elevation="@dimen/spacing_xsmall"
             app:fabSize="mini"

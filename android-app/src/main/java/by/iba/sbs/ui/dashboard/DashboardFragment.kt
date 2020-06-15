@@ -37,6 +37,7 @@ import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 enum class GuidelineCategory {
@@ -62,6 +63,7 @@ class DashboardFragment :
         )
     }
 
+    val firstPresenter: DashboardViewModelShared by inject()
     var lastSearchText: String = ""
     private val mainViewModel: MainViewModel by sharedViewModel()
 

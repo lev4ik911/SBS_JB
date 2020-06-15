@@ -2,6 +2,7 @@ package by.iba.sbs.ui.guideline
 
 import android.content.Context
 import android.preference.PreferenceManager
+import android.text.Html
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -42,6 +43,9 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     val steps = MutableLiveData<List<Step>>()
     var oldSteps = listOf<Step>()
     val updatedStepId = MutableLiveData("")
+    val starsCount = MutableLiveData("").apply {
+        value = Html.fromHtml("&#9733; ").toString() + "12345"
+    }
 
     val ratingUp = MutableLiveData(0)
     val ratingDown = MutableLiveData(0)
@@ -500,7 +504,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         fun onCallInstructionEditor(instructionId: String)
         fun onOpenProfile(profileId: Int)
         fun onEditStep(stepWeight: Int)
-        fun onEditStepImage(step: Step)
+        fun onEditStepImage(editStep: Step)
         fun onEditGuidelineImage()
         fun onPreviewStepAction(view: View, step: Step)
         fun onClosePreviewStepAction()

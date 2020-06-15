@@ -101,10 +101,7 @@ class GuidelineListFragment :
         binding.rvInstructions.also {
             it.adapter = instructionsAdapter
             instructionsAdapter.itemTouchHelper.attachToRecyclerView(it)
-            it.layoutAnimation = AnimationUtils.loadLayoutAnimation(
-                requireContext(),
-                R.anim.layout_animation_left_to_right
-            )
+
         }
 //        binding.lSwipeRefresh.setOnRefreshListener {
 //            viewModel.loadInstructions(true)
@@ -112,7 +109,13 @@ class GuidelineListFragment :
 
         viewModel.instructions.addObserver {
             instructionsAdapter.addItems(it)
-            binding.rvInstructions.scheduleLayoutAnimation()
+            binding.rvInstructions.apply {
+                layoutAnimation = AnimationUtils.loadLayoutAnimation(
+                    requireContext(),
+                    R.anim.layout_animation_left_to_right
+                )
+                scheduleLayoutAnimation()
+            }
         }
     }
 
