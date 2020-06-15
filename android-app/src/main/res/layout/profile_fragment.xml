@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.profile.ProfileViewModel"/>
+            type="by.iba.sbs.library.viewmodel.ProfileViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -99,17 +99,17 @@
                             android:gravity="center"
 
                             android:padding="@dimen/spacing_xxsmall"
-                            android:text="@{viewmodel.fullName}"/>
+                            android:text="@{viewmodel.fullName.ld}" />
 
                         <TextView
                             android:id="@+id/tv_user_email"
                             style="@style/Text.Email"
-                            visibleOrGone="@{viewmodel.email.length() != 0}"
+                            visibleOrGone="@{viewmodel.email.ld.length() != 0}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:padding="@dimen/spacing_xxsmall"
-                            android:text="@{viewmodel.email}"/>
+                            android:text="@{viewmodel.email.ld}" />
 
                     </LinearLayout>
                 </RelativeLayout>
@@ -160,7 +160,7 @@
                             android:layout_height="@dimen/spacing_xlarge"
                             android:layout_gravity="end|center"
                             android:background="@null"
-                            visibleOrGone="@{viewmodel.isMyProfile}"
+                            visibleOrGone="@{viewmodel.isMyProfile.ld}"
                             android:onClick="@{() -> viewmodel.onLogoutButtonClick()}"
                             android:src="@drawable/logout"
                             android:tint="@color/colorAccent"
