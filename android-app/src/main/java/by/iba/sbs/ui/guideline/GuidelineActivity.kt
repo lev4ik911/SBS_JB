@@ -34,8 +34,10 @@ import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionActivityBinding
 import by.iba.sbs.databinding.StepPreviewItemBinding
 import by.iba.sbs.databinding.StepPreviewLayoutBinding
+import by.iba.sbs.library.MR
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.model.request.RatingCreate
+import by.iba.sbs.library.service.SharedResources
 import by.iba.sbs.ui.profile.ProfileActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
@@ -245,11 +247,11 @@ class GuidelineActivity :
                     val resultUri: Uri? = UCrop.getOutput(data!!)
                     if (!(resultUri?.path).isNullOrEmpty()){
                         if (isStepEditing){
-                            _editStep.imagePath = resultUri!!.path
+                            _editStep.imagePath = resultUri!!.path!!
                             viewModel.steps.value = viewModel.steps.value
                         }
                         else
-                            viewModel.guideline.value?.imagePath = resultUri!!.path
+                            viewModel.guideline.value?.imagePath = resultUri!!.path!!
                             viewModel.guideline.value=viewModel.guideline.value
                     }
 
@@ -490,10 +492,11 @@ class GuidelineActivity :
         val builder = AlertDialog.Builder(this).apply {
             setTitle(resources.getString(R.string.title_delete_instruction_dialog))
             setMessage(
-                resources.getString(
-                    R.string.msg_delete_instruction_dialog,
-                    viewModel.guideline.value!!.name
-                )
+//                resources.getString(
+//                    R.string.msg_delete_instruction_dialog,
+//                    viewModel.guideline.value!!.name
+//                )
+                SharedResources.getSharedString(MR.strings.invalid_language_s).toString(context)
             )
             setPositiveButton(
                 resources.getString(R.string.btn_delete),
