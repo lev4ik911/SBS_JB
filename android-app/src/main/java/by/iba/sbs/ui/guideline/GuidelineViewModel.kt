@@ -504,7 +504,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         fun onCallInstructionEditor(instructionId: String)
         fun onOpenProfile(profileId: Int)
         fun onEditStep(stepWeight: Int)
-        fun onEditStepImage(step: Step)
+        fun onEditStepImage(editStep: Step)
         fun onEditGuidelineImage()
         fun onPreviewStepAction(view: View, step: Step)
         fun onClosePreviewStepAction()

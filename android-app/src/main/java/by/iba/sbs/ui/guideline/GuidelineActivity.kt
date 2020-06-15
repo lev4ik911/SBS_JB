@@ -60,7 +60,7 @@ class GuidelineActivity :
     GuidelineViewModel.EventsListener {
     override val layoutId: Int = R.layout.instruction_activity
     override val viewModel: GuidelineViewModel by viewModel()
-    override val viewModelVariableId: Int = by.iba.sbs.BR.viewmodel
+    override val viewModelVariableId: Int = BR.viewmodel
     lateinit var mPopupWindow: PopupWindow
     var bindingPopup: StepPreviewLayoutBinding? = null
 
@@ -268,7 +268,7 @@ class GuidelineActivity :
                 if (resultCode == RESULT_OK && data != null) {
                     //TODO("Add offer cut image by default" )
                     try {
-                        val sourceUri = data.getData() as Uri
+                        val sourceUri = data.data as Uri
                         val destinationUri = createTempImageFileInInternalStorage()
                         UCrop.of(sourceUri, destinationUri)
                             .withAspectRatio(1f, 1f)
@@ -335,10 +335,10 @@ class GuidelineActivity :
             imageFileName, ".jpg", storageDir
         )
         absolutePhotoPath = "file:" + file.absoluteFile
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            return FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file)
         else
-            return Uri.fromFile(file)
+            Uri.fromFile(file)
     }
 
     //update Gallery
@@ -421,7 +421,7 @@ class GuidelineActivity :
     override fun onPreviewStepAction(view: View, step: Step) {
 
         val contentView = layoutInflater.inflate(R.layout.step_preview_layout, null)
-        bindingPopup = DataBindingUtil.bind<StepPreviewLayoutBinding>(contentView)
+        bindingPopup = DataBindingUtil.bind(contentView)
         if (bindingPopup != null) {
             bindingPopup!!.viewmodel = viewModel
             mPopupWindow = PopupWindow(
@@ -496,10 +496,10 @@ class GuidelineActivity :
                 )
             )
             setPositiveButton(
-                resources.getString(R.string.btn_delete),
-                { dialogInterface: DialogInterface, i: Int ->
-                    viewModel.deleteInstruction(viewModel.guideline.value!!)
-                })
+                resources.getString(R.string.btn_delete)
+            ) { _: DialogInterface, _: Int ->
+                viewModel.deleteInstruction(viewModel.guideline.value!!)
+            }
             setNegativeButton(resources.getString(R.string.btn_cancel), null)
         }
         val dialog = builder.create()

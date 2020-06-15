@@ -63,7 +63,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
     @UnstableDefault
     override suspend fun getAllGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>> {
-        //   if (forceRefresh) clearCache()
+           if (forceRefresh) clearCache()
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
 
@@ -206,6 +206,8 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
     }
 
     private fun clearCache() {
+        feedbackQueries.deleteAllFeedbacks()
+        ratingSummaryQueries.deleteRatings()
         guidelinesQueries.deleteAllSteps()
         guidelinesQueries.deleteAllGuidelines()
     }
