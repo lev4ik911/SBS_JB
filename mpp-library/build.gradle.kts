@@ -75,11 +75,14 @@ dependencies {
     androidLibrary(Deps.Libs.Android.lifecycle)
     ktorLibs.forEach { mppLibrary(it) }
     mppLibs.forEach { mppLibrary(it) }
+    commonMainApi("dev.icerock.moko:resources:0.10.1")
     // mppModules.forEach { mppModule(it) }
 }
 
 multiplatformResources {
     multiplatformResourcesPackage = "by.iba.sbs.library"
+    iosBaseLocalizationRegion = "en" //optional, default "en"
+    multiplatformResourcesSourceSet = "commonMain"  // optional, default "commonMain"
 }
 
 // dependencies graph generator

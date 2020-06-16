@@ -105,30 +105,14 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
             override fun createCallAsync(): Deferred<List<Guideline>> {
                 return GlobalScope.async(Dispatchers.Default) {
-                    val ratingSummary = ratingSummaryQueries.selectAllRatings().executeAsList()
-
                     val result = guidelines.getAllGuidelines()
                     if (result.isSuccess) {
                         result.data!!.map { item ->
-                            val rating =
-                                ratingSummary.firstOrNull { rating -> rating.id == item.id }
-                            if (rating != null) {
-                                Guideline(
-                                    item.id, item.name, item.description ?: "",
-                                    rating = RatingSummary(
-                                        rating.positive!!.toInt(),
-                                        rating.negative!!.toInt(),
-                                        rating.overall!!.toInt()
-                                    )
-                                )
-                            } else {
-                                Guideline(item.id, item.name, item.description ?: "")
-                            }
+                            Guideline(item.id, item.name, item.description ?: "", rating = item.rating)
                         }
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
                         listOf()
-
                     }
                 }
             }
