@@ -1,10 +1,10 @@
 package by.iba.sbs.ui.guideline
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.adapters.BaseBindingAdapter
@@ -12,10 +12,8 @@ import by.iba.sbs.databinding.InstructionStepListItemBinding
 import by.iba.sbs.databinding.StepsFragmentBinding
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.viewmodel.GuidelineViewModel
-import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 
 
 class StepsFragment : MvvmFragment<StepsFragmentBinding, GuidelineViewModel>() {
@@ -25,10 +23,9 @@ class StepsFragment : MvvmFragment<StepsFragmentBinding, GuidelineViewModel>() {
         GuidelineViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        GuidelineViewModel(
-            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
-            eventsDispatcherOnMain()
-        )
+        requireActivity().let {
+            ViewModelProviders.of(it).get(GuidelineViewModel::class.java)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -64,9 +64,9 @@ class GuidelineViewModel(
     }
 
 
-    @UnstableDefault
-    @OptIn(ImplicitReflectionSerializer::class)
-    fun loadInstruction(instructionId: String, forceRefresh: Boolean) {
+    @OptIn(UnstableDefault::class)
+    @ImplicitReflectionSerializer
+    fun loadGuideline(instructionId: String, forceRefresh: Boolean) {
         if (instructionId != "") {
             loading.value = true
             viewModelScope.launch {
@@ -98,24 +98,24 @@ class GuidelineViewModel(
                             if (forceRefresh) {
                                 //check image info on actual
                                 val tempListOfSteps = it.data!!.toMutableList()
-                                tempListOfSteps.forEach {
-                                    it.updateImageTimeSpan = 1 //TODO (delete fake data!!!)
-                                    if (it.updateImageTimeSpan != 0) {
+                                tempListOfSteps.forEach { step ->
+                                    step.updateImageTimeSpan = 1 //TODO (delete fake data!!!)
+                                    if (step.updateImageTimeSpan != 0) {
                                         viewModelScope.launch {
                                             val stepFromLocalDB =
                                                 repository.getStepByIdFromLocalDB(
                                                     instructionId,
-                                                    it.stepId
+                                                    step.stepId
                                                 )
-                                            if (stepFromLocalDB.updateImageTimeSpan != it.updateImageTimeSpan) {
+                                            if (stepFromLocalDB.updateImageTimeSpan != step.updateImageTimeSpan) {
                                                 eventsDispatcher.dispatchEvent {
                                                     onLoadImageFromAPI(
-                                                        it
+                                                        step
                                                     )
                                                 }
                                             }
-                                            it.imagePath = stepFromLocalDB.imagePath
-                                            it.updateImageTimeSpan =
+                                            step.imagePath = stepFromLocalDB.imagePath
+                                            step.updateImageTimeSpan =
                                                 stepFromLocalDB.updateImageTimeSpan
                                         }
                                     }
@@ -329,9 +329,9 @@ class GuidelineViewModel(
     fun onSaveAction() {
         loading.value = true
         if (guideline.value.id.isEmpty())
-            insertInstruction(guideline.value)
+            insertGuideline(guideline.value)
         else
-            updateInsruction(guideline.value)
+            updateGuideline(guideline.value)
         eventsDispatcher.dispatchEvent { onAfterSaveAction() }
     }
 
@@ -350,7 +350,7 @@ class GuidelineViewModel(
         eventsDispatcher.dispatchEvent { onAfterSaveStepAction() }
     }
 
-    fun onRemoveInstructionClick() {
+    fun onRemoveGuidelineClick() {
         eventsDispatcher.dispatchEvent { onRemoveInstruction() }
     }
 
@@ -365,7 +365,7 @@ class GuidelineViewModel(
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun insertInstruction(newGuideline: Guideline) {
+    fun insertGuideline(newGuideline: Guideline) {
         viewModelScope.launch {
             try {
                 val result = repository.insertGuideline(newGuideline)
@@ -400,7 +400,7 @@ class GuidelineViewModel(
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun updateInsruction(guideline: Guideline) {
+    fun updateGuideline(guideline: Guideline) {
         viewModelScope.launch {
             try {
                 val result = repository.updateGuideline(guideline)

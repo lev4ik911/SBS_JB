@@ -1,12 +1,12 @@
 package by.iba.sbs.ui.guideline
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.View
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import by.iba.sbs.BR
@@ -16,10 +16,8 @@ import by.iba.sbs.library.viewmodel.GuidelineViewModel
 import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlinx.serialization.UnstableDefault
 import kotlin.math.abs
 
@@ -40,10 +38,13 @@ class GuidelineFragment :
         GuidelineViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        GuidelineViewModel(
-            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
-            eventsDispatcherOnMain()
-        )
+        requireActivity().let {
+            ViewModelProviders.of(it).get(GuidelineViewModel::class.java)
+        }
+//        GuidelineViewModel(
+//            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
+//            eventsDispatcherOnMain()
+//        )
     }
 
     @UnstableDefault
@@ -55,7 +56,7 @@ class GuidelineFragment :
         binding.appBar.addOnOffsetChangedListener(this)
 
         binding.toolbarDescription.apply {
-            title = viewModel.guideline.value!!.name
+            title = viewModel.guideline.value.name
         }
 
         initActionButton()
@@ -77,11 +78,11 @@ class GuidelineFragment :
     private fun initActionButton() {
         binding.fActionButton.apply {
             when {
-                viewModel.isMyInstruction.value!! -> {
+                viewModel.isMyInstruction.value -> {
                     this.setImageResource(R.drawable.file_document_edit_outline)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 }
-                viewModel.isFavorite.value!! -> {
+                viewModel.isFavorite.value -> {
                     this.setImageResource(R.drawable.star)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorGold))
                 }
@@ -93,11 +94,11 @@ class GuidelineFragment :
         }
         binding.btnToolbarAction.apply {
             when {
-                viewModel.isMyInstruction.value!! -> {
+                viewModel.isMyInstruction.value -> {
                     this.setImageResource(R.drawable.file_document_edit_outline)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 }
-                viewModel.isFavorite.value!! -> {
+                viewModel.isFavorite.value -> {
                     this.setImageResource(R.drawable.star)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorGold))
                 }

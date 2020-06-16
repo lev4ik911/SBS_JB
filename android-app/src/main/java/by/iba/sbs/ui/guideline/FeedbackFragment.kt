@@ -1,9 +1,9 @@
 package by.iba.sbs.ui.guideline
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.adapters.BaseBindingAdapter
@@ -11,10 +11,8 @@ import by.iba.sbs.databinding.FeedbackFragmentBinding
 import by.iba.sbs.databinding.InstructionFeedbackListItemBinding
 import by.iba.sbs.library.model.Feedback
 import by.iba.sbs.library.viewmodel.GuidelineViewModel
-import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 
 class FeedbackFragment : MvvmFragment<FeedbackFragmentBinding, GuidelineViewModel>() {
     override val layoutId: Int = R.layout.feedback_fragment
@@ -23,10 +21,9 @@ class FeedbackFragment : MvvmFragment<FeedbackFragmentBinding, GuidelineViewMode
         GuidelineViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        GuidelineViewModel(
-            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
-            eventsDispatcherOnMain()
-        )
+        requireActivity().let {
+            ViewModelProviders.of(it).get(GuidelineViewModel::class.java)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

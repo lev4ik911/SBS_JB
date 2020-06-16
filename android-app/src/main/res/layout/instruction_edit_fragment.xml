@@ -93,7 +93,7 @@
                             android:layout_height="@dimen/spacing_xlarge"
                             android:layout_marginHorizontal="@dimen/spacing_normal"
                             android:background="@null"
-                            android:onClick="@{() -> viewmodel.onRemoveInstructionClick()}"
+                            android:onClick="@{() -> viewmodel.onRemoveGuidelineClick()}"
                             android:src="@drawable/trash_can_outline"
                             android:tint="@color/colorAccent"
                             app:layout_anchor="@id/toolbar_description"

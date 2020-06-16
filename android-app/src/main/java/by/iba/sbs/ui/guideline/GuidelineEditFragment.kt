@@ -1,10 +1,10 @@
 package by.iba.sbs.ui.guideline
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.View
 import androidx.activity.addCallback
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import by.iba.sbs.BR
 import by.iba.sbs.R
@@ -15,10 +15,8 @@ import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.viewmodel.GuidelineViewModel
 import by.iba.sbs.tools.Extentions
 import com.google.android.material.appbar.AppBarLayout
-import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlin.math.abs
 
 
@@ -38,10 +36,9 @@ class GuidelineEditFragment :
         GuidelineViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        GuidelineViewModel(
-            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
-            eventsDispatcherOnMain()
-        )
+        requireActivity().let {
+            ViewModelProviders.of(it).get(GuidelineViewModel::class.java)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
