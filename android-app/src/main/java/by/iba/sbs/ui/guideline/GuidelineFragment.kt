@@ -1,36 +1,50 @@
 package by.iba.sbs.ui.guideline
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.View
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import by.iba.mvvmbase.BaseFragment
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionFragmentBinding
+import by.iba.sbs.library.viewmodel.GuidelineViewModel
 import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.russhwolf.settings.AndroidSettings
+import dev.icerock.moko.mvvm.MvvmFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlinx.serialization.UnstableDefault
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.abs
 
 class GuidelineFragment :
-    BaseFragment<InstructionFragmentBinding, GuidelineViewModel>(),
+    MvvmFragment<InstructionFragmentBinding, GuidelineViewModel>(),
     AppBarLayout.OnOffsetChangedListener {
 
     override val layoutId: Int = R.layout.instruction_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: GuidelineViewModel by sharedViewModel()
+
     private lateinit var viewPager: ViewPager2
     private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
     private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
     private val mAlphaAnimationsDuration = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
+    override val viewModelClass: Class<GuidelineViewModel> =
+        GuidelineViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        GuidelineViewModel(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
+            eventsDispatcherOnMain()
+        )
+    }
 
     @UnstableDefault
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,9 +59,9 @@ class GuidelineFragment :
         }
 
         initActionButton()
-        viewModel.isFavorite.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.isFavorite.addObserver {
             initActionButton()
-        })
+        }
         viewPager = binding.viewPager
         viewPager.adapter = TabsFragmentAdapter(this)
 

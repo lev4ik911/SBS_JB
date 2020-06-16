@@ -10,8 +10,10 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.*
+import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.text.InputType
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
@@ -22,20 +24,23 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
-import by.iba.mvvmbase.BaseEventsActivity
-import by.iba.mvvmbase.adapter.BaseBindingAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.BuildConfig
 import by.iba.sbs.R
+import by.iba.sbs.adapters.BaseBindingAdapter
 import by.iba.sbs.databinding.InstructionActivityBinding
 import by.iba.sbs.databinding.StepPreviewItemBinding
 import by.iba.sbs.databinding.StepPreviewLayoutBinding
+import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.Step
+import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.model.request.RatingCreate
+import by.iba.sbs.library.viewmodel.GuidelineViewModel
 import by.iba.sbs.ui.profile.ProfileActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
@@ -46,20 +51,34 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.russhwolf.settings.AndroidSettings
+import com.shashank.sony.fancytoastlib.FancyToast
 import com.yalantis.ucrop.UCrop
+import dev.icerock.moko.mvvm.MvvmEventsActivity
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
+import kotlinx.android.synthetic.main.instruction_activity.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
 
 class GuidelineActivity :
-    BaseEventsActivity<InstructionActivityBinding, GuidelineViewModel, GuidelineViewModel.EventsListener>(),
+    MvvmEventsActivity<InstructionActivityBinding, GuidelineViewModel, GuidelineViewModel.EventsListener>(),
     GuidelineViewModel.EventsListener {
     override val layoutId: Int = R.layout.instruction_activity
-    override val viewModel: GuidelineViewModel by viewModel()
+    override val viewModelClass: Class<GuidelineViewModel> =
+        GuidelineViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        GuidelineViewModel(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(this)),
+            eventsDispatcherOnMain()
+        )
+    }
+
     override val viewModelVariableId: Int = BR.viewmodel
     lateinit var mPopupWindow: PopupWindow
     var bindingPopup: StepPreviewLayoutBinding? = null
@@ -418,7 +437,7 @@ class GuidelineActivity :
 
     }
 
-    override fun onPreviewStepAction(view: View, step: Step) {
+    override fun onPreviewStepAction(step: Step) {
 
         val contentView = layoutInflater.inflate(R.layout.step_preview_layout, null)
         bindingPopup = DataBindingUtil.bind(contentView)
@@ -457,12 +476,12 @@ class GuidelineActivity :
                 val snapHelperStart: SnapHelper = PagerSnapHelper()
                 snapHelperStart.attachToRecyclerView(this)
             }
-            viewModel.steps.observe(this, androidx.lifecycle.Observer {
+            viewModel.steps.addObserver {
                 stepsAdapter.addItems(it)
                 bindingPopup!!.rvSteps.scrollToPosition(step.weight - 1)
-            })
+            }
 
-            mPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+            mPopupWindow.showAtLocation(container, Gravity.CENTER, 0, 0)
         }
 
     }
@@ -620,6 +639,26 @@ class GuidelineActivity :
             })
             .submit()
 
+    }
+
+    override fun showToast(msg: ToastMessage) {
+        when (msg.type) {
+            MessageType.ERROR ->
+                Log.e(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.WARNING ->
+                Log.w(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.INFO ->
+                Log.i(viewModel::class.java.name, msg.getLogMessage())
+            else ->
+                Log.v(viewModel::class.java.name, msg.getLogMessage())
+        }
+        FancyToast.makeText(
+            this,
+            msg.message,
+            FancyToast.LENGTH_LONG,
+            msg.type.index,
+            false
+        ).show()
     }
 
     private val imageHandler = object : Handler(Looper.getMainLooper()) {

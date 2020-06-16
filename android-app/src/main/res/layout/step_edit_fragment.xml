@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.guideline.GuidelineViewModel"/>
+            type="by.iba.sbs.library.viewmodel.GuidelineViewModel" />
         <variable
             name="step"
             type="by.iba.sbs.library.model.Step"/>
@@ -129,7 +129,7 @@
                 <androidx.core.widget.ContentLoadingProgressBar
                     android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyleHorizontal"
-                    visibleOrGone="@{viewmodel.isLoading}"
+                    visibleOrGone="@{viewmodel.isLoading.ld}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/progress_bar_layout_margin"

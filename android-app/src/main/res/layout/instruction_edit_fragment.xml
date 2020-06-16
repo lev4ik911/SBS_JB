@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.guideline.GuidelineViewModel"/>
+            type="by.iba.sbs.library.viewmodel.GuidelineViewModel" />
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/htab_maincontent"
@@ -45,7 +45,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fitsSystemWindows="true"
-                        imageFromPath="@{ viewmodel.guideline.imagePath }"
+                        imageFromPath="@{ viewmodel.guideline.ld.imagePath }"
                         android:scaleType="centerCrop"/>
                 </RelativeLayout>
                 <androidx.appcompat.widget.Toolbar
@@ -118,7 +118,7 @@
                 <androidx.core.widget.ContentLoadingProgressBar
                     android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyleHorizontal"
-                    visibleOrGone="@{viewmodel.isLoading}"
+                    visibleOrGone="@{viewmodel.isLoading.ld}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/progress_bar_layout_margin"
@@ -148,7 +148,7 @@
                         android:layout_marginTop="@dimen/spacing_small"
                         android:layout_marginEnd="@dimen/spacing_xxxxlarge"
                         android:hint="@string/hint_instruction_name"
-                        android:text="@={viewmodel.guideline.name}"
+                        android:text="@={viewmodel.guideline.ld.name}"
                         android:textAppearance="@style/Text" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -170,7 +170,7 @@
                         android:layout_marginTop="@dimen/spacing_xsmall"
                         android:hint="@string/hint_instruction_description"
                         android:singleLine="false"
-                        android:text="@={viewmodel.guideline.description}"
+                        android:text="@={viewmodel.guideline.ld.description}"
                         android:textAppearance="@style/Text.Description"
                         android:textSize="@dimen/text_size_small" />
                 </com.google.android.material.textfield.TextInputLayout>

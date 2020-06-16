@@ -1,64 +1,52 @@
-package by.iba.sbs.ui.guideline
+package by.iba.sbs.library.viewmodel
 
-import android.content.Context
-import android.preference.PreferenceManager
-import android.text.Html
-import android.view.View
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import by.iba.mvvmbase.BaseViewModel
-import by.iba.mvvmbase.MessageType
-import by.iba.mvvmbase.dispatcher.EventsDispatcher
-import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
-import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
-import by.iba.mvvmbase.model.ToastMessage
+
 import by.iba.sbs.library.data.remote.Response
-import by.iba.sbs.library.model.Feedback
-import by.iba.sbs.library.model.Guideline
-import by.iba.sbs.library.model.Step
+import by.iba.sbs.library.model.*
 import by.iba.sbs.library.model.request.RatingCreate
 import by.iba.sbs.library.model.response.RatingSummary
 import by.iba.sbs.library.repository.GuidelineRepository
-import by.iba.sbs.library.service.LocalSettings
-import com.russhwolf.settings.AndroidSettings
+import com.russhwolf.settings.Settings
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcherOwner
+import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
-import java.util.*
 
 
-class GuidelineViewModel(context: Context) : BaseViewModel(),
+class GuidelineViewModel(
+    settings: Settings,
+    override val eventsDispatcher: EventsDispatcher<EventsListener>
+) : ViewModelExt(settings),
     EventsDispatcherOwner<GuidelineViewModel.EventsListener> {
-    override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
-
-    private val localStorage: LocalSettings by lazy {
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val settings = AndroidSettings(sharedPrefs)
-        LocalSettings(settings)
-    }
 
     @OptIn(UnstableDefault::class)
     @ImplicitReflectionSerializer
     private val repository by lazy { GuidelineRepository(localStorage) }
-    val steps = MutableLiveData<List<Step>>()
-    var oldSteps = listOf<Step>()
-    val updatedStepId = MutableLiveData("")
-    val starsCount = MutableLiveData("").apply {
-        value = Html.fromHtml("&#9733; ").toString() + "12345"
-    }
 
     val ratingUp = MutableLiveData(0)
     val ratingDown = MutableLiveData(0)
+    val isFavorite = MutableLiveData(true)
+    val isMyInstruction = MutableLiveData(true)
+
     val guideline = MutableLiveData(Guideline()).apply {
-        observeForever {
+        addObserver {
             ratingUp.value = it.rating.positive
             ratingDown.value = it.rating.negative
         }
     }
+
+    val steps = MutableLiveData<List<Step>>(mutableListOf())
+
     var oldGuideline = Guideline()
-    val isFavorite = MutableLiveData(true)
-    val isMyInstruction = MutableLiveData(true)
-    val feedback = MutableLiveData<List<Feedback>>().apply {
+    var oldSteps = listOf<Step>()
+
+    val updatedStepId = MutableLiveData("")
+    val starsCount = MutableLiveData("").apply {
+        //  value = Html.fromHtml("&#9733; ").toString() + "12345"
+    }
+    val feedback = MutableLiveData<List<Feedback>>(mutableListOf()).apply {
 //        val mData = ArrayList<Feedback>()
 //        mData.add(
 //            Feedback(
@@ -80,20 +68,26 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @OptIn(ImplicitReflectionSerializer::class)
     fun loadInstruction(instructionId: String, forceRefresh: Boolean) {
         if (instructionId != "") {
-            isLoading.value = true
-            val mData = ArrayList<Step>()
+            loading.value = true
             viewModelScope.launch {
                 try {
                     val guidelinesLiveData = repository.getGuideline(instructionId, forceRefresh)
                     guidelinesLiveData.addObserver {
                         if (it.isSuccess && it.isNotEmpty) {
                             guideline.value = it.data!!
-                        } else if (it.error != null) notificationsQueue.value =
-                            ToastMessage(it.error!!.toString(), MessageType.ERROR)
+                        } else if (it.error != null)
+                            eventsDispatcher.dispatchEvent {
+                                showToast(
+                                    ToastMessage(it.error.message.toString(), MessageType.ERROR)
+                                )
+                            }
                     }
                 } catch (e: Exception) {
-                    notificationsQueue.value =
-                        ToastMessage(e.toString(), MessageType.ERROR)
+                    eventsDispatcher.dispatchEvent {
+                        showToast(
+                            ToastMessage(e.message.toString(), MessageType.ERROR)
+                        )
+                    }
                 }
             }
             viewModelScope.launch {
@@ -129,27 +123,39 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                                 steps.value = tempListOfSteps
                             } else
                                 steps.value = it.data!!
-                        } else if (it.error != null) notificationsQueue.value =
-                            ToastMessage(it.error!!.toString(), MessageType.ERROR)
-                        isLoading.postValue(it.status == Response.Status.LOADING)
+                        } else if (it.error != null) eventsDispatcher.dispatchEvent {
+                            showToast(
+                                ToastMessage(it.error.message.toString(), MessageType.ERROR)
+                            )
+                        }
+                        loading.postValue(it.status == Response.Status.LOADING)
                     }
                 } catch (e: Exception) {
-                    notificationsQueue.value =
-                        ToastMessage(e.toString(), MessageType.ERROR)
+                    eventsDispatcher.dispatchEvent {
+                        showToast(
+                            ToastMessage(e.message.toString(), MessageType.ERROR)
+                        )
+                    }
                 }
             }
             viewModelScope.launch {
                 try {
-                    val feedbacksLiveData = repository.getAllFeedbacks(instructionId, forceRefresh)
-                    feedbacksLiveData.addObserver {
+                    val feedbackLiveData = repository.getAllFeedbacks(instructionId, forceRefresh)
+                    feedbackLiveData.addObserver {
                         if (it.isSuccess && it.isNotEmpty) {
                             feedback.value = it.data!!
-                        } else if (it.error != null) notificationsQueue.value =
-                            ToastMessage(it.error!!.toString(), MessageType.ERROR)
+                        } else if (it.error != null) eventsDispatcher.dispatchEvent {
+                            showToast(
+                                ToastMessage(it.error.message.toString(), MessageType.ERROR)
+                            )
+                        }
                     }
                 } catch (e: Exception) {
-                    notificationsQueue.value =
-                        ToastMessage(e.toString(), MessageType.ERROR)
+                    eventsDispatcher.dispatchEvent {
+                        showToast(
+                            ToastMessage(e.message.toString(), MessageType.ERROR)
+                        )
+                    }
                 }
             }
 //            if (instructionId.rem(2) == 0) {
@@ -242,12 +248,12 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     }
 
     fun onActionButtonClick() {
-        if (isMyInstruction.value!!) {
+        if (isMyInstruction.value) {
             if (!steps.value.isNullOrEmpty())
-                oldSteps = steps.value?.map { it.copy() }!!
-            oldGuideline = guideline.value!!.copy()
-            eventsDispatcher.dispatchEvent { onCallInstructionEditor(guideline.value!!.id) }
-        } else isFavorite.value = !isFavorite.value!!
+                oldSteps = steps.value.map { it.copy() }
+            oldGuideline = guideline.value.copy()
+            eventsDispatcher.dispatchEvent { onCallInstructionEditor(guideline.value.id) }
+        } else isFavorite.value = !isFavorite.value
     }
 
     @UnstableDefault
@@ -269,14 +275,18 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @ImplicitReflectionSerializer
     fun createFeedback(feedback: RatingCreate) {
         if (feedback.rating > 0)
-            ratingUp.value = ratingUp.value?.plus(1)
+            ratingUp.value = ratingUp.value.plus(1)
         else
-            ratingDown.value = ratingDown.value?.plus(1)
+            ratingDown.value = ratingDown.value.plus(1)
 
-        val ratingSummary = RatingSummary(positive = ratingUp.value!!, negative = ratingDown.value!!, overall = ratingUp.value!! - ratingDown.value!!)
+        val ratingSummary = RatingSummary(
+            positive = ratingUp.value,
+            negative = ratingDown.value,
+            overall = ratingUp.value - ratingDown.value
+        )
 
         viewModelScope.launch {
-            repository.insertRating(guideline.value!!.id, feedback, ratingSummary)
+            repository.insertRating(guideline.value.id, feedback, ratingSummary)
         }
     }
 
@@ -286,8 +296,8 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     }
 
 
-    fun onPreviewStepClick(view: View, step: Step) {
-        eventsDispatcher.dispatchEvent { onPreviewStepAction(view, step) }
+    fun onPreviewStepClick(step: Step) {
+        eventsDispatcher.dispatchEvent { onPreviewStepAction(step) }
     }
 
     fun onPreviewStepCloseClick() {
@@ -317,18 +327,18 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun onSaveAction() {
-        isLoading.value = true
-        if (guideline.value!!.id.isEmpty())
-            insertInstruction(guideline.value!!)
+        loading.value = true
+        if (guideline.value.id.isEmpty())
+            insertInstruction(guideline.value)
         else
-            updateInsruction(guideline.value!!)
+            updateInsruction(guideline.value)
         eventsDispatcher.dispatchEvent { onAfterSaveAction() }
     }
 
     fun onSaveStepAction(step: Step) {
-        if (step.stepId.isEmpty() && !steps.value!!.contains(step)){
-            val stepArr = steps.value?.toMutableList()
-            stepArr?.add(
+        if (step.stepId.isEmpty() && !steps.value.contains(step)) {
+            val stepArr = steps.value.toMutableList()
+            stepArr.add(
                 Step(
                     name = step.name,
                     description = step.description,
@@ -360,8 +370,11 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
             try {
                 val result = repository.insertGuideline(newGuideline)
                 if (result.isSuccess && result.isNotEmpty) {
-                    notificationsQueue.value =
-                        ToastMessage("Successful saved", MessageType.SUCCESS)
+                    eventsDispatcher.dispatchEvent {
+                        showToast(
+                            ToastMessage("Successful insert", MessageType.SUCCESS)
+                        )
+                    }
                     //TODO(Add to total res)
                     val resultGuideline = result.data!!
                     guideline.value = Guideline(
@@ -370,11 +383,17 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
                         description = resultGuideline.description ?: ""
                     )
                     saveSteps()
-                } else if (result.error != null) notificationsQueue.value =
-                    ToastMessage(result.error!!.toString(), MessageType.ERROR)
+                } else if (result.error != null) eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(result.error.message.toString(), MessageType.ERROR)
+                    )
+                }
             } catch (e: Exception) {
-                notificationsQueue.value =
-                    ToastMessage(e.toString(), MessageType.ERROR)
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(e.message.toString(), MessageType.ERROR)
+                    )
+                }
             }
         }
     }
@@ -386,15 +405,24 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
             try {
                 val result = repository.updateGuideline(guideline)
                 if (result.isSuccess && result.isNotEmpty) {
-                    notificationsQueue.value =
-                        ToastMessage("Successful saved", MessageType.SUCCESS)
+                    eventsDispatcher.dispatchEvent {
+                        showToast(
+                            ToastMessage("Successful update", MessageType.SUCCESS)
+                        )
+                    }
                     //TODO(Add to total res)
                     saveSteps()
-                } else if (result.error != null) notificationsQueue.value =
-                    ToastMessage(result.error!!.toString(), MessageType.ERROR)
+                } else if (result.error != null) eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(result.error.message.toString(), MessageType.ERROR)
+                    )
+                }
             } catch (e: Exception) {
-                notificationsQueue.value =
-                    ToastMessage(e.toString(), MessageType.ERROR)
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(e.toString(), MessageType.ERROR)
+                    )
+                }
             }
         }
     }
@@ -402,58 +430,74 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun deleteInstruction(guideline: Guideline) {
-        isLoading.value = true
+        loading.value = true
         viewModelScope.launch {
             try {
                 val result = repository.deleteGuideline(guideline.id)
                 if (result.isSuccess) {
-                    notificationsQueue.value =
-                        ToastMessage("Successful delete", MessageType.SUCCESS)
+                    eventsDispatcher.dispatchEvent {
+                        showToast(
+                            ToastMessage("Successful delete", MessageType.SUCCESS)
+                        )
+                    }
                     //TODO(Add to total res)
-                } else if (result.error != null) notificationsQueue.value =
-                    ToastMessage(result.error!!.toString(), MessageType.ERROR)
-                isLoading.postValue(result.status == Response.Status.LOADING)
+                } else if (result.error != null) eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(result.error.message.toString(), MessageType.ERROR)
+                    )
+                }
+                loading.postValue(result.status == Response.Status.LOADING)
                 eventsDispatcher.dispatchEvent { onAfterDeleteAction() }
             } catch (e: Exception) {
-                notificationsQueue.value =
-                    ToastMessage(e.toString(), MessageType.ERROR)
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(e.toString(), MessageType.ERROR)
+                    )
+                }
             }
         }
     }
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun saveSteps(){
+    fun saveSteps() {
         //insert / update steps
         var isNeedSaving = false
-        steps.value?.filter{step-> step.stepId.isEmpty()}.apply {
+        steps.value.filter { step -> step.stepId.isEmpty() }.apply {
             if (!this.isNullOrEmpty()) {
                 isNeedSaving = true
-                insertSteps(guideline.value!!.id, this)
+                insertSteps(guideline.value.id, this)
             }
         }
-        steps.value?.filter{step-> !step.stepId.isEmpty() && !oldSteps.contains(step)}.apply {
+        steps.value.filter { step -> !step.stepId.isEmpty() && !oldSteps.contains(step) }.apply {
             if (!this.isNullOrEmpty()) {
                 isNeedSaving = true
-                updateSteps(guideline.value!!.id, this)
+                updateSteps(guideline.value.id, this)
             }
         }
         if (!isNeedSaving)
-            isLoading.value = false
+            loading.value = false
     }
 
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun insertSteps(guidelineId: String, newSteps: List<Step>) {
+        loading.value = true
         viewModelScope.launch {
             try {
                 val result = repository.insertSteps(guidelineId, newSteps)
-                if (result.error != null) notificationsQueue.value =
-                    ToastMessage(result.error!!.toString(), MessageType.ERROR)
-                isLoading.value = false
+                if (result.error != null) eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(result.error.message.toString(), MessageType.ERROR)
+                    )
+                }
+                loading.value = false
             } catch (e: Exception) {
-                notificationsQueue.value =
-                    ToastMessage(e.toString(), MessageType.ERROR)
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(e.toString(), MessageType.ERROR)
+                    )
+                }
             }
         }
     }
@@ -461,15 +505,22 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun updateSteps(guidelineId: String, updatedSteps: List<Step>) {
+        loading.value = true
         viewModelScope.launch {
             try {
                 val result = repository.updateSteps(guidelineId, updatedSteps)
-                if (result.error != null) notificationsQueue.value =
-                    ToastMessage(result.error!!.toString(), MessageType.ERROR)
-                isLoading.value = false
+                if (result.error != null) eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(result.error.message.toString(), MessageType.ERROR)
+                    )
+                }
+                loading.value = false
             } catch (e: Exception) {
-                notificationsQueue.value =
-                    ToastMessage(e.toString(), MessageType.ERROR)
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(e.toString(), MessageType.ERROR)
+                    )
+                }
             }
         }
     }
@@ -477,25 +528,34 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun deleteStep(guidelineId: String, step: Step) {
-        isLoading.value = true
+        loading.value = true
         viewModelScope.launch {
             try {
                 val result = repository.deleteStep(guidelineId, step.stepId)
                 if (result.isSuccess) {
-                    notificationsQueue.value =
-                        ToastMessage("Successful delete", MessageType.SUCCESS)
+                    eventsDispatcher.dispatchEvent {
+                        showToast(
+                            ToastMessage("Successful delete", MessageType.SUCCESS)
+                        )
+                    }
                     //TODO(Add to total res)
-                    val stepArr = steps.value?.toMutableList()
-                    stepArr?.remove(step)
-                    stepArr?.forEachIndexed { index, step -> step.weight = index + 1 }
+                    val stepArr = steps.value.toMutableList()
+                    stepArr.remove(step)
+                    stepArr.forEachIndexed { index, step -> step.weight = index + 1 }
                     steps.value = stepArr
-                } else if (result.error != null) notificationsQueue.value =
-                    ToastMessage(result.error!!.toString(), MessageType.ERROR)
-                isLoading.postValue(result.status == Response.Status.LOADING)
+                } else if (result.error != null) eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(result.error.message.toString(), MessageType.ERROR)
+                    )
+                }
+                loading.postValue(result.status == Response.Status.LOADING)
                 eventsDispatcher.dispatchEvent { onAfterSaveStepAction() }
             } catch (e: Exception) {
-                notificationsQueue.value =
-                    ToastMessage(e.toString(), MessageType.ERROR)
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(e.toString(), MessageType.ERROR)
+                    )
+                }
             }
         }
     }
@@ -506,7 +566,7 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         fun onEditStep(stepWeight: Int)
         fun onEditStepImage(editStep: Step)
         fun onEditGuidelineImage()
-        fun onPreviewStepAction(view: View, step: Step)
+        fun onPreviewStepAction(step: Step)
         fun onClosePreviewStepAction()
         fun onPreviewStepNextAction(currentStep: Step)
         fun onPreviewStepPreviousAction(currentStep: Step)
@@ -518,5 +578,6 @@ class GuidelineViewModel(context: Context) : BaseViewModel(),
         fun onRatingUpAction()
         fun onRemoveStep(step: Step)
         fun onLoadImageFromAPI(step: Step)
+        fun showToast(msg: ToastMessage)
     }
 }

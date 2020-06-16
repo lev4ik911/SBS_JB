@@ -1,36 +1,48 @@
 package by.iba.sbs.ui.guideline
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.View
 import androidx.activity.addCallback
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import by.iba.mvvmbase.BaseFragment
-import by.iba.mvvmbase.adapter.BaseBindingAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
+import by.iba.sbs.adapters.BaseBindingAdapter
 import by.iba.sbs.databinding.InstructionEditFragmentBinding
 import by.iba.sbs.databinding.InstructionEditStepListItemBinding
 import by.iba.sbs.library.model.Step
+import by.iba.sbs.library.viewmodel.GuidelineViewModel
 import by.iba.sbs.tools.Extentions
 import com.google.android.material.appbar.AppBarLayout
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import com.russhwolf.settings.AndroidSettings
+import dev.icerock.moko.mvvm.MvvmFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlin.math.abs
 
 
 class GuidelineEditFragment :
-    BaseFragment<InstructionEditFragmentBinding, GuidelineViewModel>(),
+    MvvmFragment<InstructionEditFragmentBinding, GuidelineViewModel>(),
     AppBarLayout.OnOffsetChangedListener {
 
-    override val layoutId: Int = R.layout.instruction_edit_fragment
-    override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: GuidelineViewModel by sharedViewModel()
     private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
     private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
     private val mAlphaAnimationsDuration = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
     private var instructionId = ""
+    override val layoutId: Int = R.layout.instruction_edit_fragment
+    override val viewModelVariableId: Int = BR.viewmodel
+    override val viewModelClass: Class<GuidelineViewModel> =
+        GuidelineViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        GuidelineViewModel(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
+            eventsDispatcherOnMain()
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,14 +74,14 @@ class GuidelineEditFragment :
             stepsAdapter.itemTouchHelper.attachToRecyclerView(this)
         }
 
-        viewModel.guideline.observe(viewLifecycleOwner, Observer {
+        viewModel.guideline.addObserver {
             binding.toolbarDescription.title = it.name
             binding.htabHeader.invalidate()
-        })
-        viewModel.steps.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        }
+        viewModel.steps.addObserver {
             stepsAdapter.addItems(it)
 
-        })
+        }
         stepsAdapter.onItemClick = { pos, itemView, item ->
             (activity as GuidelineActivity).onEditStep(item.weight)
             // Toast.makeText(context, pos.toString(), Toast.LENGTH_LONG).show()

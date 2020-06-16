@@ -9,7 +9,7 @@
 
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
+            type="by.iba.sbs.library.viewmodel.GuidelineViewModel" />
 
         <variable
             name="step"
@@ -65,7 +65,7 @@
 
                 <ImageButton
                     android:id="@+id/btn_next"
-                    visibleOrGone="@{step.weight != viewmodel.steps.size()}"
+                    visibleOrGone="@{step.weight != viewmodel.steps.ld.size()}"
                     android:onClick="@{()-> viewmodel.onPreviewStepNextClick(step)}"
                     style="@style/Widget.AppCompat.ActionButton.Overflow"
                     android:layout_width="wrap_content"

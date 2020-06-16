@@ -11,7 +11,7 @@
 
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
+            type="by.iba.sbs.library.viewmodel.GuidelineViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView

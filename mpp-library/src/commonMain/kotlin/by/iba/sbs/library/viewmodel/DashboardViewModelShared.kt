@@ -32,6 +32,7 @@ class DashboardViewModelShared(
     }
     var isShowRecommended: LiveData<Boolean> = showRecommended.readOnly()
     var isShowFavorites: LiveData<Boolean> = showFavorites.readOnly()
+
     fun update() {
         showRecommended.value = localStorage.showRecommended
         showFavorites.value = localStorage.showFavorites
