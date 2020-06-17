@@ -46,7 +46,7 @@ class GuidelineViewModel(
     val starsCount = MutableLiveData("").apply {
         //  value = Html.fromHtml("&#9733; ").toString() + "12345"
     }
-    val feedback = MutableLiveData<List<Feedback>>(mutableListOf()).apply {
+    val feedback = MutableLiveData<MutableList<Feedback>>(mutableListOf()).apply {
 //        val mData = ArrayList<Feedback>()
 //        mData.add(
 //            Feedback(
@@ -143,7 +143,7 @@ class GuidelineViewModel(
                     val feedbackLiveData = repository.getAllFeedbacks(instructionId, forceRefresh)
                     feedbackLiveData.addObserver {
                         if (it.isSuccess && it.isNotEmpty) {
-                            feedback.value = it.data!!
+                            feedback.value = it.data!!.toMutableList()
                         } else if (it.error != null) eventsDispatcher.dispatchEvent {
                             showToast(
                                 ToastMessage(it.error.message.toString(), MessageType.ERROR)
@@ -273,8 +273,8 @@ class GuidelineViewModel(
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun createFeedback(feedback: RatingCreate) {
-        if (feedback.rating > 0)
+    fun createFeedback(newFeedback: RatingCreate) {
+        if (newFeedback.rating > 0)
             ratingUp.value = ratingUp.value.plus(1)
         else
             ratingDown.value = ratingDown.value.plus(1)
@@ -284,9 +284,15 @@ class GuidelineViewModel(
             negative = ratingDown.value,
             overall = ratingUp.value - ratingDown.value
         )
-
         viewModelScope.launch {
-            repository.insertRating(guideline.value.id, feedback, ratingSummary)
+            val response = repository.insertRating(guideline.value.id, newFeedback, ratingSummary)
+            if (response.isSuccess && response.isNotEmpty) {
+                response.data?.let {
+                    val feedbackList = feedback.value
+                    feedbackList.add(Feedback(it.id, it.rating, it.comment))
+                    feedback.value = feedbackList
+                }
+            }
         }
     }
 

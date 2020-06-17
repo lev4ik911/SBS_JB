@@ -438,7 +438,6 @@ class GuidelineActivity :
     }
 
     override fun onPreviewStepAction(step: Step) {
-
         val contentView = layoutInflater.inflate(R.layout.step_preview_layout, null)
         bindingPopup = DataBindingUtil.bind(contentView)
         if (bindingPopup != null) {
@@ -463,15 +462,11 @@ class GuidelineActivity :
                         oldItem.weight == newItem.weight
                     }
                 )
-//            bindingPopup.btnClose.setOnClickListener {
-//                mPopupWindow.dismiss()
-//            }
             bindingPopup!!.rvSteps.apply {
                 this.layoutManager = LinearLayoutManager(
                     context,
                     LinearLayoutManager.HORIZONTAL, false
                 )
-
                 adapter = stepsAdapter
                 val snapHelperStart: SnapHelper = PagerSnapHelper()
                 snapHelperStart.attachToRecyclerView(this)
@@ -480,7 +475,6 @@ class GuidelineActivity :
                 stepsAdapter.addItems(it)
                 bindingPopup!!.rvSteps.scrollToPosition(step.weight - 1)
             }
-
             mPopupWindow.showAtLocation(container, Gravity.CENTER, 0, 0)
         }
 
