@@ -51,13 +51,13 @@ android {
     }
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = "1.8"
-        kotlinOptions.freeCompilerArgs += "-Xopt-in=org.mylibrary.OptInAnnotation"
+        kotlinOptions.freeCompilerArgs += "-Xopt-in=by.iba.sbs.OptInAnnotation"
     }
 
     packagingOptions {
         exclude("META-INF/*.kotlin_module")
     }
-    buildToolsVersion = "30.0.0 rc4"
+    buildToolsVersion = "30.0.0"
 }
 
 dependencies {
