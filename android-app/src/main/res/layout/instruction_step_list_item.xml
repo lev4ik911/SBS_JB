@@ -10,13 +10,13 @@
 
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
+            type="by.iba.sbs.library.viewmodel.GuidelineViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         style="@style/Card"
-        android:onClick="@{(view) ->  viewmodel.onPreviewStepClick(view, step)}"
+        android:onClick="@{() ->  viewmodel.onPreviewStepClick(step)}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_xsmall"

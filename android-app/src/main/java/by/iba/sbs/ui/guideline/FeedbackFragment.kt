@@ -2,19 +2,29 @@ package by.iba.sbs.ui.guideline
 
 import android.os.Bundle
 import android.view.View
-import by.iba.mvvmbase.BaseFragment
-import by.iba.mvvmbase.adapter.BaseBindingAdapter
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import by.iba.sbs.BR
 import by.iba.sbs.R
+import by.iba.sbs.adapters.BaseBindingAdapter
 import by.iba.sbs.databinding.FeedbackFragmentBinding
 import by.iba.sbs.databinding.InstructionFeedbackListItemBinding
 import by.iba.sbs.library.model.Feedback
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import by.iba.sbs.library.viewmodel.GuidelineViewModel
+import dev.icerock.moko.mvvm.MvvmFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
 
-class FeedbackFragment : BaseFragment<FeedbackFragmentBinding, GuidelineViewModel>() {
+class FeedbackFragment : MvvmFragment<FeedbackFragmentBinding, GuidelineViewModel>() {
     override val layoutId: Int = R.layout.feedback_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: GuidelineViewModel by sharedViewModel()
+    override val viewModelClass: Class<GuidelineViewModel> =
+        GuidelineViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        requireActivity().let {
+            ViewModelProviders.of(it).get(GuidelineViewModel::class.java)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,8 +42,8 @@ class FeedbackFragment : BaseFragment<FeedbackFragmentBinding, GuidelineViewMode
         binding.rvFeedback.also {
             it.adapter = feedbackAdapter
         }
-        viewModel.feedback.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.feedback.addObserver {
             feedbackAdapter.addItems(it)
-        })
+        }
     }
 }
