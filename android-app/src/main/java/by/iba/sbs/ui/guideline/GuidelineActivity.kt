@@ -57,7 +57,6 @@ import com.yalantis.ucrop.UCrop
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
-import kotlinx.android.synthetic.main.instruction_activity.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import java.io.File
@@ -475,7 +474,7 @@ class GuidelineActivity :
                 stepsAdapter.addItems(it)
                 bindingPopup!!.rvSteps.scrollToPosition(step.weight - 1)
             }
-            mPopupWindow.showAtLocation(container, Gravity.CENTER, 0, 0)
+            mPopupWindow.showAtLocation(binding.container, Gravity.CENTER, 0, 0)
         }
 
     }

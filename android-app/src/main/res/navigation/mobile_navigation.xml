@@ -25,7 +25,7 @@
         android:id="@+id/navigation_instructionActivity"
         android:name="by.iba.sbs.ui.guideline.GuidelineActivity"
         android:label="instruction_activity"
-        tools:layout="@layout/instruction_activity"/>
+        tools:layout="@layout/instruction_activity" />
     <fragment
         android:id="@+id/navigation_favorites"
         android:name="by.iba.sbs.ui.dashboard.FavoritesFragment"
@@ -34,4 +34,13 @@
             android:name="Category"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_profile_fragment"
+        android:name="by.iba.sbs.ui.profile.ProfileFragment"
+        android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/navigation_profile_edit_fragment"
+        android:name="by.iba.sbs.ui.profile.ProfileEditFragment"
+        android:label="profile_edit_fragment"
+        tools:layout="@layout/profile_edit_fragment" />
 </navigation>

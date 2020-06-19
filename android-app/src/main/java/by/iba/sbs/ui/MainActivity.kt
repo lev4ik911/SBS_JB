@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.navigation.findNavController
 import by.iba.mvvmbase.BaseEventsActivity
@@ -29,11 +30,11 @@ class MainActivity :
     override val viewModel: MainViewModel by viewModel()
     override val layoutId: Int = R.layout.activity_main
     override val viewModelVariableId: Int = by.iba.sbs.BR.viewmodel
-
+    lateinit var toolbar: androidx.appcompat.widget.Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val navView: BottomNavigation = this.findViewById(R.id.nav_view)
-        val toolbar = this.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_main)
+        toolbar = this.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_main)
         setSupportActionBar(toolbar)
         val navController = findNavController(R.id.fragment_navigation_main)
 
@@ -91,6 +92,12 @@ class MainActivity :
         navView.show(viewModel.activeTab.value!!)
     }
 
+    fun setNavigationIcon(visible: Boolean) {
+        if (visible)
+            toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.chevron_left)
+        else
+            toolbar.navigationIcon = null
+    }
 
     override fun onOpenGuidelineAction(view: View, guideline: Guideline) {
         val transitionSharedNameImgView = this.getString(R.string.transition_name_img_view)

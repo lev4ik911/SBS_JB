@@ -2,8 +2,7 @@ package by.iba.sbs.di
 
 import android.preference.PreferenceManager
 import by.iba.sbs.library.service.SystemInformation
-import by.iba.sbs.library.viewmodel.DashboardViewModelShared
-import by.iba.sbs.library.viewmodel.GuidelineViewModel
+import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.tools.SystemInfo
 import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.guideline.GuidelineFragment
@@ -21,30 +20,19 @@ import org.koin.dsl.module
 
 
 val viewModelModule = module {
+    single<SystemInformation> { SystemInfo(androidContext()) }
+    single<Settings> { AndroidSettings(PreferenceManager.getDefaultSharedPreferences(androidContext())) }
     viewModel { MainViewModel() }
     viewModel { SplashViewModel(get()) }
     viewModel { LoginViewModel(androidContext(), get()) }
     viewModel { ResetViewModel() }
-   // viewModel { GuidelineViewModel(androidContext()) }
+    // viewModel { GuidelineViewModel(androidContext()) }
     viewModel { WalkthroughViewModel() }
     //viewModel { PostDetailsViewModel(userPostUseCase = get(), commentsUseCase = get()) }
+    viewModel { ProfileViewModel(get(), eventsDispatcherOnMain()) }
 }
 val serviceModule = module {
-    single<SystemInformation> { SystemInfo(androidContext()) }
-    single<Settings> { AndroidSettings(PreferenceManager.getDefaultSharedPreferences(androidContext())) }
 
-    factory {
-        DashboardViewModelShared(
-            eventsDispatcher = eventsDispatcherOnMain(),
-            settings = get()
-        )
-    }
-    factory {
-        GuidelineViewModel(
-            eventsDispatcher = eventsDispatcherOnMain(),
-            settings = get()
-        )
-    }
 }
 val fragmentModule = module {
     fragment { GuidelineFragment() }

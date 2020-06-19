@@ -34,7 +34,6 @@ import com.shashank.sony.fancytoastlib.FancyToast
 import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
-import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import org.koin.android.ext.android.inject
@@ -164,10 +163,7 @@ class DashboardFragment :
     @ImplicitReflectionSerializer
     override fun onStart() {
         super.onStart()
-        (activity as MainActivity).toolbar_main.apply {
-            navigationIcon = null
-            title = resources.getString(R.string.title_home)
-        }
+        (activity as MainActivity).setNavigationIcon(false)
         viewModel.loadRecommended(false, 4)
         viewModel.loadFavorites(false, 3)
         viewModel.loadPopular(false, 3)

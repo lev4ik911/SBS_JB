@@ -2,7 +2,6 @@ package by.iba.sbs.ui.profile
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
@@ -12,10 +11,9 @@ import by.iba.sbs.R
 import by.iba.sbs.databinding.SubscribersFragmentBinding
 import by.iba.sbs.library.model.Author
 import by.iba.sbs.library.viewmodel.ProfileViewModel
-import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SubscribersFragment : MvvmFragment<SubscribersFragmentBinding, ProfileViewModel>() {
 
@@ -25,10 +23,8 @@ class SubscribersFragment : MvvmFragment<SubscribersFragmentBinding, ProfileView
         ProfileViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        ProfileViewModel(
-            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
-            eventsDispatcherOnMain()
-        )
+        val viewModel: ProfileViewModel by sharedViewModel()
+        return@createViewModelFactory viewModel
     }
 
     private lateinit var subscribersStr: String

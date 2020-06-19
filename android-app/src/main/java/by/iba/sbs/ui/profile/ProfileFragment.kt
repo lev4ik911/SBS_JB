@@ -1,7 +1,6 @@
 package by.iba.sbs.ui.profile
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -17,10 +16,9 @@ import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
 import by.iba.sbs.ui.MainActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.abs
 
 class ProfileFragment :
@@ -33,10 +31,8 @@ class ProfileFragment :
         ProfileViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        ProfileViewModel(
-            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
-            eventsDispatcherOnMain()
-        )
+        val viewModel: ProfileViewModel by sharedViewModel()
+        return@createViewModelFactory viewModel
     }
 
     private lateinit var viewPager: ViewPager2
@@ -77,11 +73,11 @@ class ProfileFragment :
     private fun initActionButton() {
         binding.fActionButton.apply {
             when {
-                viewModel.isMyProfile.value!! -> {
+                viewModel.isMyProfile.value -> {
                     this.setImageResource(R.drawable.account_edit_outline)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 }
-                viewModel.isFavorite.value!! -> {
+                viewModel.isFavorite.value -> {
                     this.setImageResource(R.drawable.star)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
                 }
@@ -91,14 +87,14 @@ class ProfileFragment :
                 }
             }
         }
-        binding.btnToolbarLogout.visibleOrGone(viewModel.isMyProfile.value!!)
+        binding.btnToolbarLogout.visibleOrGone(viewModel.isMyProfile.value)
         binding.btnToolbarAction.apply {
             when {
-                viewModel.isMyProfile.value!! -> {
+                viewModel.isMyProfile.value -> {
                     this.setImageResource(R.drawable.account_edit_outline)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 }
-                viewModel.isFavorite.value!! -> {
+                viewModel.isFavorite.value -> {
                     this.setImageResource(R.drawable.star)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
                 }
@@ -162,7 +158,7 @@ class ProfileFragment :
 
     inner class TabsFragmentAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-        override fun getItemCount(): Int = if (viewModel.isMyProfile.value!!) 3 else 2
+        override fun getItemCount(): Int = if (viewModel.isMyProfile.value) 3 else 2
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {

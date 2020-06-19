@@ -118,6 +118,7 @@
                     android:onClick="onToolbarClick"
                     app:contentInsetStartWithNavigation="0dp"
                     app:layout_collapseMode="pin"
+                    app:navigationIcon="@drawable/chevron_left"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:titleTextColor="?attr/colorPrimaryDark">
 
@@ -149,9 +150,9 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:onClick="@{() -> viewmodel.onActionButtonClick()}"
-                            android:src="@drawable/heart"
-                            android:tint="@color/colorLightRed"
-                            android:visibility="invisible"/>
+                            android:src="@drawable/check_bold"
+                            android:tint="@color/colorAccent"
+                            android:visibility="invisible" />
 
                         <Space
                             android:layout_width="@dimen/spacing_large"
@@ -178,13 +179,13 @@
             android:layout_margin="@dimen/spacing_large"
             android:backgroundTint="@android:color/white"
             android:onClick="@{() -> viewmodel.onActionButtonClick()}"
-            android:src="@drawable/heart"
-            android:tint="@color/colorLightRed"
+            android:src="@drawable/check_bold"
+            android:tint="@color/colorAccent"
             app:borderWidth="0dp"
             app:elevation="@dimen/spacing_xsmall"
             app:fabSize="mini"
             app:layout_anchor="@id/htab_collapse_toolbar"
-            app:layout_anchorGravity="bottom|end"/>
+            app:layout_anchorGravity="bottom|end" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
