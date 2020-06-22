@@ -2,36 +2,49 @@ package by.iba.sbs.ui.login
 
 //import com.github.ybq.android.spinkit.style.FadingCircle
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.Extentions.Companion.waitForLayout
 import by.iba.mvvmbase.visibleOrNot
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.LoginFragmentBinding
+import by.iba.sbs.library.model.MessageType
+import by.iba.sbs.library.model.ToastMessage
+import by.iba.sbs.library.viewmodel.LoginViewModel
 import com.github.ybq.android.spinkit.style.FadingCircle
+import com.shashank.sony.fancytoastlib.FancyToast
+import dev.icerock.moko.mvvm.MvvmEventsFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class LoginFragment :
-    BaseEventsFragment<LoginFragmentBinding, LoginViewModel, LoginViewModel.EventsListener>(),
+    MvvmEventsFragment<LoginFragmentBinding, LoginViewModel, LoginViewModel.EventsListener>(),
     LoginViewModel.EventsListener, TextView.OnEditorActionListener {
     override val layoutId: Int = R.layout.login_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: LoginViewModel by viewModel()
+
+    override val viewModelClass: Class<LoginViewModel> =
+        LoginViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        val viewModel: LoginViewModel by viewModel()
+        return@createViewModelFactory viewModel
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            (activity as LoginActivity).navController.navigate(R.id.navigation_splash)
-        }
+//        requireActivity().onBackPressedDispatcher.addCallback(this) {
+//            (activity as LoginActivity).navController.navigate(R.id.navigation_splash)
+//        }
         viewModel.init()
         binding.includePassword.etPassword.setOnEditorActionListener(this)
         binding.includeEmail.etLogin.setOnEditorActionListener(this)
@@ -54,12 +67,12 @@ class LoginFragment :
                 )
             }
         }
-        viewModel.isLoading.observe(viewLifecycleOwner, Observer {
+        viewModel.isLoading.addObserver {
             if (it)
                 mWaveDrawable.start()
             else
                 mWaveDrawable.stop()
-        })
+        }
     }
 
     override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
@@ -109,4 +122,27 @@ class LoginFragment :
             it.showNext()
         }
     }
+
+
+    override fun showToast(msg: ToastMessage) {
+        when (msg.type) {
+            MessageType.ERROR ->
+                Log.e(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.WARNING ->
+                Log.w(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.INFO ->
+                Log.i(viewModel::class.java.name, msg.getLogMessage())
+            else ->
+                Log.v(viewModel::class.java.name, msg.getLogMessage())
+        }
+        FancyToast.makeText(
+            requireContext(),
+            msg.message,
+            FancyToast.LENGTH_LONG,
+            msg.type.index,
+            false
+        ).show()
+    }
+
+
 }

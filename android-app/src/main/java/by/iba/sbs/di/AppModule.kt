@@ -2,11 +2,11 @@ package by.iba.sbs.di
 
 import android.preference.PreferenceManager
 import by.iba.sbs.library.service.SystemInformation
+import by.iba.sbs.library.viewmodel.LoginViewModel
 import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.tools.SystemInfo
 import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.guideline.GuidelineFragment
-import by.iba.sbs.ui.login.LoginViewModel
 import by.iba.sbs.ui.login.ResetViewModel
 import by.iba.sbs.ui.login.SplashViewModel
 import by.iba.sbs.ui.walkthrough.WalkthroughViewModel
@@ -24,7 +24,11 @@ val viewModelModule = module {
     single<Settings> { AndroidSettings(PreferenceManager.getDefaultSharedPreferences(androidContext())) }
     viewModel { MainViewModel() }
     viewModel { SplashViewModel(get()) }
-    viewModel { LoginViewModel(androidContext(), get()) }
+    viewModel {
+        LoginViewModel(
+            get(), eventsDispatcherOnMain(), get()
+        )
+    }
     viewModel { ResetViewModel() }
     // viewModel { GuidelineViewModel(androidContext()) }
     viewModel { WalkthroughViewModel() }
