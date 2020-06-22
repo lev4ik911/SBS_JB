@@ -43,4 +43,17 @@
         android:name="by.iba.sbs.ui.profile.ProfileEditFragment"
         android:label="profile_edit_fragment"
         tools:layout="@layout/profile_edit_fragment" />
+    <fragment
+        android:id="@+id/navigation_login_fragment"
+        android:name="by.iba.sbs.ui.login.LoginFragment"
+        android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/navigation_register"
+        android:name="by.iba.sbs.ui.login.RegisterFragment"
+        android:label="register_fragment"
+        tools:layout="@layout/login_register_fragment" />
+    <fragment
+        android:id="@+id/navigation_reset"
+        android:name="by.iba.sbs.ui.login.ResetFragment"
+        android:label="ResetFragment" />
 </navigation>

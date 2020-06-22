@@ -2,6 +2,7 @@ package by.iba.sbs.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,7 +15,9 @@ import by.iba.mvvmbase.custom.bottomnavigation.BottomNavigation
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ActivityMainBinding
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.ui.guideline.GuidelineActivity
+import com.russhwolf.settings.AndroidSettings
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity :
@@ -27,6 +30,9 @@ class MainActivity :
         ID_PROFILE(4)
     }
 
+    private val settings: LocalSettings by lazy {
+        LocalSettings(AndroidSettings(PreferenceManager.getDefaultSharedPreferences(this)))
+    }
     override val viewModel: MainViewModel by viewModel()
     override val layoutId: Int = R.layout.activity_main
     override val viewModelVariableId: Int = by.iba.sbs.BR.viewmodel
@@ -83,7 +89,13 @@ class MainActivity :
                     ActiveTabEnum.ID_HOME.index -> R.id.navigation_dashboard
                     ActiveTabEnum.ID_FAVORITES.index -> R.id.navigation_favorites
                     ActiveTabEnum.ID_SEARCH.index -> R.id.navigation_notifications
-                    ActiveTabEnum.ID_PROFILE.index -> R.id.navigation_profile
+                    ActiveTabEnum.ID_PROFILE.index -> {
+                        if (settings.accessToken.isEmpty()) {
+                            R.id.navigation_login_fragment
+                        } else {
+                            R.id.navigation_profile
+                        }
+                    }
                     else -> R.id.navigation_home
                 }
             )

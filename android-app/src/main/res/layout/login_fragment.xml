@@ -66,12 +66,12 @@
 
             <include
                 android:id="@+id/include_email"
-                layout="@layout/content_login_email"
+                layout="@layout/login_email_content"
                 app:viewmodel="@{viewmodel}"/>
 
             <include
                 android:id="@+id/include_password"
-                layout="@layout/content_login_password"
+                layout="@layout/login_password_content"
                 app:viewmodel="@{viewmodel}"/>
         </ViewFlipper>
 
@@ -93,6 +93,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5"/>
+            app:layout_constraintGuide_percent="0.4" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
