@@ -19,6 +19,7 @@ import by.iba.sbs.R
 import by.iba.sbs.databinding.FavoritesFragmentBinding
 import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.viewmodel.DashboardViewModelShared
 import by.iba.sbs.ui.MainActivity
 import by.iba.sbs.ui.MainViewModel
@@ -31,6 +32,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -49,6 +51,9 @@ class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewMo
         )
     }
 
+    private val settings: LocalSettings by lazy {
+        LocalSettings(AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)))
+    }
     private val mainViewModel: MainViewModel by sharedViewModel()
     var lastSearchText: String = ""
     var activeCategory: Int = 0
@@ -193,11 +198,12 @@ class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewMo
     @ImplicitReflectionSerializer
     override fun onStart() {
         super.onStart()
+        val forceRefresh = Date().day != Date(settings.lastUpdate).day
         when (activeCategory) {
-            GuidelineCategory.RECOMMENDED.ordinal -> viewModel.loadRecommended(false)
-            GuidelineCategory.POPULAR.ordinal -> viewModel.loadPopular(false)
-            GuidelineCategory.FAVORITE.ordinal -> viewModel.loadFavorites(false)
-            else -> viewModel.loadFavorites(false)
+            GuidelineCategory.RECOMMENDED.ordinal -> viewModel.loadRecommended(forceRefresh)
+            GuidelineCategory.POPULAR.ordinal -> viewModel.loadPopular(forceRefresh)
+            GuidelineCategory.FAVORITE.ordinal -> viewModel.loadFavorites(forceRefresh)
+            else -> viewModel.loadFavorites(forceRefresh)
         }
     }
 

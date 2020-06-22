@@ -76,6 +76,7 @@ dependencies {
     ktorLibs.forEach { mppLibrary(it) }
     mppLibs.forEach { mppLibrary(it) }
     commonMainApi("dev.icerock.moko:resources:0.10.1")
+    commonMainApi("dev.icerock.moko:time:0.3.0")
     // mppModules.forEach { mppModule(it) }
 }
 

@@ -18,6 +18,7 @@ import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.ToastMessage
+import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.viewmodel.GuidelineListViewModelShared
 import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.guideline.GuidelineActivity
@@ -29,13 +30,16 @@ import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.util.*
 
 @UnstableDefault
 @ImplicitReflectionSerializer
 class GuidelineListFragment :
     MvvmEventsFragment<InstructionListFragmentBinding, GuidelineListViewModelShared, GuidelineListViewModelShared.EventsListener>(),
     GuidelineListViewModelShared.EventsListener {
-
+    private val settings: LocalSettings by lazy {
+        LocalSettings(AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)))
+    }
     override val layoutId: Int = R.layout.instruction_list_fragment
     override val viewModelVariableId: Int = BR.viewmodel
 
@@ -148,6 +152,7 @@ class GuidelineListFragment :
 
     override fun onStart() {
         super.onStart()
-        viewModel.loadInstructions(false)
+        val forceRefresh = Date().day != Date(settings.lastUpdate).day
+        viewModel.loadInstructions(forceRefresh)
     }
 }

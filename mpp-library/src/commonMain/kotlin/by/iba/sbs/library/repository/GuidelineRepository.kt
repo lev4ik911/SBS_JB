@@ -12,6 +12,7 @@ import by.iba.sbs.library.model.response.RatingView
 import by.iba.sbs.library.model.response.StepView
 import by.iba.sbs.library.service.LocalSettings
 import dev.icerock.moko.mvvm.livedata.LiveData
+import dev.icerock.moko.time.getCurrentMilliSeconds
 import kotlinx.coroutines.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -46,7 +47,7 @@ interface IGuidelineRepository {
 }
 
 @ImplicitReflectionSerializer
-class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) :
+class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettings) :
     IGuidelineRepository {
     @UnstableDefault
     private val guidelines = Guidelines(settings)
@@ -63,7 +64,9 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
     @UnstableDefault
     override suspend fun getAllGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>> {
-           if (forceRefresh) clearCache()
+        if (forceRefresh) {
+            clearCache()
+        }
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
 
@@ -194,6 +197,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
         ratingSummaryQueries.deleteRatings()
         guidelinesQueries.deleteAllSteps()
         guidelinesQueries.deleteAllGuidelines()
+        settings.lastUpdate = getCurrentMilliSeconds()
     }
 
     @UnstableDefault
@@ -335,7 +339,8 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
     override suspend fun updateSteps(guidelineId: String, data: List<Step>): Response<List<StepView>> = coroutineScope {
         val stepMap = HashMap<String, StepEdit>()
         data.forEach {
-            stepMap.put(it.stepId, StepEdit(name = it.name, description = it.description, weight = it.weight))
+            stepMap[it.stepId] =
+                StepEdit(name = it.name, description = it.description, weight = it.weight)
         }
         val result = steps.putSteps(guidelineId, stepMap)
         if (result.isSuccess) {
