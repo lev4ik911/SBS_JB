@@ -99,7 +99,7 @@ class LoginFragment :
     }
 
     override fun routeToLoginScreen() {
-        findNavController().navigate(R.id.navigation_login)
+        findNavController().navigate(R.id.navigation_login_fragment)
     }
 
     override fun onResetPassword() {
@@ -111,8 +111,8 @@ class LoginFragment :
     }
 
 
-    override fun routeToMainScreen() {
-        findNavController().navigate(R.id.navigation_mainActivity)
+    override fun routeToProfile() {
+        findNavController().navigate(R.id.navigation_profile_fragment)
     }
 
     override fun flipToPassword() {

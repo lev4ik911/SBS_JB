@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import by.iba.mvvmbase.visibleOrGone
@@ -16,13 +17,14 @@ import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
 import by.iba.sbs.ui.MainActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import dev.icerock.moko.mvvm.MvvmFragment
+import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.abs
 
 class ProfileFragment :
-    MvvmFragment<ProfileFragmentBinding, ProfileViewModel>(),
+    MvvmEventsFragment<ProfileFragmentBinding, ProfileViewModel, ProfileViewModel.EventsListener>(),
+    ProfileViewModel.EventsListener,
     AppBarLayout.OnOffsetChangedListener {
 
     override val layoutId: Int = R.layout.profile_fragment
@@ -31,8 +33,15 @@ class ProfileFragment :
         ProfileViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        val viewModel: ProfileViewModel by sharedViewModel()
+//        requireActivity().let {
+//            ViewModelProvider(it).get(ProfileViewModel::class.java)
+//        }
+        val viewModel: ProfileViewModel by viewModel()
         return@createViewModelFactory viewModel
+//        ProfileViewModel(
+//            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(requireContext())),
+//            eventsDispatcherOnMain()
+//        )
     }
 
     private lateinit var viewPager: ViewPager2
@@ -168,5 +177,20 @@ class ProfileFragment :
                 else -> ProfileInstructionsFragment()
             }
         }
+    }
+
+    override fun onActionButtonAction() {
+        when {
+            viewModel.isMyProfile.value!! -> {
+                findNavController().navigate(R.id.navigation_profile_edit_fragment)
+            }
+            else -> {
+                viewModel.isFavorite.value = viewModel.isFavorite.value.not()
+            }
+        }
+    }
+
+    override fun routeToLoginScreen() {
+        findNavController().navigate(R.id.navigation_login_fragment)
     }
 }

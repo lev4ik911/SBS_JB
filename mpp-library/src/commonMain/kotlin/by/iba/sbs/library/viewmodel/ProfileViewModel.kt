@@ -49,11 +49,13 @@ class ProfileViewModel(
     }
 
     fun onLogoutButtonClick() {
-
+        localStorage.accessToken = ""
+        eventsDispatcher.dispatchEvent { routeToLoginScreen() }
     }
 
     interface EventsListener {
         fun onActionButtonAction()
+        fun routeToLoginScreen()
     }
 
 }

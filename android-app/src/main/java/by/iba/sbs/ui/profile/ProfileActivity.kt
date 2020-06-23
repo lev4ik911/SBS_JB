@@ -1,14 +1,16 @@
 package by.iba.sbs.ui.profile
 
+import android.preference.PreferenceManager
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileActivityBinding
 import by.iba.sbs.library.viewmodel.ProfileViewModel
+import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 
 class ProfileActivity :
     MvvmEventsActivity<ProfileActivityBinding, ProfileViewModel, ProfileViewModel.EventsListener>(),
@@ -23,12 +25,12 @@ class ProfileActivity :
         ProfileViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        val viewModel: ProfileViewModel by viewModel()
-        return@createViewModelFactory viewModel
-//        ProfileViewModel(
-//            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(this)),
-//            eventsDispatcherOnMain()
-//        )
+        //val viewModel: ProfileViewModel by viewModel()
+        //return@createViewModelFactory viewModel
+        ProfileViewModel(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(this)),
+            eventsDispatcherOnMain()
+        )
     }
 
     override fun onActionButtonAction() {
@@ -40,6 +42,10 @@ class ProfileActivity :
                 viewModel.isFavorite.value = viewModel.isFavorite.value.not()
             }
         }
+    }
+
+    override fun routeToLoginScreen() {
+        findNavController(R.navigation.mobile_navigation).navigate(R.id.navigation_login_fragment)
     }
 }
 

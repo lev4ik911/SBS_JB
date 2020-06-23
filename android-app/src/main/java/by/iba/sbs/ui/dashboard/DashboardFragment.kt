@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
@@ -192,6 +193,18 @@ class DashboardFragment :
                 return true
             }
         })
+        menu.findItem(R.id.action_new).isVisible = viewModel.localStorage.accessToken.isNotEmpty()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_new -> {
+                val intent = Intent(activity, GuidelineActivity::class.java)
+                intent.putExtra("instructionId", 0)
+                startActivity(intent)
+            }
+        }
+        return true
     }
 
     override fun onViewFavoritesAction() {

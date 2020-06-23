@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import by.iba.sbs.BR
 import by.iba.sbs.R
@@ -37,7 +36,7 @@ class GuidelineEditFragment :
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         requireActivity().let {
-            ViewModelProviders.of(it).get(GuidelineViewModel::class.java)
+            ViewModelProvider(it).get(GuidelineViewModel::class.java)
         }
     }
 

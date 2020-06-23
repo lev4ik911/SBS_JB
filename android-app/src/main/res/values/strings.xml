@@ -96,5 +96,6 @@
     <string name="lbl_show_favorites">Show favorite guidelines</string>
     <string name="title_dialog_feedback">Send feedback</string>
     <string name="btn_send">Send</string>
+    <string name="title_new">New</string>
 
 </resources>

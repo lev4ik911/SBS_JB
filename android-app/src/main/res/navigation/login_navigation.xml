@@ -10,7 +10,7 @@
         android:name="by.iba.sbs.ui.login.SplashFragment"
         android:label="SplashFragment"/>
     <fragment
-        android:id="@+id/navigation_login"
+        android:id="@+id/navigation_login_fragment"
         android:name="by.iba.sbs.ui.login.LoginFragment"
         android:label="LoginFragment"/>
     <fragment

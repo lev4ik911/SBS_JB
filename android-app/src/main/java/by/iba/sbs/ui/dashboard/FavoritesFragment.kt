@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.appcompat.widget.SearchView
@@ -184,6 +185,7 @@ class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewMo
                 return true
             }
         })
+        menu.findItem(R.id.action_new).isVisible = viewModel.localStorage.accessToken.isNotEmpty()
 //        mSearchView.setOnCloseListener {
 //            when (activeCategory) {
 //                GuidelineCategory.RECOMMENDED.ordinal ->  toolbar_main.title = resources.getString(R.string.title_recommended)
@@ -192,6 +194,17 @@ class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewMo
 //            }
 //            return@setOnCloseListener true
 //        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_new -> {
+                val intent = Intent(activity, GuidelineActivity::class.java)
+                intent.putExtra("instructionId", 0)
+                startActivity(intent)
+            }
+        }
+        return true
     }
 
     @UnstableDefault

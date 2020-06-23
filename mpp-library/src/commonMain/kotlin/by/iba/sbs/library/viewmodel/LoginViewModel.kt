@@ -60,6 +60,7 @@ class LoginViewModel(
                 if (response.isSuccess && response.isNotEmpty) {
                     response.data?.let {
                         localStorage.accessToken = it.accessToken
+                        eventsDispatcher.dispatchEvent { routeToProfile() }
                     }
                 }
                 loading.postValue(false)
@@ -93,7 +94,7 @@ class LoginViewModel(
     interface EventsListener {
         fun onResetPassword()
         fun onRegister()
-        fun routeToMainScreen()
+        fun routeToProfile()
         fun routeToLoginScreen()
         fun flipToPassword()
         fun flipToLogin()
