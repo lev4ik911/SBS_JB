@@ -79,11 +79,13 @@ class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewMo
                 item.name.contains(text, true)
                         || item.description.contains(text, true)
             }
-            emptyViewId = R.layout.new_item
-            onEmptyViewItemClick = {
-                val intent = Intent(activity, GuidelineActivity::class.java)
-                intent.putExtra("instructionId", 0)
-                startActivity(intent)
+            if (settings.accessToken.isNotEmpty()) {
+                emptyViewId = R.layout.new_item
+                onEmptyViewItemClick = {
+                    val intent = Intent(activity, GuidelineActivity::class.java)
+                    intent.putExtra("instructionId", 0)
+                    startActivity(intent)
+                }
             }
         }
         (activity as MainActivity).apply {

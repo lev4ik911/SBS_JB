@@ -141,11 +141,13 @@ class DashboardFragment :
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 }).also {
-                it.emptyViewId = R.layout.new_item
-                it.onEmptyViewItemClick = {
-                    val intent = Intent(activity, GuidelineActivity::class.java)
-                    intent.putExtra("instructionId", 0)
-                    startActivity(intent)
+                if (viewModel.localStorage.accessToken.isNotEmpty()) {
+                    it.emptyViewId = R.layout.new_item
+                    it.onEmptyViewItemClick = {
+                        val intent = Intent(activity, GuidelineActivity::class.java)
+                        intent.putExtra("instructionId", 0)
+                        startActivity(intent)
+                    }
                 }
             }
 

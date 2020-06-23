@@ -38,9 +38,9 @@
                 android:padding="@dimen/spacing_small">
 
                 <ImageView
-                    android:layout_width="@dimen/profile_image_size"
-                    android:layout_height="@dimen/profile_image_size"
-                    android:src="@drawable/lock_reset"/>
+                    android:layout_width="@dimen/logo_image_size"
+                    android:layout_height="@dimen/logo_image_size"
+                    android:src="@drawable/lock_reset" />
 
                 <TextView
                     style="@style/Text.Logo"

@@ -152,7 +152,7 @@
                             android:onClick="@{() -> viewmodel.onActionButtonClick()}"
                             android:src="@drawable/heart"
                             android:tint="@color/colorLightRed"
-                            />
+                            android:visibility="invisible" />
 
                         <ImageButton
                             android:id="@+id/btn_toolbar_logout"
@@ -162,7 +162,6 @@
                             android:background="@null"
                             visibleOrGone="@{viewmodel.isMyProfile.ld}"
                             android:onClick="@{() -> viewmodel.onLogoutButtonClick()}"
-                            android:clickable="true"
                             android:src="@drawable/logout"
                             android:tint="@color/colorAccent"
                             android:focusable="true" />

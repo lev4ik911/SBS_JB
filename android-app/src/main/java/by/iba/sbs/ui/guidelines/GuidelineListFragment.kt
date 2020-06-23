@@ -90,17 +90,20 @@ class GuidelineListFragment :
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 }).also {
-                it.emptyViewId = R.layout.new_item
+
             }
         instructionsAdapter.apply {
             filterCriteria = { item, text ->
                 item.name.contains(text, true)
                         || item.description.contains(text, true)
             }
-            onEmptyViewItemClick = {
-                val intent = Intent(activity, GuidelineActivity::class.java)
-                intent.putExtra("instructionId", 0)
-                startActivity(intent)
+            if (settings.accessToken.isNotEmpty()) {
+                emptyViewId = R.layout.new_item
+                onEmptyViewItemClick = {
+                    val intent = Intent(activity, GuidelineActivity::class.java)
+                    intent.putExtra("instructionId", 0)
+                    startActivity(intent)
+                }
             }
         }
         binding.rvInstructions.also {
