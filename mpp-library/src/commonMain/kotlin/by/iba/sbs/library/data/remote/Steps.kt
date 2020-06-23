@@ -33,8 +33,7 @@ class Steps(override val settings: LocalSettings) : Client(settings) {
         return post(
             Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEPS_BATCHING, guidelineId),
             requestBody = steps,
-            deserializer = StepView::class.serializer().list,
-            needAuth = false
+            deserializer = StepView::class.serializer().list
         )
     }
 
@@ -42,15 +41,13 @@ class Steps(override val settings: LocalSettings) : Client(settings) {
         return put(
             Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEPS_BATCHING, guidelineId),
             requestBody = steps,
-            deserializer = StepView::class.serializer().list,
-            needAuth = false
+            deserializer = StepView::class.serializer().list
         )
     }
 
     suspend fun deleteStep(guidelineId: String, stepId: String): Response<String> {
         return delete(
-            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEP_DETAILS, guidelineId, stepId),
-            needAuth = false
+            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEP_DETAILS, guidelineId, stepId)
         )
     }
 

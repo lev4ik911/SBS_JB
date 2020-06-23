@@ -1,8 +1,9 @@
 package by.iba.sbs.library.model.response
 
-import by.iba.sbs.library.model.User
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class AuthData(
-    var user: User = User(),
+    var user: UserView = UserView(),
     var accessToken: String = ""
 )

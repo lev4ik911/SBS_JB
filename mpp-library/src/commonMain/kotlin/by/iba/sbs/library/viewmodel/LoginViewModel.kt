@@ -48,7 +48,7 @@ class LoginViewModel(
             eventsDispatcher.dispatchEvent { flipToPassword() }
     }
 
-    val password = MutableLiveData("")
+    val password = MutableLiveData("RooT~Pa55w0rd")
 
     @UnstableDefault
     @ImplicitReflectionSerializer

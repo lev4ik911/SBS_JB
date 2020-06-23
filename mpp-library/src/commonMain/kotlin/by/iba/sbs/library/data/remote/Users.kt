@@ -15,8 +15,7 @@ class Users(override val settings: LocalSettings) : Client(settings) {
     suspend fun postUser(user: UserCreate): Response<UserView> {
         return post(
             Routes.Users.URL_USERS,
-            requestBody = user,
-            needAuth = false
+            requestBody = user
         )
     }
 
@@ -38,8 +37,7 @@ class Users(override val settings: LocalSettings) : Client(settings) {
     suspend fun deleteUser(userId: String): Response<UserView> {
         return post(
             Routes.Users.URL_USERS,
-            requestBody = userId,
-            needAuth = false
+            requestBody = userId
         )
     }
 }

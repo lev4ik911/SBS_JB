@@ -32,22 +32,19 @@ class Guidelines(override val settings: LocalSettings) : Client(settings) {
     suspend fun postGuideline(guideline: GuidelineCreate): Response<GuidelineView> {
         return post(
             Routes.Guidelines.URL_GUIDELINES,
-            requestBody = guideline,
-            needAuth = false
+            requestBody = guideline
         )
     }
 
     suspend fun putGuideline(guidelineId: String, guideline: GuidelineEdit): Response<GuidelineView> {
         return put(
             Utils.formatString(Routes.Guidelines.URL_GUIDELINE_DETAILS, guidelineId),
-            requestBody = guideline,
-            needAuth = false
+            requestBody = guideline
         )
     }
     suspend fun deleteGuideline(guidelineId: String): Response<String> {
         return delete(
-            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_DETAILS, guidelineId),
-            needAuth = false
+            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_DETAILS, guidelineId)
         )
     }
 

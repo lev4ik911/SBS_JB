@@ -2,6 +2,7 @@ package by.iba.sbs.ui.login
 
 //import com.github.ybq.android.spinkit.style.FadingCircle
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -18,11 +19,13 @@ import by.iba.sbs.databinding.LoginFragmentBinding
 import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.viewmodel.LoginViewModel
+import by.iba.sbs.tools.SystemInfo
 import com.github.ybq.android.spinkit.style.FadingCircle
+import com.russhwolf.settings.AndroidSettings
 import com.shashank.sony.fancytoastlib.FancyToast
 import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 
 
 class LoginFragment :
@@ -35,8 +38,13 @@ class LoginFragment :
         LoginViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        val viewModel: LoginViewModel by viewModel()
-        return@createViewModelFactory viewModel
+        //   val viewModel: LoginViewModel by viewModel()
+        //    return@createViewModelFactory viewModel
+        LoginViewModel(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
+            eventsDispatcherOnMain(),
+            SystemInfo(requireContext())
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

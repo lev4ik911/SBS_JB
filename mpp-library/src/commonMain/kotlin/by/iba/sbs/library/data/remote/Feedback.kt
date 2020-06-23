@@ -35,8 +35,7 @@ class Feedback(override val settings: LocalSettings) : Client(settings) {
     suspend fun postFeedback(guidelineId: String, rating: RatingCreate): Response<RatingView> {
         return post(
             Utils.formatString(Routes.Ratings.URL_GUIDELINE_RATINGS, guidelineId),
-            requestBody = rating,
-            needAuth = false
+            requestBody = rating
         )
     }
 
@@ -51,8 +50,7 @@ class Feedback(override val settings: LocalSettings) : Client(settings) {
                 guidelineId,
                 feedbackId
             ),
-            requestBody = rating,
-            needAuth = false
+            requestBody = rating
         )
     }
 
@@ -62,8 +60,7 @@ class Feedback(override val settings: LocalSettings) : Client(settings) {
                 Routes.Ratings.URL_GUIDELINE_RATING_DETAILS,
                 guidelineId,
                 feedbackId
-            ),
-            needAuth = false
+            )
         )
     }
 }
