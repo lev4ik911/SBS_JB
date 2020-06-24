@@ -7,12 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		451D7B1A235845B100095112 /* AppComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451D7B19235845B100095112 /* AppComponent.swift */; };
-		4539A7B3235437660081362B /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4539A7B2235437660081362B /* NewsViewController.swift */; };
-		4539A7B52354376F0081362B /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4539A7B42354376F0081362B /* ConfigViewController.swift */; };
-		4539A7B723543B1C0081362B /* NewsListUnitsFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4539A7B623543B1C0081362B /* NewsListUnitsFactory.swift */; };
-		4539A7BE2354471C0081362B /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4539A7BD2354471C0081362B /* NewsTableViewCell.swift */; };
-		4539A7C02354472A0081362B /* NewsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4539A7BF2354472A0081362B /* NewsTableViewCell.xib */; };
+		0F822EAC248A634300A3E3CE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F822EAB248A634300A3E3CE /* MainViewController.swift */; };
+		0F8F77832492E0AC00E3A0A5 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F77822492E0AC00E3A0A5 /* HomeViewController.swift */; };
+		0F8F77852492E0D100E3A0A5 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F77842492E0D100E3A0A5 /* FavoritesViewController.swift */; };
+		0F8F77872492E0EC00E3A0A5 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F77862492E0EC00E3A0A5 /* SearchViewController.swift */; };
+		0F8F77892492E10300E3A0A5 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F77882492E10300E3A0A5 /* ProfileViewController.swift */; };
+		0F8F778C2492EA8C00E3A0A5 /* drawable in Resources */ = {isa = PBXBuildFile; fileRef = 0F8F778B2492EA8C00E3A0A5 /* drawable */; };
+		0F8F778E24978C7F00E3A0A5 /* InstructionsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F8F778D24978C7F00E3A0A5 /* InstructionsTableViewCell.xib */; };
+		0F8F779024978C9700E3A0A5 /* HorizontalTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F8F778F24978C9700E3A0A5 /* HorizontalTableViewCell.xib */; };
+		0F8F77922497925700E3A0A5 /* HorizontalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F77912497925700E3A0A5 /* HorizontalTableViewCell.swift */; };
+		0F8F7794249793FB00E3A0A5 /* InstructionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F7793249793FB00E3A0A5 /* InstructionsTableViewCell.swift */; };
+		0F8F7796249B7ECC00E3A0A5 /* CategoriesHomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F8F7795249B7ECC00E3A0A5 /* CategoriesHomeView.xib */; };
+		0F8F7798249B7EE400E3A0A5 /* RecommendedHomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F8F7797249B7EE400E3A0A5 /* RecommendedHomeView.xib */; };
+		0F8F779A249B7EFB00E3A0A5 /* FavoriteHomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F8F7799249B7EFB00E3A0A5 /* FavoriteHomeView.xib */; };
+		0F8F779C249B7F0F00E3A0A5 /* PopularHomeView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F8F779B249B7F0F00E3A0A5 /* PopularHomeView.xib */; };
+		0F8F779E249E231600E3A0A5 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F8F779D249E231600E3A0A5 /* LoginView.xib */; };
+		0F8F77A024A0D14600E3A0A5 /* FavoriteHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F779F24A0D14600E3A0A5 /* FavoriteHomeView.swift */; };
+		0F8F77A224A0D3A900E3A0A5 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F77A124A0D3A900E3A0A5 /* LoginView.swift */; };
+		0F8F77A424A0D3BB00E3A0A5 /* PopularHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F77A324A0D3BB00E3A0A5 /* PopularHomeView.swift */; };
+		0F8F77A624A0D3D000E3A0A5 /* RecommendedHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F77A524A0D3D000E3A0A5 /* RecommendedHomeView.swift */; };
+		0F8F77A824A0D3E100E3A0A5 /* CategoriesHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F77A724A0D3E100E3A0A5 /* CategoriesHomeView.swift */; };
 		4587E6063EE4F8F2D5A7AFB7 /* Pods_ios_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 363BA6BFAA3FA87230445070 /* Pods_ios_app.framework */; };
 		45F4791D219463C7003D25FA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45F47912219463C7003D25FA /* LaunchScreen.storyboard */; };
 		45F4791E219463C7003D25FA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45F47914219463C7003D25FA /* Main.storyboard */; };
@@ -21,14 +35,28 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		287627FF1F319065007FA12B /* mokoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mokoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F822EAB248A634300A3E3CE /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		0F8F77822492E0AC00E3A0A5 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		0F8F77842492E0D100E3A0A5 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
+		0F8F77862492E0EC00E3A0A5 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		0F8F77882492E10300E3A0A5 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		0F8F778B2492EA8C00E3A0A5 /* drawable */ = {isa = PBXFileReference; lastKnownFileType = folder; path = drawable; sourceTree = "<group>"; };
+		0F8F778D24978C7F00E3A0A5 /* InstructionsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InstructionsTableViewCell.xib; sourceTree = "<group>"; };
+		0F8F778F24978C9700E3A0A5 /* HorizontalTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HorizontalTableViewCell.xib; sourceTree = "<group>"; };
+		0F8F77912497925700E3A0A5 /* HorizontalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalTableViewCell.swift; sourceTree = "<group>"; };
+		0F8F7793249793FB00E3A0A5 /* InstructionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsTableViewCell.swift; sourceTree = "<group>"; };
+		0F8F7795249B7ECC00E3A0A5 /* CategoriesHomeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CategoriesHomeView.xib; sourceTree = "<group>"; };
+		0F8F7797249B7EE400E3A0A5 /* RecommendedHomeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecommendedHomeView.xib; sourceTree = "<group>"; };
+		0F8F7799249B7EFB00E3A0A5 /* FavoriteHomeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FavoriteHomeView.xib; sourceTree = "<group>"; };
+		0F8F779B249B7F0F00E3A0A5 /* PopularHomeView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PopularHomeView.xib; sourceTree = "<group>"; };
+		0F8F779D249E231600E3A0A5 /* LoginView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoginView.xib; sourceTree = "<group>"; };
+		0F8F779F24A0D14600E3A0A5 /* FavoriteHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteHomeView.swift; sourceTree = "<group>"; };
+		0F8F77A124A0D3A900E3A0A5 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		0F8F77A324A0D3BB00E3A0A5 /* PopularHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularHomeView.swift; sourceTree = "<group>"; };
+		0F8F77A524A0D3D000E3A0A5 /* RecommendedHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedHomeView.swift; sourceTree = "<group>"; };
+		0F8F77A724A0D3E100E3A0A5 /* CategoriesHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesHomeView.swift; sourceTree = "<group>"; };
+		287627FF1F319065007FA12B /* SBS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SBS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		363BA6BFAA3FA87230445070 /* Pods_ios_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ios_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		451D7B19235845B100095112 /* AppComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppComponent.swift; sourceTree = "<group>"; };
-		4539A7B2235437660081362B /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
-		4539A7B42354376F0081362B /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
-		4539A7B623543B1C0081362B /* NewsListUnitsFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsListUnitsFactory.swift; sourceTree = "<group>"; };
-		4539A7BD2354471C0081362B /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
-		4539A7BF2354472A0081362B /* NewsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsTableViewCell.xib; sourceTree = "<group>"; };
 		45964D362282A1FD00C16658 /* mpp-library */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "mpp-library"; path = "../mpp-library"; sourceTree = "<group>"; };
 		45F47913219463C7003D25FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		45F47915219463C7003D25FA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -64,6 +92,13 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		0F8F778A2492EA3300E3A0A5 /* img */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = img;
+			sourceTree = "<group>";
+		};
 		287627F61F319065007FA12B = {
 			isa = PBXGroup;
 			children = (
@@ -81,7 +116,7 @@
 		287628001F319065007FA12B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				287627FF1F319065007FA12B /* mokoApp.app */,
+				287627FF1F319065007FA12B /* SBS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -89,8 +124,11 @@
 		451D7B1B235845D400095112 /* view */ = {
 			isa = PBXGroup;
 			children = (
-				4539A7B42354376F0081362B /* ConfigViewController.swift */,
-				4539A7B2235437660081362B /* NewsViewController.swift */,
+				0F822EAB248A634300A3E3CE /* MainViewController.swift */,
+				0F8F77822492E0AC00E3A0A5 /* HomeViewController.swift */,
+				0F8F77842492E0D100E3A0A5 /* FavoritesViewController.swift */,
+				0F8F77862492E0EC00E3A0A5 /* SearchViewController.swift */,
+				0F8F77882492E10300E3A0A5 /* ProfileViewController.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -98,9 +136,21 @@
 		451D7B1C235845E500095112 /* units */ = {
 			isa = PBXGroup;
 			children = (
-				4539A7BD2354471C0081362B /* NewsTableViewCell.swift */,
-				4539A7BF2354472A0081362B /* NewsTableViewCell.xib */,
-				4539A7B623543B1C0081362B /* NewsListUnitsFactory.swift */,
+				45F4791C219463C7003D25FA /* Info.plist */,
+				0F8F778D24978C7F00E3A0A5 /* InstructionsTableViewCell.xib */,
+				0F8F778F24978C9700E3A0A5 /* HorizontalTableViewCell.xib */,
+				0F8F77912497925700E3A0A5 /* HorizontalTableViewCell.swift */,
+				0F8F7793249793FB00E3A0A5 /* InstructionsTableViewCell.swift */,
+				0F8F7795249B7ECC00E3A0A5 /* CategoriesHomeView.xib */,
+				0F8F7797249B7EE400E3A0A5 /* RecommendedHomeView.xib */,
+				0F8F7799249B7EFB00E3A0A5 /* FavoriteHomeView.xib */,
+				0F8F779B249B7F0F00E3A0A5 /* PopularHomeView.xib */,
+				0F8F779D249E231600E3A0A5 /* LoginView.xib */,
+				0F8F779F24A0D14600E3A0A5 /* FavoriteHomeView.swift */,
+				0F8F77A124A0D3A900E3A0A5 /* LoginView.swift */,
+				0F8F77A324A0D3BB00E3A0A5 /* PopularHomeView.swift */,
+				0F8F77A524A0D3D000E3A0A5 /* RecommendedHomeView.swift */,
+				0F8F77A724A0D3E100E3A0A5 /* CategoriesHomeView.swift */,
 			);
 			path = units;
 			sourceTree = "<group>";
@@ -108,13 +158,13 @@
 		45F47910219463C7003D25FA /* src */ = {
 			isa = PBXGroup;
 			children = (
+				0F8F778B2492EA8C00E3A0A5 /* drawable */,
+				0F8F778A2492EA3300E3A0A5 /* img */,
 				451D7B1C235845E500095112 /* units */,
 				451D7B1B235845D400095112 /* view */,
 				45F47911219463C7003D25FA /* Resources */,
 				45F4791A219463C7003D25FA /* Assets.xcassets */,
 				45F4791B219463C7003D25FA /* AppDelegate.swift */,
-				451D7B19235845B100095112 /* AppComponent.swift */,
-				45F4791C219463C7003D25FA /* Info.plist */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -155,7 +205,7 @@
 			);
 			name = "ios-app";
 			productName = IosApp;
-			productReference = 287627FF1F319065007FA12B /* mokoApp.app */;
+			productReference = 287627FF1F319065007FA12B /* SBS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -199,8 +249,15 @@
 			files = (
 				45F4791E219463C7003D25FA /* Main.storyboard in Resources */,
 				45F4791D219463C7003D25FA /* LaunchScreen.storyboard in Resources */,
-				4539A7C02354472A0081362B /* NewsTableViewCell.xib in Resources */,
+				0F8F778C2492EA8C00E3A0A5 /* drawable in Resources */,
+				0F8F779E249E231600E3A0A5 /* LoginView.xib in Resources */,
+				0F8F779A249B7EFB00E3A0A5 /* FavoriteHomeView.xib in Resources */,
+				0F8F779024978C9700E3A0A5 /* HorizontalTableViewCell.xib in Resources */,
+				0F8F7796249B7ECC00E3A0A5 /* CategoriesHomeView.xib in Resources */,
 				45F47921219463C7003D25FA /* Assets.xcassets in Resources */,
+				0F8F778E24978C7F00E3A0A5 /* InstructionsTableViewCell.xib in Resources */,
+				0F8F7798249B7EE400E3A0A5 /* RecommendedHomeView.xib in Resources */,
+				0F8F779C249B7F0F00E3A0A5 /* PopularHomeView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,12 +308,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F8F77832492E0AC00E3A0A5 /* HomeViewController.swift in Sources */,
+				0F8F77922497925700E3A0A5 /* HorizontalTableViewCell.swift in Sources */,
+				0F8F7794249793FB00E3A0A5 /* InstructionsTableViewCell.swift in Sources */,
+				0F8F77872492E0EC00E3A0A5 /* SearchViewController.swift in Sources */,
+				0F8F77A824A0D3E100E3A0A5 /* CategoriesHomeView.swift in Sources */,
+				0F8F77A024A0D14600E3A0A5 /* FavoriteHomeView.swift in Sources */,
+				0F8F77A424A0D3BB00E3A0A5 /* PopularHomeView.swift in Sources */,
+				0F822EAC248A634300A3E3CE /* MainViewController.swift in Sources */,
+				0F8F77852492E0D100E3A0A5 /* FavoritesViewController.swift in Sources */,
+				0F8F77892492E10300E3A0A5 /* ProfileViewController.swift in Sources */,
+				0F8F77A224A0D3A900E3A0A5 /* LoginView.swift in Sources */,
 				45F47922219463C7003D25FA /* AppDelegate.swift in Sources */,
-				4539A7B723543B1C0081362B /* NewsListUnitsFactory.swift in Sources */,
-				4539A7BE2354471C0081362B /* NewsTableViewCell.swift in Sources */,
-				4539A7B52354376F0081362B /* ConfigViewController.swift in Sources */,
-				4539A7B3235437660081362B /* NewsViewController.swift in Sources */,
-				451D7B1A235845B100095112 /* AppComponent.swift in Sources */,
+				0F8F77A624A0D3D000E3A0A5 /* RecommendedHomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,6 +352,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CURRENT_PROJECT_VERSION = 0;
 				DEFINES_MODULE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -298,6 +363,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CURRENT_PROJECT_VERSION = 0;
 				DEFINES_MODULE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
@@ -308,9 +374,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = src/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.example.app;
-				PRODUCT_NAME = mokoApp;
+				PRODUCT_NAME = SBS;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
@@ -322,9 +388,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = src/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				PRODUCT_BUNDLE_IDENTIFIER = org.example.app;
-				PRODUCT_NAME = mokoApp;
+				PRODUCT_NAME = SBS;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
 			};
@@ -340,7 +406,7 @@
 				287628101F319065007FA12B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		287628111F319065007FA12B /* Build configuration list for PBXNativeTarget "ios-app" */ = {
 			isa = XCConfigurationList;
@@ -349,7 +415,7 @@
 				287628131F319065007FA12B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

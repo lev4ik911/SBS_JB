@@ -2,6 +2,7 @@
  * Copyright 2019 IceRock MAG Inc. Use of this source code is governed by the Apache 2.0 license.
  */
 
+
 import UIKit
 import MultiPlatformLibrary
 
@@ -10,6 +11,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     var window: UIWindow?
     
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+      // Override point for customization after application launch.
+      return true
+    }
+    
+    /*
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         
         // create factory of shared module - it's main DI component of application.
@@ -27,4 +34,5 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         )
         return true
     }
+ */
 }
