@@ -35,11 +35,6 @@ class ProfileFragment :
         ProfileViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-//        requireActivity().let {
-//            ViewModelProvider(it).get(ProfileViewModel::class.java)
-//        }
-        // val viewModel: ProfileViewModel by viewModel()
-        //    return@createViewModelFactory viewModel
         ProfileViewModel(
             AndroidSettings(PreferenceManager.getDefaultSharedPreferences(requireContext())),
             eventsDispatcherOnMain()
@@ -100,7 +95,6 @@ class ProfileFragment :
                 }
             }
         }
-        binding.btnToolbarLogout.visibleOrGone(viewModel.isMyProfile.value)
         binding.btnToolbarAction.apply {
             when {
                 viewModel.isMyProfile.value -> {
@@ -117,6 +111,7 @@ class ProfileFragment :
                 }
             }
         }
+        binding.btnToolbarLogout.visibleOrGone(viewModel.isMyProfile.value)
     }
 
     override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {

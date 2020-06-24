@@ -100,6 +100,8 @@ class MainActivity :
                 }
             )
             invalidateOptionsMenu()
+            toolbar.visibility =
+                if (it.id == ActiveTabEnum.ID_PROFILE.index) View.GONE else View.VISIBLE
         }
         navView.show(viewModel.activeTab.value!!)
     }
