@@ -19,6 +19,7 @@ import by.iba.sbs.R
 import by.iba.sbs.databinding.FavoritesFragmentBinding
 import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.viewmodel.DashboardViewModelShared
 import by.iba.sbs.ui.MainActivity
 import by.iba.sbs.ui.MainViewModel
@@ -31,6 +32,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -49,6 +51,9 @@ class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewMo
         )
     }
 
+    private val settings: LocalSettings by lazy {
+        LocalSettings(AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)))
+    }
     private val mainViewModel: MainViewModel by sharedViewModel()
     var lastSearchText: String = ""
     var activeCategory: Int = 0
@@ -86,7 +91,73 @@ class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewMo
             toolbar_main.setNavigationOnClickListener {
                 onBackPressed()
             }
+            activeCategory = arguments?.getInt("Category") ?: 0
+            when (activeCategory) {
+                GuidelineCategory.RECOMMENDED.ordinal -> {
+                    toolbar_main.title = resources.getString(R.string.title_recommended)
+                    binding.rvFavorites.apply {
+                        adapter = favoritesAdapter
+                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
+                            requireContext(),
+                            R.anim.layout_animation_right_to_left
+                        )
+                    }
+                    viewModel.recommended.addObserver {
+                        favoritesAdapter.addItems(it)
+                        binding.lSwipeRefresh.isRefreshing = false
+                    }
+                }
+                GuidelineCategory.POPULAR.ordinal -> {
+                    toolbar_main.title = resources.getString(R.string.title_popular)
+                    binding.rvFavorites.apply {
+                        adapter = favoritesAdapter
+                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
+                            requireContext(),
+                            R.anim.layout_animation_right_to_left
+                        )
+                    }
+                    viewModel.popular.addObserver {
+                        favoritesAdapter.addItems(it)
+                        binding.lSwipeRefresh.isRefreshing = false
+                    }
+                }
+                GuidelineCategory.FAVORITE.ordinal -> {
+                    toolbar_main.title = resources.getString(R.string.title_favorites)
+                    binding.rvFavorites.apply {
+                        adapter = favoritesAdapter
+                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
+                            requireContext(),
+                            R.anim.layout_animation_right_to_left
+                        )
+                    }
+                    viewModel.favorite.addObserver {
+                        favoritesAdapter.addItems(it)
+                        binding.lSwipeRefresh.isRefreshing = false
+                    }
+                }
+                else -> {
+                    toolbar_main.navigationIcon = null
+                    toolbar_main.title = resources.getString(R.string.title_favorites)
+                    binding.rvFavorites.apply {
+                        adapter = favoritesAdapter
+                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
+                            requireContext(),
+                            R.anim.layout_animation_right_to_left
+                        )
+                    }
+                    viewModel.favorite.addObserver {
+                        favoritesAdapter.addItems(it)
+                    }
+                }
+            }
         }
+
+
+
         binding.lSwipeRefresh.setOnRefreshListener {
             when (activeCategory) {
                 GuidelineCategory.RECOMMENDED.ordinal -> viewModel.loadRecommended(true)
@@ -127,76 +198,13 @@ class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewMo
     @ImplicitReflectionSerializer
     override fun onStart() {
         super.onStart()
-        (activity as MainActivity).apply {
-            activeCategory = arguments?.getInt("Category") ?: 0
-            when (activeCategory) {
-                GuidelineCategory.RECOMMENDED.ordinal -> {
-                    toolbar_main.title = resources.getString(R.string.title_recommended)
-                    binding.rvFavorites.apply {
-                        adapter = favoritesAdapter
-                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
-                            requireContext(),
-                            R.anim.layout_animation_right_to_left
-                        )
-                    }
-                    viewModel.recommended.addObserver {
-                        favoritesAdapter.addItems(it)
-                        binding.lSwipeRefresh.isRefreshing = false
-                    }
-                    viewModel.loadRecommended(false)
-                }
-                GuidelineCategory.POPULAR.ordinal -> {
-                    toolbar_main.title = resources.getString(R.string.title_popular)
-                    binding.rvFavorites.apply {
-                        adapter = favoritesAdapter
-                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
-                            requireContext(),
-                            R.anim.layout_animation_right_to_left
-                        )
-                    }
-                    viewModel.popular.addObserver {
-                        favoritesAdapter.addItems(it)
-                        binding.lSwipeRefresh.isRefreshing = false
-                    }
-                    viewModel.loadPopular(false)
-                }
-                GuidelineCategory.FAVORITE.ordinal -> {
-                    toolbar_main.title = resources.getString(R.string.title_favorites)
-                    binding.rvFavorites.apply {
-                        adapter = favoritesAdapter
-                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
-                            requireContext(),
-                            R.anim.layout_animation_right_to_left
-                        )
-                    }
-                    viewModel.favorite.addObserver {
-                        favoritesAdapter.addItems(it)
-                        binding.lSwipeRefresh.isRefreshing = false
-                    }
-                    viewModel.loadFavorites(false)
-                }
-                else -> {
-                    toolbar_main.navigationIcon = null
-                    toolbar_main.title = resources.getString(R.string.title_favorites)
-                    binding.rvFavorites.apply {
-                        adapter = favoritesAdapter
-                        layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-                        layoutAnimation = AnimationUtils.loadLayoutAnimation(
-                            requireContext(),
-                            R.anim.layout_animation_right_to_left
-                        )
-                    }
-                    viewModel.favorite.addObserver {
-                        favoritesAdapter.addItems(it)
-                    }
-                    viewModel.loadFavorites(false)
-                }
-            }
+        val forceRefresh = Date().day != Date(settings.lastUpdate).day
+        when (activeCategory) {
+            GuidelineCategory.RECOMMENDED.ordinal -> viewModel.loadRecommended(forceRefresh)
+            GuidelineCategory.POPULAR.ordinal -> viewModel.loadPopular(forceRefresh)
+            GuidelineCategory.FAVORITE.ordinal -> viewModel.loadFavorites(forceRefresh)
+            else -> viewModel.loadFavorites(forceRefresh)
         }
-
     }
 
 }

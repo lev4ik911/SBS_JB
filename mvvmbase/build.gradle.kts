@@ -46,7 +46,7 @@ android {
     packagingOptions {
         exclude("META-INF/*.kotlin_module")
     }
-    buildToolsVersion = "30.0.0 rc4"
+    buildToolsVersion = "30.0.0"
 }
 
 dependencies {

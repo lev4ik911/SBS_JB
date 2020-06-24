@@ -25,6 +25,7 @@ import by.iba.sbs.library.model.Category
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.ToastMessage
+import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.viewmodel.DashboardViewModelShared
 import by.iba.sbs.ui.MainActivity
 import by.iba.sbs.ui.MainViewModel
@@ -34,10 +35,11 @@ import com.shashank.sony.fancytoastlib.FancyToast
 import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
-import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import java.util.*
 
 enum class GuidelineCategory {
     DEFAULT,
@@ -54,6 +56,9 @@ class DashboardFragment :
 
     override val viewModelClass: Class<DashboardViewModelShared> =
         DashboardViewModelShared::class.java
+    private val settings: LocalSettings by lazy {
+        LocalSettings(AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)))
+    }
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         DashboardViewModelShared(
@@ -62,6 +67,7 @@ class DashboardFragment :
         )
     }
 
+    val firstPresenter: DashboardViewModelShared by inject()
     var lastSearchText: String = ""
     private val mainViewModel: MainViewModel by sharedViewModel()
 
@@ -70,7 +76,7 @@ class DashboardFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
-
+        val forceRefresh = Date().day != Date(settings.lastUpdate).day
         val categoriesAdapter =
             BaseBindingAdapter<Category, CategoriesListItemBinding, MainViewModel>(
                 R.layout.categories_list_item,
@@ -105,7 +111,7 @@ class DashboardFragment :
         viewModel.recommended.addObserver {
             recommendedAdapter.addItems(it)
         }
-        viewModel.loadRecommended(true, 4)
+        viewModel.loadRecommended(forceRefresh, 4)
         val favoritesAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>(
                 R.layout.instruction_list_item,
@@ -123,7 +129,7 @@ class DashboardFragment :
         viewModel.favorite.addObserver {
             favoritesAdapter.addItems(it)
         }
-        viewModel.loadFavorites(true, 3)
+        viewModel.loadFavorites(forceRefresh, 3)
 
         val popularAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>(
@@ -150,7 +156,7 @@ class DashboardFragment :
             popularAdapter.addItems(it)
             binding.lSwipeRefresh.isRefreshing = false
         }
-        viewModel.loadPopular(true, 3)
+        viewModel.loadPopular(forceRefresh, 3)
         binding.lSwipeRefresh.setOnRefreshListener {
             viewModel.loadRecommended(true, 4)
             viewModel.loadFavorites(true, 3)
@@ -158,12 +164,15 @@ class DashboardFragment :
         }
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     override fun onStart() {
         super.onStart()
-        (activity as MainActivity).toolbar_main.apply {
-            navigationIcon = null
-            title = resources.getString(R.string.title_home)
-        }
+        (activity as MainActivity).setNavigationIcon(false)
+        val forceRefresh = Date().day != Date(settings.lastUpdate).day
+        viewModel.loadRecommended(forceRefresh, 4)
+        viewModel.loadFavorites(forceRefresh, 3)
+        viewModel.loadPopular(forceRefresh, 3)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -224,4 +233,5 @@ class DashboardFragment :
         super.onResume()
         viewModel.update()
     }
+
 }

@@ -1,34 +1,28 @@
-package by.iba.sbs.ui.profile
+package by.iba.sbs.library.viewmodel
 
-import android.content.Context
-import android.preference.PreferenceManager
-import androidx.lifecycle.MutableLiveData
-import by.iba.mvvmbase.BaseViewModel
-import by.iba.mvvmbase.dispatcher.EventsDispatcher
-import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
-import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
 import by.iba.sbs.library.model.Author
 import by.iba.sbs.library.model.Guideline
-import by.iba.sbs.library.service.LocalSettings
-import com.russhwolf.settings.AndroidSettings
+import com.russhwolf.settings.Settings
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcherOwner
+import dev.icerock.moko.mvvm.livedata.MutableLiveData
 
-class ProfileViewModel(context: Context) : BaseViewModel(),
+class ProfileViewModel(
+    settings: Settings,
+    override val eventsDispatcher: EventsDispatcher<EventsListener>
+) : ViewModelExt(settings),
     EventsDispatcherOwner<ProfileViewModel.EventsListener> {
-    override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
-    private val localStorage: LocalSettings by lazy {
-        val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val settings = AndroidSettings(sharedPrefs)
-        LocalSettings(settings)
-    }
+
+
     val showRecommended = MutableLiveData(true).apply {
         value = localStorage.showRecommended
-        observeForever {
+        addObserver {
             localStorage.showRecommended = it
         }
     }
     val showFavorites = MutableLiveData(true).apply {
         value = localStorage.showFavorites
-        observeForever {
+        addObserver {
             localStorage.showFavorites = it
         }
     }
@@ -37,13 +31,13 @@ class ProfileViewModel(context: Context) : BaseViewModel(),
     val rating = MutableLiveData("547")
     val isFavorite = MutableLiveData(true)
     val isMyProfile = MutableLiveData(true)
-    val instructions = MutableLiveData<List<Guideline>>().apply {
+    val instructions = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
         val mData = ArrayList<Guideline>()
         mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
         mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
         value = mData
     }
-    val subscribers = MutableLiveData<List<Author>>().apply {
+    val subscribers = MutableLiveData<List<Author>>(mutableListOf()).apply {
         val mData = ArrayList<Author>()
         mData.add(Author("Petey Cruiser", 12, 123, 547))
         mData.add(Author("Mario Speedwagon", 33, 21, 123))
@@ -51,7 +45,7 @@ class ProfileViewModel(context: Context) : BaseViewModel(),
     }
 
     fun onActionButtonClick() {
-
+        eventsDispatcher.dispatchEvent { onActionButtonAction() }
     }
 
     fun onLogoutButtonClick() {
@@ -59,7 +53,7 @@ class ProfileViewModel(context: Context) : BaseViewModel(),
     }
 
     interface EventsListener {
-
+        fun onActionButtonAction()
     }
 
 }

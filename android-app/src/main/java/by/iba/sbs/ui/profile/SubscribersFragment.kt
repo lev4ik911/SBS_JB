@@ -4,19 +4,29 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import by.iba.mvvmbase.BaseFragment
+import androidx.lifecycle.ViewModelProvider
 import by.iba.mvvmbase.adapter.BaseAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.SubscribersFragmentBinding
 import by.iba.sbs.library.model.Author
+import by.iba.sbs.library.viewmodel.ProfileViewModel
+import dev.icerock.moko.mvvm.MvvmFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class SubscribersFragment : BaseFragment<SubscribersFragmentBinding, ProfileViewModel>() {
+class SubscribersFragment : MvvmFragment<SubscribersFragmentBinding, ProfileViewModel>() {
 
     override val layoutId: Int = R.layout.subscribers_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: ProfileViewModel by sharedViewModel()
+    override val viewModelClass: Class<ProfileViewModel> =
+        ProfileViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        val viewModel: ProfileViewModel by sharedViewModel()
+        return@createViewModelFactory viewModel
+    }
+
     private lateinit var subscribersStr: String
     private lateinit var instructionsStr: String
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,9 +37,9 @@ class SubscribersFragment : BaseFragment<SubscribersFragmentBinding, ProfileView
         binding.rvSubscribers.apply {
             adapter = subscribersAdapter
         }
-        viewModel.subscribers.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.subscribers.addObserver {
             subscribersAdapter.addItems(it)
-        })
+        }
     }
 
     @SuppressLint("ResourceType")

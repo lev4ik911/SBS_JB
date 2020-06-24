@@ -12,6 +12,7 @@ import by.iba.sbs.library.model.response.RatingView
 import by.iba.sbs.library.model.response.StepView
 import by.iba.sbs.library.service.LocalSettings
 import dev.icerock.moko.mvvm.livedata.LiveData
+import dev.icerock.moko.time.getCurrentMilliSeconds
 import kotlinx.coroutines.*
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -40,13 +41,13 @@ interface IGuidelineRepository {
     suspend fun updateSteps(guidelineId: String, data: List<Step>): Response<List<StepView>>
     suspend fun deleteStep(guidelineId: String, stepId: String): Response<String?>
     suspend fun getStepByIdFromLocalDB(guidelineId: String, stepId: String): Step
-    suspend fun insertRating(guidelineId: String, data: RatingCreate): Response<RatingView>
+    suspend fun insertRating(guidelineId: String, data: RatingCreate, ratingSummary: RatingSummary): Response<RatingView>
     suspend fun updateRating(guidelineId: String, data: Feedback): Response<RatingView>
     suspend fun deleteRating(guidelineId: String, feedbackId: String): Response<String?>
 }
 
 @ImplicitReflectionSerializer
-class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) :
+class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettings) :
     IGuidelineRepository {
     @UnstableDefault
     private val guidelines = Guidelines(settings)
@@ -63,7 +64,9 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
     @UnstableDefault
     override suspend fun getAllGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>> {
-        //   if (forceRefresh) clearCache()
+        if (forceRefresh) {
+            clearCache()
+        }
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
 
@@ -105,30 +108,14 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
 
             override fun createCallAsync(): Deferred<List<Guideline>> {
                 return GlobalScope.async(Dispatchers.Default) {
-                    val ratingSummary = ratingSummaryQueries.selectAllRatings().executeAsList()
-
                     val result = guidelines.getAllGuidelines()
                     if (result.isSuccess) {
                         result.data!!.map { item ->
-                            val rating =
-                                ratingSummary.firstOrNull { rating -> rating.id == item.id }
-                            if (rating != null) {
-                                Guideline(
-                                    item.id, item.name, item.description ?: "",
-                                    rating = RatingSummary(
-                                        rating.positive!!.toInt(),
-                                        rating.negative!!.toInt(),
-                                        rating.overall!!.toInt()
-                                    )
-                                )
-                            } else {
-                                Guideline(item.id, item.name, item.description ?: "")
-                            }
+                            Guideline(item.id, item.name, item.description ?: "", rating = item.rating)
                         }
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
                         listOf()
-
                     }
                 }
             }
@@ -161,17 +148,21 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             override fun shouldFetch(data: Guideline?): Boolean =
                 data == null || forceRefresh
 
-            override suspend fun loadFromDb(): Guideline = coroutineScope {
-                val item = guidelinesQueries.selectGuidelineById(guidelineId).executeAsOne()
+            override suspend fun loadFromDb(): Guideline? = coroutineScope {
+                val item = guidelinesQueries.selectGuidelineById(guidelineId).executeAsOneOrNull()
                 val ratingSummary =
                     ratingSummaryQueries.selectRatingByGuidelineId(guidelineId).executeAsOne()
-                return@coroutineScope Guideline(
-                    item.id, item.name, item.description, rating = RatingSummary(
-                        ratingSummary.positive!!.toInt(),
-                        ratingSummary.negative!!.toInt(),
-                        ratingSummary.overall!!.toInt()
+                //  return@coroutineScope
+                if (item != null) {
+                    Guideline(
+                        item.id, item.name, item.description, rating = RatingSummary(
+                            ratingSummary.positive!!.toInt(),
+                            ratingSummary.negative!!.toInt(),
+                            ratingSummary.overall!!.toInt()
+                        )
                     )
-                )
+                } else return@coroutineScope null
+
             }
 
             override fun createCallAsync(): Deferred<Guideline> {
@@ -202,8 +193,11 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
     }
 
     private fun clearCache() {
+        feedbackQueries.deleteAllFeedbacks()
+        ratingSummaryQueries.deleteRatings()
         guidelinesQueries.deleteAllSteps()
         guidelinesQueries.deleteAllGuidelines()
+        settings.lastUpdate = getCurrentMilliSeconds()
     }
 
     @UnstableDefault
@@ -229,10 +223,17 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             override fun shouldFetch(data: List<Step>?): Boolean =
                 data == null || data.isEmpty() || forceRefresh
 
-            override suspend fun loadFromDb(): List<Step> = coroutineScope {
+            override suspend fun loadFromDb(): List<Step>? = coroutineScope {
                 return@coroutineScope guidelinesQueries.selectAllSteps(guidelineId).executeAsList()
                     .map {
-                        Step(it.id, it.name, it.description, it.weight!!.toInt(), it.imagePath, it.updateImageTimeSpan!!.toInt())
+                        Step(
+                            it.id,
+                            it.name,
+                            it.description,
+                            it.weight!!.toInt(),
+                            it.imagePath,
+                            it.updateImageTimeSpan!!.toInt()
+                        )
                     }
             }
 
@@ -338,7 +339,8 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
     override suspend fun updateSteps(guidelineId: String, data: List<Step>): Response<List<StepView>> = coroutineScope {
         val stepMap = HashMap<String, StepEdit>()
         data.forEach {
-            stepMap.put(it.stepId, StepEdit(name = it.name, description = it.description, weight = it.weight))
+            stepMap[it.stepId] =
+                StepEdit(name = it.name, description = it.description, weight = it.weight)
         }
         val result = steps.putSteps(guidelineId, stepMap)
         if (result.isSuccess) {
@@ -407,7 +409,7 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
             override fun shouldFetch(data: List<Feedback>?): Boolean =
                 data == null || data.isEmpty() || forceRefresh
 
-            override suspend fun loadFromDb(): List<Feedback> = coroutineScope {
+            override suspend fun loadFromDb(): List<Feedback>? = coroutineScope {
                 return@coroutineScope feedbackQueries.selectAllFeedbacks(guidelineId)
                     .executeAsList()
                     .map {
@@ -441,19 +443,25 @@ class GuidelineRepository @UnstableDefault constructor(settings: LocalSettings) 
     @UnstableDefault
     override suspend fun insertRating(
         guidelineId: String,
-        data: RatingCreate
+        data: RatingCreate,
+        ratingSummary: RatingSummary
     ): Response<RatingView> =
         coroutineScope {
             val result =
                 feedback.postFeedback(guidelineId, data)
             if (result.isSuccess) {
                 val item = result.data!!
-
                 feedbackQueries.insertFeedback(
                     item.id,
                     guidelineId,
                     item.rating.toLong(),
                     item.comment ?: ""
+                )
+                ratingSummaryQueries.insertRating(
+                    guidelineId,
+                    ratingSummary.positive.toLong(),
+                    ratingSummary.negative.toLong(),
+                    ratingSummary.overall.toLong()
                 )
             } else {
                 if (result.status == Response.Status.ERROR) error(result.error!!)

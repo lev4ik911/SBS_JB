@@ -10,8 +10,10 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.*
+import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.text.InputType
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
@@ -22,20 +24,23 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.SnapHelper
-import by.iba.mvvmbase.BaseEventsActivity
-import by.iba.mvvmbase.adapter.BaseBindingAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.BuildConfig
 import by.iba.sbs.R
+import by.iba.sbs.adapters.BaseBindingAdapter
 import by.iba.sbs.databinding.InstructionActivityBinding
 import by.iba.sbs.databinding.StepPreviewItemBinding
 import by.iba.sbs.databinding.StepPreviewLayoutBinding
+import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.Step
+import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.model.request.RatingCreate
+import by.iba.sbs.library.viewmodel.GuidelineViewModel
 import by.iba.sbs.ui.profile.ProfileActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
@@ -46,25 +51,37 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.russhwolf.settings.AndroidSettings
+import com.shashank.sony.fancytoastlib.FancyToast
 import com.yalantis.ucrop.UCrop
+import dev.icerock.moko.mvvm.MvvmEventsActivity
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
 
 
 class GuidelineActivity :
-    BaseEventsActivity<InstructionActivityBinding, GuidelineViewModel, GuidelineViewModel.EventsListener>(),
+    MvvmEventsActivity<InstructionActivityBinding, GuidelineViewModel, GuidelineViewModel.EventsListener>(),
     GuidelineViewModel.EventsListener {
     override val layoutId: Int = R.layout.instruction_activity
-    override val viewModel: GuidelineViewModel by viewModel()
-    override val viewModelVariableId: Int = by.iba.sbs.BR.viewmodel
+    override val viewModelClass: Class<GuidelineViewModel> =
+        GuidelineViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        GuidelineViewModel(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(this)),
+            eventsDispatcherOnMain()
+        )
+    }
+
+    override val viewModelVariableId: Int = BR.viewmodel
     lateinit var mPopupWindow: PopupWindow
     var bindingPopup: StepPreviewLayoutBinding? = null
 
-    // lateinit var bindingPopup?: StepPreviewLayoutBinding
     private val PICK_IMAGE_GALLERY_REQUEST_CODE = 609
     private val CAMERA_ACTION_PICK_REQUEST_CODE = 610
     private val WRITE_STORAGE_PERMISSION = 611
@@ -84,6 +101,7 @@ class GuidelineActivity :
         FromGallery(2, R.string.select_variant_from_gallery)
     }
 
+    @ImplicitReflectionSerializer
     @UnstableDefault
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,7 +109,7 @@ class GuidelineActivity :
         val bundle = Bundle()
         bundle.putString("instructionId", instructionId)
 
-        viewModel.loadInstruction(instructionId, true)
+        viewModel.loadGuideline(instructionId, true)
 
         findNavController(R.id.fragment_navigation_instruction).navigate(
             if (instructionId == "") R.id.navigation_instruction_edit else R.id.navigation_instruction_view,
@@ -190,14 +208,15 @@ class GuidelineActivity :
         when (selectedAction) {
             ImageActions.EditCurrent.key -> {
                 try {
-                        val path = if (isStepEditing) _editStep.imagePath else viewModel.guideline.value?.imagePath
-                        if (!path.isNullOrEmpty()) {
-                            val sourcePath = Uri.fromFile(File(path))
-                            val destinationUri = createTempImageFileInInternalStorage()
-                            UCrop.of(sourcePath, destinationUri)
-                                .withAspectRatio(16f, 9f)
-                                .start(this@GuidelineActivity)
-                        }
+                    val path =
+                        if (isStepEditing) _editStep.imagePath else viewModel.guideline.value?.imagePath
+                    if (!path.isNullOrEmpty()) {
+                        val sourcePath = Uri.fromFile(File(path))
+                        val destinationUri = createTempImageFileInInternalStorage()
+                        UCrop.of(sourcePath, destinationUri)
+                            .withAspectRatio(16f, 9f)
+                            .start(this@GuidelineActivity)
+                    }
 
                 } catch (ex: Exception) {
                     val toast = Toast.makeText(
@@ -243,14 +262,13 @@ class GuidelineActivity :
             UCrop.REQUEST_CROP -> {
                 if (resultCode == RESULT_OK) {
                     val resultUri: Uri? = UCrop.getOutput(data!!)
-                    if (!(resultUri?.path).isNullOrEmpty()){
-                        if (isStepEditing){
+                    if (!(resultUri?.path).isNullOrEmpty()) {
+                        if (isStepEditing) {
                             _editStep.imagePath = resultUri!!.path
                             viewModel.steps.value = viewModel.steps.value
-                        }
-                        else
+                        } else
                             viewModel.guideline.value?.imagePath = resultUri!!.path
-                            viewModel.guideline.value=viewModel.guideline.value
+                        viewModel.guideline.value = viewModel.guideline.value
                     }
 
 
@@ -268,7 +286,7 @@ class GuidelineActivity :
                 if (resultCode == RESULT_OK && data != null) {
                     //TODO("Add offer cut image by default" )
                     try {
-                        val sourceUri = data.getData() as Uri
+                        val sourceUri = data.data as Uri
                         val destinationUri = createTempImageFileInInternalStorage()
                         UCrop.of(sourceUri, destinationUri)
                             .withAspectRatio(1f, 1f)
@@ -335,10 +353,10 @@ class GuidelineActivity :
             imageFileName, ".jpg", storageDir
         )
         absolutePhotoPath = "file:" + file.absoluteFile
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            return FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file)
         else
-            return Uri.fromFile(file)
+            Uri.fromFile(file)
     }
 
     //update Gallery
@@ -418,10 +436,9 @@ class GuidelineActivity :
 
     }
 
-    override fun onPreviewStepAction(view: View, step: Step) {
-
+    override fun onPreviewStepAction(step: Step) {
         val contentView = layoutInflater.inflate(R.layout.step_preview_layout, null)
-        bindingPopup = DataBindingUtil.bind<StepPreviewLayoutBinding>(contentView)
+        bindingPopup = DataBindingUtil.bind(contentView)
         if (bindingPopup != null) {
             bindingPopup!!.viewmodel = viewModel
             mPopupWindow = PopupWindow(
@@ -444,25 +461,20 @@ class GuidelineActivity :
                         oldItem.weight == newItem.weight
                     }
                 )
-//            bindingPopup.btnClose.setOnClickListener {
-//                mPopupWindow.dismiss()
-//            }
             bindingPopup!!.rvSteps.apply {
                 this.layoutManager = LinearLayoutManager(
                     context,
                     LinearLayoutManager.HORIZONTAL, false
                 )
-
                 adapter = stepsAdapter
                 val snapHelperStart: SnapHelper = PagerSnapHelper()
                 snapHelperStart.attachToRecyclerView(this)
             }
-            viewModel.steps.observe(this, androidx.lifecycle.Observer {
+            viewModel.steps.addObserver {
                 stepsAdapter.addItems(it)
                 bindingPopup!!.rvSteps.scrollToPosition(step.weight - 1)
-            })
-
-            mPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0)
+            }
+            mPopupWindow.showAtLocation(binding.container, Gravity.CENTER, 0, 0)
         }
 
     }
@@ -496,10 +508,10 @@ class GuidelineActivity :
                 )
             )
             setPositiveButton(
-                resources.getString(R.string.btn_delete),
-                { dialogInterface: DialogInterface, i: Int ->
-                    viewModel.deleteInstruction(viewModel.guideline.value!!)
-                })
+                resources.getString(R.string.btn_delete)
+            ) { _: DialogInterface, _: Int ->
+                viewModel.deleteInstruction(viewModel.guideline.value!!)
+            }
             setNegativeButton(resources.getString(R.string.btn_cancel), null)
         }
         val dialog = builder.create()
@@ -620,6 +632,26 @@ class GuidelineActivity :
             })
             .submit()
 
+    }
+
+    override fun showToast(msg: ToastMessage) {
+        when (msg.type) {
+            MessageType.ERROR ->
+                Log.e(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.WARNING ->
+                Log.w(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.INFO ->
+                Log.i(viewModel::class.java.name, msg.getLogMessage())
+            else ->
+                Log.v(viewModel::class.java.name, msg.getLogMessage())
+        }
+        FancyToast.makeText(
+            this,
+            msg.message,
+            FancyToast.LENGTH_LONG,
+            msg.type.index,
+            false
+        ).show()
     }
 
     private val imageHandler = object : Handler(Looper.getMainLooper()) {

@@ -9,7 +9,7 @@
 
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.guideline.GuidelineViewModel" />
+            type="by.iba.sbs.library.viewmodel.GuidelineViewModel" />
 
         <variable
             name="step"
@@ -40,8 +40,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cards"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="@dimen/spacing_xsmall"
                 android:layout_marginTop="@dimen/list_image_size"
                 android:layout_marginBottom="@dimen/spacing_xsmall"
@@ -58,18 +58,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start"
+                    android:background="@drawable/selector_list_item"
                     android:src="@drawable/chevron_left"
                     android:tint="@color/textColorSecondary"
                     tools:ignore="ContentDescription" />
 
                 <ImageButton
                     android:id="@+id/btn_next"
-                    visibleOrGone="@{step.weight != viewmodel.steps.size()}"
+                    visibleOrGone="@{step.weight != viewmodel.steps.ld.size()}"
                     android:onClick="@{()-> viewmodel.onPreviewStepNextClick(step)}"
                     style="@style/Widget.AppCompat.ActionButton.Overflow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
+                    android:background="@drawable/selector_list_item"
                     android:src="@drawable/chevron_right"
                     android:tint="@color/textColorSecondary"
                     tools:ignore="ContentDescription" />

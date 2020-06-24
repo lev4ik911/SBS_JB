@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="no_description">Без описания</string>
+    <string name="invalid_language_s">Язык должен быть один из (%s)</string>
+    <string name="invalid_token">Токен не может быть пустым</string>
+</resources>

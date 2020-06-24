@@ -17,6 +17,7 @@ allprojects {
         maven { url = uri("https://dl.bintray.com/icerockdev/moko") }
         maven { url = uri("https://dl.bintray.com/aakira/maven") }
         maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
+        maven { url = uri("https://dl.bintray.com/icerockdev/moko") }
     }
 
     // workaround for https://youtrack.jetbrains.com/issue/KT-27170
@@ -32,6 +33,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk7"))
     implementation(kotlin("stdlib-jdk8"))
     //   implementation("com.squareup.sqldelight:gradle-plugin:1.3.0")
+    implementation ("dev.icerock.moko:resources-generator:0.10.1")
 }
 
 val compileKotlin: KotlinCompile by tasks

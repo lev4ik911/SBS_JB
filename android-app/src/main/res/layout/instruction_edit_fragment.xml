@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="by.iba.sbs.ui.guideline.GuidelineViewModel"/>
+            type="by.iba.sbs.library.viewmodel.GuidelineViewModel" />
     </data>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/htab_maincontent"
@@ -45,7 +45,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fitsSystemWindows="true"
-                        imageFromPath="@{ viewmodel.guideline.imagePath }"
+                        imageFromPath="@{ viewmodel.guideline.ld.imagePath }"
                         android:scaleType="centerCrop"/>
                 </RelativeLayout>
                 <androidx.appcompat.widget.Toolbar
@@ -93,7 +93,7 @@
                             android:layout_height="@dimen/spacing_xlarge"
                             android:layout_marginHorizontal="@dimen/spacing_normal"
                             android:background="@null"
-                            android:onClick="@{() -> viewmodel.onRemoveInstructionClick()}"
+                            android:onClick="@{() -> viewmodel.onRemoveGuidelineClick()}"
                             android:src="@drawable/trash_can_outline"
                             android:tint="@color/colorAccent"
                             app:layout_anchor="@id/toolbar_description"
@@ -118,43 +118,67 @@
                 <androidx.core.widget.ContentLoadingProgressBar
                     android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyleHorizontal"
-                    visibleOrGone="@{viewmodel.isLoading}"
+                    visibleOrGone="@{viewmodel.isLoading.ld}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/progress_bar_layout_margin"
                     android:indeterminate="true" />
+
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/cg_categories"
                     android:layout_marginHorizontal="@dimen/spacing_normal"
                     android:layout_marginTop="@dimen/spacing_xsmall"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/te_name"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ti_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_normal"
                     android:layout_marginTop="@dimen/spacing_small"
                     android:layout_marginEnd="@dimen/spacing_xxxxlarge"
-                    android:hint="@string/hint_instruction_name"
-                    android:text="@={viewmodel.guideline.name}"
-                    android:textAppearance="@style/Text"/>
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/te_description"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="80">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/te_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/spacing_normal"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        android:layout_marginEnd="@dimen/spacing_xxxxlarge"
+                        android:hint="@string/hint_instruction_name"
+                        android:text="@={viewmodel.guideline.ld.name}"
+                        android:textAppearance="@style/Text" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ti_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/te_name"
-                    android:layout_marginHorizontal="@dimen/spacing_normal"
-                    android:layout_marginTop="@dimen/spacing_xsmall"
-                    android:hint="@string/hint_instruction_description"
-                    android:singleLine="false"
-                    android:text="@={viewmodel.guideline.description}"
-                    android:textAppearance="@style/Text.Description"/>
+                    android:layout_below="@id/ti_name"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="800">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/te_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/te_name"
+                        android:layout_marginHorizontal="@dimen/spacing_normal"
+                        android:layout_marginTop="@dimen/spacing_xsmall"
+                        android:hint="@string/hint_instruction_description"
+                        android:singleLine="false"
+                        android:text="@={viewmodel.guideline.ld.description}"
+                        android:textAppearance="@style/Text.Description"
+                        android:textSize="@dimen/text_size_small" />
+                </com.google.android.material.textfield.TextInputLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_steps"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/te_description"
+                    android:layout_below="@+id/ti_description"
                     android:background="@android:color/transparent"
                     android:layout_marginVertical="@dimen/spacing_xsmall"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

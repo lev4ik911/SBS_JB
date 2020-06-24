@@ -2,26 +2,36 @@ package by.iba.sbs.ui.guideline
 
 import android.os.Bundle
 import android.view.View
-import by.iba.mvvmbase.BaseFragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.StepEditFragmentBinding
 import by.iba.sbs.library.model.Step
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import by.iba.sbs.library.viewmodel.GuidelineViewModel
+import dev.icerock.moko.mvvm.MvvmFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
 
 
-class StepEditFragment : BaseFragment<StepEditFragmentBinding, GuidelineViewModel>() {
+class StepEditFragment : MvvmFragment<StepEditFragmentBinding, GuidelineViewModel>() {
 
     override val layoutId: Int = R.layout.step_edit_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: GuidelineViewModel by sharedViewModel()
     private var stepWeight = 0
+    override val viewModelClass: Class<GuidelineViewModel> =
+        GuidelineViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        requireActivity().let {
+            ViewModelProviders.of(it).get(GuidelineViewModel::class.java)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         stepWeight = arguments?.getInt("stepWeight") ?: 0
-        if (stepWeight>0)
-            binding.step = viewModel.steps.value!!.find { step-> step.weight == stepWeight}
+        if (stepWeight > 0)
+            binding.step = viewModel.steps.value!!.find { step -> step.weight == stepWeight }
         else {
             if (viewModel.steps.value.isNullOrEmpty())
                 viewModel.steps.value = listOf()

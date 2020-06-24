@@ -4,27 +4,37 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.visibleOrGone
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileFragmentBinding
+import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
 import by.iba.sbs.ui.MainActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import dev.icerock.moko.mvvm.MvvmFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import kotlin.math.abs
 
 class ProfileFragment :
-    BaseEventsFragment<ProfileFragmentBinding, ProfileViewModel, ProfileViewModel.EventsListener>(),
-    ProfileViewModel.EventsListener, AppBarLayout.OnOffsetChangedListener {
+    MvvmFragment<ProfileFragmentBinding, ProfileViewModel>(),
+    AppBarLayout.OnOffsetChangedListener {
 
     override val layoutId: Int = R.layout.profile_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: ProfileViewModel by sharedViewModel()
+    override val viewModelClass: Class<ProfileViewModel> =
+        ProfileViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        val viewModel: ProfileViewModel by sharedViewModel()
+        return@createViewModelFactory viewModel
+    }
+
     private lateinit var viewPager: ViewPager2
     private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
     private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
@@ -35,9 +45,9 @@ class ProfileFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initActionButton()
-        viewModel.isFavorite.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.isFavorite.addObserver {
             initActionButton()
-        })
+        }
         when (activity) {
             is MainActivity -> {
                 binding.toolbar.navigationIcon = null
@@ -63,33 +73,33 @@ class ProfileFragment :
     private fun initActionButton() {
         binding.fActionButton.apply {
             when {
-                viewModel.isMyProfile.value!! -> {
+                viewModel.isMyProfile.value -> {
                     this.setImageResource(R.drawable.account_edit_outline)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 }
-                viewModel.isFavorite.value!! -> {
-                    this.setImageResource(R.drawable.heart)
+                viewModel.isFavorite.value -> {
+                    this.setImageResource(R.drawable.star)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
                 }
                 else -> {
-                    this.setImageResource(R.drawable.heart_outline)
+                    this.setImageResource(R.drawable.star_outline)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
                 }
             }
         }
-        binding.btnToolbarLogout.visibleOrGone(viewModel.isMyProfile.value!!)
+        binding.btnToolbarLogout.visibleOrGone(viewModel.isMyProfile.value)
         binding.btnToolbarAction.apply {
             when {
-                viewModel.isMyProfile.value!! -> {
+                viewModel.isMyProfile.value -> {
                     this.setImageResource(R.drawable.account_edit_outline)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
                 }
-                viewModel.isFavorite.value!! -> {
-                    this.setImageResource(R.drawable.heart)
+                viewModel.isFavorite.value -> {
+                    this.setImageResource(R.drawable.star)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
                 }
                 else -> {
-                    this.setImageResource(R.drawable.heart_outline)
+                    this.setImageResource(R.drawable.star_outline)
                     this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
                 }
             }
@@ -148,7 +158,7 @@ class ProfileFragment :
 
     inner class TabsFragmentAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-        override fun getItemCount(): Int = if (viewModel.isMyProfile.value!!) 3 else 2
+        override fun getItemCount(): Int = if (viewModel.isMyProfile.value) 3 else 2
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {

@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.mvvmbase.Extentions.Companion.waitForLayout
 import by.iba.mvvmbase.visibleOrNot
@@ -77,20 +78,20 @@ class LoginFragment :
     }
 
     override fun routeToLoginScreen() {
-        (activity as LoginActivity).navController.navigate(R.id.navigation_login)
+        findNavController().navigate(R.id.navigation_login)
     }
 
     override fun onResetPassword() {
-        (activity as LoginActivity).navController.navigate(R.id.navigation_reset)
+        findNavController().navigate(R.id.navigation_reset)
     }
 
     override fun onRegister() {
-        (activity as LoginActivity).navController.navigate(R.id.navigation_register)
+        findNavController().navigate(R.id.navigation_register)
     }
 
 
     override fun routeToMainScreen() {
-        (activity as LoginActivity).navController.navigate(R.id.navigation_mainActivity)
+        findNavController().navigate(R.id.navigation_mainActivity)
     }
 
     override fun flipToPassword() {

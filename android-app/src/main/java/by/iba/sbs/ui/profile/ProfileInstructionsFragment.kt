@@ -9,29 +9,38 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
-import by.iba.mvvmbase.BaseFragment
+import androidx.lifecycle.ViewModelProvider
 import by.iba.mvvmbase.adapter.EmptyViewAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileInstructionsFragmentBinding
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.ui.guideline.GuidelineActivity
+import dev.icerock.moko.mvvm.MvvmFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ProfileInstructionsFragment :
-    BaseFragment<ProfileInstructionsFragmentBinding, ProfileViewModel>() {
+    MvvmFragment<ProfileInstructionsFragmentBinding, ProfileViewModel>() {
     override val layoutId: Int = R.layout.profile_instructions_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: ProfileViewModel by sharedViewModel()
+    override val viewModelClass: Class<ProfileViewModel> =
+        ProfileViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        val viewModel: ProfileViewModel by sharedViewModel()
+        return@createViewModelFactory viewModel
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.rvInstructions.apply {
             adapter = instructionsAdapter
         }
-        viewModel.instructions.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.instructions.addObserver {
             instructionsAdapter.addItems(it)
-        })
+        }
         instructionsAdapter.onItemClick = { pos, itemView, item ->
             val transitionSharedNameImgView = this.getString(R.string.transition_name_img_view)
             val transitionSharedNameTxtView = this.getString(R.string.transition_name_txt_view)

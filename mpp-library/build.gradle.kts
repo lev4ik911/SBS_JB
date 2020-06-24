@@ -19,21 +19,21 @@ android {
         minSdkVersion(Versions.Android.minSdk)
         targetSdkVersion(Versions.Android.targetSdk)
     }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-        }
-        getByName("debug") {
-            isDebuggable = true
-            //   applicationIdSuffix = ".debug"
-        }
-    }
+//    buildTypes {
+//        getByName("release") {
+//            isMinifyEnabled = false
+//            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+//        }
+//        getByName("debug") {
+//            isDebuggable = true
+//            //applicationIdSuffix = ".debug"
+//        }
+//    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    buildToolsVersion = "30.0.0 rc4"
+    buildToolsVersion = "30.0.0"
 }
 sqldelight {
     database("SBSDB") {
@@ -75,11 +75,15 @@ dependencies {
     androidLibrary(Deps.Libs.Android.lifecycle)
     ktorLibs.forEach { mppLibrary(it) }
     mppLibs.forEach { mppLibrary(it) }
+    commonMainApi("dev.icerock.moko:resources:0.10.1")
+    commonMainApi("dev.icerock.moko:time:0.3.0")
     // mppModules.forEach { mppModule(it) }
 }
 
 multiplatformResources {
     multiplatformResourcesPackage = "by.iba.sbs.library"
+    iosBaseLocalizationRegion = "en" //optional, default "en"
+    multiplatformResourcesSourceSet = "commonMain"  // optional, default "commonMain"
 }
 
 // dependencies graph generator

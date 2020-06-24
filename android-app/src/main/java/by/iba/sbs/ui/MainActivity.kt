@@ -2,10 +2,12 @@ package by.iba.sbs.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.navigation.findNavController
 import by.iba.mvvmbase.BaseEventsActivity
@@ -13,7 +15,9 @@ import by.iba.mvvmbase.custom.bottomnavigation.BottomNavigation
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ActivityMainBinding
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.ui.guideline.GuidelineActivity
+import com.russhwolf.settings.AndroidSettings
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity :
@@ -26,14 +30,17 @@ class MainActivity :
         ID_PROFILE(4)
     }
 
+    private val settings: LocalSettings by lazy {
+        LocalSettings(AndroidSettings(PreferenceManager.getDefaultSharedPreferences(this)))
+    }
     override val viewModel: MainViewModel by viewModel()
     override val layoutId: Int = R.layout.activity_main
     override val viewModelVariableId: Int = by.iba.sbs.BR.viewmodel
-
+    lateinit var toolbar: androidx.appcompat.widget.Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val navView: BottomNavigation = this.findViewById(R.id.nav_view)
-        val toolbar = this.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_main)
+        toolbar = this.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_main)
         setSupportActionBar(toolbar)
         val navController = findNavController(R.id.fragment_navigation_main)
 
@@ -46,7 +53,7 @@ class MainActivity :
         navView.add(
             BottomNavigation.Model(
                 ActiveTabEnum.ID_FAVORITES.index,
-                R.drawable.heart_outline
+                R.drawable.star_outline
             )
         )
         navView.add(
@@ -82,7 +89,13 @@ class MainActivity :
                     ActiveTabEnum.ID_HOME.index -> R.id.navigation_dashboard
                     ActiveTabEnum.ID_FAVORITES.index -> R.id.navigation_favorites
                     ActiveTabEnum.ID_SEARCH.index -> R.id.navigation_notifications
-                    ActiveTabEnum.ID_PROFILE.index -> R.id.navigation_profile
+                    ActiveTabEnum.ID_PROFILE.index -> {
+                        if (settings.accessToken.isEmpty()) {
+                            R.id.navigation_login_fragment
+                        } else {
+                            R.id.navigation_profile
+                        }
+                    }
                     else -> R.id.navigation_home
                 }
             )
@@ -91,6 +104,12 @@ class MainActivity :
         navView.show(viewModel.activeTab.value!!)
     }
 
+    fun setNavigationIcon(visible: Boolean) {
+        if (visible)
+            toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.chevron_left)
+        else
+            toolbar.navigationIcon = null
+    }
 
     override fun onOpenGuidelineAction(view: View, guideline: Guideline) {
         val transitionSharedNameImgView = this.getString(R.string.transition_name_img_view)

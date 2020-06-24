@@ -32,6 +32,7 @@
     <color name="colorTextEditBorder">#E2E2E2</color>
     <color name="colorLightRed">#FF7D78</color>
     <color name="colorLightYellow">#ffdc73</color>
+    <color name="colorGold">#ffa500</color>
     <color name="colorLightGreen">#5ac18e</color>
     <array name="array_dot_active">
         <item>@color/colorPrimaryVariant</item>

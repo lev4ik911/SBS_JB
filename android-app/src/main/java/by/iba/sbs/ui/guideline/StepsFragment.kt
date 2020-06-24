@@ -3,20 +3,30 @@ package by.iba.sbs.ui.guideline
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import by.iba.mvvmbase.BaseFragment
-import by.iba.mvvmbase.adapter.BaseBindingAdapter
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import by.iba.sbs.BR
 import by.iba.sbs.R
+import by.iba.sbs.adapters.BaseBindingAdapter
 import by.iba.sbs.databinding.InstructionStepListItemBinding
 import by.iba.sbs.databinding.StepsFragmentBinding
 import by.iba.sbs.library.model.Step
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import by.iba.sbs.library.viewmodel.GuidelineViewModel
+import dev.icerock.moko.mvvm.MvvmFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
 
 
-class StepsFragment : BaseFragment<StepsFragmentBinding, GuidelineViewModel>() {
+class StepsFragment : MvvmFragment<StepsFragmentBinding, GuidelineViewModel>() {
     override val layoutId: Int = R.layout.steps_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: GuidelineViewModel by sharedViewModel()
+    override val viewModelClass: Class<GuidelineViewModel> =
+        GuidelineViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        requireActivity().let {
+            ViewModelProviders.of(it).get(GuidelineViewModel::class.java)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,17 +43,17 @@ class StepsFragment : BaseFragment<StepsFragmentBinding, GuidelineViewModel>() {
         binding.rvSteps.apply {
             adapter = stepsAdapter
         }
-        viewModel.steps.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.steps.addObserver {
             stepsAdapter.addItems(it)
-        })
+        }
         stepsAdapter.onItemClick = { pos, itemView, item ->
             Toast.makeText(context, pos.toString(), Toast.LENGTH_LONG).show()
         }
-        viewModel.updatedStepId.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            stepsAdapter.itemsList.indexOfFirst{step -> step.stepId == it}.apply {
+        viewModel.updatedStepId.addObserver {
+            stepsAdapter.itemsList.indexOfFirst { step -> step.stepId == it }.apply {
                 stepsAdapter.notifyItemChanged(this)
             }
-        })
+        }
     }
 
 }

@@ -6,5 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ActionSummary(
     var createdAt: String = "",
-    var updatedAt: String = ""
+    var createdBy: String = "",
+    var updatedAt: String = "",
+    var updatedBy: String = ""
 )
