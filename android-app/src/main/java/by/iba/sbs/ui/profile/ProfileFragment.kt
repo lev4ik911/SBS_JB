@@ -1,6 +1,7 @@
 package by.iba.sbs.ui.profile
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -17,9 +18,10 @@ import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
 import by.iba.sbs.ui.MainActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlin.math.abs
 
 class ProfileFragment :
@@ -36,12 +38,12 @@ class ProfileFragment :
 //        requireActivity().let {
 //            ViewModelProvider(it).get(ProfileViewModel::class.java)
 //        }
-        val viewModel: ProfileViewModel by viewModel()
-        return@createViewModelFactory viewModel
-//        ProfileViewModel(
-//            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(requireContext())),
-//            eventsDispatcherOnMain()
-//        )
+        // val viewModel: ProfileViewModel by viewModel()
+        //    return@createViewModelFactory viewModel
+        ProfileViewModel(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(requireContext())),
+            eventsDispatcherOnMain()
+        )
     }
 
     private lateinit var viewPager: ViewPager2
@@ -61,10 +63,12 @@ class ProfileFragment :
             is MainActivity -> {
                 binding.toolbar.navigationIcon = null
             }
-            is ProfileActivity -> {
-                binding.toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
+            else -> {
+                binding.toolbar.navigationIcon =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
             }
         }
+
         binding.appbar.addOnOffsetChangedListener(this)
         viewPager = binding.viewPager
         viewPager.adapter = TabsFragmentAdapter(this)

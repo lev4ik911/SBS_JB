@@ -159,12 +159,11 @@
                             android:layout_width="@dimen/spacing_xlarge"
                             android:layout_height="@dimen/spacing_xlarge"
                             android:layout_gravity="end|center"
-                            android:background="@null"
+                            android:background="@drawable/selector_list_item"
                             visibleOrGone="@{viewmodel.isMyProfile.ld}"
                             android:onClick="@{() -> viewmodel.onLogoutButtonClick()}"
                             android:src="@drawable/logout"
-                            android:tint="@color/colorAccent"
-                            android:focusable="true" />
+                            android:tint="@color/colorAccent" />
 
                         <Space
                             android:layout_width="@dimen/spacing_normal"

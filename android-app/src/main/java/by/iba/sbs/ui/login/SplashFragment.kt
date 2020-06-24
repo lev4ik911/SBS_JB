@@ -1,6 +1,7 @@
 package by.iba.sbs.ui.login
 
 import android.os.Bundle
+import androidx.navigation.fragment.findNavController
 import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.sbs.BR
 import by.iba.sbs.R
@@ -20,14 +21,14 @@ class SplashFragment :
     }
 
     override fun routeToLoginScreen() {
-        (activity as LoginActivity).navController.navigate(R.id.navigation_login_fragment)
+        findNavController().navigate(R.id.navigation_login_fragment)
     }
 
     override fun routeToRegisterScreen() {
-        (activity as LoginActivity).navController.navigate(R.id.navigation_register)
+        findNavController().navigate(R.id.navigation_register)
     }
 
     override fun routeToMainScreen() {
-        (activity as LoginActivity).navController.navigate(R.id.navigation_mainActivity)
+        findNavController().navigate(R.id.navigation_mainActivity)
     }
 }

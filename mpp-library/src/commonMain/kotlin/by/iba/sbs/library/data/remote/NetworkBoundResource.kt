@@ -13,8 +13,9 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
     private val errors = MutableLiveData("")
     suspend fun build(): NetworkBoundResource<ResultType, RequestType> {
         withContext(applicationDispatcher) {
-            result.value =
+            result.postValue(
                 Response.loading(null)
+            )
         }
         CoroutineScope(coroutineContext).launch(supervisorJob) {
             val dbResult = loadFromDb()
