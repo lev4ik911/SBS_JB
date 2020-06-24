@@ -59,7 +59,7 @@ class FavoritesViewController : UIViewController {
         
         vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
            eventsDispatcher: EventsDispatcher(listener: self))
-        
+        vm.loadInstructions(forceRefresh: true)
                 
         vm.instructions.addObserver{[weak self] itemsObject in
         guard let items = itemsObject as? [Guideline] else { return }
@@ -68,7 +68,8 @@ class FavoritesViewController : UIViewController {
             //self?.dataSource.unitItems = items
             //self?.tableView.items = items
         }
-        vm.loadInstructions(forceRefresh: true)
+        
+        
         self.configureTableView()
     }
 }
@@ -122,7 +123,7 @@ extension FavoritesViewController : UITableViewDataSource, UITableViewDelegate{
 extension FavoritesViewController: GuidelineListViewModelSharedEventsListener {
     func showToast(msg: ToastMessage) {
     
-        print(msg.message)
+        print(msg.type)
     }
     
 }
