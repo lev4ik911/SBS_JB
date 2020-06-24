@@ -1,5 +1,6 @@
 package by.iba.sbs.library.data.remote
 
+import by.iba.sbs.library.service.applicationDispatcher
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import kotlinx.coroutines.*
@@ -11,7 +12,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> {
     private val supervisorJob = SupervisorJob()
     private val errors = MutableLiveData("")
     suspend fun build(): NetworkBoundResource<ResultType, RequestType> {
-        withContext(Dispatchers.Main) {
+        withContext(applicationDispatcher) {
             result.value =
                 Response.loading(null)
         }

@@ -10,6 +10,7 @@ import by.iba.sbs.library.model.request.UserCreate
 import by.iba.sbs.library.model.response.UserView
 
 import by.iba.sbs.library.service.LocalSettings
+import by.iba.sbs.library.service.applicationDispatcher
 import dev.icerock.moko.mvvm.livedata.LiveData
 import kotlinx.coroutines.*
 import kotlinx.serialization.ImplicitReflectionSerializer
@@ -73,7 +74,7 @@ interface IUsersRepository{
             }
 
             override fun createCallAsync(): Deferred<List<User>> {
-                return GlobalScope.async(Dispatchers.Default) {
+                return GlobalScope.async(applicationDispatcher) {
                     val result = users.getAllUsers()
                     if (result.isSuccess) {
                         result.data!!.map { item ->
@@ -118,7 +119,7 @@ interface IUsersRepository{
             }
 
             override fun createCallAsync(): Deferred<User> {
-                return GlobalScope.async(Dispatchers.Default) {
+                return GlobalScope.async(applicationDispatcher) {
                     val result = users.getUserById(userId)
                     if (result.isSuccess) {
                         val item = result.data!!

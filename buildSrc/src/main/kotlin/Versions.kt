@@ -8,7 +8,7 @@ object Versions {
 
     const val kotlin = "1.3.70"
 
-    private const val mokoResources = "0.9.0"
+    private const val mokoResources = "0.10.1"
     private const val mokoNetwork = "0.6.0"
     private const val mokoUnits = "0.3.1" // temporary dev version
     private const val SQLDelight = "1.3.0"
