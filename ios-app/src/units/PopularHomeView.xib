@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="9LG-5n-N4k">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="onc-CR-Mwc">
+                    <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                    <items>
+                        <navigationItem title="Title" id="Zic-zV-xav">
+                            <barButtonItem key="rightBarButtonItem" title="View all" id="8D7-SV-I1M"/>
+                        </navigationItem>
+                    </items>
+                </navigationBar>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pgM-Bx-Otx">
+                    <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="onc-CR-Mwc" firstAttribute="trailing" secondItem="x0E-m7-pqn" secondAttribute="trailing" id="DDX-6q-yff"/>
+                <constraint firstItem="x0E-m7-pqn" firstAttribute="bottom" secondItem="pgM-Bx-Otx" secondAttribute="bottom" id="DuL-v9-mqH"/>
+                <constraint firstItem="x0E-m7-pqn" firstAttribute="trailing" secondItem="pgM-Bx-Otx" secondAttribute="trailing" id="NTB-UW-11j"/>
+                <constraint firstItem="pgM-Bx-Otx" firstAttribute="leading" secondItem="x0E-m7-pqn" secondAttribute="leading" id="PPY-LN-NPj"/>
+                <constraint firstItem="onc-CR-Mwc" firstAttribute="top" secondItem="x0E-m7-pqn" secondAttribute="top" id="iXC-xu-S2o"/>
+                <constraint firstItem="onc-CR-Mwc" firstAttribute="leading" secondItem="x0E-m7-pqn" secondAttribute="leading" id="lyq-72-f2P"/>
+                <constraint firstItem="pgM-Bx-Otx" firstAttribute="top" secondItem="onc-CR-Mwc" secondAttribute="bottom" id="mji-lm-ROd"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="x0E-m7-pqn"/>
+            <point key="canvasLocation" x="-67" y="56"/>
+        </view>
+    </objects>
+</document>

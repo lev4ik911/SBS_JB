@@ -11,6 +11,7 @@ import by.iba.sbs.library.model.response.RatingSummary
 import by.iba.sbs.library.model.response.RatingView
 import by.iba.sbs.library.model.response.StepView
 import by.iba.sbs.library.service.LocalSettings
+import by.iba.sbs.library.service.applicationDispatcher
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.time.getCurrentMilliSeconds
 import kotlinx.coroutines.*
@@ -88,6 +89,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 data == null || data.isEmpty() || forceRefresh
 
             override suspend fun loadFromDb(): List<Guideline> = coroutineScope {
+
                 val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
                 return@coroutineScope guidelinesQueries.selectAllGuidelines().executeAsList().map {
                     val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
@@ -107,7 +109,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             }
 
             override fun createCallAsync(): Deferred<List<Guideline>> {
-                return GlobalScope.async(Dispatchers.Default) {
+                return GlobalScope.async(applicationDispatcher) {
                     val result = guidelines.getAllGuidelines()
                     if (result.isSuccess) {
                         result.data!!.map { item ->
@@ -166,7 +168,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             }
 
             override fun createCallAsync(): Deferred<Guideline> {
-                return GlobalScope.async(Dispatchers.Default) {
+                return GlobalScope.async(applicationDispatcher) {
                     val result = guidelines.getGuideline(guidelineId)
                     if (result.isSuccess) {
                         val item = result.data!!
@@ -238,7 +240,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             }
 
             override fun createCallAsync(): Deferred<List<Step>> {
-                return GlobalScope.async(Dispatchers.Default) {
+                return GlobalScope.async(applicationDispatcher) {
                     val result = steps.getAllSteps(guidelineId)
                     if (result.isSuccess) {
                         result.data!!.map { item ->
@@ -418,7 +420,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             }
 
             override fun createCallAsync(): Deferred<List<Feedback>> {
-                return GlobalScope.async(Dispatchers.Default) {
+                return GlobalScope.async(applicationDispatcher) {
                     val result = feedback.getAllFeedbacks(guidelineId)
                     if (result.isSuccess) {
                         result.data!!.map { item ->

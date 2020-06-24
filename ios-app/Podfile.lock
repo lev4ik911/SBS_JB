@@ -26,7 +26,7 @@ DEPENDENCIES:
   - MultiPlatformLibraryUnits/Core (from `https://github.com/icerockdev/moko-units.git`, tag `release/0.2.0-dev-2`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  https://github.com/cocoapods/specs.git:
     - Alamofire
     - AlamofireImage
     - SkyFloatingLabelTextField
@@ -53,10 +53,10 @@ SPEC CHECKSUMS:
   Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
   AlamofireImage: be9963c6582d68b39e89191f64c82a7d7bf40fdd
   MultiPlatformLibrary: 176fb8ade516666cd47e93de1b71ba0441a541bb
-  MultiPlatformLibraryMvvm: 999ac3896d8214fd65e0e0a376a2e553bf4515b3
-  MultiPlatformLibraryUnits: 44eda0f9372f8a095225fae2579916208ca2c8d3
+  MultiPlatformLibraryMvvm: c6c10b121c623603ecc0184f7078935d3b3ed662
+  MultiPlatformLibraryUnits: 73d19963493cf2afb9bf0db83b3fa6d78620f379
   SkyFloatingLabelTextField: 4b46db0ab1ccde0919cded29c656e6b4805eda04
 
-PODFILE CHECKSUM: 814649638d98c966c2d49f2f7e24e76cb94e82cf
+PODFILE CHECKSUM: ffe6fa1a6a09fd7a6b3065daacd9722bc3638ae1
 
-COCOAPODS: 1.8.3
+COCOAPODS: 1.7.5
