@@ -80,7 +80,7 @@ class ProfileInstructionsFragment :
                 view.findViewById<TextView>(R.id.tv_info)?.text = item.author
             },
             isItemsEquals = { oldItem, newItem ->
-                oldItem.description == newItem.description
+                oldItem.descr == newItem.descr
             }
         ).also {
             it.emptyViewId = R.layout.new_item

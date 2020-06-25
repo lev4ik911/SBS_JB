@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class Guideline(
     val id: String = "",
     var name: String = "",
-    var description: String = "",
+    var descr: String = "",
     var author: String = "Author name",
     var isFavorite: Boolean = false,
     var rating: RatingSummary = RatingSummary(),

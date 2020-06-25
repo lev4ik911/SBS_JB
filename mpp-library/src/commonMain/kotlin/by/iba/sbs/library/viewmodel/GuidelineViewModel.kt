@@ -300,7 +300,7 @@ class GuidelineViewModel(
                     guideline.value = Guideline(
                         id = resultGuideline.id,
                         name = resultGuideline.name,
-                        description = resultGuideline.description ?: ""
+                        descr = resultGuideline.description ?: ""
                     )
                     saveSteps()
                 } else if (result.error != null) eventsDispatcher.dispatchEvent {

@@ -170,7 +170,7 @@
                         android:layout_marginTop="@dimen/spacing_xsmall"
                         android:hint="@string/hint_instruction_description"
                         android:singleLine="false"
-                        android:text="@={viewmodel.guideline.ld.description}"
+                        android:text="@={viewmodel.guideline.ld.descr}"
                         android:textAppearance="@style/Text.Description"
                         android:textSize="@dimen/text_size_small" />
                 </com.google.android.material.textfield.TextInputLayout>

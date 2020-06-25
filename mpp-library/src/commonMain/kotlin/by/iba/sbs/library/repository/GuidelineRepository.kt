@@ -76,7 +76,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
 
             override suspend fun saveCallResults(data: List<Guideline>) = coroutineScope {
                 data.forEach {
-                    guidelinesQueries.insertGuideline(it.id, it.name, it.description)
+                    guidelinesQueries.insertGuideline(it.id, it.name, it.descr)
                     it.rating.apply {
                         ratingSummaryQueries.insertRating(
                             it.id,
@@ -146,7 +146,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         overall.toLong()
                     )
                 }
-                guidelinesQueries.insertGuideline(data.id, data.name, data.description)
+                guidelinesQueries.insertGuideline(data.id, data.name, data.descr)
 
             }
 
@@ -271,7 +271,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     @UnstableDefault
     override suspend fun insertGuideline(data: Guideline): Response<GuidelineView> =
         coroutineScope {
-            val result = guidelines.postGuideline(GuidelineCreate(data.name, data.description))
+            val result = guidelines.postGuideline(GuidelineCreate(data.name, data.descr))
             if (result.isSuccess) {
                 val item = result.data!!
                 guidelinesQueries.insertGuideline(item.id, item.name, item.description ?: "")
@@ -292,7 +292,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     override suspend fun updateGuideline(data: Guideline): Response<GuidelineView> =
         coroutineScope {
             val result =
-                guidelines.putGuideline(data.id, GuidelineEdit(data.name, data.description))
+                guidelines.putGuideline(data.id, GuidelineEdit(data.name, data.descr))
             if (result.isSuccess) {
                 val item = result.data!!
                 guidelinesQueries.insertGuideline(item.id, item.name, item.description ?: "")
