@@ -12,8 +12,7 @@ class Auth(override val settings: LocalSettings) : Client(settings) {
     suspend fun login(loginData: LoginData): Response<AuthData> {
         return post(
             route = Routes.Auth.URL_LOGIN,
-            requestBody = loginData,
-            needAuth = false
+            requestBody = loginData
         )
     }
 }

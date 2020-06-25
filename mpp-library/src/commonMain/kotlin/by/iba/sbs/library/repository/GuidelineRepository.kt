@@ -14,7 +14,10 @@ import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.service.applicationDispatcher
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.time.getCurrentMilliSeconds
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 
@@ -279,7 +282,8 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     item.rating.overall.toLong()
                 )
             } else {
-                if (result.status == Response.Status.ERROR) error(result.error!!)
+                if (result.status == Response.Status.ERROR)
+                    error(result.error!!)
             }
             return@coroutineScope result
         }
@@ -292,9 +296,11 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             if (result.isSuccess) {
                 val item = result.data!!
                 guidelinesQueries.insertGuideline(item.id, item.name, item.description ?: "")
-            } else {
-                if (result.status == Response.Status.ERROR) error(result.error!!)
             }
+//            else {
+//                if (result.status != Response.Status.SUCCESS)
+//                    error(result.error!!)
+//            }
             return@coroutineScope result
         }
 
@@ -306,9 +312,10 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             ratingSummaryQueries.deleteRatingByGuidelineId(guidelineId)
             guidelinesQueries.deleteAllStepsByGuidelineId(guidelineId)
             guidelinesQueries.deleteGuidelineById(guidelineId)
-        } else {
-            if (result.status == Response.Status.ERROR) error(result.error!!)
         }
+//        else {
+//            if (result.status == Response.Status.ERROR) error(result.error!!)
+//        }
         return@coroutineScope result
     }
 
@@ -326,14 +333,15 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     it.name,
                     it.description,
                     it.weight.toLong(),
-                    data.first{step -> step.weight == it.weight}.imagePath, // save local path in db
+                    data.first { step -> step.weight == it.weight }.imagePath, // save local path in db
                     it.updateImageTimeSpan.toLong()
                 )
             }
 
-        } else {
-            if (result.status == Response.Status.ERROR) error(result.error!!)
         }
+//        else {
+//            if (result.status == Response.Status.ERROR) error(result.error!!)
+//        }
         return@coroutineScope result
     }
 
@@ -354,13 +362,14 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     it.name,
                     it.description,
                     it.weight.toLong(),
-                    data.first{step -> step.weight == it.weight}.imagePath, // save local path in db
+                    data.first { step -> step.weight == it.weight }.imagePath, // save local path in db
                     it.updateImageTimeSpan.toLong()
                 )
             }
-        } else {
-            if (result.status == Response.Status.ERROR) error(result.error!!)
         }
+        //else {
+//            if (result.status == Response.Status.ERROR) error(result.error!!)
+//        }
         return@coroutineScope result
     }
 

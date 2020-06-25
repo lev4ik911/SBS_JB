@@ -16,8 +16,7 @@ class Feedback(override val settings: LocalSettings) : Client(settings) {
     suspend fun getAllFeedbacks(guidelineId: String): Response<List<RatingView>> {
         return get(
             Utils.formatString(Routes.Ratings.URL_GUIDELINE_RATINGS, guidelineId),
-            deserializer = RatingView::class.serializer().list,
-            needAuth = false
+            deserializer = RatingView::class.serializer().list
         )
     }
 
@@ -27,8 +26,7 @@ class Feedback(override val settings: LocalSettings) : Client(settings) {
                 Routes.Ratings.URL_GUIDELINE_RATING_DETAILS,
                 guidelineId,
                 feedbackId
-            ),
-            needAuth = false
+            )
         )
     }
 

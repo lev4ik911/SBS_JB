@@ -42,8 +42,8 @@ class ProfileFragment :
     }
 
     private lateinit var viewPager: ViewPager2
-    private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
-    private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
+    private val percentageToShowTitleAtToolbar = 0.7f
+    private val percentageToHideTitleDetails = 0.7f
     private val mAlphaAnimationsDuration = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
@@ -122,7 +122,7 @@ class ProfileFragment :
     }
 
     private fun handleToolbarTitleVisibility(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+        if (percentage >= percentageToShowTitleAtToolbar) {
 
             if (!mIsTheTitleVisible) {
 
@@ -142,7 +142,7 @@ class ProfileFragment :
     }
 
     private fun handleAlphaOnTitle(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+        if (percentage >= percentageToHideTitleDetails) {
             if (mIsTheTitleContainerVisible) {
                 binding.fActionButton.visibility = View.INVISIBLE
                 startAlphaAnimation(
@@ -180,7 +180,7 @@ class ProfileFragment :
 
     override fun onActionButtonAction() {
         when {
-            viewModel.isMyProfile.value!! -> {
+            viewModel.isMyProfile.value -> {
                 findNavController().navigate(R.id.navigation_profile_edit_fragment)
             }
             else -> {
@@ -191,5 +191,6 @@ class ProfileFragment :
 
     override fun routeToLoginScreen() {
         findNavController().navigate(R.id.navigation_login_fragment)
+        // findNavController().navigate()
     }
 }
