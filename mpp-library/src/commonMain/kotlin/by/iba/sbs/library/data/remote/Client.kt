@@ -35,7 +35,7 @@ import kotlinx.serialization.serializer
 
 @UnstableDefault
 @ImplicitReflectionSerializer
-open class Client(open val settings: LocalSettings) {
+open class Client(open val settings: LocalSettings, private val heedAuth: Boolean = true) {
 
     private val json: Json by lazy {
         Json(JsonConfiguration.Default)
@@ -69,12 +69,13 @@ open class Client(open val settings: LocalSettings) {
                 level = LogLevel.ALL
                 logger = Logger.DEFAULT
             }
-            install(TokenFeature) {
-                tokenHeaderName = "Authorization"
-                tokenProvider = object : TokenFeature.TokenProvider {
-                    override fun getToken(): String? = "Bearer ${settings.accessToken}"
+            if (heedAuth)
+                install(TokenFeature) {
+                    tokenHeaderName = "Authorization"
+                    tokenProvider = object : TokenFeature.TokenProvider {
+                        override fun getToken(): String? = "Bearer ${settings.accessToken}"
+                    }
                 }
-            }
             expectSuccess = false
         }
     }

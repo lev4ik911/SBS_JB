@@ -29,6 +29,6 @@ class SplashFragment :
     }
 
     override fun routeToMainScreen() {
-        findNavController().navigate(R.id.navigation_mainActivity)
+        findNavController().navigate(R.id.navigation_profile_fragment)
     }
 }
