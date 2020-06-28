@@ -76,7 +76,7 @@ open class Client(open val settings: LocalSettings, private val heedAuth: Boolea
                         override fun getToken(): String? = "Bearer ${settings.accessToken}"
                     }
                 }
-            expectSuccess = false
+            expectSuccess = true
         }
     }
 

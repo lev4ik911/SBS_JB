@@ -2,6 +2,7 @@ package by.iba.sbs.ui.profile
 
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -13,15 +14,20 @@ import by.iba.mvvmbase.visibleOrGone
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileFragmentBinding
+import by.iba.sbs.library.model.MessageType
+import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
 import by.iba.sbs.ui.MainActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.russhwolf.settings.AndroidSettings
+import com.shashank.sony.fancytoastlib.FancyToast
 import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
 import kotlin.math.abs
 
 class ProfileFragment :
@@ -48,8 +54,12 @@ class ProfileFragment :
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val userId = arguments?.getString("userId").orEmpty()
+        viewModel.loadUser(userId)
         initActionButton()
         viewModel.isFavorite.addObserver {
             initActionButton()
@@ -192,5 +202,25 @@ class ProfileFragment :
     override fun routeToLoginScreen() {
         findNavController().navigate(R.id.navigation_login_fragment)
         // findNavController().navigate()
+    }
+
+    override fun showToast(msg: ToastMessage) {
+        when (msg.type) {
+            MessageType.ERROR ->
+                Log.e(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.WARNING ->
+                Log.w(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.INFO ->
+                Log.i(viewModel::class.java.name, msg.getLogMessage())
+            else ->
+                Log.v(viewModel::class.java.name, msg.getLogMessage())
+        }
+        FancyToast.makeText(
+            requireContext(),
+            msg.message,
+            FancyToast.LENGTH_LONG,
+            msg.type.index,
+            false
+        ).show()
     }
 }

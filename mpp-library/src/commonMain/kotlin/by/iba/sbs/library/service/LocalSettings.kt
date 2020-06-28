@@ -10,6 +10,7 @@ import com.russhwolf.settings.string
 class LocalSettings(settings: Settings) {
     var accessToken by settings.string("pref_access_token")
     var refreshToken by settings.string("pref_refresh_token")
+    var userId by settings.string("pref_user_id")
     var language by settings.string("pref_language")
     var login by settings.string("pref_login")
     var lastUpdate by settings.long("last_update", defaultValue = 0L)

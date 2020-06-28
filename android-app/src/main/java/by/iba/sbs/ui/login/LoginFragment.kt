@@ -9,6 +9,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import by.iba.mvvmbase.Extentions.Companion.waitForLayout
@@ -111,8 +112,12 @@ class LoginFragment :
     }
 
 
-    override fun routeToProfile() {
-        findNavController().navigate(R.id.navigation_profile_fragment)
+    override fun routeToProfile(userId: String) {
+        val bundle = bundleOf("profileId" to userId)
+        findNavController().navigate(
+            R.id.navigation_profile_fragment,
+            bundle
+        )
     }
 
     override fun flipToPassword() {
