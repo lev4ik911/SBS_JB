@@ -1,0 +1,9 @@
+CREATE TABLE punctuation_marks (
+    id INTEGER PRIMARY KEY,
+    mark TEXT
+);
+INSERT INTO punctuation_marks VALUES(1,'-');
+INSERT INTO punctuation_marks VALUES(2,';');
+INSERT INTO punctuation_marks VALUES(3,',');
+INSERT INTO punctuation_marks VALUES(4,'.');
+INSERT INTO punctuation_marks VALUES(5,':');

@@ -85,17 +85,26 @@
     <string name="lbl_categories">Categories</string>
     <string name="title_search">Search</string>
     <string name="title_home">Home</string>
+    <string name="title_cancel_search">Cansel</string>
     <string name="title_delete_instruction_dialog">Delete instruction</string>
     <string name="msg_delete_instruction_dialog">Are you sure you want to delete the instruction %s?</string>
+    <string name="title_clear_history_dialog">Clear history</string>
+    <string name="msg_clear_history_dialog">Are you sure you want to clear history?</string>
     <string name="title_delete_step_dialog">Delete step</string>
     <string name="msg_delete_step_dialog">Are you sure you want to delete the step %s?</string>
     <string name="btn_delete">Delete</string>
+    <string name="btn_clear">Clear</string>
     <string name="btn_cancel">Cancel</string>
     <string name="title_home_settings">Home screen settings</string>
+    <string name="title_search_settings">Search settings</string>
     <string name="lbl_show_recommended">Show recommended guidelines</string>
     <string name="lbl_show_favorites">Show favorite guidelines</string>
     <string name="title_dialog_feedback">Send feedback</string>
     <string name="btn_send">Send</string>
     <string name="title_new">New</string>
+    <string name="lbl_count_history">Save last search queries</string>
+    <string name="lbl_clear_history">Clear history</string>
+    <string name="hint_search">Start enter text</string>
+    <string name="title_search_results">Result for: \"%s\"</string>
 
 </resources>

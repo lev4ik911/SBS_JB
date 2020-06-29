@@ -1,5 +1,7 @@
 package by.iba.sbs.ui.profile
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
@@ -196,5 +198,22 @@ class ProfileFragment :
 
     override fun routeToLoginScreen() {
         findNavController().navigate(R.id.navigation_login_fragment)
+    }
+
+    override fun requireAccept() {
+        val builder = AlertDialog.Builder(requireContext()).apply {
+            setTitle(resources.getString(R.string.title_clear_history_dialog))
+            setMessage(
+                resources.getString(R.string.msg_clear_history_dialog)
+            )
+            setPositiveButton(
+                resources.getString(R.string.btn_clear)
+            ) { _: DialogInterface, _: Int ->
+                viewModel.onAcceptClearHistory()
+            }
+            setNegativeButton(resources.getString(R.string.btn_cancel), null)
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 }

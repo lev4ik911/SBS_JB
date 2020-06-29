@@ -1,9 +1,6 @@
 package by.iba.sbs.library.service
 
-import com.russhwolf.settings.Settings
-import com.russhwolf.settings.boolean
-import com.russhwolf.settings.long
-import com.russhwolf.settings.string
+import com.russhwolf.settings.*
 
 //https://github.com/russhwolf/multiplatform-settings
 
@@ -16,4 +13,6 @@ class LocalSettings(settings: Settings) {
     var keepLogin by settings.boolean("pref_remember_login")
     var showRecommended by settings.boolean("pref_show_recommended", defaultValue = true)
     var showFavorites by settings.boolean("pref_show_favorites", defaultValue = true)
+    var searchHistoryJson by settings.string("pref_search_history_json")
+    var searchHistoryCount by settings.int("pref_search_history_count", defaultValue = 5)
 }

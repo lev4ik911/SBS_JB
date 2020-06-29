@@ -52,10 +52,23 @@ class ProfileViewModel(
         localStorage.accessToken = ""
         eventsDispatcher.dispatchEvent { routeToLoginScreen() }
     }
+    fun onClearHistoryClick() {
+        eventsDispatcher.dispatchEvent { requireAccept() }
+    }
+    fun onAcceptClearHistory() {
+        localStorage.searchHistoryJson = ""
+    }
+
+    var searchHistoryCount: Int
+        get() = localStorage.searchHistoryCount
+        set(value) {
+            localStorage.searchHistoryCount = value
+        }
 
     interface EventsListener {
         fun onActionButtonAction()
         fun routeToLoginScreen()
+        fun requireAccept()
     }
 
 }

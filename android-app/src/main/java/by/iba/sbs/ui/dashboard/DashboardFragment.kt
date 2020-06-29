@@ -8,7 +8,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -179,22 +178,8 @@ class DashboardFragment :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        //super.onCreateOptionsMenu(menu, inflater)
+        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_action_menu, menu)
-        val mSearchView: SearchView = menu.findItem(R.id.action_search).actionView as SearchView
-        mSearchView.queryHint = "Search"
-        mSearchView.setOnQueryTextListener(object :
-            SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                lastSearchText = newText
-                //   mCardAdapter.filter.filter(newText)
-                return true
-            }
-        })
         menu.findItem(R.id.action_new).isVisible = viewModel.localStorage.accessToken.isNotEmpty()
     }
 

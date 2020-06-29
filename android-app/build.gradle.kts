@@ -96,6 +96,8 @@ dependencies {
     implementation("com.afollestad.material-dialogs:input:3.3.0")
     implementation("com.afollestad.material-dialogs:lifecycle:3.3.0")
     implementation("com.github.Shashank02051997:FancyToast-Android:0.1.3")
+    implementation("com.miguelcatalan:materialsearchview:1.4.0")
+    implementation("com.github.DanielMartinus:Stepper-Touch:1.0.1")
     implementation(project(":mpp-library"))
     implementation(project(":mvvmbase"))
 }

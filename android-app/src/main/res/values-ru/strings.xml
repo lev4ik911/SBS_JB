@@ -85,14 +85,23 @@
     <string name="lbl_categories">Категории</string>
     <string name="title_search">Поиск</string>
     <string name="title_home">Главная</string>
+    <string name="title_cancel_search">Отмена</string>
     <string name="title_delete_instruction_dialog">Удалить инструкцию</string>
     <string name="msg_delete_instruction_dialog">Вы уверены, что хотите удалить инструкцию %s?</string>
+    <string name="title_clear_history_dialog">Очистить историю</string>
+    <string name="msg_clear_history_dialog">Вы уверены, что хотите очистить историю?</string>
     <string name="title_delete_step_dialog">Удалить шаг</string>
     <string name="msg_delete_step_dialog">Вы уверены, что хотите удалить шаг %s?</string>
     <string name="btn_delete">Удалить</string>
+    <string name="btn_clear">Очистить</string>
     <string name="btn_cancel">Отменить</string>
     <string name="title_home_settings">Настройки главного экрана</string>
+    <string name="title_search_settings">Настройки поиска</string>
     <string name="lbl_show_recommended">Показывать рекомендованные инструкции</string>
     <string name="lbl_show_favorites">Показывать понравившиеся инструкции</string>
+    <string name="lbl_count_history">Хранить последние поисковые запросы</string>
+    <string name="lbl_clear_history">Очистить историю</string>
+    <string name="hint_search">Начните вводить текст</string>
+    <string name="title_search_results">Результат для: \"%s\"</string>
 
 </resources>

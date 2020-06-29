@@ -47,5 +47,9 @@ class ProfileActivity :
     override fun routeToLoginScreen() {
         findNavController(R.navigation.mobile_navigation).navigate(R.id.navigation_login_fragment)
     }
+
+    override fun requireAccept() {
+
+    }
 }
 

@@ -72,12 +72,10 @@ class MainActivity :
 
         navView.setOnShowListener {
 
-            title = when (it.id) {
-                ActiveTabEnum.ID_HOME.index -> resources.getString(R.string.title_home)
-                ActiveTabEnum.ID_FAVORITES.index -> resources.getString(R.string.title_favorites)
-                ActiveTabEnum.ID_SEARCH.index -> resources.getString(R.string.title_search)
-                ActiveTabEnum.ID_PROFILE.index -> ""
-                else -> ""
+            when (it.id) {
+                ActiveTabEnum.ID_HOME.index ->title = resources.getString(R.string.title_home)
+                ActiveTabEnum.ID_FAVORITES.index ->title = resources.getString(R.string.title_favorites)
+                ActiveTabEnum.ID_PROFILE.index ->title = ""
             }
         }
 

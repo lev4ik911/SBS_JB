@@ -1,4 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -67,5 +68,67 @@
                 android:layout_height="wrap_content"
                 android:checked="@={viewmodel.showFavorites.ld}" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/spacing_small"
+                android:text="@string/title_search_settings" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/spacing_normal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lbl_count_history" />
+
+            <nl.dionsegijn.steppertouch.StepperTouch
+                android:id="@+id/stepperTouch"
+                android:layout_width="@dimen/stepper_touch_width"
+                android:layout_height="@dimen/stepper_touch_height"
+                app:stepperTextSize="@dimen/text_size_stepper_touch" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="@dimen/spacing_normal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/Text.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/lbl_clear_history" />
+
+            <ImageButton
+                android:id="@+id/btn_clear_action"
+                android:layout_width="@dimen/md_icon_size"
+                android:layout_height="@dimen/md_icon_size"
+                android:layout_gravity="end|center"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{() -> viewmodel.onClearHistoryClick()}"
+                android:src="@drawable/baseline_delete_24"
+                android:tint="@color/colorAccent"
+                />
+        </LinearLayout>
+
     </LinearLayout>
 </layout>

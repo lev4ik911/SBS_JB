@@ -9,11 +9,16 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
-import androidx.appcompat.widget.SearchView
+import android.widget.AdapterView
+import android.widget.ImageButton
+import android.widget.ListView
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import by.iba.mvvmbase.adapter.BaseBindingAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
+import by.iba.sbs.adapters.SearchSuggestionAdapter
 import by.iba.sbs.databinding.InstructionListFragmentBinding
 import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Guideline
@@ -23,6 +28,7 @@ import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.viewmodel.GuidelineListViewModelShared
 import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.guideline.GuidelineActivity
+import com.miguelcatalan.materialsearchview.MaterialSearchView
 import com.russhwolf.settings.AndroidSettings
 import com.shashank.sony.fancytoastlib.FancyToast
 import dev.icerock.moko.mvvm.MvvmEventsFragment
@@ -76,10 +82,108 @@ class GuidelineListFragment :
 
     //override val viewModel: GuidelineListViewModelShared by viewModel()
     private val mainViewModel: MainViewModel by sharedViewModel()
-    var lastSearchText: String = ""
+    private lateinit var searchView: MaterialSearchView
     private lateinit var instructionsAdapter: BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>
+    private var isInitialization = true
+    private lateinit var mSuggestionsListView: ListView
+    private lateinit var mSearchLayout: View
+    private lateinit var mTintView: View
+    private lateinit var mEmptyBtn: ImageButton
+    private var showSuggestions = true
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().findViewById<Toolbar>(R.id.toolbar_main).apply {
+                title = resources.getString(R.string.title_search)
+        }
+        viewModel.getSearchHistoryList()
+        searchView = requireActivity().findViewById(R.id.search_view)
+        mSearchLayout = requireActivity().findViewById<View>(R.id.search_layout)
+        mSuggestionsListView  = mSearchLayout.findViewById(R.id.suggestion_list)
+        mTintView = mSearchLayout.findViewById<View>(R.id.transparent_view)
+        mEmptyBtn = mSearchLayout.findViewById<ImageButton>(R.id.action_empty_btn)
+
+        var searchAdapter: SearchSuggestionAdapter? = null
+        searchView.setHint(resources.getString(R.string.hint_search))
+
+        viewModel.suggestions.addObserver {
+            if (searchAdapter != null) {
+                mSuggestionsListView.visibility = View.VISIBLE
+                searchAdapter!!.setSuggestionIcon(ContextCompat.getDrawable(requireActivity(), R.drawable.baseline_search_24)!!)
+                searchAdapter!!.setItems(it)
+            }
+        }
+
+        mEmptyBtn.setOnClickListener {
+            searchView.setQuery("",false)
+            mSuggestionsListView.visibility = View.VISIBLE
+            viewModel.searchedText.value = ""
+            viewModel.loadInstructions(false)
+        }
+
+        searchView.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+
+                return false
+            }
+            override fun onQueryTextChange(newText: String): Boolean {
+                if (newText.length >= 3) {
+                    if (showSuggestions){
+                        viewModel.loadSuggestions(newText)
+                    }
+                    else
+                        showSuggestions = true
+                }
+                if (newText.length < 3 && !isInitialization) {
+                    searchAdapter!!.setSuggestionIcon(ContextCompat.getDrawable(requireActivity(), R.drawable.baseline_history_24)!!)
+                    searchAdapter!!.setItems(viewModel.searchHistoryList)
+                }
+                return true
+            }
+        })
+
+        searchView.setOnSearchViewListener(object : MaterialSearchView.SearchViewListener {
+            override fun onSearchViewShown() {
+                searchAdapter = SearchSuggestionAdapter(requireActivity(), viewModel.searchHistoryList, ContextCompat.getDrawable(requireActivity(), R.drawable.baseline_history_24)!!, true)
+                searchView.setAdapter(searchAdapter)
+                mTintView.setVisibility(View.VISIBLE);
+                isInitialization = false;
+                viewModel.searchedText.value.apply {
+                    if (this.isNotEmpty())
+                        searchView.setQuery(this, false)
+                }
+            }
+            override fun onSearchViewClosed() {
+                searchView.setAdapter(null)
+                activity!!.findViewById<Toolbar>(R.id.toolbar_main).apply {
+                    val searchText = viewModel.searchedText.value
+                    if(searchText.isNotEmpty()) {
+                        title = resources.getString(R.string.title_search_results, searchText)
+                        viewModel.saveSearchHistoryList(searchText)
+                    }
+                    else
+                        title = resources.getString(R.string.title_search)
+                }
+            }
+        })
+        searchView.setOnItemClickListener(object : AdapterView.OnItemClickListener{
+            override fun onItemClick(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                showSuggestions = false
+                val query = searchAdapter!!.getItem(position)
+                if (query!=null) {
+                    searchView.setQuery(query, false)
+                    mSuggestionsListView.visibility = View.INVISIBLE
+                    viewModel.getFilteredGuidelines(query)
+                    viewModel.searchedText.value = query
+                }
+            }
+        })
+
         setHasOptionsMenu(true)
         instructionsAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>(
@@ -93,10 +197,6 @@ class GuidelineListFragment :
 
             }
         instructionsAdapter.apply {
-            filterCriteria = { item, text ->
-                item.name.contains(text, true)
-                        || item.description.contains(text, true)
-            }
             if (settings.accessToken.isNotEmpty()) {
                 emptyViewId = R.layout.new_item
                 onEmptyViewItemClick = {
@@ -128,31 +228,14 @@ class GuidelineListFragment :
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        //super.onCreateOptionsMenu(menu, inflater)
+        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_action_menu, menu)
-        val mSearchView: SearchView = menu.findItem(R.id.action_search).actionView as SearchView
-        mSearchView.queryHint = "Search"
-        mSearchView.setOnQueryTextListener(object :
-            SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                lastSearchText = newText
-                instructionsAdapter.filter.filter(newText)
-                return true
-            }
-        })
-        menu.findItem(R.id.action_new).isVisible = viewModel.localStorage.accessToken.isNotEmpty()
-//        mSearchView.setOnCloseListener {
-//            when (activeCategory) {
-//                GuidelineCategory.RECOMMENDED.ordinal ->  toolbar_main.title = resources.getString(R.string.title_recommended)
-//                GuidelineCategory.FAVORITE.ordinal ->toolbar_main.title = resources.getString(R.string.title_favorites)
-//                GuidelineCategory.POPULAR.ordinal -> toolbar_main.title = resources.getString(R.string.title_popular)
-//            }
-//            return@setOnCloseListener true
-//        }
+        menu.findItem(R.id.action_new).isVisible = false
+        viewModel.searchedText.addObserver {
+            menu.findItem(R.id.action_cancel_search).isVisible = it.isNotEmpty()
+        }
+        val searchItem: MenuItem = menu.findItem(R.id.action_search)
+        searchView.setMenuItem(searchItem)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -162,6 +245,14 @@ class GuidelineListFragment :
                 intent.putExtra("instructionId", 0)
                 startActivity(intent)
             }
+            R.id.action_cancel_search -> {
+                viewModel.searchedText.value = ""
+                viewModel.loadInstructions(false)
+                requireActivity().findViewById<Toolbar>(R.id.toolbar_main).apply {
+                        title = resources.getString(R.string.title_search)
+                }
+                mSuggestionsListView.visibility = View.VISIBLE
+            }
         }
         return true
     }
@@ -169,6 +260,7 @@ class GuidelineListFragment :
     override fun onStart() {
         super.onStart()
         val forceRefresh = Date().day != Date(settings.lastUpdate).day
-        viewModel.loadInstructions(forceRefresh)
+        if (viewModel.searchedText.value.isEmpty())
+            viewModel.loadInstructions(forceRefresh)
     }
 }

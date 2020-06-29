@@ -14,7 +14,10 @@ import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.service.applicationDispatcher
 import dev.icerock.moko.mvvm.livedata.LiveData
 import dev.icerock.moko.time.getCurrentMilliSeconds
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 
@@ -45,6 +48,8 @@ interface IGuidelineRepository {
     suspend fun insertRating(guidelineId: String, data: RatingCreate, ratingSummary: RatingSummary): Response<RatingView>
     suspend fun updateRating(guidelineId: String, data: Feedback): Response<RatingView>
     suspend fun deleteRating(guidelineId: String, feedbackId: String): Response<String?>
+    suspend fun getSuggestions(searchText: String):List<String>
+    suspend fun getFilteredGuidelines(searchText: String): List<Guideline>
 }
 
 @ImplicitReflectionSerializer
@@ -62,6 +67,8 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     private val guidelinesQueries = sbsDb.guidelinesEntityQueries
     private val ratingSummaryQueries = sbsDb.ratingSummaryQueries
     private val feedbackQueries = sbsDb.feedbackEntityQueries
+    private val suggestionsQueries = sbsDb.suggestionsEntityQueries
+
 
     @UnstableDefault
     override suspend fun getAllGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>> {
@@ -433,7 +440,6 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
                         listOf()
-
                     }
                 }
             }
@@ -503,6 +509,32 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 if (result.status == Response.Status.ERROR) error(result.error!!)
             }
             return@coroutineScope result
+        }
+
+    override suspend fun getSuggestions(searchText: String): List<String> =
+        coroutineScope {
+            return@coroutineScope suggestionsQueries.selectSuggestionsByText(searchText).executeAsList()
+        }
+
+    override suspend fun getFilteredGuidelines(searchText: String): List<Guideline> =
+        coroutineScope {
+            val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
+            return@coroutineScope suggestionsQueries.searchGuidelinesByText(searchText).executeAsList().map {
+                val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
+                if (rating != null) {
+                    Guideline(
+                        it.id, it.name, it.description,
+                        rating = RatingSummary(
+                            rating.positive!!.toInt(),
+                            rating.negative!!.toInt(),
+                            rating.overall!!.toInt()
+                        )
+                    )
+                } else {
+                    Guideline(it.id, it.name, it.description)
+                }
+            }
+
         }
 
 }

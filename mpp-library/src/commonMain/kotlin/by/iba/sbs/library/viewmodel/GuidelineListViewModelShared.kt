@@ -14,6 +14,10 @@ import dev.icerock.moko.mvvm.livedata.MutableLiveData
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.builtins.list
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 
 class GuidelineListViewModelShared(
     settings: Settings,
@@ -21,6 +25,9 @@ class GuidelineListViewModelShared(
 ) : ViewModelExt(settings),
     EventsDispatcherOwner<GuidelineListViewModelShared.EventsListener> {
     val instructions = MutableLiveData<List<Guideline>>(mutableListOf())
+    val suggestions = MutableLiveData<List<String>>(arrayListOf())
+    var searchedText = MutableLiveData("")
+    val searchHistoryList = mutableListOf<String>()
 
     @UnstableDefault
     @ImplicitReflectionSerializer
@@ -35,9 +42,18 @@ class GuidelineListViewModelShared(
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
                 guidelinesLiveData.addObserver {
                     if (it.isSuccess && it.isNotEmpty) {
-                        val guidelines = it.data!!
-                        instructions.postValue(guidelines.sortedBy { item -> item.id }
-                            .toList())
+                        var guidelines = it.data!!
+                        if(searchedText.value.isNotEmpty()) {
+                            viewModelScope.launch {
+                                guidelines = repository.getFilteredGuidelines(searchedText.value)
+                                instructions.postValue(guidelines.sortedBy { item -> item.id }
+                                    .toList())
+                            }
+                        }
+                        else {
+                            instructions.postValue(guidelines.sortedBy { item -> item.id }
+                                .toList())
+                        }
                     } else if (it.error != null)
                         eventsDispatcher.dispatchEvent {
                             showToast(
@@ -61,6 +77,69 @@ class GuidelineListViewModelShared(
             }
         }
     }
+
+    @ImplicitReflectionSerializer
+    fun loadSuggestions(searchText: String){
+        viewModelScope.launch {
+            try {
+                suggestions.postValue(repository.getSuggestions(searchText))
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+    @ImplicitReflectionSerializer
+    fun getFilteredGuidelines(searchText: String){
+        viewModelScope.launch {
+            try {
+                instructions.postValue(repository.getFilteredGuidelines(searchText))
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    fun saveSearchHistoryList(searchText:String){
+        if (localStorage.searchHistoryCount>0) {
+            searchHistoryList.removeAll {
+                searchHistoryList.indexOf(it).plus(1) >= localStorage.searchHistoryCount || it == searchText
+            }
+            searchHistoryList.add(0, searchText)
+
+            Json(JsonConfiguration.Stable).apply {
+                this.stringify(String.serializer().list, searchHistoryList).apply {
+                    if (this.isNotEmpty())
+                        localStorage.searchHistoryJson = this
+                }
+            }
+        }
+    }
+
+    fun getSearchHistoryList(){
+        val stringJson = localStorage.searchHistoryJson
+        if (stringJson.isNotEmpty())
+            Json(JsonConfiguration.Stable).apply {
+                this.parse(String.serializer().list, stringJson).apply {
+                    if (!this.isNullOrEmpty() && localStorage.searchHistoryCount>0)
+                        searchHistoryList.addAll(this.filter { this.indexOf(it).plus(1) <= localStorage.searchHistoryCount })
+                }
+            }
+    }
+
 
     interface EventsListener {
         fun showToast(msg: ToastMessage)

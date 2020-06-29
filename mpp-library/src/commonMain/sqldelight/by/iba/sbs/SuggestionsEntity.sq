@@ -1,0 +1,42 @@
+selectSuggestionsByText:
+WITH RECURSIVE cleared_strings(id, text) AS
+    (
+    SELECT 0 AS id, ' ' || lower(name) || ' ' || lower(description)  AS text  FROM guidelines
+    UNION
+        SELECT cleared_strings.id + 1, replace(cleared_strings.text, (SELECT punctuation_marks.mark FROM punctuation_marks WHERE punctuation_marks.id = cleared_strings.id + 1), ' ')
+        FROM cleared_strings
+        WHERE cleared_strings.id + 1 <= (SELECT count(*) FROM punctuation_marks)
+    )
+
+SELECT DISTINCT
+    trim(
+    CASE
+      WHEN instr(substr(text, instr(text, (SELECT ' ' || :search)) + length((SELECT ' ' || :search))),' ') > 0 THEN
+      substr(text,
+    		  instr(text, (SELECT ' ' || :search)),
+    		  instr(substr(text, instr(text, (SELECT ' ' || :search)) + length((SELECT ' ' || :search))),' ') + length((SELECT ' ' || :search))
+    		  )
+      ELSE
+      substr(text, instr(text, (SELECT ' ' || :search)))
+    END)
+FROM cleared_strings
+WHERE id = (SELECT count(*) FROM punctuation_marks)
+AND text LIKE ('% ' || :search || '%');
+
+searchGuidelinesByText:
+WITH RECURSIVE cleared_strings(num, text, id) AS
+    (
+    SELECT 0 AS num, ' ' || lower(name) || ' ' || lower(description)  AS text, guidelines.id AS id FROM guidelines
+    UNION
+        SELECT cleared_strings.num + 1,
+            replace(cleared_strings.text, (SELECT punctuation_marks.mark FROM punctuation_marks WHERE punctuation_marks.id = cleared_strings.num + 1), ' '),
+            id
+        FROM cleared_strings
+        WHERE cleared_strings.num + 1 <= (SELECT count(*) FROM punctuation_marks)
+    )
+
+SELECT guidelines.*
+FROM cleared_strings, guidelines
+WHERE cleared_strings.num = (SELECT count(*) FROM punctuation_marks)
+AND cleared_strings.text LIKE ('% ' || :search || '%')
+AND cleared_strings.id = guidelines.id;

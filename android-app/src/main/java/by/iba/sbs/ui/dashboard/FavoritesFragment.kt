@@ -8,7 +8,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
-import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -173,29 +172,7 @@ class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewMo
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         //super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_action_menu, menu)
-        val mSearchView: SearchView = menu.findItem(R.id.action_search).actionView as SearchView
-        mSearchView.queryHint = "Search"
-        mSearchView.setOnQueryTextListener(object :
-            SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                lastSearchText = newText
-                favoritesAdapter.filter.filter(newText)
-                return true
-            }
-        })
         menu.findItem(R.id.action_new).isVisible = viewModel.localStorage.accessToken.isNotEmpty()
-//        mSearchView.setOnCloseListener {
-//            when (activeCategory) {
-//                GuidelineCategory.RECOMMENDED.ordinal ->  toolbar_main.title = resources.getString(R.string.title_recommended)
-//                GuidelineCategory.FAVORITE.ordinal ->toolbar_main.title = resources.getString(R.string.title_favorites)
-//                GuidelineCategory.POPULAR.ordinal -> toolbar_main.title = resources.getString(R.string.title_popular)
-//            }
-//            return@setOnCloseListener true
-//        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
