@@ -181,6 +181,8 @@ class DashboardFragment :
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_action_menu, menu)
         menu.findItem(R.id.action_new).isVisible = viewModel.localStorage.accessToken.isNotEmpty()
+        menu.findItem(R.id.action_cancel_search).isVisible = false
+        menu.findItem(R.id.action_search).isVisible = false
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
