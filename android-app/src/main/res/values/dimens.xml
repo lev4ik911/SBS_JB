@@ -27,7 +27,7 @@
     <dimen name="spacing_xxxsmall">2dp</dimen>
     <dimen name="corner_radius">12dp</dimen>
     <dimen name="progress_bar_layout_margin">-4dp</dimen>
-    <dimen name="stepper_touch_width">96dp</dimen>
+    <dimen name="stepper_touch_width">88dp</dimen>
     <dimen name="stepper_touch_height">28dp</dimen>
     <!-- text size!-->
     <dimen name="text_size_smallest">8sp</dimen>
