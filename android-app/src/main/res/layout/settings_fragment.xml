@@ -99,7 +99,8 @@
                 android:id="@+id/stepperTouch"
                 android:layout_width="@dimen/stepper_touch_width"
                 android:layout_height="@dimen/stepper_touch_height"
-                app:stepperTextSize="@dimen/text_size_stepper_touch" />
+                app:stepperTextSize="@dimen/text_size_stepper_touch"
+                tools:ignore="MissingClass" />
         </LinearLayout>
 
         <LinearLayout
