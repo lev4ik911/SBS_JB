@@ -3,7 +3,6 @@ package by.iba.sbs.ui.guideline
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.adapters.BaseBindingAdapter
@@ -22,7 +21,7 @@ class FeedbackFragment : MvvmFragment<FeedbackFragmentBinding, GuidelineViewMode
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         requireActivity().let {
-            ViewModelProviders.of(it).get(GuidelineViewModel::class.java)
+            ViewModelProvider(it).get(GuidelineViewModel::class.java)
         }
     }
 

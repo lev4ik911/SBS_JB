@@ -99,17 +99,17 @@
                             android:gravity="center"
 
                             android:padding="@dimen/spacing_xxsmall"
-                            android:text="@{viewmodel.fullName.ld}" />
+                            android:text="@{viewmodel.user.ld.name}" />
 
                         <TextView
                             android:id="@+id/tv_user_email"
                             style="@style/Text.Email"
-                            visibleOrGone="@{viewmodel.email.ld.length() != 0}"
+                            visibleOrGone="@{viewmodel.user.ld.email.length() != 0}"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:padding="@dimen/spacing_xxsmall"
-                            android:text="@{viewmodel.email.ld}" />
+                            android:text="@{viewmodel.user.ld.email}" />
 
                     </LinearLayout>
                 </RelativeLayout>

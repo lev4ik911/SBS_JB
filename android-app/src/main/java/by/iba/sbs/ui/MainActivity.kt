@@ -86,20 +86,26 @@ class MainActivity :
                 when (it.id) {
                     ActiveTabEnum.ID_HOME.index -> R.id.navigation_dashboard
                     ActiveTabEnum.ID_FAVORITES.index -> R.id.navigation_favorites
-                    ActiveTabEnum.ID_SEARCH.index -> R.id.navigation_notifications
+                    ActiveTabEnum.ID_SEARCH.index -> R.id.navigation_guideline_list
                     ActiveTabEnum.ID_PROFILE.index -> {
                         if (settings.accessToken.isEmpty()) {
                             R.id.navigation_login_fragment
                         } else {
-                            R.id.navigation_profile
+                            R.id.navigation_profile_fragment
                         }
                     }
                     else -> R.id.navigation_home
                 }
             )
             invalidateOptionsMenu()
+            toolbar.visibility =
+                if (it.id == ActiveTabEnum.ID_PROFILE.index) View.GONE else View.VISIBLE
         }
         navView.show(viewModel.activeTab.value!!)
+    }
+
+    fun onToolbarClick(view: View) {
+        onBackPressed()
     }
 
     fun setNavigationIcon(visible: Boolean) {

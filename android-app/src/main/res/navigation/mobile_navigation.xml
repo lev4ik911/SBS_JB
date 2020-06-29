@@ -12,15 +12,24 @@
         tools:layout="@layout/dashboard_fragment"/>
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_guideline_list"
         android:name="by.iba.sbs.ui.guidelines.GuidelineListFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/instruction_list_fragment"/>
     <fragment
-        android:id="@+id/navigation_profile"
+        android:id="@+id/navigation_profile_fragment"
         android:name="by.iba.sbs.ui.profile.ProfileFragment"
         android:label="profile_fragment"
-        tools:layout="@layout/profile_fragment"/>
+        tools:layout="@layout/profile_fragment">
+        <action
+            android:id="@+id/action_navigation_profile_to_navigation_login_fragment"
+            app:destination="@id/navigation_login_fragment"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="userId"
+            app:argType="string" />
+    </fragment>
     <activity
         android:id="@+id/navigation_instructionActivity"
         android:name="by.iba.sbs.ui.guideline.GuidelineActivity"
@@ -34,10 +43,6 @@
             android:name="Category"
             app:argType="integer" />
     </fragment>
-    <fragment
-        android:id="@+id/navigation_profile_fragment"
-        android:name="by.iba.sbs.ui.profile.ProfileFragment"
-        android:label="ProfileFragment" />
     <fragment
         android:id="@+id/navigation_profile_edit_fragment"
         android:name="by.iba.sbs.ui.profile.ProfileEditFragment"

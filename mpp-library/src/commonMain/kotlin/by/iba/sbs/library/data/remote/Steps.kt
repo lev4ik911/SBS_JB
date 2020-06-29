@@ -17,15 +17,13 @@ class Steps(override val settings: LocalSettings) : Client(settings) {
     suspend fun getAllSteps(guidelineId: String): Response<List<StepView>> {
         return get(
             Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEPS, guidelineId),
-            deserializer = StepView::class.serializer().list,
-            needAuth = false
+            deserializer = StepView::class.serializer().list
         )
     }
 
     suspend fun getStep(guidelineId: String, stepId: String): Response<StepView> {
         return get(
-            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEP_DETAILS, guidelineId, stepId),
-            needAuth = false
+            Utils.formatString(Routes.Guidelines.URL_GUIDELINE_STEP_DETAILS, guidelineId, stepId)
         )
     }
 

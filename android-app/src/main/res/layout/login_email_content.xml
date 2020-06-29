@@ -36,7 +36,7 @@
                 android:text="@={viewmodel.login.ld}" />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.checkbox.MaterialCheckBox
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="@dimen/spacing_normal"
             android:checked="@={viewmodel.keepLogin.ld}"

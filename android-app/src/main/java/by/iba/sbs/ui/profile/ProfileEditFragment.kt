@@ -1,5 +1,6 @@
 package by.iba.sbs.ui.profile
 
+import android.preference.PreferenceManager
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import by.iba.sbs.BR
@@ -7,9 +8,10 @@ import by.iba.sbs.databinding.ProfileEditFragmentBinding
 import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.tools.Extentions
 import com.google.android.material.appbar.AppBarLayout
+import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlin.math.abs
 
 
@@ -22,16 +24,14 @@ class ProfileEditFragment :
         ProfileViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        val viewModel: ProfileViewModel by sharedViewModel()
-        return@createViewModelFactory viewModel
-//        ProfileViewModel(
-//            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
-//            eventsDispatcherOnMain()
-//        )
+        ProfileViewModel(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
+            eventsDispatcherOnMain()
+        )
     }
 
-    private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
-    private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
+    private val percentageToShowTitleAtToolbar = 0.7f
+    private val percentageToHideTitleDetails = 0.7f
     private val mAlphaAnimationsDuration = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
@@ -43,7 +43,7 @@ class ProfileEditFragment :
     }
 
     private fun handleToolbarTitleVisibility(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+        if (percentage >= percentageToShowTitleAtToolbar) {
             if (!mIsTheTitleVisible) {
                 Extentions.startAlphaAnimation(
                     binding.tvTitle,
@@ -69,7 +69,7 @@ class ProfileEditFragment :
     }
 
     private fun handleAlphaOnTitle(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+        if (percentage >= percentageToHideTitleDetails) {
             if (mIsTheTitleContainerVisible) {
                 binding.fActionButton.visibility = View.INVISIBLE
                 Extentions.startAlphaAnimation(

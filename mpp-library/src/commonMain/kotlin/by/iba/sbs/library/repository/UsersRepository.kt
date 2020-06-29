@@ -5,14 +5,15 @@ import by.iba.sbs.library.data.remote.NetworkBoundResource
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.data.remote.Users
 import by.iba.sbs.library.model.User
-
 import by.iba.sbs.library.model.request.UserCreate
 import by.iba.sbs.library.model.response.UserView
-
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.service.applicationDispatcher
 import dev.icerock.moko.mvvm.livedata.LiveData
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 
@@ -34,7 +35,7 @@ interface IUsersRepository{
     @UnstableDefault
     private val users = Users(settings)
     private val sbsDb = createDb()
-    private val usersQueries = sbsDb.usersEntityQueries;
+    private val usersQueries = sbsDb.usersEntityQueries
 
     @UnstableDefault
     override suspend fun addUser(data: User): Response<UserView> = coroutineScope {

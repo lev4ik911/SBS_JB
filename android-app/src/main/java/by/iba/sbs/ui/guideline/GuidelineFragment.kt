@@ -6,7 +6,6 @@ import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import by.iba.sbs.BR
@@ -29,8 +28,8 @@ class GuidelineFragment :
     override val viewModelVariableId: Int = BR.viewmodel
 
     private lateinit var viewPager: ViewPager2
-    private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
-    private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
+    private val percentageToShowTitleAtToolbar = 0.7f
+    private val percentageToHideTitleDetails = 0.7f
     private val mAlphaAnimationsDuration = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
@@ -39,7 +38,7 @@ class GuidelineFragment :
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         requireActivity().let {
-            ViewModelProviders.of(it).get(GuidelineViewModel::class.java)
+            ViewModelProvider(it).get(GuidelineViewModel::class.java)
         }
 //        GuidelineViewModel(
 //            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
@@ -118,7 +117,7 @@ class GuidelineFragment :
     }
 
     private fun handleToolbarTitleVisibility(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+        if (percentage >= percentageToShowTitleAtToolbar) {
 
             if (!mIsTheTitleVisible) {
 
@@ -131,14 +130,14 @@ class GuidelineFragment :
             if (mIsTheTitleVisible) {
                 startAlphaAnimation(binding.tvTitle, mAlphaAnimationsDuration, View.INVISIBLE)
                 mIsTheTitleVisible = false
-                binding.tvTitle.text = ""
+                binding.tvTitle.clearComposingText()
                 binding.btnToolbarAction.visibility = View.VISIBLE
             }
         }
     }
 
     private fun handleAlphaOnTitle(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+        if (percentage >= percentageToHideTitleDetails) {
             if (mIsTheTitleContainerVisible) {
                 binding.fActionButton.visibility = View.INVISIBLE
                 startAlphaAnimation(
@@ -160,7 +159,7 @@ class GuidelineFragment :
         }
     }
 
-    inner class TabsFragmentAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+    class TabsFragmentAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
         override fun getItemCount(): Int = 2
 

@@ -76,7 +76,7 @@ class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewMo
         favoritesAdapter.apply {
             filterCriteria = { item, text ->
                 item.name.contains(text, true)
-                        || item.description.contains(text, true)
+                        || item.descr.contains(text, true)
             }
             if (settings.accessToken.isNotEmpty()) {
                 emptyViewId = R.layout.new_item

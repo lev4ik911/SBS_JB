@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -15,15 +16,20 @@ import by.iba.mvvmbase.visibleOrGone
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileFragmentBinding
+import by.iba.sbs.library.model.MessageType
+import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
 import by.iba.sbs.ui.MainActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.russhwolf.settings.AndroidSettings
+import com.shashank.sony.fancytoastlib.FancyToast
 import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
 import kotlin.math.abs
 
 class ProfileFragment :
@@ -37,11 +43,6 @@ class ProfileFragment :
         ProfileViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-//        requireActivity().let {
-//            ViewModelProvider(it).get(ProfileViewModel::class.java)
-//        }
-        // val viewModel: ProfileViewModel by viewModel()
-        //    return@createViewModelFactory viewModel
         ProfileViewModel(
             AndroidSettings(PreferenceManager.getDefaultSharedPreferences(requireContext())),
             eventsDispatcherOnMain()
@@ -49,14 +50,18 @@ class ProfileFragment :
     }
 
     private lateinit var viewPager: ViewPager2
-    private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
-    private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
+    private val percentageToShowTitleAtToolbar = 0.7f
+    private val percentageToHideTitleDetails = 0.7f
     private val mAlphaAnimationsDuration = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val userId = arguments?.getString("userId").orEmpty()
+        viewModel.loadUser(userId)
         initActionButton()
         viewModel.isFavorite.addObserver {
             initActionButton()
@@ -102,7 +107,6 @@ class ProfileFragment :
                 }
             }
         }
-        binding.btnToolbarLogout.visibleOrGone(viewModel.isMyProfile.value)
         binding.btnToolbarAction.apply {
             when {
                 viewModel.isMyProfile.value -> {
@@ -119,6 +123,7 @@ class ProfileFragment :
                 }
             }
         }
+        binding.btnToolbarLogout.visibleOrGone(viewModel.isMyProfile.value)
     }
 
     override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
@@ -129,7 +134,7 @@ class ProfileFragment :
     }
 
     private fun handleToolbarTitleVisibility(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+        if (percentage >= percentageToShowTitleAtToolbar) {
 
             if (!mIsTheTitleVisible) {
 
@@ -149,7 +154,7 @@ class ProfileFragment :
     }
 
     private fun handleAlphaOnTitle(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+        if (percentage >= percentageToHideTitleDetails) {
             if (mIsTheTitleContainerVisible) {
                 binding.fActionButton.visibility = View.INVISIBLE
                 startAlphaAnimation(
@@ -187,7 +192,7 @@ class ProfileFragment :
 
     override fun onActionButtonAction() {
         when {
-            viewModel.isMyProfile.value!! -> {
+            viewModel.isMyProfile.value -> {
                 findNavController().navigate(R.id.navigation_profile_edit_fragment)
             }
             else -> {
@@ -198,6 +203,27 @@ class ProfileFragment :
 
     override fun routeToLoginScreen() {
         findNavController().navigate(R.id.navigation_login_fragment)
+        // findNavController().navigate()
+    }
+
+    override fun showToast(msg: ToastMessage) {
+        when (msg.type) {
+            MessageType.ERROR ->
+                Log.e(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.WARNING ->
+                Log.w(viewModel::class.java.name, msg.getLogMessage())
+            MessageType.INFO ->
+                Log.i(viewModel::class.java.name, msg.getLogMessage())
+            else ->
+                Log.v(viewModel::class.java.name, msg.getLogMessage())
+        }
+        FancyToast.makeText(
+            requireContext(),
+            msg.message,
+            FancyToast.LENGTH_LONG,
+            msg.type.index,
+            false
+        ).show()
     }
 
     override fun requireAccept() {

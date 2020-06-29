@@ -16,13 +16,15 @@ import io.ktor.client.features.logging.DEFAULT
 import io.ktor.client.features.logging.LogLevel
 import io.ktor.client.features.logging.Logger
 import io.ktor.client.features.logging.Logging
-import io.ktor.client.request.header
 import io.ktor.client.request.headers
 import io.ktor.client.request.parameter
 import io.ktor.client.request.request
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.readText
-import io.ktor.http.*
+import io.ktor.http.ContentType
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -33,7 +35,7 @@ import kotlinx.serialization.serializer
 
 @UnstableDefault
 @ImplicitReflectionSerializer
-open class Client(open val settings: LocalSettings) {
+open class Client(open val settings: LocalSettings, private val heedAuth: Boolean = true) {
 
     private val json: Json by lazy {
         Json(JsonConfiguration.Default)
@@ -67,15 +69,14 @@ open class Client(open val settings: LocalSettings) {
                 level = LogLevel.ALL
                 logger = Logger.DEFAULT
             }
-            install(TokenFeature) {
-                tokenHeaderName = "Authorization"
-                tokenProvider = object : TokenFeature.TokenProvider {
-                    override fun getToken(): String? = settings.accessToken
+            if (heedAuth)
+                install(TokenFeature) {
+                    tokenHeaderName = "Authorization"
+                    tokenProvider = object : TokenFeature.TokenProvider {
+                        override fun getToken(): String? = "Bearer ${settings.accessToken}"
+                    }
                 }
-            }
-
-            // disable standard BadResponseStatus - exceptionfactory do it for us
-            expectSuccess = false
+            expectSuccess = true
         }
     }
 
@@ -102,7 +103,6 @@ open class Client(open val settings: LocalSettings) {
                         println(this.status)
                         val s = this.readText()
                         println(s)
-                        //val errorInfo = Json.parse(ErrorInfo::class.serializer(), s)
                         Response.error(Throwable(s), null)
                     }
                 }
@@ -115,16 +115,12 @@ open class Client(open val settings: LocalSettings) {
     internal suspend inline fun <reified T : Any> get(
         route: String,
         query: Map<String, String> = mutableMapOf(),
-        needAuth: Boolean = true,
         deserializer: DeserializationStrategy<T>? = null
     ): Response<T> {
 
         return try {
             ktor
                 .request<HttpResponse>(route) {
-                    if (needAuth) {
-                        header(HttpHeaders.Authorization, "Bearer ${settings.accessToken}")
-                    }
                     method = HttpMethod.Get
                     query.forEach {
                         parameter(it.key, it.value)
@@ -141,15 +137,11 @@ open class Client(open val settings: LocalSettings) {
         route: String,
         requestBody: Any,
         query: Map<String, String> = mutableMapOf(),
-        needAuth: Boolean = true,
         deserializer: DeserializationStrategy<T>? = null
     ): Response<T> {
         return try {
             ktor
                 .request<HttpResponse>(route) {
-                    if (needAuth) {
-                        header(HttpHeaders.Authorization, "Bearer ${settings.accessToken}")
-                    }
                     contentType(ContentType.Application.Json)
                     method = HttpMethod.Post
                     body = requestBody
@@ -168,16 +160,12 @@ open class Client(open val settings: LocalSettings) {
         route: String,
         requestBody: Any,
         query: Map<String, String> = mutableMapOf(),
-        needAuth: Boolean = true,
         deserializer: DeserializationStrategy<T>? = null
     ): Response<T> {
 
         return try {
             ktor
                 .request<HttpResponse>(route) {
-                    if (needAuth) {
-                        header(HttpHeaders.Authorization, "Bearer ${settings.accessToken}")
-                    }
                     contentType(ContentType.Application.Json)
                     method = HttpMethod.Put
                     body = requestBody
@@ -193,16 +181,11 @@ open class Client(open val settings: LocalSettings) {
     }
 
     internal suspend inline fun <reified T : Any> delete(
-        route: String,
-        needAuth: Boolean = true
+        route: String
     ): Response<T> {
         return try {
             ktor
                 .request<HttpResponse>(route) {
-
-                    if (needAuth) {
-                        header(HttpHeaders.Authorization, "Bearer ${settings.accessToken}")
-                    }
                     method = HttpMethod.Delete
                 }
                 .processResponse()

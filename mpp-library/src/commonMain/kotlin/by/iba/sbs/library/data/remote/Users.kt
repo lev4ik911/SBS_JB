@@ -22,15 +22,13 @@ class Users(override val settings: LocalSettings) : Client(settings) {
     suspend fun getAllUsers(): Response<List<UserView>> {
         return get(
             Routes.Users.URL_USERS,
-            deserializer = UserView::class.serializer().list,
-            needAuth = false
+            deserializer = UserView::class.serializer().list
         )
     }
 
     suspend fun getUserById(userId: String): Response<UserView> {
         return get(
-            Utils.formatString(Routes.Users.URL_USERS, userId),
-            needAuth = false
+            Utils.formatString(Routes.Users.URL_USERS, userId)
         )
     }
 

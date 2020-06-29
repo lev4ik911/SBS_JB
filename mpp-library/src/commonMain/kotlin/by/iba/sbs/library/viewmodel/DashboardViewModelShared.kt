@@ -47,39 +47,27 @@ class DashboardViewModelShared(
         mData.add(Category("Кулинария", "", true, "#f08c8c"))
         mData.add(Category("Медицина", "", false, "#c1cefa"))
         mData.add(Category("Ремонт авто", "", false, "#fad1c1"))
-        mData.add(Category("Выживание", "", true, "#060054"))
+        //mData.add(Category("Выживание", "", true, "#060054"))
         mData.add(Category("IBA info", "", true, "#246801"))
-        mData.add(Category("Документы", "", true, "#246801"))
+        //mData.add(Category("Документы", "", true, "#246801"))
         mData.add(Category("СМК", "", true, "#246801"))
-        mData.add(Category("Строительство", "", true, "#246801"))
-        mData.add(Category("Экстренная помощь", "", true, "#246801"))
+        //mData.add(Category("Строительство", "", true, "#246801"))
+        //mData.add(Category("Экстренная помощь", "", true, "#246801"))
         mData.add(Category("IBA docs", "", true, "#246801"))
         value = mData
     }
     val recommended = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
         val mData = ArrayList<Guideline>()
         mData.add(Guideline("1", "Loading guidelines...", "Dobry"))
-//        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
-//        mData.add(Guideline("1", "Как попасть на проект, подготовка к интервью", "Author 2"))
         value = mData
     }
     val favorite = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
         val mData = ArrayList<Guideline>()
         mData.add(Guideline("1", "Loading guidelines...", "Loading...", "Dobry"))
-//        mData.add(Guideline("7", "Как сдать СМК на отлично!", "Dobry", isFavorite = true))
-//        mData.add(Guideline("3", "Как стать счастливым", "Dobry", isFavorite = true))
-//        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry", isFavorite = true))
-//        mData.add(Guideline("4", "Что делать, если вы заразились", "Доктор"))
-//
         value = mData
     }
     val popular = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
-//        val mData = ArrayList<Guideline>()
-//        mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
-//        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
-//        mData.add(Guideline("5", "Как поставить на учет автомобиль", "Dobry"))
-//        mData.add(Guideline("6", "Как оформить командировку", "Dobry"))
-//        value = mData
+
     }
 
     @UnstableDefault

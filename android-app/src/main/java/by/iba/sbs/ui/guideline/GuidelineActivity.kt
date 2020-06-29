@@ -41,7 +41,6 @@ import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.model.request.RatingCreate
 import by.iba.sbs.library.viewmodel.GuidelineViewModel
-import by.iba.sbs.ui.profile.ProfileActivity
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
@@ -209,8 +208,8 @@ class GuidelineActivity :
             ImageActions.EditCurrent.key -> {
                 try {
                     val path =
-                        if (isStepEditing) _editStep.imagePath else viewModel.guideline.value?.imagePath
-                    if (!path.isNullOrEmpty()) {
+                        if (isStepEditing) _editStep.imagePath else viewModel.guideline.value.imagePath
+                    if (path.isNotEmpty()) {
                         val sourcePath = Uri.fromFile(File(path))
                         val destinationUri = createTempImageFileInInternalStorage()
                         UCrop.of(sourcePath, destinationUri)
@@ -262,16 +261,14 @@ class GuidelineActivity :
             UCrop.REQUEST_CROP -> {
                 if (resultCode == RESULT_OK) {
                     val resultUri: Uri? = UCrop.getOutput(data!!)
-                    if (!(resultUri?.path).isNullOrEmpty()) {
+                    if (resultUri != null && resultUri!!.path.isNotEmpty()) {
                         if (isStepEditing) {
                             _editStep.imagePath = resultUri!!.path
                             viewModel.steps.value = viewModel.steps.value
                         } else
-                            viewModel.guideline.value?.imagePath = resultUri!!.path
+                            viewModel.guideline.value.imagePath = resultUri!!.path
                         viewModel.guideline.value = viewModel.guideline.value
                     }
-
-
                 } else if (resultCode == UCrop.RESULT_ERROR) {
                     val toast = Toast.makeText(
                         this,
@@ -381,10 +378,14 @@ class GuidelineActivity :
     }
 
     override fun onOpenProfile(profileId: Int) {
-        val intent = Intent(this, ProfileActivity::class.java)
-        intent.putExtra("profileId", profileId)
-        // findNavController().navigate(R.id.navigation_instruction_edit, bundle)
-        startActivity(intent)
+//        val intent = Intent(this, ProfileActivity::class.java)
+//        intent.putExtra("profileId", profileId)
+        //  startActivity(intent)
+        val bundle = bundleOf("profileId" to profileId)
+        findNavController(R.id.fragment_navigation_instruction).navigate(
+            R.id.navigation_profile_fragment,
+            bundle
+        )
     }
 
     override fun onEditStep(stepWeight: Int) {
@@ -402,7 +403,7 @@ class GuidelineActivity :
 
     override fun onEditGuidelineImage() {
         isStepEditing = false
-        val guidelineHasImage = viewModel.guideline.value!!.imagePath.isNotEmpty()
+        val guidelineHasImage = viewModel.guideline.value.imagePath.isNotEmpty()
         openAlertDialog(guidelineHasImage)
     }
 
@@ -504,13 +505,13 @@ class GuidelineActivity :
             setMessage(
                 resources.getString(
                     R.string.msg_delete_instruction_dialog,
-                    viewModel.guideline.value!!.name
+                    viewModel.guideline.value.name
                 )
             )
             setPositiveButton(
                 resources.getString(R.string.btn_delete)
             ) { _: DialogInterface, _: Int ->
-                viewModel.deleteInstruction(viewModel.guideline.value!!)
+                viewModel.deleteInstruction(viewModel.guideline.value)
             }
             setNegativeButton(resources.getString(R.string.btn_cancel), null)
         }
@@ -578,12 +579,12 @@ class GuidelineActivity :
                 resources.getString(R.string.btn_delete),
                 { dialogInterface: DialogInterface, i: Int ->
                     if (step.stepId.isNotEmpty()) {
-                        viewModel.deleteStep(viewModel.guideline.value!!.id, step)
+                        viewModel.deleteStep(viewModel.guideline.value.id, step)
                     }
                     else {
-                        val stepArr = viewModel.steps.value?.toMutableList()
-                        stepArr?.remove(step)
-                        stepArr?.forEachIndexed { index, step -> step.weight = index + 1 }
+                        val stepArr = viewModel.steps.value.toMutableList()
+                        stepArr.remove(step)
+                        stepArr.forEachIndexed { index, step -> step.weight = index + 1 }
                         viewModel.steps.value = stepArr
                         onAfterSaveStepAction()
                     }
@@ -619,7 +620,7 @@ class GuidelineActivity :
                     isFirstResource: Boolean
                 ): Boolean {
 
-                    val destFile = File(createTempImageFileInInternalStorage().path)
+                    val destFile = File(createTempImageFileInInternalStorage().path.orEmpty())
                     val fos = FileOutputStream(destFile)
                     resource?.compress(Bitmap.CompressFormat.JPEG, 100, fos)
                     step.imagePath = destFile.path

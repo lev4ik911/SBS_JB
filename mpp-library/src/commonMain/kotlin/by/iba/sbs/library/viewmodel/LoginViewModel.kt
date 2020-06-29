@@ -1,9 +1,11 @@
 package by.iba.sbs.library.viewmodel
 
+import by.iba.sbs.library.data.local.createDb
 import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.model.request.LoginData
 import by.iba.sbs.library.repository.AuthRepository
+import by.iba.sbs.library.repository.UsersRepository
 import by.iba.sbs.library.service.SystemInformation
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
@@ -25,7 +27,15 @@ class LoginViewModel(
 
     @OptIn(UnstableDefault::class)
     @ImplicitReflectionSerializer
-    private val repository by lazy { AuthRepository(localStorage) }
+    private val authRepository by lazy { AuthRepository(localStorage) }
+
+    @OptIn(UnstableDefault::class)
+    @ImplicitReflectionSerializer
+    private val usersRepository by lazy { UsersRepository(localStorage) }
+
+    private val sbsDb = createDb()
+    private val usersQueries = sbsDb.usersEntityQueries
+
     val isLoginEnabled = MutableLiveData(true)
 
     val keepLogin = MutableLiveData(true).apply {
@@ -56,11 +66,15 @@ class LoginViewModel(
         loading.value = true
         viewModelScope.launch {
             try {
-                val response = repository.login(LoginData(login.value, password.value))
+                val response = authRepository.login(LoginData(login.value, password.value))
                 if (response.isSuccess && response.isNotEmpty) {
                     response.data?.let {
                         localStorage.accessToken = it.accessToken
-                        eventsDispatcher.dispatchEvent { routeToProfile() }
+                        it.user.apply {
+                            usersQueries.addUser(id, name, email)
+                            localStorage.userId = id
+                            eventsDispatcher.dispatchEvent { routeToProfile(id) }
+                        }
                     }
                 }
                 loading.postValue(false)
@@ -94,7 +108,7 @@ class LoginViewModel(
     interface EventsListener {
         fun onResetPassword()
         fun onRegister()
-        fun routeToProfile()
+        fun routeToProfile(userId: String)
         fun routeToLoginScreen()
         fun flipToPassword()
         fun flipToLogin()

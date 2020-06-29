@@ -150,11 +150,11 @@
             <TextView
                 android:id="@+id/tv_info"
                 style="@style/Text.Description"
-                visibleOrGone="@{instruction.description.length()>0}"
+                visibleOrGone="@{instruction.descr.length()>0}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/spacing_xxxsmall"
-                tools:text="@{instruction.description}" />
+                tools:text="@{instruction.descr}" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

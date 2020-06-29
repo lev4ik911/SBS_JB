@@ -80,7 +80,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
 
             override suspend fun saveCallResults(data: List<Guideline>) = coroutineScope {
                 data.forEach {
-                    guidelinesQueries.insertGuideline(it.id, it.name, it.description)
+                    guidelinesQueries.insertGuideline(it.id, it.name, it.descr)
                     it.rating.apply {
                         ratingSummaryQueries.insertRating(
                             it.id,
@@ -150,7 +150,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         overall.toLong()
                     )
                 }
-                guidelinesQueries.insertGuideline(data.id, data.name, data.description)
+                guidelinesQueries.insertGuideline(data.id, data.name, data.descr)
 
             }
 
@@ -275,7 +275,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     @UnstableDefault
     override suspend fun insertGuideline(data: Guideline): Response<GuidelineView> =
         coroutineScope {
-            val result = guidelines.postGuideline(GuidelineCreate(data.name, data.description))
+            val result = guidelines.postGuideline(GuidelineCreate(data.name, data.descr))
             if (result.isSuccess) {
                 val item = result.data!!
                 guidelinesQueries.insertGuideline(item.id, item.name, item.description ?: "")
@@ -286,7 +286,8 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     item.rating.overall.toLong()
                 )
             } else {
-                if (result.status == Response.Status.ERROR) error(result.error!!)
+                if (result.status == Response.Status.ERROR)
+                    error(result.error!!)
             }
             return@coroutineScope result
         }
@@ -295,13 +296,15 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     override suspend fun updateGuideline(data: Guideline): Response<GuidelineView> =
         coroutineScope {
             val result =
-                guidelines.putGuideline(data.id, GuidelineEdit(data.name, data.description))
+                guidelines.putGuideline(data.id, GuidelineEdit(data.name, data.descr))
             if (result.isSuccess) {
                 val item = result.data!!
                 guidelinesQueries.insertGuideline(item.id, item.name, item.description ?: "")
-            } else {
-                if (result.status == Response.Status.ERROR) error(result.error!!)
             }
+//            else {
+//                if (result.status != Response.Status.SUCCESS)
+//                    error(result.error!!)
+//            }
             return@coroutineScope result
         }
 
@@ -313,9 +316,10 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             ratingSummaryQueries.deleteRatingByGuidelineId(guidelineId)
             guidelinesQueries.deleteAllStepsByGuidelineId(guidelineId)
             guidelinesQueries.deleteGuidelineById(guidelineId)
-        } else {
-            if (result.status == Response.Status.ERROR) error(result.error!!)
         }
+//        else {
+//            if (result.status == Response.Status.ERROR) error(result.error!!)
+//        }
         return@coroutineScope result
     }
 
@@ -333,14 +337,15 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     it.name,
                     it.description,
                     it.weight.toLong(),
-                    data.first{step -> step.weight == it.weight}.imagePath, // save local path in db
+                    data.first { step -> step.weight == it.weight }.imagePath, // save local path in db
                     it.updateImageTimeSpan.toLong()
                 )
             }
 
-        } else {
-            if (result.status == Response.Status.ERROR) error(result.error!!)
         }
+//        else {
+//            if (result.status == Response.Status.ERROR) error(result.error!!)
+//        }
         return@coroutineScope result
     }
 
@@ -361,13 +366,14 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     it.name,
                     it.description,
                     it.weight.toLong(),
-                    data.first{step -> step.weight == it.weight}.imagePath, // save local path in db
+                    data.first { step -> step.weight == it.weight }.imagePath, // save local path in db
                     it.updateImageTimeSpan.toLong()
                 )
             }
-        } else {
-            if (result.status == Response.Status.ERROR) error(result.error!!)
         }
+        //else {
+//            if (result.status == Response.Status.ERROR) error(result.error!!)
+//        }
         return@coroutineScope result
     }
 

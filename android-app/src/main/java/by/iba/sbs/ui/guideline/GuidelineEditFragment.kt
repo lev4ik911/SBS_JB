@@ -23,8 +23,8 @@ class GuidelineEditFragment :
     MvvmFragment<InstructionEditFragmentBinding, GuidelineViewModel>(),
     AppBarLayout.OnOffsetChangedListener {
 
-    private val PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.7f
-    private val PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.7f
+    private val percentageToShowTitleAtToolbar = 0.7f
+    private val percentageToHideTitleDetails = 0.7f
     private val mAlphaAnimationsDuration = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
@@ -76,7 +76,6 @@ class GuidelineEditFragment :
         }
         viewModel.steps.addObserver {
             stepsAdapter.addItems(it)
-
         }
         stepsAdapter.onItemClick = { pos, itemView, item ->
             (activity as GuidelineActivity).onEditStep(item.weight)
@@ -100,7 +99,7 @@ class GuidelineEditFragment :
     }
 
     private fun handleToolbarTitleVisibility(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+        if (percentage >= percentageToShowTitleAtToolbar) {
 
             if (!mIsTheTitleVisible) {
 
@@ -128,7 +127,7 @@ class GuidelineEditFragment :
     }
 
     private fun handleAlphaOnTitle(percentage: Float) {
-        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+        if (percentage >= percentageToHideTitleDetails) {
             if (mIsTheTitleContainerVisible) {
                 binding.fActionButton.visibility = View.INVISIBLE
                 Extentions.startAlphaAnimation(
@@ -149,6 +148,4 @@ class GuidelineEditFragment :
             }
         }
     }
-
-
 }

@@ -27,7 +27,7 @@
     <string name="sign_in">Войти</string>
     <string name="hint_password">Пароль</string>
     <string name="caption_remember_me">Запомнить</string>
-    <string name="btn_next">Следующее</string>
+    <string name="btn_next">Далее</string>
     <string name="caption_work_email">Ваш контактный e-mail</string>
 
     <string name="caption_reset_password">Сбросить пароль</string>
@@ -66,7 +66,7 @@
     <string name="walkthrough_description_2">Создавайте свои собственные рецепты и зарабатывайте рейтинг</string>
     <string name="walkthrough_description_3">Улучшайте свои знания шаг за шагом</string>
     <string name="walkthrough_description_4">Create your own recipes and earn your rating</string>
-    <string name="btn_save">Save</string>
+    <string name="btn_save">Сохранить</string>
 
     <string name="select_variant_edit_current">Редактировать текущее</string>
     <string name="select_variant_take_photo">Сделать фото</string>
@@ -99,6 +99,9 @@
     <string name="title_search_settings">Настройки поиска</string>
     <string name="lbl_show_recommended">Показывать рекомендованные инструкции</string>
     <string name="lbl_show_favorites">Показывать понравившиеся инструкции</string>
+    <string name="btn_send">Отправить</string>
+    <string name="title_dialog_feedback">Отправить отзыв</string>
+    <string name="title_new">Новый</string>
     <string name="lbl_count_history">Хранить последние поисковые запросы</string>
     <string name="lbl_clear_history">Очистить историю</string>
     <string name="hint_search">Начните вводить текст</string>
