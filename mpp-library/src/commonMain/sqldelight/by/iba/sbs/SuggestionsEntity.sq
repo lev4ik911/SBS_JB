@@ -11,13 +11,13 @@ WITH RECURSIVE cleared_strings(id, text) AS
 SELECT DISTINCT
     trim(
     CASE
-      WHEN instr(substr(text, instr(text, (SELECT ' ' || :search)) + length((SELECT ' ' || :search))),' ') > 0 THEN
+      WHEN instr(substr(text, instr(text, (SELECT ' ' || lower(:search))) + length((SELECT ' ' || :search))),' ') > 0 THEN
       substr(text,
-    		  instr(text, (SELECT ' ' || :search)),
-    		  instr(substr(text, instr(text, (SELECT ' ' || :search)) + length((SELECT ' ' || :search))),' ') + length((SELECT ' ' || :search))
+    		  instr(text, (SELECT ' ' || lower(:search))),
+    		  instr(substr(text, instr(text, (SELECT ' ' || lower(:search))) + length((SELECT ' ' || :search))),' ') + length((SELECT ' ' || :search))
     		  )
       ELSE
-      substr(text, instr(text, (SELECT ' ' || :search)))
+      substr(text, instr(text, (SELECT ' ' || lower(:search))))
     END)
 FROM cleared_strings
 WHERE id = (SELECT count(*) FROM punctuation_marks)

@@ -146,12 +146,16 @@ class GuidelineListFragment :
             override fun onSearchViewShown() {
                 searchAdapter = SearchSuggestionAdapter(requireActivity(), viewModel.searchHistoryList, ContextCompat.getDrawable(requireActivity(), R.drawable.baseline_history_24)!!, true)
                 searchView.setAdapter(searchAdapter)
-                mTintView.setVisibility(View.VISIBLE);
+                mTintView.visibility  = View.VISIBLE;
                 isInitialization = false;
                 viewModel.searchedText.value.apply {
                     if (this.isNotEmpty())
                         searchView.setQuery(this, false)
+                    else
+                        mSuggestionsListView.visibility = View.VISIBLE
+
                 }
+
             }
             override fun onSearchViewClosed() {
                 searchView.setAdapter(null)
