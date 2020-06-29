@@ -32,7 +32,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="@dimen/spacing_normal">
+            android:paddingHorizontal="@dimen/spacing_normal"
+            android:paddingVertical="@dimen/spacing_small">
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="@style/Text.Title"
@@ -53,7 +54,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="@dimen/spacing_normal">
+            android:paddingHorizontal="@dimen/spacing_normal"
+            android:paddingVertical="@dimen/spacing_small">
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="@style/Text.Title"
@@ -86,7 +88,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="@dimen/spacing_normal">
+            android:paddingHorizontal="@dimen/spacing_normal"
+            android:paddingVertical="@dimen/spacing_small">
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="@style/Text.Title"
@@ -110,7 +113,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="@dimen/spacing_normal">
+            android:paddingHorizontal="@dimen/spacing_normal"
+            android:paddingVertical="@dimen/spacing_small">
 
             <androidx.appcompat.widget.AppCompatTextView
                 style="@style/Text.Title"

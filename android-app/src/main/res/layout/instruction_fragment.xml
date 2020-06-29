@@ -15,6 +15,7 @@
         android:id="@+id/htab_maincontent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="@dimen/bottom_navigation_height"
         android:fitsSystemWindows="true"
         tools:ignore="ContentDescription">
 
@@ -221,8 +222,6 @@
                         android:singleLine="false"
                         android:text="@{viewmodel.guideline.ld.descr}"
                         android:transitionName="@string/transition_name_txt_view" />
-
-
 
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tabs_profile"
