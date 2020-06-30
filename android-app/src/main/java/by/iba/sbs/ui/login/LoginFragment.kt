@@ -115,7 +115,7 @@ class LoginFragment :
     override fun routeToProfile(userId: String) {
         val bundle = bundleOf("profileId" to userId)
         findNavController().navigate(
-            R.id.navigation_profile_fragment,
+            R.id.action_navigation_login_fragment_to_navigation_profile_fragment,
             bundle
         )
     }

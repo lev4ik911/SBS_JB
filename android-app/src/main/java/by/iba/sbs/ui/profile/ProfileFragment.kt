@@ -202,7 +202,7 @@ class ProfileFragment :
     }
 
     override fun routeToLoginScreen() {
-        findNavController().navigate(R.id.navigation_login_fragment)
+        findNavController().navigate(R.id.action_navigation_profile_to_navigation_login_fragment)
         // findNavController().navigate()
     }
 

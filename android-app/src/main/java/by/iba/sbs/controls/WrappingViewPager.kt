@@ -1,6 +1,7 @@
 package by.iba.sbs.controls
 
 import android.content.Context
+import android.util.AttributeSet
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.Transformation
@@ -11,11 +12,11 @@ import androidx.viewpager.widget.ViewPager
 class WrappingViewPager(context: Context) : ViewPager(context) {
     private var mAnimStarted = false
 
-    //constructor(context: Context, attrs: AttributeSet?) : ViewPager(context, attrs) {}
+    constructor(context: Context, attrs: AttributeSet?) : this(context) {}
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        var heightMeasureSpec = heightMeasureSpec
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        var mHeightMeasureSpec = heightMeasureSpec
+        super.onMeasure(widthMeasureSpec, mHeightMeasureSpec)
         if (!mAnimStarted && null != adapter) {
             var height = 0
             val child: View? = (adapter as FragmentPagerAdapter).getItem(currentItem).view
@@ -32,7 +33,7 @@ class WrappingViewPager(context: Context) : ViewPager(context) {
 
             // Not the best place to put this animation, but it works pretty good.
             val newHeight = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY)
-            if (layoutParams.height != 0 && heightMeasureSpec != newHeight) {
+            if (layoutParams.height != 0 && mHeightMeasureSpec != newHeight) {
                 val targetHeight = height
                 val currentHeight = layoutParams.height
                 val heightChange = targetHeight - currentHeight
@@ -66,7 +67,7 @@ class WrappingViewPager(context: Context) : ViewPager(context) {
                 startAnimation(a)
                 mAnimStarted = true
             } else {
-                heightMeasureSpec = newHeight
+                mHeightMeasureSpec = newHeight
             }
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
