@@ -16,8 +16,8 @@ class InstructionsTableViewCell : UITableViewCell, Fillable {
     
     struct CellModel {
         let id: String
-        let picture: UIImage
-        let isFavorite: UIImage
+        let picturePath: String
+        let isFavorite: Bool
         let title: String
         let author: String
         
@@ -40,11 +40,23 @@ class InstructionsTableViewCell : UITableViewCell, Fillable {
     
     @IBOutlet weak var descriptionLabel: UILabel!
     
-    let tmpImage = UIImage(named: "ic_paneer.jpg")
     
     func fill(_ data: InstructionsTableViewCell.CellModel) {
-        guidPicture.image = tmpImage
+        //TODO: checking of ImagePath
+        let tmpImage = UIImage(named: "ic_paneer.jpg")
         
+        let favoriteImage = (data.isFavorite ?
+                           UIImage(systemName: "star.fill") :
+                           UIImage(systemName: "star"))
+        
+        guidPicture.layer.borderWidth = 1
+        guidPicture.layer.masksToBounds = false
+        guidPicture.layer.borderColor = UIColor.black.cgColor
+        guidPicture.layer.cornerRadius = guidPicture.frame.height/2
+        guidPicture.clipsToBounds = true
+
+        guidPicture.image = tmpImage
+        isFavoriteButton.image = favoriteImage
         titleLabel.text = data.title
         authorLabel.text = data.author
         
