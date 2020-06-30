@@ -12,6 +12,20 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        /*
+        let homeVC = HomeViewController()
+        let favoritesVC = FavoritesViewController()
+        let searchVC = SearchViewController()
+        let profileVC = ProfileViewController()
+        //let addInstructionVC = AddInstructionViewController()
+
+        let tabBarController = UITabBarController()
+        tabBarController.viewControllers = [homeVC, favoritesVC, searchVC, profileVC]
+        tabBarController.selectedViewController = homeVC
+        
+        window?.rootViewController = tabBarController
+        window?.makeKeyAndVisible()
+        */
       // Override point for customization after application launch.
       return true
     }
