@@ -6,94 +6,162 @@
 //  Copyright © 2020 IceRock Development. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import MultiPlatformLibrary
-import MultiPlatformLibraryUnits
 
-class SearchViewController : UIViewController, UITableViewDataSource, UITableViewDelegate {
+
+class SearchViewController : UITableViewController  {
     
-    @IBOutlet weak var tableview: UITableView!
-       
+    var filtered = [Guideline]()
+    var filterring = false
+    
     var vm : GuidelineListViewModelShared!
-    /*
-    func createNewsTile(
-        id: String,
-        picture: UIImage,
-        isFavorite: UIImage,
-        title: String,
-        author: String,
-        description: StringDesc,
-        positiveRating: String,
-        negativeRating: String
-        ) -> TableUnitItem {
-        // create unit for https://github.com/icerockdev/moko-units
-        return UITableViewCellUnit<InstructionsTableViewCell>(
-            data: InstructionsTableViewCell.CellModel(
-                id: id,
-                picture: picture,
-                isFavorite: isFavorite,
-                title: title,
-                author: author,
-                positiveRating: positiveRating,
-                negativeRating: negativeRating,
-                description: description.localized()
-            ),
-            //itemId: id,
-            configurator: nil
+    var data = [Guideline]()
+    
+    func createGuidlinesTile(
+        item: Guideline
+    ) -> InstructionsTableViewCell.CellModel {
+        return InstructionsTableViewCell.CellModel (
+            id: item.id,
+            picturePath: item.imagePath,
+            isFavorite: item.isFavorite,
+            title: item.name,
+            author: item.author,
+            positiveRating: String(item.rating.positive),
+            negativeRating: String(item.rating.negative),
+            description: item.descr
         )
     }
-    */
-    private var dataSource: TableUnitsSource!
     
+    lazy var table: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.rowHeight = 90
+        tableView.delegate = self
+        tableView.dataSource = self
+        let myFieldCell = UINib(nibName: "InstructionsTableViewCell",
+                                  bundle: nil)
+        tableView.register(myFieldCell,
+                                forCellReuseIdentifier: "InstructionsTableViewCell")
+
+        return tableView
+    }()
+    
+    var tableConstraints: [NSLayoutConstraint]  {
+        var constraints = [NSLayoutConstraint]()
+        constraints.append(NSLayoutConstraint(item: self.tableView, attribute: .left, relatedBy: .equal,
+                                              toItem: self.view, attribute: .left, multiplier: 1.0, constant: 1.0))
+        constraints.append(NSLayoutConstraint(item: self.tableView, attribute: .right, relatedBy: .equal,
+                                              toItem: self.view, attribute: .right, multiplier: 1.0, constant: 1.0))
+        constraints.append(NSLayoutConstraint(item: self.tableView, attribute: .top, relatedBy: .equal,
+                                              toItem: self.view, attribute: .top, multiplier: 1.0, constant: 1.0))
+        constraints.append(NSLayoutConstraint(item: self.tableView, attribute: .bottom, relatedBy: .equal,
+                                              toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: 1.0))
+        return constraints
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tableView.rowHeight=90
+        let myFieldCell = UINib(nibName: "InstructionsTableViewCell",
+                                  bundle: nil)
+        self.tableView.register(myFieldCell,
+                                forCellReuseIdentifier: "InstructionsTableViewCell")
+                
+        self.view.backgroundColor = UIColor.white
+        
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.largeTitleDisplayMode = .always
+                
+        let search = UISearchController(searchResultsController: nil)
+        search.searchResultsUpdater = self
+        self.navigationItem.searchController = search
+
         vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
            eventsDispatcher: EventsDispatcher(listener: self))
-        vm.loadInstructions(forceRefresh: false)
-        
-        //dataSource = TableUnitsSourceKt.default(for: tableView)
-        
-        self.tableview.dataSource = self
-        self.tableview.delegate = self
-        
-        self.registerTableViewCells()
+        vm.loadInstructions(forceRefresh: true)
         
         vm.instructions.addObserver{[weak self] itemsObject in
         guard let items = itemsObject as? [Guideline] else { return }
-            
-            //self?.dataSource.unitItems = items
-            //self?.tableView.items = items
+            self?.data = items
+            self?.tableView.reloadData()
         }
-        
-        
     }
     
-    private func registerTableViewCells() {
-        let myFieldCell = UINib(nibName: "InstructionsTableViewCell",
-                                  bundle: nil)
-        self.tableview.register(myFieldCell,
-                                forCellReuseIdentifier: "InstructionsTableViewCell")
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
     
-    func tableView(_ tableView: UITableView,
+    
+    
+    override func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return data.count
     }
     
-    func tableView(_ tableView: UITableView,
+    override func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "InstructionsTableViewCell") as? InstructionsTableViewCell {
+        if let cell = self.tableView.dequeueReusableCell(withIdentifier: "InstructionsTableViewCell") as? InstructionsTableViewCell {
+            cell.fill(self.createGuidlinesTile(item: data[indexPath.row]))
             return cell
         }
         
         return UITableViewCell()
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //TODO: add navigation to Instruction detail View
+        
+        //vm.openNews(vm.getWorkplaceNewsItem(for: indexPath.row))
+    }
+    
 }
 
+extension SearchViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        /*
+        if let text = searchController.searchBar.text, !text.isEmpty {
+            self.filtered = self.data.filter({ (item) -> Bool in
+                return item .lowercased().contains(text.lowercased())
+            })
+            self.filterring = true
+        }
+        else {
+            self.filterring = false
+            self.filtered = [String]()
+        }
+        self.table.reloadData()
+        */
+    }
+}
+/*
+extension FavoritesViewController : UITableViewDataSource, UITableViewDelegate{
+    override func tableView(_ tableView: UITableView,
+                   numberOfRowsInSection section: Int) -> Int {
+        return data.count
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "InstructionsTableViewCell") as? InstructionsTableViewCell {
+            cell.fill(self.createGuidlinesTile(item: data[indexPath.row]))
+            return cell
+        }
+        
+        return UITableViewCell()
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //TODO: add navigation to Instruction detail View
+        
+        //vm.openNews(vm.getWorkplaceNewsItem(for: indexPath.row))
+    }
+}
+*/
 extension SearchViewController: GuidelineListViewModelSharedEventsListener {
     func showToast(msg: ToastMessage) {
-        
+
     }
 }

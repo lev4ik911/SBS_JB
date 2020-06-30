@@ -6,124 +6,175 @@
 //  Copyright © 2020 IceRock Development. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import MultiPlatformLibrary
-import MultiPlatformLibraryUnits
 
-class FavoritesViewController : UIViewController {
+
+class FavoritesViewController : UITableViewController  {
     
-    //let data = ["One","Two","Three","Four","Five",]
-       
-    @IBOutlet weak var tableview: UITableView!
-       
+    var filtered = [Guideline]()
+    var filterring = false
+    
     var vm : GuidelineListViewModelShared!
-    
-    var data : [Guideline] = []
+    var data = [Guideline]()
     
     func createGuidlinesTile(
-        id: String,
-        picture: UIImage,
-        isFavorite: UIImage,
-        title: String,
-        author: String,
-        description: String,
-        positiveRating: String,
-        negativeRating: String
+        item: Guideline
     ) -> InstructionsTableViewCell.CellModel {
-
-        return InstructionsTableViewCell.CellModel(
-                id: id,
-                picture: picture,
-                isFavorite: isFavorite,
-                title: title,
-                author: author,
-                positiveRating: positiveRating,
-                negativeRating: negativeRating,
-                description: description
-            )
+        return InstructionsTableViewCell.CellModel (
+            id: item.id,
+            picturePath: item.imagePath,
+            isFavorite: item.isFavorite,
+            title: item.name,
+            author: item.author,
+            positiveRating: String(item.rating.positive),
+            negativeRating: String(item.rating.negative),
+            description: item.descr
+        )
     }
     
-    private func configureTableView() {
+    lazy var table: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.rowHeight = 90
+        tableView.delegate = self
+        tableView.dataSource = self
         let myFieldCell = UINib(nibName: "InstructionsTableViewCell",
                                   bundle: nil)
-        self.tableview.register(myFieldCell,
+        tableView.register(myFieldCell,
                                 forCellReuseIdentifier: "InstructionsTableViewCell")
-        
-        tableview.delegate = self
-        tableview.dataSource = self
-    }
+
+        return tableView
+    }()
     
+    var tableConstraints: [NSLayoutConstraint]  {
+        var constraints = [NSLayoutConstraint]()
+        constraints.append(NSLayoutConstraint(item: self.tableView, attribute: .left, relatedBy: .equal,
+                                              toItem: self.view, attribute: .left, multiplier: 1.0, constant: 1.0))
+        constraints.append(NSLayoutConstraint(item: self.tableView, attribute: .right, relatedBy: .equal,
+                                              toItem: self.view, attribute: .right, multiplier: 1.0, constant: 1.0))
+        constraints.append(NSLayoutConstraint(item: self.tableView, attribute: .top, relatedBy: .equal,
+                                              toItem: self.view, attribute: .top, multiplier: 1.0, constant: 1.0))
+        constraints.append(NSLayoutConstraint(item: self.tableView, attribute: .bottom, relatedBy: .equal,
+                                              toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: 1.0))
+        return constraints
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tableView.rowHeight=90
+        let myFieldCell = UINib(nibName: "InstructionsTableViewCell",
+                                  bundle: nil)
+        self.tableView.register(myFieldCell,
+                                forCellReuseIdentifier: "InstructionsTableViewCell")
+                
+        self.view.backgroundColor = UIColor.white
+        
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.largeTitleDisplayMode = .always
+                
+        let search = UISearchController(searchResultsController: nil)
+        search.searchResultsUpdater = self
+        self.navigationItem.searchController = search
+
         vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
            eventsDispatcher: EventsDispatcher(listener: self))
         vm.loadInstructions(forceRefresh: true)
-                
+        
         vm.instructions.addObserver{[weak self] itemsObject in
         guard let items = itemsObject as? [Guideline] else { return }
-            print(items.count)
             self?.data = items
-            //self?.dataSource.unitItems = items
-            //self?.tableView.items = items
+            self?.tableView.reloadData()
         }
-        
-        
-        self.configureTableView()
-    }
-}
-
-extension FavoritesViewController : UITableViewDataSource, UITableViewDelegate{
-    func tableView(_ tableView: UITableView,
-                   numberOfRowsInSection section: Int) -> Int {
-        var cellCount = 0
-        if let array = vm.instructions.value {
-            let items = array as? [Guideline]
-            cellCount = items?.count as! Int
-        }
-        cellCount=data.count
-        print(cellCount)
-        return cellCount
     }
     
-    func tableView(_ tableView: UITableView,
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+    
+    override func tableView(_ tableView: UITableView,
+                   numberOfRowsInSection section: Int) -> Int {
+        return data.count
+    }
+    
+    override func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "InstructionsTableViewCell") as? InstructionsTableViewCell {
-            if let array =  vm.instructions.value { let item = array[indexPath.row] as? Guideline
-                
-                let tmpImage = UIImage(named: "ic_paneer.jpg")!
-                let isFavorite = (item!.isFavorite ?
-                    UIImage(systemName: "star.fill") :
-                    UIImage(systemName: "star"))!
-                
-                cell.fill(self.createGuidlinesTile(
-                    id: item!.id,
-                    picture: tmpImage,
-                    isFavorite: isFavorite,
-                    title: item!.name,
-                    author: item!.author,
-                    description: item!.description(),
-                    positiveRating: String(item!.rating.positive),
-                    negativeRating: String(item!.rating.negative)
-                )
-            )
-            }
+        if let cell = self.tableView.dequeueReusableCell(withIdentifier: "InstructionsTableViewCell") as? InstructionsTableViewCell {
+            cell.fill(self.createGuidlinesTile(item: data[indexPath.row]))
             return cell
         }
         
         return UITableViewCell()
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-           //vm.openNews(vm.getWorkplaceNewsItem(for: indexPath.row))
-       }
-}
-
-extension FavoritesViewController: GuidelineListViewModelSharedEventsListener {
-    func showToast(msg: ToastMessage) {
-    
-        print(msg.type)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //TODO: add navigation to Instruction detail View
+        performSegue(withIdentifier: "showinstructiondetail", sender: self)
+        //vm.openNews(vm.getWorkplaceNewsItem(for: indexPath.row))
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? InstructionDetailViewController{
+            destination.instruction = self.data[(tableView.indexPathForSelectedRow?.row)!]
+        }
+    }
+    
+}
+
+extension FavoritesViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        /*
+        if let text = searchController.searchBar.text, !text.isEmpty {
+            self.filtered = self.data.filter({ (item) -> Bool in
+                return item .lowercased().contains(text.lowercased())
+            })
+            self.filterring = true
+        }
+        else {
+            self.filterring = false
+            self.filtered = [String]()
+        }
+        self.table.reloadData()
+        */
+    }
+}
+/*
+extension FavoritesViewController : UITableViewDataSource, UITableViewDelegate{
+    override func tableView(_ tableView: UITableView,
+                   numberOfRowsInSection section: Int) -> Int {
+        return data.count
+    }
+    
+    override func tableView(_ tableView: UITableView,
+                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "InstructionsTableViewCell") as? InstructionsTableViewCell {
+            cell.fill(self.createGuidlinesTile(item: data[indexPath.row]))
+            return cell
+        }
+        
+        return UITableViewCell()
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //TODO: add navigation to Instruction detail View
+        if let vcMissionDetail : ViewControllerMissionDetail = self.storyboard?.instantiateViewControllerWithIdentifier("MissionDetail") as ViewControllerMissionDetail {
+
+            //set label text before presenting the viewController
+            vcMissionDetail.label.text = "Test"
+
+            //load detail view controller
+            self.presentViewController(vcMissionDetail, animated: true, completion: nil)
+        }
+        //vm.openNews(vm.getWorkplaceNewsItem(for: indexPath.row))
+    }
+}
+*/
+extension FavoritesViewController: GuidelineListViewModelSharedEventsListener {
+    func showToast(msg: ToastMessage) {
+
+    }
 }

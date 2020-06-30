@@ -14,16 +14,14 @@ import MultiPlatformLibraryUnits
 
 class MainViewController : UIViewController {
     
-    let homeVC = HomeViewController()
-    let favoritesVC = FavoritesViewController()
-    let searchVC = SearchViewController()
-    let profileVC = ProfileViewController()
     
+
     var vm : GuidelineListViewModelShared!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        /*
         vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
            eventsDispatcher: EventsDispatcher(listener: self))
         vm.loadInstructions(forceRefresh: false)
@@ -42,14 +40,13 @@ class MainViewController : UIViewController {
         //dataSource = TableUnitsSourceKt.default(for: tableView)
         
         
-        vm.instructions.addObserver{[weak self] itemsObject in
-        guard let items = itemsObject as? [Guideline] else { return }
-            print(items.count)
+        //vm.instructions.addObserver{[weak self] itemsObject in
+        //guard let items = itemsObject as? [Guideline] else { return }
         //self?.dataSource.unitItems = items
         //self?.tableView.reloadData()
             
-        }
-        
+        ///}
+        */
     }
     
     
