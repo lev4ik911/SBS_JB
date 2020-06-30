@@ -1,4 +1,4 @@
-# SBS
+# SBS Initiative project
 
 ![sbs-version](https://img.shields.io/badge/SBS-0.1.0-red)
 
@@ -13,13 +13,13 @@ This repository contains clients part of [SBS Initiative project](https://github
 
 ## Dependencies
 
-####mpp-library
+###mpp-library
   - [`Ktor`](https://ktor.io/) as framework;
   - [`moko-mvvm`](https://github.com/icerockdev/moko-mvvm);
   - [`moko-permissions`](https://github.com/icerockdev/moko-permissions);
   - [`SQLDelight`](https://github.com/cashapp/sqldelight/);
 
-####android-app
+###android-app
   - [`Koin`](https://github.com/InsertKoinIO/koin/) as DI;
   - [`recycler-fast-scroll`](https://github.com/FutureMind/recycler-fast-scroll/);
   - [`shimmer-android`](https://github.com/facebook/shimmer-android)
@@ -32,7 +32,7 @@ This repository contains clients part of [SBS Initiative project](https://github
   - [`MaterialSearchView`](https://github.com/MiguelCatalan/MaterialSearchView)
   - [`Stepper-Touch`](https://github.com/DanielMartinus/Stepper-Touch)
 
-####ios-app
+###ios-app
 
 ## Repository structure
 
