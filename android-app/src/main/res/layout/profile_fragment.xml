@@ -149,6 +149,7 @@
                             android:layout_height="@dimen/spacing_xlarge"
                             android:layout_gravity="end|center"
                             android:background="@null"
+                            android:layout_marginHorizontal="@dimen/spacing_xsmall"
                             android:onClick="@{() -> viewmodel.onActionButtonClick()}"
                             android:src="@drawable/heart"
                             android:tint="@color/colorLightRed"
