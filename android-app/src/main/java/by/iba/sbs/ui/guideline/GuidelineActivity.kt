@@ -13,7 +13,6 @@ import android.os.*
 import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.text.InputType
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
@@ -36,11 +35,11 @@ import by.iba.sbs.adapters.BaseBindingAdapter
 import by.iba.sbs.databinding.InstructionActivityBinding
 import by.iba.sbs.databinding.StepPreviewItemBinding
 import by.iba.sbs.databinding.StepPreviewLayoutBinding
-import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.model.request.RatingCreate
 import by.iba.sbs.library.viewmodel.GuidelineViewModel
+import by.iba.sbs.tools.Tools
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
@@ -51,7 +50,6 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.russhwolf.settings.AndroidSettings
-import com.shashank.sony.fancytoastlib.FancyToast
 import com.yalantis.ucrop.UCrop
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
@@ -636,23 +634,7 @@ class GuidelineActivity :
     }
 
     override fun showToast(msg: ToastMessage) {
-        when (msg.type) {
-            MessageType.ERROR ->
-                Log.e(viewModel::class.java.name, msg.getLogMessage())
-            MessageType.WARNING ->
-                Log.w(viewModel::class.java.name, msg.getLogMessage())
-            MessageType.INFO ->
-                Log.i(viewModel::class.java.name, msg.getLogMessage())
-            else ->
-                Log.v(viewModel::class.java.name, msg.getLogMessage())
-        }
-        FancyToast.makeText(
-            this,
-            msg.message,
-            FancyToast.LENGTH_LONG,
-            msg.type.index,
-            false
-        ).show()
+        Tools.showToast(this, viewModel::class.java.name, msg)
     }
 
     private val imageHandler = object : Handler(Looper.getMainLooper()) {

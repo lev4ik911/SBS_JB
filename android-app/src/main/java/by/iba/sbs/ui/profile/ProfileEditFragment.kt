@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import by.iba.sbs.BR
 import by.iba.sbs.databinding.ProfileEditFragmentBinding
 import by.iba.sbs.library.viewmodel.ProfileViewModel
-import by.iba.sbs.tools.Extentions
+import by.iba.sbs.tools.Tools
 import com.google.android.material.appbar.AppBarLayout
 import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmFragment
@@ -45,7 +45,7 @@ class ProfileEditFragment :
     private fun handleToolbarTitleVisibility(percentage: Float) {
         if (percentage >= percentageToShowTitleAtToolbar) {
             if (!mIsTheTitleVisible) {
-                Extentions.startAlphaAnimation(
+                Tools.startAlphaAnimation(
                     binding.tvTitle,
                     mAlphaAnimationsDuration,
                     View.VISIBLE
@@ -56,7 +56,7 @@ class ProfileEditFragment :
             }
         } else {
             if (mIsTheTitleVisible) {
-                Extentions.startAlphaAnimation(
+                Tools.startAlphaAnimation(
                     binding.tvTitle,
                     mAlphaAnimationsDuration,
                     View.INVISIBLE
@@ -72,7 +72,7 @@ class ProfileEditFragment :
         if (percentage >= percentageToHideTitleDetails) {
             if (mIsTheTitleContainerVisible) {
                 binding.fActionButton.visibility = View.INVISIBLE
-                Extentions.startAlphaAnimation(
+                Tools.startAlphaAnimation(
                     binding.btnToolbarAction,
                     mAlphaAnimationsDuration,
                     View.VISIBLE
@@ -81,7 +81,7 @@ class ProfileEditFragment :
             }
         } else {
             if (!mIsTheTitleContainerVisible) {
-                Extentions.startAlphaAnimation(
+                Tools.startAlphaAnimation(
                     binding.btnToolbarAction,
                     mAlphaAnimationsDuration, View.INVISIBLE
                 )

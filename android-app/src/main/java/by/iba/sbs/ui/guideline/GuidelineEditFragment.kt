@@ -12,7 +12,7 @@ import by.iba.sbs.databinding.InstructionEditFragmentBinding
 import by.iba.sbs.databinding.InstructionEditStepListItemBinding
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.viewmodel.GuidelineViewModel
-import by.iba.sbs.tools.Extentions
+import by.iba.sbs.tools.Tools
 import com.google.android.material.appbar.AppBarLayout
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
@@ -103,7 +103,7 @@ class GuidelineEditFragment :
 
             if (!mIsTheTitleVisible) {
 
-                Extentions.startAlphaAnimation(
+                Tools.startAlphaAnimation(
                     binding.tvTitle,
                     mAlphaAnimationsDuration,
                     View.VISIBLE
@@ -114,7 +114,7 @@ class GuidelineEditFragment :
             }
         } else {
             if (mIsTheTitleVisible) {
-                Extentions.startAlphaAnimation(
+                Tools.startAlphaAnimation(
                     binding.tvTitle,
                     mAlphaAnimationsDuration,
                     View.INVISIBLE
@@ -130,7 +130,7 @@ class GuidelineEditFragment :
         if (percentage >= percentageToHideTitleDetails) {
             if (mIsTheTitleContainerVisible) {
                 binding.fActionButton.visibility = View.INVISIBLE
-                Extentions.startAlphaAnimation(
+                Tools.startAlphaAnimation(
                     binding.btnToolbarAction,
                     mAlphaAnimationsDuration,
                     View.VISIBLE
@@ -139,7 +139,7 @@ class GuidelineEditFragment :
             }
         } else {
             if (!mIsTheTitleContainerVisible) {
-                Extentions.startAlphaAnimation(
+                Tools.startAlphaAnimation(
                     binding.btnToolbarAction,
                     mAlphaAnimationsDuration, View.INVISIBLE
                 )

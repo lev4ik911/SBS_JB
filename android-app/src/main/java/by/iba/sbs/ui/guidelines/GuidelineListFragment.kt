@@ -3,7 +3,6 @@ package by.iba.sbs.ui.guidelines
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -22,15 +21,14 @@ import by.iba.sbs.adapters.SearchSuggestionAdapter
 import by.iba.sbs.databinding.InstructionListFragmentBinding
 import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Guideline
-import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.viewmodel.GuidelineListViewModelShared
+import by.iba.sbs.tools.Tools
 import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.guideline.GuidelineActivity
 import com.miguelcatalan.materialsearchview.MaterialSearchView
 import com.russhwolf.settings.AndroidSettings
-import com.shashank.sony.fancytoastlib.FancyToast
 import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
@@ -51,23 +49,7 @@ class GuidelineListFragment :
     override val viewModelVariableId: Int = BR.viewmodel
 
     override fun showToast(msg: ToastMessage) {
-        when (msg.type) {
-            MessageType.ERROR ->
-                Log.e(viewModel::class.java.name, msg.getLogMessage())
-            MessageType.WARNING ->
-                Log.w(viewModel::class.java.name, msg.getLogMessage())
-            MessageType.INFO ->
-                Log.i(viewModel::class.java.name, msg.getLogMessage())
-            else ->
-                Log.v(viewModel::class.java.name, msg.getLogMessage())
-        }
-        FancyToast.makeText(
-            requireContext(),
-            msg.message,
-            FancyToast.LENGTH_LONG,
-            msg.type.index,
-            false
-        ).show()
+        Tools.showToast(requireContext(), viewModel::class.java.name, msg)
     }
 
     override val viewModelClass: Class<GuidelineListViewModelShared> =

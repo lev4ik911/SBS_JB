@@ -4,7 +4,7 @@
 
     <data>
 
-        <import type="by.iba.sbs.tools.Extentions" />
+        <import type="by.iba.sbs.tools.Tools" />
 
         <variable
             name="category"

@@ -1,17 +1,15 @@
 package by.iba.sbs.ui.profile
 
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileActivityBinding
-import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.viewmodel.ProfileViewModel
+import by.iba.sbs.tools.Tools
 import com.russhwolf.settings.AndroidSettings
-import com.shashank.sony.fancytoastlib.FancyToast
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
@@ -53,23 +51,7 @@ class ProfileActivity :
     }
 
     override fun showToast(msg: ToastMessage) {
-        when (msg.type) {
-            MessageType.ERROR ->
-                Log.e(viewModel::class.java.name, msg.getLogMessage())
-            MessageType.WARNING ->
-                Log.w(viewModel::class.java.name, msg.getLogMessage())
-            MessageType.INFO ->
-                Log.i(viewModel::class.java.name, msg.getLogMessage())
-            else ->
-                Log.v(viewModel::class.java.name, msg.getLogMessage())
-        }
-        FancyToast.makeText(
-            this,
-            msg.message,
-            FancyToast.LENGTH_LONG,
-            msg.type.index,
-            false
-        ).show()
+        Tools.showToast(this, viewModel::class.java.name, msg)
     }
 
     override fun requireAccept() {

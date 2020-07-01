@@ -36,7 +36,7 @@ This repository contains clients part of [SBS Initiative project](https://github
 
 ## Repository structure
 
-`mpp-library` - common part code; based on:
+`mpp-library` - common part code;
 
 `mvvmbase` - common code for the Android app;
 

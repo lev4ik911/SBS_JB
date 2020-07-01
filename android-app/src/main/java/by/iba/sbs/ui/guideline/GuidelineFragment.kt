@@ -12,7 +12,7 @@ import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionFragmentBinding
 import by.iba.sbs.library.viewmodel.GuidelineViewModel
-import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
+import by.iba.sbs.tools.Tools.Companion.startAlphaAnimation
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dev.icerock.moko.mvvm.MvvmFragment

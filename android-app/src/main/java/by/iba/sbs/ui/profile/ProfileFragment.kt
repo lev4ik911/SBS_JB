@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,15 +15,14 @@ import by.iba.mvvmbase.visibleOrGone
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileFragmentBinding
-import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.viewmodel.ProfileViewModel
-import by.iba.sbs.tools.Extentions.Companion.startAlphaAnimation
+import by.iba.sbs.tools.Tools
+import by.iba.sbs.tools.Tools.Companion.startAlphaAnimation
 import by.iba.sbs.ui.MainActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.russhwolf.settings.AndroidSettings
-import com.shashank.sony.fancytoastlib.FancyToast
 import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
@@ -207,23 +205,7 @@ class ProfileFragment :
     }
 
     override fun showToast(msg: ToastMessage) {
-        when (msg.type) {
-            MessageType.ERROR ->
-                Log.e(viewModel::class.java.name, msg.getLogMessage())
-            MessageType.WARNING ->
-                Log.w(viewModel::class.java.name, msg.getLogMessage())
-            MessageType.INFO ->
-                Log.i(viewModel::class.java.name, msg.getLogMessage())
-            else ->
-                Log.v(viewModel::class.java.name, msg.getLogMessage())
-        }
-        FancyToast.makeText(
-            requireContext(),
-            msg.message,
-            FancyToast.LENGTH_LONG,
-            msg.type.index,
-            false
-        ).show()
+        Tools.showToast(requireContext(), viewModel::class.java.name, msg)
     }
 
     override fun requireAccept() {
