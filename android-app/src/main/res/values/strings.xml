@@ -87,7 +87,9 @@
     <string name="title_home">Home</string>
     <string name="title_cancel_search">Cansel</string>
     <string name="title_delete_instruction_dialog">Delete instruction</string>
+    <string name="title_logout_dialog">Logout</string>
     <string name="msg_delete_instruction_dialog">Are you sure you want to delete the instruction %s?</string>
+    <string name="msg_logout_dialog">Are you sure you want to logout?</string>
     <string name="title_clear_history_dialog">Clear history</string>
     <string name="msg_clear_history_dialog">Are you sure you want to clear history?</string>
     <string name="title_delete_step_dialog">Delete step</string>
@@ -95,6 +97,7 @@
     <string name="btn_delete">Delete</string>
     <string name="btn_clear">Clear</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="btn_logout">Logout</string>
     <string name="title_home_settings">Home screen settings</string>
     <string name="title_search_settings">Search settings</string>
     <string name="lbl_show_recommended">Show recommended guidelines</string>

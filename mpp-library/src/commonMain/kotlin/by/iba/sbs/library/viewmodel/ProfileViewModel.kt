@@ -94,12 +94,19 @@ class ProfileViewModel(
     }
 
     fun onLogoutButtonClick() {
+        eventsDispatcher.dispatchEvent { onLogoutAction() }
+    }
+
+    fun logout() {
         localStorage.accessToken = ""
+        localStorage.userId = ""
         eventsDispatcher.dispatchEvent { routeToLoginScreen() }
     }
+
     fun onClearHistoryClick() {
         eventsDispatcher.dispatchEvent { requireAccept() }
     }
+
     fun onAcceptClearHistory() {
         localStorage.searchHistoryJson = ""
     }
@@ -112,6 +119,7 @@ class ProfileViewModel(
 
     interface EventsListener {
         fun onActionButtonAction()
+        fun onLogoutAction()
         fun routeToLoginScreen()
         fun showToast(msg: ToastMessage)
         fun requireAccept()

@@ -46,6 +46,10 @@ class ProfileActivity :
         }
     }
 
+    override fun onLogoutAction() {
+        TODO("Not yet implemented")
+    }
+
     override fun routeToLoginScreen() {
         findNavController(R.navigation.mobile_navigation).navigate(R.id.navigation_login_fragment)
     }

@@ -46,23 +46,7 @@ class GuidelineViewModel(
     val starsCount = MutableLiveData("").apply {
         //  value = Html.fromHtml("&#9733; ").toString() + "12345"
     }
-    val feedback = MutableLiveData<MutableList<Feedback>>(mutableListOf()).apply {
-//        val mData = ArrayList<Feedback>()
-//        mData.add(
-//            Feedback(
-//                "Charlize Theron",
-//                "Something I really appreciate about you is your aptitude for problem solving in a proactive way."
-//            )
-//        )
-//        mData.add(
-//            Feedback(
-//                "Matt Damon",
-//                "I really think you have a superpower around making new hires feel welcome."
-//            )
-//        )
-//        this.postValue(mData)
-    }
-
+    val feedback = MutableLiveData<MutableList<Feedback>>(mutableListOf())
 
     @OptIn(UnstableDefault::class)
     @ImplicitReflectionSerializer

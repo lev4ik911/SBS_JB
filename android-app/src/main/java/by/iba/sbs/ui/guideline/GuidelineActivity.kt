@@ -103,14 +103,11 @@ class GuidelineActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         instructionId = intent?.getStringExtra("instructionId") ?: ""
-        val bundle = Bundle()
-        bundle.putString("instructionId", instructionId)
-
-        viewModel.loadGuideline(instructionId, true)
-
+        val forceRefresh = Date().day != Date(viewModel.localStorage.lastUpdate).day
+        viewModel.loadGuideline(instructionId, forceRefresh)
         findNavController(R.id.fragment_navigation_instruction).navigate(
             if (instructionId == "") R.id.navigation_instruction_edit else R.id.navigation_instruction_view,
-            bundle
+            bundleOf("instructionId" to instructionId)
         )
     }
 
@@ -376,20 +373,15 @@ class GuidelineActivity :
     }
 
     override fun onOpenProfile(profileId: Int) {
-//        val intent = Intent(this, ProfileActivity::class.java)
-//        intent.putExtra("profileId", profileId)
-        //  startActivity(intent)
-        val bundle = bundleOf("profileId" to profileId)
         findNavController(R.id.fragment_navigation_instruction).navigate(
             R.id.navigation_profile_fragment,
-            bundle
+            bundleOf("profileId" to profileId)
         )
     }
 
     override fun onEditStep(stepWeight: Int) {
-        val bundle = bundleOf("stepWeight" to stepWeight)
         findNavController(R.id.fragment_navigation_instruction)
-            .navigate(R.id.navigation_step_edit, bundle)
+            .navigate(R.id.navigation_step_edit, bundleOf("stepWeight" to stepWeight))
     }
 
     override fun onEditStepImage(editStep: Step) {
@@ -405,7 +397,7 @@ class GuidelineActivity :
         openAlertDialog(guidelineHasImage)
     }
 
-    private fun openAlertDialog(itemHasImage: Boolean){
+    private fun openAlertDialog(itemHasImage: Boolean) {
         val builder = AlertDialog.Builder(this)
         val listOfResolvedActions = ImageActions.values().filter {
             (itemHasImage && it == ImageActions.EditCurrent) || (it != ImageActions.EditCurrent)
@@ -498,7 +490,7 @@ class GuidelineActivity :
     @UnstableDefault
     @ImplicitReflectionSerializer
     override fun onRemoveInstruction() {
-        val builder = AlertDialog.Builder(this).apply {
+        AlertDialog.Builder(this).apply {
             setTitle(resources.getString(R.string.title_delete_instruction_dialog))
             setMessage(
                 resources.getString(
@@ -513,8 +505,8 @@ class GuidelineActivity :
             }
             setNegativeButton(resources.getString(R.string.btn_cancel), null)
         }
-        val dialog = builder.create()
-        dialog.show()
+            .create()
+            .show()
     }
 
     override fun onAfterDeleteAction() {
@@ -578,8 +570,7 @@ class GuidelineActivity :
                 { dialogInterface: DialogInterface, i: Int ->
                     if (step.stepId.isNotEmpty()) {
                         viewModel.deleteStep(viewModel.guideline.value.id, step)
-                    }
-                    else {
+                    } else {
                         val stepArr = viewModel.steps.value.toMutableList()
                         stepArr.remove(step)
                         stepArr.forEachIndexed { index, step -> step.weight = index + 1 }

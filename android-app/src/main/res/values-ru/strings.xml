@@ -106,5 +106,8 @@
     <string name="lbl_clear_history">Очистить историю</string>
     <string name="hint_search">Начните вводить текст</string>
     <string name="title_search_results">Результат для: \"%s\"</string>
+    <string name="title_logout_dialog">Выйти</string>
+    <string name="msg_logout_dialog">Вы уверены, что хотите выйти?</string>
+    <string name="btn_logout">Выйти</string>
 
 </resources>

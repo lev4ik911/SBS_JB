@@ -199,6 +199,25 @@ class ProfileFragment :
         }
     }
 
+    override fun onLogoutAction() {
+        AlertDialog.Builder(requireContext()).apply {
+            setTitle(resources.getString(R.string.title_logout_dialog))
+            setMessage(
+                resources.getString(
+                    R.string.msg_logout_dialog
+                )
+            )
+            setPositiveButton(
+                resources.getString(R.string.btn_logout)
+            ) { _: DialogInterface, _: Int ->
+                viewModel.logout()
+            }
+            setNegativeButton(resources.getString(R.string.btn_cancel), null)
+        }
+            .create()
+            .show()
+    }
+
     override fun routeToLoginScreen() {
         findNavController().navigate(R.id.action_navigation_profile_to_navigation_login_fragment)
         // findNavController().navigate()
