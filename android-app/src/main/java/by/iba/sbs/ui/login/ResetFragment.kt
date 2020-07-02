@@ -1,23 +1,37 @@
 package by.iba.sbs.ui.login
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.KeyEvent
 import android.widget.TextView
 import androidx.activity.addCallback
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import by.iba.mvvmbase.BaseEventsFragment
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.LoginResetFragmentBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import by.iba.sbs.library.viewmodel.ResetViewModel
+import com.russhwolf.settings.AndroidSettings
+import dev.icerock.moko.mvvm.MvvmEventsFragment
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 
 class ResetFragment :
-    BaseEventsFragment<LoginResetFragmentBinding, ResetViewModel, ResetViewModel.EventsListener>(),
+    MvvmEventsFragment<LoginResetFragmentBinding, ResetViewModel, ResetViewModel.EventsListener>(),
     ResetViewModel.EventsListener, TextView.OnEditorActionListener {
 
     override val layoutId: Int = R.layout.login_reset_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    override val viewModel: ResetViewModel by viewModel()
+    override val viewModelClass: Class<ResetViewModel> =
+        ResetViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        ResetViewModel(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
+            eventsDispatcherOnMain()
+        )
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this) {

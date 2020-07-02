@@ -33,7 +33,7 @@ class RegisterViewModel(
     private val sbsDb = createDb()
     private val usersQueries = sbsDb.usersEntityQueries
 
-    val isLoginEnabled = MutableLiveData(true)
+    val isRegisterEnabled = MutableLiveData(true)
 
     val login = MutableLiveData("")
     val password = MutableLiveData("")

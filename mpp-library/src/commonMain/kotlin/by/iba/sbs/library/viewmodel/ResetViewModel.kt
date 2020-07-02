@@ -1,14 +1,15 @@
-package by.iba.sbs.ui.login
+package by.iba.sbs.library.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import by.iba.mvvmbase.BaseViewModel
-import by.iba.mvvmbase.dispatcher.EventsDispatcher
-import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
-import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
+import com.russhwolf.settings.Settings
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcherOwner
+import dev.icerock.moko.mvvm.livedata.MutableLiveData
 
-class ResetViewModel : BaseViewModel(),
+class ResetViewModel(
+    settings: Settings,
+    override val eventsDispatcher: EventsDispatcher<EventsListener>
+) : ViewModelExt(settings),
     EventsDispatcherOwner<ResetViewModel.EventsListener> {
-    override val eventsDispatcher: EventsDispatcher<ResetViewModel.EventsListener> = eventsDispatcherOnMain()
     val oldPassword = MutableLiveData("")
     val isOldPasswordValid = MutableLiveData(false)
     val newPassword = MutableLiveData("")
