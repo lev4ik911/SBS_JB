@@ -60,7 +60,7 @@ class GuidelineEditFragment :
                 BR.viewmodel,
                 viewModel,
                 isItemsEquals = { oldItem, newItem ->
-                    oldItem.description == newItem.description
+                    oldItem.descr == newItem.descr
                 }).also {
                 it.emptyViewId = R.layout.new_step
                 it.dragLayoutId = R.id.iv_drag

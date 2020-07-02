@@ -74,11 +74,11 @@
             <TextView
                 android:id="@+id/tv_description"
                 style="@style/Text.Description"
-                visibleOrGone="@{!step.description.isEmpty()}"
+                visibleOrGone="@{!step.descr.isEmpty()}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/spacing_xxsmall"
-                tools:text="@{step.description}"/>
+                tools:text="@{step.descr}" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

@@ -36,7 +36,7 @@ class StepsFragment : MvvmFragment<StepsFragmentBinding, GuidelineViewModel>() {
                 BR.viewmodel,
                 viewModel,
                 isItemsEquals = { oldItem, newItem ->
-                    oldItem.description == newItem.description
+                    oldItem.descr == newItem.descr
                 }
             )
         binding.rvSteps.apply {

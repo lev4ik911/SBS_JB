@@ -223,7 +223,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         it.stepId,
                         guidelineId,
                         it.name,
-                        it.description,
+                        it.descr,
                         it.weight.toLong()
                     )
                 }
@@ -326,7 +326,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     @UnstableDefault
     override suspend fun insertSteps(guidelineId: String, data: List<Step>): Response<List<StepView>> = coroutineScope {
         val result = steps.postSteps(guidelineId, data.map {
-            StepCreate(it.name, it.description, it.weight)
+            StepCreate(it.name, it.descr, it.weight)
         })
         if (result.isSuccess) {
             val items = result.data!!
@@ -354,7 +354,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
         val stepMap = HashMap<String, StepEdit>()
         data.forEach {
             stepMap[it.stepId] =
-                StepEdit(name = it.name, description = it.description, weight = it.weight)
+                StepEdit(name = it.name, description = it.descr, weight = it.weight)
         }
         val result = steps.putSteps(guidelineId, stepMap)
         if (result.isSuccess) {
@@ -394,7 +394,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             guidelinesQueries.selectStepById(guidelineId, stepId).executeAsOne().apply {
                 result.stepId = this.id
                 result.name = this.name
-                result.description = this.description
+                result.descr = this.description
                 result.weight = this.weight!!.toInt()
                 result.imagePath = this.imagePath
                 result.updateImageTimeSpan = this.updateImageTimeSpan!!.toInt()

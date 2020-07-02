@@ -37,8 +37,6 @@ class LoginFragment :
         LoginViewModel::class.java
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        //   val viewModel: LoginViewModel by viewModel()
-        //    return@createViewModelFactory viewModel
         LoginViewModel(
             AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
             eventsDispatcherOnMain(),
@@ -106,7 +104,7 @@ class LoginFragment :
     }
 
     override fun onRegister() {
-        findNavController().navigate(R.id.navigation_register)
+        findNavController().navigate(R.id.action_navigation_login_fragment_to_navigation_register)
     }
 
 

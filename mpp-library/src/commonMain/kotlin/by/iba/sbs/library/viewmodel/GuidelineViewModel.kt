@@ -245,7 +245,7 @@ class GuidelineViewModel(
             stepArr.add(
                 Step(
                     name = step.name,
-                    description = step.description,
+                    descr = step.descr,
                     weight = step.weight
                 )
             )
