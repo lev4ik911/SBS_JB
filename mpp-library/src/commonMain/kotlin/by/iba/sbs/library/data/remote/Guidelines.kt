@@ -12,7 +12,7 @@ import kotlinx.serialization.serializer
 
 @UnstableDefault
 @ImplicitReflectionSerializer
-class Guidelines(override val settings: LocalSettings) : Client(settings) {
+internal class Guidelines(override val settings: LocalSettings) : Client(settings) {
     suspend fun getAllGuidelines(): Response<List<GuidelineView>> {
         return get(
             Routes.Guidelines.URL_GUIDELINES,

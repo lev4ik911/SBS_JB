@@ -11,7 +11,7 @@ import kotlinx.serialization.serializer
 
 @UnstableDefault
 @ImplicitReflectionSerializer
-class Users(override val settings: LocalSettings) : Client(settings) {
+internal class Users(override val settings: LocalSettings) : Client(settings) {
     suspend fun postUser(user: UserCreate): Response<UserView> {
         return post(
             Routes.Users.URL_USERS,

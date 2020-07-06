@@ -12,7 +12,7 @@ import kotlinx.serialization.serializer
 
 @UnstableDefault
 @ImplicitReflectionSerializer
-class Steps(override val settings: LocalSettings) : Client(settings) {
+internal class Steps(override val settings: LocalSettings) : Client(settings) {
 
     suspend fun getAllSteps(guidelineId: String): Response<List<StepView>> {
         return get(

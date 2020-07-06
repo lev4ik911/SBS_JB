@@ -8,7 +8,7 @@ import kotlinx.serialization.UnstableDefault
 
 @UnstableDefault
 @ImplicitReflectionSerializer
-class Auth(override val settings: LocalSettings) : Client(settings, false) {
+internal class Auth(override val settings: LocalSettings) : Client(settings, false) {
     suspend fun login(loginData: LoginData): Response<AuthData> {
 
         return post(

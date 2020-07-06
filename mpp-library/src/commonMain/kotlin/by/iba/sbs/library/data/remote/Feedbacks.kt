@@ -12,7 +12,7 @@ import kotlinx.serialization.serializer
 
 @UnstableDefault
 @ImplicitReflectionSerializer
-class Feedbacks(override val settings: LocalSettings) : Client(settings) {
+internal class Feedbacks(override val settings: LocalSettings) : Client(settings) {
     suspend fun getAllFeedbacks(guidelineId: String): Response<List<RatingView>> {
         return get(
             Utils.formatString(Routes.Ratings.URL_GUIDELINE_RATINGS, guidelineId),
