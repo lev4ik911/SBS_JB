@@ -55,8 +55,6 @@
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
         <!-- content layout -->
-
-
         <com.google.android.material.textfield.TextInputLayout
             style="@style/TextInputLayout"
             android:paddingVertical="@dimen/spacing_xsmall"
@@ -69,10 +67,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/outline_perm_identity_24"
+                android:hint="@string/caption_login"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress|textNoSuggestions"
+                android:text="@={viewmodel.email.ld}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/spacing_xsmall"
+            app:endIconMode="clear_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/outline_perm_identity_24"
                 android:hint="@string/caption_work_email"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress|textNoSuggestions"
-                android:text="@={viewmodel.login.ld}" />
+                android:text="@={viewmodel.email.ld}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout

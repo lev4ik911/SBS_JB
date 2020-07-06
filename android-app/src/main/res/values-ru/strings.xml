@@ -109,5 +109,6 @@
     <string name="title_logout_dialog">Выйти</string>
     <string name="msg_logout_dialog">Вы уверены, что хотите выйти?</string>
     <string name="btn_logout">Выйти</string>
+    <string name="caption_login">Ваше имя</string>
 
 </resources>

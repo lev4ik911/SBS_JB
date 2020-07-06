@@ -5,7 +5,9 @@ object Routes {
     private const val version = "api/v1"
 
     object Auth {
-        const val URL_LOGIN = "$baseRoute/$version/auth"
+        const val URL_USER = "$baseRoute/$version/auth"
+        const val URL_LOGIN = "$baseRoute/$version/auth/login"
+        const val URL_REGISTER = "$baseRoute/$version/auth/register"
     }
 
     object Users {
