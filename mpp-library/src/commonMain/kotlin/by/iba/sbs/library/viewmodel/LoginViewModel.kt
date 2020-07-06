@@ -109,7 +109,6 @@ class LoginViewModel(
         fun onResetPassword()
         fun onRegister()
         fun routeToProfile(userId: String)
-        fun routeToLoginScreen()
         fun flipToPassword()
         fun flipToLogin()
         fun showToast(msg: ToastMessage)

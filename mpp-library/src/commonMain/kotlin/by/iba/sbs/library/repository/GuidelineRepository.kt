@@ -62,7 +62,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     private val steps = Steps(settings)
 
     @UnstableDefault
-    private val feedback = Feedback(settings)
+    private val feedback = Feedbacks(settings)
     private val sbsDb = createDb()
     private val guidelinesQueries = sbsDb.guidelinesEntityQueries
     private val ratingSummaryQueries = sbsDb.ratingSummaryQueries

@@ -95,12 +95,8 @@ class LoginFragment :
         return false
     }
 
-    override fun routeToLoginScreen() {
-        findNavController().navigate(R.id.navigation_login_fragment)
-    }
-
     override fun onResetPassword() {
-        findNavController().navigate(R.id.navigation_reset)
+        findNavController().navigate(R.id.action_navigation_login_fragment_to_navigation_reset)
     }
 
     override fun onRegister() {
@@ -109,10 +105,9 @@ class LoginFragment :
 
 
     override fun routeToProfile(userId: String) {
-        val bundle = bundleOf("profileId" to userId)
         findNavController().navigate(
             R.id.action_navigation_login_fragment_to_navigation_profile_fragment,
-            bundle
+            bundleOf("profileId" to userId)
         )
     }
 
@@ -132,10 +127,7 @@ class LoginFragment :
         }
     }
 
-
     override fun showToast(msg: ToastMessage) {
         Tools.showToast(requireContext(), viewModel::class.java.name, msg)
     }
-
-
 }

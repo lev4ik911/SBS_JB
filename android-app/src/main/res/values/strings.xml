@@ -42,7 +42,7 @@
     <string name="btn_login">Login</string>
     <string name="btn_register">Register</string>
     <string name="btn_just_look">I want to see</string>
-    <string name="caption_register">Register</string>
+    <string name="caption_register">Register profile</string>
     <string name="text_rating">Rating:</string>
     <string name="text_subscribers">Subscribers: %s</string>
     <string name="text_instructions">Instructions: %s</string>

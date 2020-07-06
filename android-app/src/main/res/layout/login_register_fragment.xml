@@ -14,20 +14,52 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/spacing_small"
+        android:padding="@dimen/spacing_xsmall"
         tools:context="by.iba.sbs.ui.login.RegisterFragment">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
+        <!-- image layout -->
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_view_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_normal"
-            android:gravity="center_vertical"
-            android:paddingVertical="@dimen/spacing_small"
-            style="@style/Text.Title"
-            android:text="@string/caption_register" />
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/spacing_normal"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:shimmer_base_color="?attr/colorPrimaryDark"
+            app:shimmer_colored="true"
+            app:shimmer_duration="5000"
+            app:shimmer_highlight_alpha="0.9"
+            app:shimmer_highlight_color="?attr/colorAccent"
+            app:shimmer_shape="radial">
+
+            <LinearLayout
+                android:id="@+id/text_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_small">
+
+                <ImageView
+                    android:layout_width="@dimen/logo_image_size"
+                    android:layout_height="@dimen/logo_image_size"
+                    android:src="@drawable/outline_lock_24" />
+
+                <TextView
+                    style="@style/Text.Logo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="false"
+                    android:text="@string/caption_register" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+        <!-- content layout -->
+
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/TextInputLayout"
+            android:paddingVertical="@dimen/spacing_xsmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="clear_text">
@@ -45,6 +77,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/TextInputLayout"
+            android:paddingVertical="@dimen/spacing_xxsmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:passwordToggleEnabled="true">
@@ -62,6 +95,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/TextInputLayout"
+            android:paddingVertical="@dimen/spacing_xxsmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:passwordToggleEnabled="true">
