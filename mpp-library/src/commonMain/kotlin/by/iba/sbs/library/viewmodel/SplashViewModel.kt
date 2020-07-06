@@ -1,16 +1,16 @@
-package by.iba.sbs.ui.login
+package by.iba.sbs.library.viewmodel
 
-import by.iba.mvvmbase.BaseViewModel
-import by.iba.mvvmbase.dispatcher.EventsDispatcher
-import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
-import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
 import by.iba.sbs.library.service.SystemInformation
+import com.russhwolf.settings.Settings
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcherOwner
 
-
-class SplashViewModel(systemInfo: SystemInformation) : BaseViewModel(),
+class SplashViewModel(
+    settings: Settings,
+    systemInfo: SystemInformation,
+    override val eventsDispatcher: EventsDispatcher<EventsListener>
+) : ViewModelExt(settings),
     EventsDispatcherOwner<SplashViewModel.EventsListener> {
-
-    override val eventsDispatcher: EventsDispatcher<EventsListener> = eventsDispatcherOnMain()
 
     val appVersion: String = systemInfo.getAppVersion()
     fun checkCredentials() {

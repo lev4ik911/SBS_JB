@@ -25,7 +25,7 @@ class DashboardViewModelShared(
     EventsDispatcherOwner<DashboardViewModelShared.EventsListener> {
 
     private val showRecommended = MutableLiveData(true).apply {
-        value = localStorage.showRecommended
+        value = localStorage.showRecommended || localStorage.accessToken.isEmpty()
     }
     private val showFavorites = MutableLiveData(true).apply {
         value = localStorage.showFavorites && localStorage.accessToken.isNotEmpty()
@@ -34,7 +34,7 @@ class DashboardViewModelShared(
     var isShowFavorites: LiveData<Boolean> = showFavorites.readOnly()
 
     fun update() {
-        showRecommended.value = localStorage.showRecommended
+        showRecommended.value = localStorage.showRecommended || localStorage.accessToken.isEmpty()
         showFavorites.value = localStorage.showFavorites && localStorage.accessToken.isNotEmpty()
     }
 
@@ -93,7 +93,6 @@ class DashboardViewModelShared(
                                     .sortedBy { item -> item.id }
                                     .toList()
                         )
-
                     } else if (it.error != null)
                         eventsDispatcher.dispatchEvent {
                             showToast(
@@ -139,7 +138,6 @@ class DashboardViewModelShared(
                                     .sortedBy { item -> item.id }
                                     .toList()
                         )
-
                     } else if (it.error != null)
                         eventsDispatcher.dispatchEvent {
                             showToast(
@@ -185,7 +183,6 @@ class DashboardViewModelShared(
                                     .sortedBy { item -> item.id }
                                     .toList()
                         )
-
                     } else if (it.error != null)
                         eventsDispatcher.dispatchEvent {
                             showToast(
