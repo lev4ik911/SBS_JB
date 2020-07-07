@@ -41,11 +41,11 @@ class SettingsFragment : MvvmFragment<SettingsFragmentBinding, ProfileViewModel>
         val stepperTouch = view.findViewById<StepperTouch>(R.id.stepperTouch)
         stepperTouch.minValue = 0
         stepperTouch.maxValue = 10
-        stepperTouch.count = viewModel.searchHistoryCount
+        stepperTouch.count = viewModel.searchHistoryCount.value
         stepperTouch.sideTapEnabled = true
         stepperTouch.addStepCallback(object : OnStepCallback {
             override fun onStep(value: Int, positive: Boolean) {
-                viewModel.searchHistoryCount = value
+                viewModel.searchHistoryCount.value = value
             }
         })
     }

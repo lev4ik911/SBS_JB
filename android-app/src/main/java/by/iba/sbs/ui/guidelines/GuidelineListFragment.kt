@@ -76,7 +76,12 @@ class GuidelineListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().findViewById<Toolbar>(R.id.toolbar_main).apply {
+            if(viewModel.searchedText.value.isNotEmpty()) {
+                title = resources.getString(R.string.title_search_results, viewModel.searchedText.value)
+            }
+            else {
                 title = resources.getString(R.string.title_search)
+            }
         }
         viewModel.getSearchHistoryList()
         searchView = requireActivity().findViewById(R.id.search_view)
@@ -250,7 +255,6 @@ class GuidelineListFragment :
     override fun onStart() {
         super.onStart()
         val forceRefresh = Date().day != Date(settings.lastUpdate).day
-        if (viewModel.searchedText.value.isEmpty())
-            viewModel.loadInstructions(forceRefresh)
+        viewModel.loadInstructions(forceRefresh)
     }
 }
