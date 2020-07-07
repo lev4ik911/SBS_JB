@@ -34,6 +34,8 @@ class GuidelineViewModel(
         addObserver {
             ratingUp.value = it.rating.positive
             ratingDown.value = it.rating.negative
+            isMyInstruction.value = localStorage.userId == it.author
+            isFavorite.value = it.isFavorite
         }
     }
 
@@ -151,21 +153,39 @@ class GuidelineViewModel(
                 oldSteps = steps.value.map { it.copy() }
             oldGuideline = guideline.value.copy()
             eventsDispatcher.dispatchEvent { onCallInstructionEditor(guideline.value.id) }
-        } else isFavorite.value = !isFavorite.value
+        } else {
+            if (localStorage.userId.isNotEmpty()) {
+                isFavorite.value = !isFavorite.value
+            }
+            else {
+                eventsDispatcher.dispatchEvent { onAuthorizationRequired() }
+            }
+
+        }
     }
 
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun onRatingUpButtonClick() {
         eventsDispatcher.dispatchEvent {
-            onRatingUpAction()
+            if (localStorage.userId.isNotEmpty()) {
+                onRatingUpAction()
+            }
+            else {
+                onAuthorizationRequired()
+            }
         }
     }
 
 
     fun onRatingDownButtonClick() {
         eventsDispatcher.dispatchEvent {
-            onRatingDownAction()
+            if (localStorage.userId.isNotEmpty()) {
+                onRatingDownAction()
+            }
+            else {
+                onAuthorizationRequired()
+            }
         }
     }
 
@@ -486,5 +506,6 @@ class GuidelineViewModel(
         fun onRemoveStep(step: Step)
         fun onLoadImageFromAPI(step: Step)
         fun showToast(msg: ToastMessage)
+        fun onAuthorizationRequired()
     }
 }

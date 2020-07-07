@@ -628,6 +628,21 @@ class GuidelineActivity :
         Tools.showToast(this, viewModelClass.name, msg)
     }
 
+    override fun onAuthorizationRequired() {
+        val builder = AlertDialog.Builder(this).apply {
+            setTitle(resources.getString(R.string.title_dialog_authorization))
+            setMessage(resources.getString(R.string.msg_authorization_dialog))
+            setPositiveButton(
+                resources.getString(R.string.btn_login),
+                { dialogInterface: DialogInterface, i: Int ->
+                    findNavController(R.id.fragment_navigation_instruction).navigate(R.id.navigation_login_fragment)
+                })
+            setNegativeButton(resources.getString(R.string.btn_cancel), null)
+        }
+        val dialog = builder.create()
+        dialog.show()
+    }
+
     private val imageHandler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
             viewModel.updatedStepId.value = msg.obj as String
