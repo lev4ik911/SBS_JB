@@ -92,6 +92,7 @@
     <string name="msg_clear_history_dialog">Вы уверены, что хотите очистить историю?</string>
     <string name="title_delete_step_dialog">Удалить шаг</string>
     <string name="msg_delete_step_dialog">Вы уверены, что хотите удалить шаг %s?</string>
+    <string name="msg_authorization_dialog">Для выполнения указанных действий требуется авторизация</string>
     <string name="btn_delete">Удалить</string>
     <string name="btn_clear">Очистить</string>
     <string name="btn_cancel">Отменить</string>
@@ -101,6 +102,7 @@
     <string name="lbl_show_favorites">Показывать понравившиеся инструкции</string>
     <string name="btn_send">Отправить</string>
     <string name="title_dialog_feedback">Отправить отзыв</string>
+    <string name="title_dialog_authorization">Требуется aвторизация</string>
     <string name="title_new">Новый</string>
     <string name="lbl_count_history">Хранить последние поисковые запросы</string>
     <string name="lbl_clear_history">Очистить историю</string>
@@ -112,5 +114,11 @@
     <string name="caption_login">Ваше имя</string>
     <string name="hint_confirm_password">Подтвердите ваш пароль</string>
     <string name="hint_your_password">Ваш пароль</string>
+
+    <string name="error_login_is_empty">Пустое Имя пользователя</string>
+    <string name="error_invalid_email">Некорректный Email</string>
+    <string name="error_password_is_too_small">Короткий пароль</string>
+    <string name="error_password_has_incorrect_symbols">Пароль содержит пробел</string>
+    <string name="error_password_mismatch">Пароли не совпадают</string>
 
 </resources>

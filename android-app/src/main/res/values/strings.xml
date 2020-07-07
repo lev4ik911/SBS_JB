@@ -96,6 +96,7 @@
     <string name="msg_clear_history_dialog">Are you sure you want to clear history?</string>
     <string name="title_delete_step_dialog">Delete step</string>
     <string name="msg_delete_step_dialog">Are you sure you want to delete the step %s?</string>
+    <string name="msg_authorization_dialog">Authorization is required to perform these actions</string>
     <string name="btn_delete">Delete</string>
     <string name="btn_clear">Clear</string>
     <string name="btn_cancel">Cancel</string>
@@ -105,6 +106,7 @@
     <string name="lbl_show_recommended">Show recommended guidelines</string>
     <string name="lbl_show_favorites">Show favorite guidelines</string>
     <string name="title_dialog_feedback">Send feedback</string>
+    <string name="title_dialog_authorization">Authorization required</string>
     <string name="btn_send">Send</string>
     <string name="title_new">New</string>
     <string name="lbl_count_history">Save last search queries</string>
@@ -112,4 +114,9 @@
     <string name="hint_search">Start enter text</string>
     <string name="title_search_results">Result for: \"%s\"</string>
 
+    <string name="error_login_is_empty">Login is empty</string>
+    <string name="error_invalid_email">Invalid email</string>
+    <string name="error_password_is_too_small">Password is too small</string>
+    <string name="error_password_has_incorrect_symbols">Password has incorrect symbols</string>
+    <string name="error_password_mismatch">Password mismatch</string>
 </resources>

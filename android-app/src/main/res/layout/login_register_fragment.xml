@@ -8,6 +8,9 @@
             name="viewmodel"
             type="by.iba.sbs.library.viewmodel.RegisterViewModel" />
     </data>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
@@ -51,9 +54,11 @@
         <!-- content layout -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/TextInputLayout"
-            android:paddingVertical="@dimen/spacing_xsmall"
+            android:id="@+id/et_login_layout"
+            android:layout_marginVertical="@dimen/spacing_xxsmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:errorEnabled="true"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -71,7 +76,9 @@
             style="@style/TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="@dimen/spacing_xsmall"
+            android:id="@+id/et_email_layout"
+            android:layout_marginVertical="@dimen/spacing_xxsmall"
+            app:errorEnabled="true"
             app:endIconMode="clear_text">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -86,10 +93,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_new_password_layout"
             style="@style/TextInputLayout"
-            android:paddingVertical="@dimen/spacing_xxsmall"
+            android:layout_marginVertical="@dimen/spacing_xxsmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:errorEnabled="true"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -104,10 +113,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/et_confirm_password_layout"
             style="@style/TextInputLayout"
-            android:paddingVertical="@dimen/spacing_xxsmall"
+            android:layout_marginVertical="@dimen/spacing_xxsmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:errorEnabled="true"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -126,10 +137,12 @@
             style="@style/Button.Action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/spacing_xsmall"
+            android:layout_marginTop="@dimen/spacing_xsmall"
+            android:layout_marginBottom="@dimen/bottom_navigation_height"
             android:enabled="@{viewmodel.isRegisterEnabled.ld}"
             android:onClick="@{() -> viewmodel.onRegisterButtonClick()}"
             android:paddingHorizontal="@dimen/spacing_xlarge"
             android:text="@string/btn_register" />
     </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.core.widget.NestedScrollView>
 </layout>
