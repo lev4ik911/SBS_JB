@@ -49,7 +49,7 @@ class GuidelineListFragment :
     override val viewModelVariableId: Int = BR.viewmodel
 
     override fun showToast(msg: ToastMessage) {
-        Tools.showToast(requireContext(), viewModel::class.java.name, msg)
+        Tools.showToast(requireContext(), viewModelClass.name, msg)
     }
 
     override val viewModelClass: Class<GuidelineListViewModelShared> =

@@ -3,6 +3,7 @@ package by.iba.sbs.library.data.remote
 import by.iba.sbs.library.model.request.LoginData
 import by.iba.sbs.library.model.request.RegisterData
 import by.iba.sbs.library.model.response.AuthData
+import by.iba.sbs.library.model.response.UserView
 import by.iba.sbs.library.service.LocalSettings
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
@@ -17,7 +18,7 @@ internal class Auth(override val settings: LocalSettings) : Client(settings, fal
         )
     }
 
-    suspend fun register(registerData: RegisterData): Response<AuthData> {
+    suspend fun register(registerData: RegisterData): Response<UserView> {
         return post(
             route = Routes.Auth.URL_REGISTER,
             requestBody = registerData

@@ -42,7 +42,7 @@
     <string name="btn_login">Войти</string>
     <string name="btn_register">Зарегистрироваться</string>
     <string name="btn_just_look">Просто посмотрю</string>
-    <string name="caption_register">Зарегистрировать профиль</string>
+    <string name="caption_register">Зарегистрировать</string>
     <string name="text_rating">Рейтинг:</string>
     <string name="text_subscribers">Подписки: %s</string>
     <string name="text_instructions">Инструкции: %s</string>
@@ -110,5 +110,7 @@
     <string name="msg_logout_dialog">Вы уверены, что хотите выйти?</string>
     <string name="btn_logout">Выйти</string>
     <string name="caption_login">Ваше имя</string>
+    <string name="hint_confirm_password">Подтвердите ваш пароль</string>
+    <string name="hint_your_password">Ваш пароль</string>
 
 </resources>

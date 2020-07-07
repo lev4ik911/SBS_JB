@@ -74,8 +74,8 @@
                 layout="@layout/login_password_content"
                 app:viewmodel="@{viewmodel}"/>
         </ViewFlipper>
-
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_register"
             style="@style/Text.Email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -86,7 +86,19 @@
             android:text="@string/caption_register"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/flipper_login"/>
+            app:layout_constraintTop_toBottomOf="@+id/flipper_login" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/Text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_normal"
+            android:layout_marginTop="12dp"
+            android:onClick="@{() -> viewmodel.onRegisterClick()}"
+            android:text="Don't have an account?"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@+id/tv_register"
+            app:layout_constraintTop_toBottomOf="@+id/flipper_login" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

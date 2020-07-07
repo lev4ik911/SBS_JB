@@ -53,16 +53,12 @@ class RegisterViewModel(
                     authRepository.register(RegisterData(login.value, email.value, password.value))
                 if (response.isSuccess && response.isNotEmpty) {
                     response.data?.let {
-                        localStorage.accessToken = it.accessToken
-                        it.user.apply {
-                            usersQueries.addUser(id, name, email)
-                            localStorage.userId = id
-                            eventsDispatcher.dispatchEvent { routeToLoginScreen() }
-                        }
+                        usersQueries.addUser(it.id, it.name, it.email)
+                        localStorage.userId = it.id
+                        eventsDispatcher.dispatchEvent { routeToLoginScreen() }
                     }
                 }
                 loading.postValue(false)
-
             } catch (e: Exception) {
                 eventsDispatcher.dispatchEvent {
                     showToast(

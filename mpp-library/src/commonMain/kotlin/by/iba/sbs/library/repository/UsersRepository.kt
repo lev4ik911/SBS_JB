@@ -17,8 +17,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 
-interface IUsersRepository{
-    suspend fun addUser(data: User):Response<UserView>
+interface IUsersRepository {
+    suspend fun addUser(data: User): Response<UserView>
 
     suspend fun getAllUsers(forceRefresh: Boolean): LiveData<Response<List<User>>>
     suspend fun getUser(
@@ -30,10 +30,10 @@ interface IUsersRepository{
 }
 
 @ImplicitReflectionSerializer
- class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
+class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
     IUsersRepository {
     @UnstableDefault
-    private val users = Users(settings)
+    private val users by lazy { Users(settings) }
     private val sbsDb = createDb()
     private val usersQueries = sbsDb.usersEntityQueries
 

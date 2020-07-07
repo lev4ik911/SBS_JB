@@ -625,7 +625,7 @@ class GuidelineActivity :
     }
 
     override fun showToast(msg: ToastMessage) {
-        Tools.showToast(this, viewModel::class.java.name, msg)
+        Tools.showToast(this, viewModelClass.name, msg)
     }
 
     private val imageHandler = object : Handler(Looper.getMainLooper()) {

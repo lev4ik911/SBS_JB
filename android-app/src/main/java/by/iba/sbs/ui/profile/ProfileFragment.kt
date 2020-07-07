@@ -224,7 +224,7 @@ class ProfileFragment :
     }
 
     override fun showToast(msg: ToastMessage) {
-        Tools.showToast(requireContext(), viewModel::class.java.name, msg)
+        Tools.showToast(requireContext(), viewModelClass.name, msg)
     }
 
     override fun requireAccept() {

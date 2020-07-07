@@ -56,13 +56,13 @@ interface IGuidelineRepository {
 class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettings) :
     IGuidelineRepository {
     @UnstableDefault
-    private val guidelines = Guidelines(settings)
+    private val guidelines by lazy { Guidelines(settings) }
 
     @UnstableDefault
-    private val steps = Steps(settings)
+    private val steps by lazy { Steps(settings) }
 
     @UnstableDefault
-    private val feedback = Feedbacks(settings)
+    private val feedback by lazy { Feedbacks(settings) }
     private val sbsDb = createDb()
     private val guidelinesQueries = sbsDb.guidelinesEntityQueries
     private val ratingSummaryQueries = sbsDb.ratingSummaryQueries
