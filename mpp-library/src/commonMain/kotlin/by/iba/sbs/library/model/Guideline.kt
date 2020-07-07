@@ -9,6 +9,7 @@ data class Guideline(
     var name: String = "",
     var descr: String = "",
     var author: String = "Author name",
+    var authorId: String = "",
     var isFavorite: Boolean = false,
     var rating: RatingSummary = RatingSummary(),
     var imagePath: String = "",

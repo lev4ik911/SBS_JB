@@ -147,7 +147,6 @@ class GuidelineListViewModelShared(
             }
     }
 
-
     interface EventsListener {
         fun showToast(msg: ToastMessage)
     }

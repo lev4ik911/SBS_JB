@@ -372,10 +372,10 @@ class GuidelineActivity :
         )
     }
 
-    override fun onOpenProfile(profileId: Int) {
+    override fun onOpenProfile(profileId: String) {
         findNavController(R.id.fragment_navigation_instruction).navigate(
             R.id.navigation_profile_fragment,
-            bundleOf("profileId" to profileId)
+            bundleOf("userId" to profileId)
         )
     }
 

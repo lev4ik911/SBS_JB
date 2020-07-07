@@ -1,6 +1,7 @@
 package by.iba.sbs.library.data.remote
 
 import by.iba.sbs.library.model.request.UserCreate
+import by.iba.sbs.library.model.response.AuthData
 import by.iba.sbs.library.model.response.UserView
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.service.Utils
@@ -19,6 +20,12 @@ internal class Users(override val settings: LocalSettings) : Client(settings) {
         )
     }
 
+    suspend fun getUserInfo(): Response<AuthData> {
+        return get(
+            route = Routes.Auth.URL_USER
+        )
+    }
+
     suspend fun getAllUsers(): Response<List<UserView>> {
         return get(
             Routes.Users.URL_USERS,
@@ -28,7 +35,7 @@ internal class Users(override val settings: LocalSettings) : Client(settings) {
 
     suspend fun getUserById(userId: String): Response<UserView> {
         return get(
-            Utils.formatString(Routes.Users.URL_USERS, userId)
+            Utils.formatString(Routes.Users.URL_USER_DETAILS, userId)
         )
     }
 

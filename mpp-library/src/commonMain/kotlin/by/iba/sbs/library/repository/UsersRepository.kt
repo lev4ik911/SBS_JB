@@ -110,8 +110,9 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
             override fun shouldFetch(data: User?): Boolean =
                 data == null || forceRefresh
 
-            override suspend fun loadFromDb(): User = coroutineScope {
-                val item = usersQueries.getUser(userId).executeAsOne()
+            override suspend fun loadFromDb(): User? = coroutineScope {
+                val item =
+                    usersQueries.getUser(userId).executeAsOneOrNull() ?: return@coroutineScope null
                 return@coroutineScope User(
                     item.id,
                     item.name,

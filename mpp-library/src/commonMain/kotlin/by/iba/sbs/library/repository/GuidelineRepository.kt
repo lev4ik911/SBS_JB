@@ -80,7 +80,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
 
             override suspend fun saveCallResults(data: List<Guideline>) = coroutineScope {
                 data.forEach {
-                    guidelinesQueries.insertGuideline(it.id, it.name, it.descr)
+                    guidelinesQueries.insertGuideline(it.id, it.name, it.descr, it.authorId)
                     it.rating.apply {
                         ratingSummaryQueries.insertRating(
                             it.id,
@@ -103,6 +103,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     if (rating != null) {
                         Guideline(
                             it.id, it.name, it.description,
+                            authorId = it.authorId,
                             rating = RatingSummary(
                                 rating.positive!!.toInt(),
                                 rating.negative!!.toInt(),
@@ -110,7 +111,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                             )
                         )
                     } else {
-                        Guideline(it.id, it.name, it.description)
+                        Guideline(it.id, it.name, it.description, it.authorId)
                     }
                 }
             }
@@ -120,7 +121,13 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     val result = guidelines.getAllGuidelines()
                     if (result.isSuccess) {
                         result.data!!.map { item ->
-                            Guideline(item.id, item.name, item.description ?: "", rating = item.rating)
+                            Guideline(
+                                item.id,
+                                item.name,
+                                item.description ?: "",
+                                rating = item.rating,
+                                authorId = item.activity.createdBy
+                            )
                         }
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
@@ -150,7 +157,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         overall.toLong()
                     )
                 }
-                guidelinesQueries.insertGuideline(data.id, data.name, data.descr)
+                guidelinesQueries.insertGuideline(data.id, data.name, data.descr, data.authorId)
 
             }
 
@@ -164,7 +171,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 //  return@coroutineScope
                 if (item != null) {
                     Guideline(
-                        item.id, item.name, item.description, rating = RatingSummary(
+                        item.id, item.name, item.description,
+                        authorId = item.authorId,
+                        rating = RatingSummary(
                             ratingSummary.positive!!.toInt(),
                             ratingSummary.negative!!.toInt(),
                             ratingSummary.overall!!.toInt()
@@ -183,6 +192,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                             item.id,
                             item.name,
                             item.description!!,
+                            authorId = item.activity.createdBy,
                             rating = RatingSummary(
                                 item.rating.positive,
                                 item.rating.negative,
@@ -278,7 +288,12 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             val result = guidelines.postGuideline(GuidelineCreate(data.name, data.descr))
             if (result.isSuccess) {
                 val item = result.data!!
-                guidelinesQueries.insertGuideline(item.id, item.name, item.description ?: "")
+                guidelinesQueries.insertGuideline(
+                    item.id,
+                    item.name,
+                    item.description ?: "",
+                    item.activity.createdBy
+                )
                 ratingSummaryQueries.insertRating(
                     item.id,
                     item.rating.positive.toLong(),
@@ -299,7 +314,12 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 guidelines.putGuideline(data.id, GuidelineEdit(data.name, data.descr))
             if (result.isSuccess) {
                 val item = result.data!!
-                guidelinesQueries.insertGuideline(item.id, item.name, item.description ?: "")
+                guidelinesQueries.insertGuideline(
+                    item.id,
+                    item.name,
+                    item.description ?: "",
+                    item.activity.createdBy
+                )
             }
 //            else {
 //                if (result.status != Response.Status.SUCCESS)

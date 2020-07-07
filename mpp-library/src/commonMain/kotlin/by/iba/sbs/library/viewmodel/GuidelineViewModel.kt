@@ -196,7 +196,7 @@ class GuidelineViewModel(
 
     fun onOpenProfileClick() {
         //get profileId from instruction
-        eventsDispatcher.dispatchEvent { onOpenProfile(1) }//TODO
+        eventsDispatcher.dispatchEvent { onOpenProfile(guideline.value.authorId) }//TODO
     }
 
 
@@ -469,7 +469,7 @@ class GuidelineViewModel(
 
     interface EventsListener {
         fun onCallInstructionEditor(instructionId: String)
-        fun onOpenProfile(profileId: Int)
+        fun onOpenProfile(profileId: String)
         fun onEditStep(stepWeight: Int)
         fun onEditStepImage(editStep: Step)
         fun onEditGuidelineImage()

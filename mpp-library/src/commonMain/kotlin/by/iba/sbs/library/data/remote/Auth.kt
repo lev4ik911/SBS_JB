@@ -25,9 +25,5 @@ internal class Auth(override val settings: LocalSettings) : Client(settings, fal
         )
     }
 
-    suspend fun getUserInfo(): Response<AuthData> {
-        return get(
-            route = Routes.Auth.URL_USER
-        )
-    }
+
 }
