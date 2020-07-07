@@ -33,6 +33,13 @@ class ProfileViewModel(
             localStorage.showFavorites = it
         }
     }
+    var searchHistoryCount= MutableLiveData(5).apply {
+        value = localStorage.searchHistoryCount
+        addObserver {
+            localStorage.searchHistoryCount = it
+        }
+    }
+
     val email = MutableLiveData("email@email.com")
     val fullName = MutableLiveData("John Doe")
     val user = MutableLiveData(User())
@@ -110,12 +117,6 @@ class ProfileViewModel(
     fun onAcceptClearHistory() {
         localStorage.searchHistoryJson = ""
     }
-
-    var searchHistoryCount: Int
-        get() = localStorage.searchHistoryCount
-        set(value) {
-            localStorage.searchHistoryCount = value
-        }
 
     interface EventsListener {
         fun onActionButtonAction()

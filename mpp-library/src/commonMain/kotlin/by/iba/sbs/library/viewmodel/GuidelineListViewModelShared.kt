@@ -26,7 +26,12 @@ class GuidelineListViewModelShared(
     EventsDispatcherOwner<GuidelineListViewModelShared.EventsListener> {
     val instructions = MutableLiveData<List<Guideline>>(mutableListOf())
     val suggestions = MutableLiveData<List<String>>(arrayListOf())
-    var searchedText = MutableLiveData("")
+    var searchedText = MutableLiveData("").apply {
+        value = localStorage.searchedText
+        addObserver {
+            localStorage.searchedText = it
+        }
+    }
     val searchHistoryList = mutableListOf<String>()
 
     @UnstableDefault
@@ -78,6 +83,7 @@ class GuidelineListViewModelShared(
         }
     }
 
+    @UnstableDefault
     @ImplicitReflectionSerializer
     fun loadSuggestions(searchText: String){
         viewModelScope.launch {
@@ -95,6 +101,7 @@ class GuidelineListViewModelShared(
             }
         }
     }
+    @UnstableDefault
     @ImplicitReflectionSerializer
     fun getFilteredGuidelines(searchText: String){
         viewModelScope.launch {

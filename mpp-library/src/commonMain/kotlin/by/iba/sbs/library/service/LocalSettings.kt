@@ -16,4 +16,5 @@ class LocalSettings(settings: Settings) {
     var showFavorites by settings.boolean("pref_show_favorites", defaultValue = true)
     var searchHistoryJson by settings.string("pref_search_history_json")
     var searchHistoryCount by settings.int("pref_search_history_count", defaultValue = 5)
+    var searchedText by settings.string("pref_searched_text")
 }
