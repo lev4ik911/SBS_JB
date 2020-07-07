@@ -114,4 +114,9 @@
     <string name="hint_search">Start enter text</string>
     <string name="title_search_results">Result for: \"%s\"</string>
 
+    <string name="error_login_is_empty">Login is empty</string>
+    <string name="error_invalid_email">Invalid email</string>
+    <string name="error_password_is_too_small">Password is too small</string>
+    <string name="error_password_has_incorrect_symbols">Password has incorrect symbols</string>
+    <string name="error_password_mismatch">Password mismatch</string>
 </resources>

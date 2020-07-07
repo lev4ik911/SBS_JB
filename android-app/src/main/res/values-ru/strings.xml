@@ -115,4 +115,10 @@
     <string name="hint_confirm_password">Подтвердите ваш пароль</string>
     <string name="hint_your_password">Ваш пароль</string>
 
+    <string name="error_login_is_empty">Пустое Имя пользователя</string>
+    <string name="error_invalid_email">Некорректный Email</string>
+    <string name="error_password_is_too_small">Короткий пароль</string>
+    <string name="error_password_has_incorrect_symbols">Пароль содержит пробел</string>
+    <string name="error_password_mismatch">Пароли не совпадают</string>
+
 </resources>
