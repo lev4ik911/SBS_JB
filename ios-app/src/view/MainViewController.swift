@@ -9,13 +9,9 @@
 import UIKit
 import Foundation
 import MultiPlatformLibrary
-import MultiPlatformLibraryMvvm
-import MultiPlatformLibraryUnits
 
 class MainViewController : UIViewController {
     
-    
-
     var vm : GuidelineListViewModelShared!
 
     override func viewDidLoad() {
