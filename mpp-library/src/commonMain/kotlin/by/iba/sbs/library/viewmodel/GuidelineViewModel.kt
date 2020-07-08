@@ -34,7 +34,7 @@ class GuidelineViewModel(
         addObserver {
             ratingUp.value = it.rating.positive
             ratingDown.value = it.rating.negative
-            isMyInstruction.value = localStorage.userId == it.author
+            isMyInstruction.value = localStorage.userId == it.authorId
             isFavorite.value = it.isFavorite
         }
     }

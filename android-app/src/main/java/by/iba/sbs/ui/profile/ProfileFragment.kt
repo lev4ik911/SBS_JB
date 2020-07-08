@@ -97,11 +97,11 @@ class ProfileFragment :
                 }
                 viewModel.isFavorite.value -> {
                     this.setImageResource(R.drawable.star)
-                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorGold))
                 }
                 else -> {
                     this.setImageResource(R.drawable.star_outline)
-                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorGold))
                 }
             }
         }
@@ -113,11 +113,11 @@ class ProfileFragment :
                 }
                 viewModel.isFavorite.value -> {
                     this.setImageResource(R.drawable.star)
-                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorGold))
                 }
                 else -> {
                     this.setImageResource(R.drawable.star_outline)
-                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorLightRed))
+                    this.setColorFilter(ContextCompat.getColor(context, R.color.colorGold))
                 }
             }
         }

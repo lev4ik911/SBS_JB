@@ -33,7 +33,7 @@ class ProfileViewModel(
             localStorage.showFavorites = it
         }
     }
-    var searchHistoryCount= MutableLiveData(5).apply {
+    var searchHistoryCount = MutableLiveData(5).apply {
         value = localStorage.searchHistoryCount
         addObserver {
             localStorage.searchHistoryCount = it
@@ -42,10 +42,15 @@ class ProfileViewModel(
 
     val email = MutableLiveData("email@email.com")
     val fullName = MutableLiveData("John Doe")
-    val user = MutableLiveData(User())
-    val rating = MutableLiveData("547")
     val isFavorite = MutableLiveData(true)
     val isMyProfile = MutableLiveData(true)
+    val user = MutableLiveData(User()).apply {
+        addObserver {
+            isMyProfile.value = it.id == localStorage.userId
+        }
+    }
+    val rating = MutableLiveData("547")
+
     val instructions = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
         val mData = ArrayList<Guideline>()
         mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
