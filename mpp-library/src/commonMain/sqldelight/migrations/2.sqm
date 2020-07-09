@@ -1,0 +1,1 @@
+--ALTER TABLE guidelines ADD COLUMN authorId TEXT NOT NULL DEFAULT "";

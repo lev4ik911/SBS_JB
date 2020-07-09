@@ -8,7 +8,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
-import android.widget.AdapterView
 import android.widget.ImageButton
 import android.widget.ListView
 import androidx.appcompat.widget.Toolbar
@@ -76,19 +75,18 @@ class GuidelineListFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().findViewById<Toolbar>(R.id.toolbar_main).apply {
-            if(viewModel.searchedText.value.isNotEmpty()) {
-                title = resources.getString(R.string.title_search_results, viewModel.searchedText.value)
-            }
-            else {
-                title = resources.getString(R.string.title_search)
+            title = if (viewModel.searchedText.value.isNotEmpty()) {
+                resources.getString(R.string.title_search_results, viewModel.searchedText.value)
+            } else {
+                resources.getString(R.string.title_search)
             }
         }
         viewModel.getSearchHistoryList()
         searchView = requireActivity().findViewById(R.id.search_view)
-        mSearchLayout = requireActivity().findViewById<View>(R.id.search_layout)
-        mSuggestionsListView  = mSearchLayout.findViewById(R.id.suggestion_list)
-        mTintView = mSearchLayout.findViewById<View>(R.id.transparent_view)
-        mEmptyBtn = mSearchLayout.findViewById<ImageButton>(R.id.action_empty_btn)
+        mSearchLayout = requireActivity().findViewById(R.id.search_layout)
+        mSuggestionsListView = mSearchLayout.findViewById(R.id.suggestion_list)
+        mTintView = mSearchLayout.findViewById(R.id.transparent_view)
+        mEmptyBtn = mSearchLayout.findViewById(R.id.action_empty_btn)
 
         var searchAdapter: SearchSuggestionAdapter? = null
         searchView.setHint(resources.getString(R.string.hint_search))
@@ -96,7 +94,12 @@ class GuidelineListFragment :
         viewModel.suggestions.addObserver {
             if (searchAdapter != null) {
                 mSuggestionsListView.visibility = View.VISIBLE
-                searchAdapter!!.setSuggestionIcon(ContextCompat.getDrawable(requireActivity(), R.drawable.baseline_search_24)!!)
+                searchAdapter!!.setSuggestionIcon(
+                    ContextCompat.getDrawable(
+                        requireActivity(),
+                        R.drawable.baseline_search_24
+                    )!!
+                )
                 searchAdapter!!.setItems(it)
             }
         }
@@ -110,11 +113,9 @@ class GuidelineListFragment :
 
         searchView.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                if (query!=null) {
-                    viewModel.searchedText.value = query
-                    viewModel.getFilteredGuidelines(query)
-                    //TODO(Add logic API call)
-                }
+                viewModel.searchedText.value = query
+                viewModel.getFilteredGuidelines(query)
+                //TODO(Add logic API call)
                 return false
             }
             override fun onQueryTextChange(newText: String): Boolean {
@@ -135,49 +136,44 @@ class GuidelineListFragment :
 
         searchView.setOnSearchViewListener(object : MaterialSearchView.SearchViewListener {
             override fun onSearchViewShown() {
-                searchAdapter = SearchSuggestionAdapter(requireActivity(), viewModel.searchHistoryList, ContextCompat.getDrawable(requireActivity(), R.drawable.baseline_history_24)!!, true)
+                searchAdapter = SearchSuggestionAdapter(
+                    requireActivity(),
+                    viewModel.searchHistoryList,
+                    ContextCompat.getDrawable(requireActivity(), R.drawable.baseline_history_24)!!,
+                    true
+                )
                 searchView.setAdapter(searchAdapter)
-                mTintView.visibility  = View.VISIBLE;
-                isInitialization = false;
+                mTintView.visibility = View.VISIBLE
+                isInitialization = false
                 viewModel.searchedText.value.apply {
                     if (this.isNotEmpty())
                         searchView.setQuery(this, false)
                     else
                         mSuggestionsListView.visibility = View.VISIBLE
-
                 }
-
             }
             override fun onSearchViewClosed() {
                 searchView.setAdapter(null)
                 activity!!.findViewById<Toolbar>(R.id.toolbar_main).apply {
                     val searchText = viewModel.searchedText.value
-                    if(searchText.isNotEmpty()) {
+                    if (searchText.isNotEmpty()) {
                         title = resources.getString(R.string.title_search_results, searchText)
                         viewModel.saveSearchHistoryList(searchText)
-                    }
-                    else
+                    } else
                         title = resources.getString(R.string.title_search)
                 }
             }
         })
-        searchView.setOnItemClickListener(object : AdapterView.OnItemClickListener{
-            override fun onItemClick(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                showSuggestions = false
-                val query = searchAdapter!!.getItem(position)
-                if (query!=null) {
-                    searchView.setQuery(query, false)
-                    mSuggestionsListView.visibility = View.INVISIBLE
-                    viewModel.getFilteredGuidelines(query)
-                    viewModel.searchedText.value = query
-                }
+        searchView.setOnItemClickListener { parent, view, position, id ->
+            showSuggestions = false
+            val query = searchAdapter!!.getItem(position)
+            if (query != null) {
+                searchView.setQuery(query, false)
+                mSuggestionsListView.visibility = View.INVISIBLE
+                viewModel.getFilteredGuidelines(query)
+                viewModel.searchedText.value = query
             }
-        })
+        }
 
         setHasOptionsMenu(true)
         instructionsAdapter =

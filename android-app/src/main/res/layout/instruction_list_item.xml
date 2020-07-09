@@ -90,6 +90,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginBottom="0dp"
                         android:layout_weight="1"
+                        android:lines="2"
                         tools:text="@{instruction.name}" />
 
                     <LinearLayout
@@ -149,11 +150,12 @@
 
             <TextView
                 android:id="@+id/tv_info"
-                style="@style/Text.Description"
+                style="@style/Text"
                 visibleOrGone="@{instruction.descr.length()>0}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/spacing_xxxsmall"
+                android:layout_marginHorizontal="@dimen/spacing_xxsmall"
+                android:layout_marginVertical="@dimen/spacing_xsmall"
                 tools:text="@{instruction.descr}" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
