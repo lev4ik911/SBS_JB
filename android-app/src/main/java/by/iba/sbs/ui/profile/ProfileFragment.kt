@@ -75,9 +75,9 @@ class ProfileFragment :
         }
 
         binding.appbar.addOnOffsetChangedListener(this)
-        viewPager = binding.viewPager
-        viewPager.adapter = TabsFragmentAdapter(this)
         viewModel.user.addObserver {
+            viewPager = binding.viewPager
+            viewPager.adapter = TabsFragmentAdapter(this)
             TabLayoutMediator(binding.tabsProfile, viewPager) { tab, position ->
                 tab.text = when (position) {
                     0 -> getString(R.string.title_instructions)
