@@ -45,10 +45,15 @@ interface IGuidelineRepository {
     suspend fun updateSteps(guidelineId: String, data: List<Step>): Response<List<StepView>>
     suspend fun deleteStep(guidelineId: String, stepId: String): Response<String?>
     suspend fun getStepByIdFromLocalDB(guidelineId: String, stepId: String): Step
-    suspend fun insertRating(guidelineId: String, data: RatingCreate, ratingSummary: RatingSummary): Response<RatingView>
+    suspend fun insertRating(
+        guidelineId: String,
+        data: RatingCreate,
+        ratingSummary: RatingSummary
+    ): Response<RatingView>
+
     suspend fun updateRating(guidelineId: String, data: Feedback): Response<RatingView>
     suspend fun deleteRating(guidelineId: String, feedbackId: String): Response<String?>
-    suspend fun getSuggestions(searchText: String):List<String>
+    suspend fun getSuggestions(searchText: String): List<String>
     suspend fun getFilteredGuidelines(searchText: String): List<Guideline>
 }
 
@@ -60,6 +65,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
 
     @UnstableDefault
     private val steps by lazy { Steps(settings) }
+
+    @UnstableDefault
+    private val users by lazy { Users(settings) }
 
     @UnstableDefault
     private val feedback by lazy { Feedbacks(settings) }
@@ -80,7 +88,13 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
 
             override suspend fun saveCallResults(data: List<Guideline>) = coroutineScope {
                 data.forEach {
-                    guidelinesQueries.insertGuideline(it.id, it.name, it.descr, it.authorId)
+                    guidelinesQueries.insertGuideline(
+                        it.id,
+                        it.name,
+                        it.descr,
+                        it.authorId,
+                        it.author
+                    )
                     it.rating.apply {
                         ratingSummaryQueries.insertRating(
                             it.id,
@@ -104,6 +118,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         Guideline(
                             it.id, it.name, it.description,
                             authorId = it.authorId,
+                            author = it.author,
                             rating = RatingSummary(
                                 rating.positive!!.toInt(),
                                 rating.negative!!.toInt(),
@@ -121,12 +136,14 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     val result = guidelines.getAllGuidelines()
                     if (result.isSuccess) {
                         result.data!!.map { item ->
+                            val user = users.getUserById(item.activity.createdBy)
                             Guideline(
                                 item.id,
                                 item.name,
                                 item.description ?: "",
                                 rating = item.rating,
-                                authorId = item.activity.createdBy
+                                authorId = item.activity.createdBy,
+                                author = if (user.data == null) "" else user.data.name
                             )
                         }
                     } else {
@@ -157,7 +174,13 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         overall.toLong()
                     )
                 }
-                guidelinesQueries.insertGuideline(data.id, data.name, data.descr, data.authorId)
+                guidelinesQueries.insertGuideline(
+                    data.id,
+                    data.name,
+                    data.descr,
+                    data.authorId,
+                    data.author
+                )
 
             }
 
@@ -173,6 +196,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     Guideline(
                         item.id, item.name, item.description,
                         authorId = item.authorId,
+                        author = item.author,
                         rating = RatingSummary(
                             ratingSummary.positive!!.toInt(),
                             ratingSummary.negative!!.toInt(),
@@ -188,11 +212,13 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     val result = guidelines.getGuideline(guidelineId)
                     if (result.isSuccess) {
                         val item = result.data!!
+                        val user = users.getUserById(item.activity.createdBy)
                         Guideline(
                             item.id,
                             item.name,
                             item.description!!,
                             authorId = item.activity.createdBy,
+                            author = if (user.data == null) "" else user.data.name,
                             rating = RatingSummary(
                                 item.rating.positive,
                                 item.rating.negative,
@@ -202,7 +228,6 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
                         Guideline()
-
                     }
                 }
             }
@@ -288,11 +313,13 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             val result = guidelines.postGuideline(GuidelineCreate(data.name, data.descr))
             if (result.isSuccess) {
                 val item = result.data!!
+                val user = users.getUserById(item.activity.createdBy)
                 guidelinesQueries.insertGuideline(
                     item.id,
                     item.name,
                     item.description ?: "",
-                    item.activity.createdBy
+                    item.activity.createdBy,
+                    if (user.data == null) "" else user.data.name
                 )
                 ratingSummaryQueries.insertRating(
                     item.id,
@@ -314,11 +341,13 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 guidelines.putGuideline(data.id, GuidelineEdit(data.name, data.descr))
             if (result.isSuccess) {
                 val item = result.data!!
+                val user = users.getUserById(item.activity.createdBy)
                 guidelinesQueries.insertGuideline(
                     item.id,
                     item.name,
                     item.description ?: "",
-                    item.activity.createdBy
+                    item.activity.createdBy,
+                    if (user.data == null) "" else user.data.name
                 )
             }
 //            else {
@@ -344,7 +373,10 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     }
 
     @UnstableDefault
-    override suspend fun insertSteps(guidelineId: String, data: List<Step>): Response<List<StepView>> = coroutineScope {
+    override suspend fun insertSteps(
+        guidelineId: String,
+        data: List<Step>
+    ): Response<List<StepView>> = coroutineScope {
         val result = steps.postSteps(guidelineId, data.map {
             StepCreate(it.name, it.descr, it.weight)
         })
@@ -370,7 +402,10 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     }
 
     @UnstableDefault
-    override suspend fun updateSteps(guidelineId: String, data: List<Step>): Response<List<StepView>> = coroutineScope {
+    override suspend fun updateSteps(
+        guidelineId: String,
+        data: List<Step>
+    ): Response<List<StepView>> = coroutineScope {
         val stepMap = HashMap<String, StepEdit>()
         data.forEach {
             stepMap[it.stepId] =
@@ -398,15 +433,16 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     }
 
     @UnstableDefault
-    override suspend fun deleteStep(guidelineId: String, stepId: String): Response<String?> = coroutineScope {
-        val result = steps.deleteStep(guidelineId, stepId)
-        if (result.isSuccess) {
-            guidelinesQueries.deleteStepById(stepId)
-        } else {
-            if (result.status == Response.Status.ERROR) error(result.error!!)
+    override suspend fun deleteStep(guidelineId: String, stepId: String): Response<String?> =
+        coroutineScope {
+            val result = steps.deleteStep(guidelineId, stepId)
+            if (result.isSuccess) {
+                guidelinesQueries.deleteStepById(stepId)
+            } else {
+                if (result.status == Response.Status.ERROR) error(result.error!!)
+            }
+            return@coroutineScope result
         }
-        return@coroutineScope result
-    }
 
     override suspend fun getStepByIdFromLocalDB(guidelineId: String, stepId: String): Step =
         coroutineScope {
@@ -420,7 +456,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 result.updateImageTimeSpan = this.updateImageTimeSpan!!.toInt()
             }
             return@coroutineScope result
-    }
+        }
 
     @UnstableDefault
     override suspend fun getAllFeedbacks(
@@ -539,23 +575,25 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
 
     override suspend fun getSuggestions(searchText: String): List<String> =
         coroutineScope {
-            return@coroutineScope suggestionsQueries.selectSuggestionsByText(searchText).executeAsList()
+            return@coroutineScope suggestionsQueries.selectSuggestionsByText(searchText)
+                .executeAsList()
         }
 
     override suspend fun getFilteredGuidelines(searchText: String): List<Guideline> =
         coroutineScope {
             val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
-            return@coroutineScope suggestionsQueries.searchGuidelinesByText(searchText).executeAsList().map {
-                val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
-                if (rating != null) {
-                    Guideline(
-                        it.id, it.name, it.description,
-                        rating = RatingSummary(
-                            rating.positive!!.toInt(),
-                            rating.negative!!.toInt(),
-                            rating.overall!!.toInt()
+            return@coroutineScope suggestionsQueries.searchGuidelinesByText(searchText)
+                .executeAsList().map {
+                    val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
+                    if (rating != null) {
+                        Guideline(
+                            it.id, it.name, it.description,
+                            rating = RatingSummary(
+                                rating.positive!!.toInt(),
+                                rating.negative!!.toInt(),
+                                rating.overall!!.toInt()
+                            )
                         )
-                    )
                 } else {
                     Guideline(it.id, it.name, it.description)
                 }

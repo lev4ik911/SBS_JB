@@ -3,12 +3,13 @@ CREATE TABLE guidelines (
     name TEXT NOT NULL DEFAULT "",
     description TEXT NOT NULL DEFAULT "",
     authorId TEXT NOT NULL DEFAULT "",
+    author TEXT NOT NULL DEFAULT "",
     imagePath TEXT NOT NULL DEFAULT "",
     updateImageTimeSpan INTEGER DEFAULT 0
 );
 insertGuideline:
-INSERT OR REPLACE INTO guidelines (id, name, description, authorId)
-VALUES (?, ?, ?, ?);
+INSERT OR REPLACE INTO guidelines (id, name, description, authorId, author)
+VALUES (?, ?, ?, ?, ?);
 
 selectAllGuidelines:
 SELECT *

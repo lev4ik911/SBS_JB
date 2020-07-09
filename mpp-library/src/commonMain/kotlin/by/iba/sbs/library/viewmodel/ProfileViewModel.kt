@@ -47,6 +47,7 @@ class ProfileViewModel(
     val user = MutableLiveData(User()).apply {
         addObserver {
             isMyProfile.value = it.id == localStorage.userId
+            isFavorite.value = !isMyProfile.value
         }
     }
     val rating = MutableLiveData("547")

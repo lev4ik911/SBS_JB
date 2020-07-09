@@ -77,15 +77,16 @@ class ProfileFragment :
         binding.appbar.addOnOffsetChangedListener(this)
         viewPager = binding.viewPager
         viewPager.adapter = TabsFragmentAdapter(this)
-
-        TabLayoutMediator(binding.tabsProfile, viewPager) { tab, position ->
-            tab.text = when (position) {
-                0 -> getString(R.string.title_instructions)
-                1 -> getString(R.string.title_subscribers)
-                2 -> getString(R.string.title_settings)
-                else -> ""
-            }
-        }.attach()
+        viewModel.user.addObserver {
+            TabLayoutMediator(binding.tabsProfile, viewPager) { tab, position ->
+                tab.text = when (position) {
+                    0 -> getString(R.string.title_instructions)
+                    1 -> getString(R.string.title_subscribers)
+                    2 -> getString(R.string.title_settings)
+                    else -> ""
+                }
+            }.attach()
+        }
     }
 
     private fun initActionButton() {
