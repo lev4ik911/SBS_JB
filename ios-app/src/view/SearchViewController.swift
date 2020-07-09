@@ -12,6 +12,12 @@ import MultiPlatformLibrary
 
 class SearchViewController : UITableViewController  {
     
+    struct Consts {
+        var InstructionCellName = "InstructionsTableViewCell"
+        var NavigationIdentifier = "showinstructiondetailSearch"
+    }
+    var consts = Consts()
+    
     var filtered = [Guideline]()
     var filterring = false
     
@@ -39,10 +45,10 @@ class SearchViewController : UITableViewController  {
         tableView.rowHeight = 90
         tableView.delegate = self
         tableView.dataSource = self
-        let myFieldCell = UINib(nibName: "InstructionsTableViewCell",
+        let myFieldCell = UINib(nibName: consts.InstructionCellName,
                                   bundle: nil)
         tableView.register(myFieldCell,
-                                forCellReuseIdentifier: "InstructionsTableViewCell")
+                                forCellReuseIdentifier: consts.InstructionCellName)
 
         return tableView
     }()
@@ -63,11 +69,11 @@ class SearchViewController : UITableViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.rowHeight=90
-        let myFieldCell = UINib(nibName: "InstructionsTableViewCell",
+        self.tableView.rowHeight = 90
+        let myFieldCell = UINib(nibName: consts.InstructionCellName,
                                   bundle: nil)
         self.tableView.register(myFieldCell,
-                                forCellReuseIdentifier: "InstructionsTableViewCell")
+                                forCellReuseIdentifier: consts.InstructionCellName)
                 
         self.view.backgroundColor = UIColor.white
         
@@ -103,7 +109,7 @@ class SearchViewController : UITableViewController  {
     
     override func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = self.tableView.dequeueReusableCell(withIdentifier: "InstructionsTableViewCell") as? InstructionsTableViewCell {
+        if let cell = self.tableView.dequeueReusableCell(withIdentifier: consts.InstructionCellName) as? InstructionsTableViewCell {
             cell.fill(self.createGuidlinesTile(item: data[indexPath.row]))
             return cell
         }
@@ -113,8 +119,14 @@ class SearchViewController : UITableViewController  {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //TODO: add navigation to Instruction detail View
-        
+        performSegue(withIdentifier: consts.NavigationIdentifier, sender: self)
         //vm.openNews(vm.getWorkplaceNewsItem(for: indexPath.row))
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destination = segue.destination as? InstructionDetailViewController{
+            destination.instructionID = self.data[(tableView.indexPathForSelectedRow?.row)!].id
+        }
     }
     
 }

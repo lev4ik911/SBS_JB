@@ -10,6 +10,16 @@ import Foundation
 import UIKit
 import MultiPlatformLibrary
 
-class ProfileViewController : UIViewController {
+
+class ProfileViewController : UIViewController  {
+    
+    var loginView = LoginView()
+    var userView = UserView()
+    
+    override func viewDidLoad() {
+        //TODO: check if user logged
+        self.view.addSubview(loginView)
+        //self.addSubView(loginView)
+    }
     
 }

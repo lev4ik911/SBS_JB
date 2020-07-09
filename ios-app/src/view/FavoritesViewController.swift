@@ -12,6 +12,12 @@ import MultiPlatformLibrary
 
 class FavoritesViewController : UITableViewController  {
     
+    struct Consts {
+        var InstructionCellName = "InstructionsTableViewCell"
+        var NavigationIdentifier = "showinstructiondetail"
+    }
+    var consts = Consts()
+    
     var filtered = [Guideline]()
     var filterring = false
     
@@ -39,10 +45,10 @@ class FavoritesViewController : UITableViewController  {
         tableView.rowHeight = 90
         tableView.delegate = self
         tableView.dataSource = self
-        let myFieldCell = UINib(nibName: "InstructionsTableViewCell",
+        let myFieldCell = UINib(nibName: consts.InstructionCellName,
                                   bundle: nil)
         tableView.register(myFieldCell,
-                                forCellReuseIdentifier: "InstructionsTableViewCell")
+                           forCellReuseIdentifier: consts.InstructionCellName)
 
         return tableView
     }()
@@ -63,11 +69,11 @@ class FavoritesViewController : UITableViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.rowHeight=90
-        let myFieldCell = UINib(nibName: "InstructionsTableViewCell",
+        self.tableView.rowHeight = 90
+        let myFieldCell = UINib(nibName: consts.InstructionCellName,
                                   bundle: nil)
         self.tableView.register(myFieldCell,
-                                forCellReuseIdentifier: "InstructionsTableViewCell")
+                                forCellReuseIdentifier: consts.InstructionCellName)
                 
         self.view.backgroundColor = UIColor.white
         
@@ -103,7 +109,7 @@ class FavoritesViewController : UITableViewController  {
     
     override func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = self.tableView.dequeueReusableCell(withIdentifier: "InstructionsTableViewCell") as? InstructionsTableViewCell {
+        if let cell = self.tableView.dequeueReusableCell(withIdentifier: consts.InstructionCellName) as? InstructionsTableViewCell {
             cell.fill(self.createGuidlinesTile(item: data[indexPath.row]))
             return cell
         }
@@ -113,13 +119,13 @@ class FavoritesViewController : UITableViewController  {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //TODO: add navigation to Instruction detail View
-        performSegue(withIdentifier: "showinstructiondetail", sender: self)
+        performSegue(withIdentifier: consts.NavigationIdentifier, sender: self)
         //vm.openNews(vm.getWorkplaceNewsItem(for: indexPath.row))
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? InstructionDetailViewController{
-            destination.instruction = self.data[(tableView.indexPathForSelectedRow?.row)!]
+            destination.instructionID = self.data[(tableView.indexPathForSelectedRow?.row)!].id
         }
     }
     
@@ -142,37 +148,7 @@ extension FavoritesViewController: UISearchResultsUpdating {
         */
     }
 }
-/*
-extension FavoritesViewController : UITableViewDataSource, UITableViewDelegate{
-    override func tableView(_ tableView: UITableView,
-                   numberOfRowsInSection section: Int) -> Int {
-        return data.count
-    }
-    
-    override func tableView(_ tableView: UITableView,
-                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "InstructionsTableViewCell") as? InstructionsTableViewCell {
-            cell.fill(self.createGuidlinesTile(item: data[indexPath.row]))
-            return cell
-        }
-        
-        return UITableViewCell()
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //TODO: add navigation to Instruction detail View
-        if let vcMissionDetail : ViewControllerMissionDetail = self.storyboard?.instantiateViewControllerWithIdentifier("MissionDetail") as ViewControllerMissionDetail {
 
-            //set label text before presenting the viewController
-            vcMissionDetail.label.text = "Test"
-
-            //load detail view controller
-            self.presentViewController(vcMissionDetail, animated: true, completion: nil)
-        }
-        //vm.openNews(vm.getWorkplaceNewsItem(for: indexPath.row))
-    }
-}
-*/
 extension FavoritesViewController: GuidelineListViewModelSharedEventsListener {
     func showToast(msg: ToastMessage) {
 
