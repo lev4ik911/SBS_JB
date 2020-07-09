@@ -110,7 +110,11 @@ class GuidelineListFragment :
 
         searchView.setOnQueryTextListener(object : MaterialSearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-
+                if (query!=null) {
+                    viewModel.searchedText.value = query
+                    viewModel.getFilteredGuidelines(query)
+                    //TODO(Add logic API call)
+                }
                 return false
             }
             override fun onQueryTextChange(newText: String): Boolean {
