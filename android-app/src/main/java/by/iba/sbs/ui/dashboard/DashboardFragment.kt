@@ -35,7 +35,6 @@ import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.*
 
@@ -65,8 +64,6 @@ class DashboardFragment :
         )
     }
 
-    val firstPresenter: DashboardViewModelShared by inject()
-    var lastSearchText: String = ""
     private val mainViewModel: MainViewModel by sharedViewModel()
 
     @UnstableDefault
@@ -87,7 +84,6 @@ class DashboardFragment :
         binding.rvCategory.apply {
             adapter = categoriesAdapter
             layoutManager = GridLayoutManager(context, 2, RecyclerView.HORIZONTAL, false)
-            //layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
         }
         viewModel.categories.addObserver {
             categoriesAdapter.addItems(it)

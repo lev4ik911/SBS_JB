@@ -64,7 +64,7 @@
     </style>
 
     <style name="Text.FragmentTitle" parent="Text">
-        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
         <item name="android:textColor">?attr/colorPrimaryDark</item>
         <item name="singleLine">true</item>
         <item name="android:gravity">center_vertical</item>

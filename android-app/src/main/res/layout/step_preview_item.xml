@@ -115,7 +115,7 @@
             android:layout_width="@dimen/preview_image_width_land"
             android:layout_height="@dimen/preview_image_height_land"
             android:layout_margin="@dimen/spacing_small"
-            android:src="@drawable/ic_paneer"
+            android:src="@drawable/image_background"
             app:layout_anchor="@id/cards"
             app:layout_anchorGravity="top|center"
             tools:ignore="ContentDescription" />

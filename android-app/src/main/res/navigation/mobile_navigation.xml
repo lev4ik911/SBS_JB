@@ -9,13 +9,35 @@
         android:id="@+id/navigation_dashboard"
         android:name="by.iba.sbs.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/dashboard_fragment"/>
+        tools:layout="@layout/dashboard_fragment" />
 
     <fragment
         android:id="@+id/navigation_guideline_list"
         android:name="by.iba.sbs.ui.guidelines.GuidelineListFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/instruction_list_fragment"/>
+        tools:layout="@layout/instruction_list_fragment" />
+    <fragment
+        android:id="@+id/navigation_instruction_view"
+        android:name="by.iba.sbs.ui.guideline.GuidelineFragment"
+        android:label=""
+        tools:layout="@layout/instruction_fragment" />
+    <fragment
+        android:id="@+id/navigation_instruction_edit"
+        android:name="by.iba.sbs.ui.guideline.GuidelineEditFragment"
+        android:label="instruction_edit_fragment"
+        tools:layout="@layout/instruction_edit_fragment">
+        <argument
+            android:name="instructionId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_step_edit"
+        android:name="by.iba.sbs.ui.guideline.StepEditFragment"
+        android:label="StepEditFragment">
+        <argument
+            android:name="stepId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_profile_fragment"
         android:name="by.iba.sbs.ui.profile.ProfileFragment"

@@ -19,11 +19,11 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         style="@style/Card"
-        android:onClick="@{(view)-> viewmodel.onOpenGuidelineClick(view, instruction)}"
         android:layout_width="@dimen/horizontal_item_width"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/spacing_xsmall"
         android:layout_marginBottom="@dimen/spacing_xsmall"
+        android:onClick="@{(view)-> viewmodel.onOpenGuidelineClick(view, instruction)}"
         tools:ignore="ContentDescription">
 
         <LinearLayout
@@ -42,7 +42,7 @@
 
                 <ImageView
                     android:id="@+id/iv_preview"
-                    android:layout_width="@dimen/list_image_width_land"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/list_image_height_land"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_paneer" />
@@ -72,6 +72,7 @@
                     android:maxLines="3"
                     android:minLines="2"
                     tools:text="@{instruction.name}" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -87,6 +88,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/feedback"
                         android:textAlignment="viewEnd" />
+
                     <View
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
@@ -97,9 +99,9 @@
 
                     <TextView
                         android:id="@+id/tv_rating_up"
+                        style="@style/Text.Description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/Text.Description"
                         android:layout_gravity="center_vertical"
                         android:paddingHorizontal="@dimen/spacing_xxxsmall"
                         android:text="@{Integer.toString(instruction.rating.positive)}"
@@ -117,8 +119,8 @@
                         android:id="@+id/tv_rating_down"
                         style="@style/Text.Description"
                         android:layout_width="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:paddingHorizontal="@dimen/spacing_xxxsmall"
                         android:text="@{Integer.toString(instruction.rating.negative)}"
                         android:textColor="@color/colorLightRed" />
@@ -139,6 +141,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_xxsmall"
+                    android:maxLines="3"
+                    android:minLines="2"
                     android:singleLine="false"
                     tools:text="@{instruction.descr}" />
             </LinearLayout>

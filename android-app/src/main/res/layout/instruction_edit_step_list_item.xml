@@ -45,6 +45,7 @@
                         android:layout_width="@dimen/list_image_size"
                         android:layout_height="@dimen/list_image_size"
                         android:scaleType="centerCrop"
+                        android:background="@drawable/image_background"
                         imageFromPath="@{ step.imagePath }"/>
 
                     <ImageView
