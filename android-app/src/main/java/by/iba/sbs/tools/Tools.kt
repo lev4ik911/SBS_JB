@@ -2,6 +2,7 @@ package by.iba.sbs.tools
 
 import android.content.Context
 import android.graphics.Color
+import android.net.Uri
 import android.util.Log
 import android.view.View
 import android.view.animation.AlphaAnimation
@@ -15,6 +16,7 @@ import by.iba.sbs.library.model.ToastMessage
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.shashank.sony.fancytoastlib.FancyToast
+import java.io.File
 
 @BindingAdapter("textColorByValue")
 fun TextView.textColorByValue(value: Int) {
@@ -24,6 +26,16 @@ fun TextView.textColorByValue(value: Int) {
         else -> resources.getColor(R.color.textColorSecondary)
     }
     setTextColor(color)
+}
+
+@BindingAdapter("imageFromPath")
+fun ImageView.imageFromPath(imagePath: String) {
+    if (imagePath.isNotEmpty()) {
+        val imageUri = Uri.fromFile(File(imagePath))
+        this.setImageURI(imageUri)
+    } else {
+        this.setImageResource(R.drawable.clouds)
+    }
 }
 
 fun ImageView.loadImageFromResources(context: Context, aImageUrl: Int) {

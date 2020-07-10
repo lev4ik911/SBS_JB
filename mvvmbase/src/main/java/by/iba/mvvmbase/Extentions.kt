@@ -1,12 +1,9 @@
 package by.iba.mvvmbase
 
 import android.content.Context
-import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import java.io.File
 
 
 @BindingAdapter("visibleOrGone")
@@ -24,16 +21,6 @@ fun ViewGroup.childrenEnabled(enabled:Boolean){
     for (i in 0 until this.childCount) {
         val child = this.getChildAt(i)
         child.isEnabled = enabled
-    }
-}
-
-@BindingAdapter("imageFromPath")
-fun ImageView.imageFromPath(imagePath: String) {
-    if (imagePath.isNotEmpty()) {
-        val imageUri = Uri.fromFile(File(imagePath))
-        this.setImageURI(imageUri)
-    } else {
-        this.setImageResource(R.drawable.ic_paneer)
     }
 }
 
