@@ -2,6 +2,7 @@ package by.iba.sbs.library.viewmodel
 
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.*
+import by.iba.sbs.library.repository.GuidelineRepository
 import by.iba.sbs.library.repository.UsersRepository
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
@@ -52,12 +53,8 @@ class ProfileViewModel(
     }
     val rating = MutableLiveData("547")
 
-    val instructions = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
-        val mData = ArrayList<Guideline>()
-        mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
-        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
-        value = mData
-    }
+    val instructions = MutableLiveData<List<Guideline>>(mutableListOf())
+
     val subscribers = MutableLiveData<List<Author>>(mutableListOf()).apply {
         val mData = ArrayList<Author>()
         mData.add(Author("Petey Cruiser", 12, 123, 547))
@@ -96,6 +93,46 @@ class ProfileViewModel(
                 eventsDispatcher.dispatchEvent {
                     showToast(
                         ToastMessage(e.message.orEmpty(), MessageType.ERROR)
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    private val repository by lazy { GuidelineRepository(localStorage) }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun loadInstructions(forceRefresh: Boolean) {
+        loading.value = true
+        viewModelScope.launch {
+            try {
+                val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
+                guidelinesLiveData.addObserver {
+                    if (it.isSuccess && it.isNotEmpty) {
+                        var guidelines = it.data!!
+                        instructions.postValue(guidelines.sortedBy { item -> item.id }
+                            .toList())
+                    } else if (it.error != null)
+                        eventsDispatcher.dispatchEvent {
+                            showToast(
+                                ToastMessage(
+                                    it.error.toString(),
+                                    MessageType.ERROR
+                                )
+                            )
+                        }
+                    loading.postValue(it.status == Response.Status.LOADING)
+                }
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
                     )
                 }
             }
