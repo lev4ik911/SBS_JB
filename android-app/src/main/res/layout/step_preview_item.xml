@@ -36,14 +36,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/cards"
                 android:padding="@dimen/spacing_xsmall"
-                tools:text="@{Integer.toString(step.weight)}" />
+                android:text="@{String.format(@string/app_version_str, step.weight)}" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cards"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="@dimen/spacing_xsmall"
-                android:layout_marginTop="@dimen/list_image_size"
+                android:layout_marginTop="@dimen/spacing_xxxlarge"
                 android:layout_marginBottom="@dimen/spacing_xsmall"
                 android:elevation="@dimen/spacing_normal"
                 android:minWidth="@dimen/preview_minimal_width"
@@ -109,17 +109,16 @@
             </androidx.cardview.widget.CardView>
 
         </RelativeLayout>
-
         <ImageView
             android:id="@+id/iv_step_image"
             android:layout_width="@dimen/preview_image_width_land"
             android:layout_height="@dimen/preview_image_height_land"
             android:layout_margin="@dimen/spacing_small"
-            visibleOrGone="@{!step.imagePath.isEmpty()}"
             android:src="@drawable/image_background"
             app:layout_anchor="@id/cards"
             app:layout_anchorGravity="top|center"
             tools:ignore="ContentDescription" />
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

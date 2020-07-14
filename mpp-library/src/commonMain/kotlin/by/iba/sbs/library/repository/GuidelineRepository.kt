@@ -71,11 +71,6 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
 
     @UnstableDefault
     private val feedback by lazy { Feedbacks(settings) }
-
-    @OptIn(UnstableDefault::class)
-    @ImplicitReflectionSerializer
-    private val usersRepository by lazy { UsersRepository(settings) }
-
     private val sbsDb = createDb()
     private val guidelinesQueries = sbsDb.guidelinesEntityQueries
     private val ratingSummaryQueries = sbsDb.ratingSummaryQueries
@@ -122,8 +117,8 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     if (rating != null) {
                         Guideline(
                             it.id, it.name, it.description,
-                            author = it.author,
                             authorId = it.authorId,
+                            author = it.author,
                             rating = RatingSummary(
                                 rating.positive!!.toInt(),
                                 rating.negative!!.toInt(),
@@ -131,7 +126,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                             )
                         )
                     } else {
-                        Guideline(it.id, it.name, it.description, it.author, it.authorId)
+                        Guideline(it.id, it.name, it.description, it.authorId)
                     }
                 }
             }
@@ -141,15 +136,14 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     val result = guidelines.getAllGuidelines()
                     if (result.isSuccess) {
                         result.data!!.map { item ->
-                            val user =
-                                usersRepository.getUser(item.activity.createdBy, forceRefresh)
+                            val user = users.getUserById(item.activity.createdBy)
                             Guideline(
                                 item.id,
                                 item.name,
                                 item.description ?: "",
                                 rating = item.rating,
                                 authorId = item.activity.createdBy,
-                                author = if (user.value.data == null) "" else user.value.data!!.name
+                                author = if (user.data == null) "" else user.data.name
                             )
                         }
                     } else {
