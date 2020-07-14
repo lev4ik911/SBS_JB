@@ -181,10 +181,10 @@ class ProfileFragment :
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> ProfileInstructionsFragment()
+                0 -> ProfileGuidelinesFragment()
                 1 -> SubscribersFragment()
                 2 -> SettingsFragment()
-                else -> ProfileInstructionsFragment()
+                else -> ProfileGuidelinesFragment()
             }
         }
     }

@@ -20,7 +20,7 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
     @LayoutRes private val layoutId: Int,
     @LayoutRes val collectionVariableId: Int,
     @LayoutRes val viewModelVariableId: Int,
-    val viewModel: VM,
+    val viewModelAction: VM,
     open val isItemsEquals: (oldItem: T, newItem: T) -> Boolean
 ) : RecyclerView.Adapter<BaseBindingAdapter<T, DB, VM>.BindingHolder>(), Filterable {
 
@@ -254,7 +254,7 @@ open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM :
 
         fun bind(employee: T) {
             _dataBinding?.setVariable(collectionVariableId, employee)
-            _dataBinding?.setVariable(viewModelVariableId, viewModel)
+            _dataBinding?.setVariable(viewModelVariableId, viewModelAction)
             _dataBinding?.executePendingBindings()
         }
 

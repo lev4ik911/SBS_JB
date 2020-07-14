@@ -2,6 +2,7 @@ package by.iba.sbs.library.data.remote
 
 import by.iba.sbs.library.model.request.UserCreate
 import by.iba.sbs.library.model.response.AuthData
+import by.iba.sbs.library.model.response.GuidelineView
 import by.iba.sbs.library.model.response.UserView
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.service.Utils
@@ -36,6 +37,13 @@ internal class Users(override val settings: LocalSettings) : Client(settings) {
     suspend fun getUserById(userId: String): Response<UserView> {
         return get(
             Utils.formatString(Routes.Users.URL_USER_DETAILS, userId)
+        )
+    }
+
+    suspend fun getUserGuidelines(userId: String): Response<List<GuidelineView>> {
+        return get(
+            Utils.formatString(Routes.Users.URL_USER_GUIDELINES, userId),
+            deserializer = GuidelineView::class.serializer().list
         )
     }
 

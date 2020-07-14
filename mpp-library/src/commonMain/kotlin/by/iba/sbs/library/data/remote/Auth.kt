@@ -5,6 +5,7 @@ import by.iba.sbs.library.model.request.RegisterData
 import by.iba.sbs.library.model.response.AuthData
 import by.iba.sbs.library.model.response.UserView
 import by.iba.sbs.library.service.LocalSettings
+import by.iba.sbs.library.service.Utils
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 
@@ -25,5 +26,9 @@ internal class Auth(override val settings: LocalSettings) : Client(settings, fal
         )
     }
 
-
+    suspend fun getUserById(userId: String): Response<UserView> {
+        return get(
+            Utils.formatString(Routes.Users.URL_USER_DETAILS, userId)
+        )
+    }
 }

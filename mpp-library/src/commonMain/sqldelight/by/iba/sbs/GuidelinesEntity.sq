@@ -19,6 +19,9 @@ ORDER BY name;
 selectGuidelineById:
 SELECT * FROM guidelines WHERE id = ?;
 
+selectGuidelinesByAuthorId:
+SELECT * FROM guidelines WHERE authorId = ?;
+
 deleteGuidelineById:
 DELETE FROM guidelines WHERE id = ?;
 

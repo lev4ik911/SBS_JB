@@ -13,6 +13,8 @@ object Routes {
     object Users {
         const val URL_USERS = "$baseRoute/$version/users/list"
         const val URL_USER_DETAILS = "$baseRoute/$version/users/item/%s"
+        const val URL_USER_GUIDELINES =
+            "$baseRoute/$version/users/item/15929ff9-b97c-436b-a246-adb83e8ccf08/guidelines/list"
     }
 
     object Guidelines {

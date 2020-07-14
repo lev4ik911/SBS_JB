@@ -2,7 +2,6 @@ package by.iba.sbs.library.viewmodel
 
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.*
-import by.iba.sbs.library.repository.GuidelineRepository
 import by.iba.sbs.library.repository.UsersRepository
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
@@ -53,7 +52,7 @@ class ProfileViewModel(
     }
     val rating = MutableLiveData("547")
 
-    val instructions = MutableLiveData<List<Guideline>>(mutableListOf())
+    val guidelines = MutableLiveData<List<Guideline>>(mutableListOf())
 
     val subscribers = MutableLiveData<List<Author>>(mutableListOf()).apply {
         val mData = ArrayList<Author>()
@@ -101,19 +100,25 @@ class ProfileViewModel(
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    private val repository by lazy { GuidelineRepository(localStorage) }
-
-    @UnstableDefault
-    @ImplicitReflectionSerializer
-    fun loadInstructions(forceRefresh: Boolean) {
+    fun loadUserGuidelines(forceRefresh: Boolean) {
         loading.value = true
+        eventsDispatcher.dispatchEvent {
+            showToast(
+                ToastMessage(
+                    "UserID: ${user.value.id}",
+                    MessageType.INFO
+                )
+            )
+        }
         viewModelScope.launch {
             try {
-                val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
+
+                val guidelinesLiveData =
+                    usersRepository.getUserGuidelines(user.value.id, forceRefresh)
                 guidelinesLiveData.addObserver {
                     if (it.isSuccess && it.isNotEmpty) {
-                        var guidelines = it.data!!
-                        instructions.postValue(guidelines.sortedBy { item -> item.id }
+                        val gl = it.data!!
+                        guidelines.postValue(gl.sortedBy { item -> item.name }
                             .toList())
                     } else if (it.error != null)
                         eventsDispatcher.dispatchEvent {

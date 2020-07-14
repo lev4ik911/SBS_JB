@@ -3,6 +3,7 @@ package by.iba.sbs.ui.profile
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import by.iba.mvvmbase.adapter.BaseBindingAdapter
@@ -11,25 +12,31 @@ import by.iba.sbs.R
 import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.databinding.ProfileInstructionsFragmentBinding
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.guideline.GuidelineActivity
+import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class ProfileInstructionsFragment :
+class ProfileGuidelinesFragment :
     MvvmFragment<ProfileInstructionsFragmentBinding, ProfileViewModel>() {
     override val layoutId: Int = R.layout.profile_instructions_fragment
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModelClass: Class<ProfileViewModel> =
         ProfileViewModel::class.java
     private lateinit var instructionsAdapter: BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>
+
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        val viewModel: ProfileViewModel by sharedViewModel()
-        return@createViewModelFactory viewModel
+        ProfileViewModel(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(requireContext())),
+            eventsDispatcherOnMain()
+        )
     }
 
     private val mainViewModel: MainViewModel by sharedViewModel()
@@ -47,38 +54,34 @@ class ProfileInstructionsFragment :
                 mainViewModel,
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
-                }).also {
-
+                }).apply {
+                val settings = LocalSettings(
+                    AndroidSettings(
+                        PreferenceManager.getDefaultSharedPreferences(requireContext())
+                    )
+                )
+                if (settings.accessToken == viewModel.user.value.id) {
+                    emptyViewId = R.layout.new_item
+                    onEmptyViewItemClick = {
+                        val intent = Intent(activity, GuidelineActivity::class.java)
+                        intent.putExtra("instructionId", 0)
+                        startActivity(intent)
+                    }
+                }
             }
         binding.rvInstructions.apply {
             adapter = instructionsAdapter
         }
-        viewModel.loadInstructions(true)//TODO: refresh implementation needed
-        viewModel.instructions.addObserver {
+        binding.rvInstructions.also {
+            it.adapter = instructionsAdapter
+            instructionsAdapter.itemTouchHelper.attachToRecyclerView(it)
+
+        }
+        viewModel.guidelines.addObserver {
             instructionsAdapter.addItems(it)
         }
-//        instructionsAdapter.onItemClick = { pos, itemView, item ->
-//            val transitionSharedNameImgView = this.getString(R.string.transition_name_img_view)
-//            val transitionSharedNameTxtView = this.getString(R.string.transition_name_txt_view)
-//            var imageViewPair: Pair<View, String>
-//            val textViewPair: Pair<View, String>
-//            itemView.findViewById<ImageView>(R.id.iv_preview).apply {
-//                this.transitionName = transitionSharedNameImgView
-//                imageViewPair = Pair.create(this, transitionSharedNameImgView)
-//            }
-//            itemView.findViewById<TextView>(R.id.tv_title).apply {
-//                this.transitionName = transitionSharedNameTxtView
-//                textViewPair = Pair.create(this, transitionSharedNameTxtView)
-//            }
-//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                activity as Activity,
-//                imageViewPair,
-//                textViewPair
-//            )
-//            val intent = Intent(activity, GuidelineActivity::class.java)
-//            intent.putExtra("instructionId", 12)
-//            startActivity(intent, options.toBundle())
-//        }
+        viewModel.loadUserGuidelines(false)//TODO: refresh implementation needed
+
         instructionsAdapter.onEmptyViewItemClick = {
             val intent = Intent(activity, GuidelineActivity::class.java)
             intent.putExtra("instructionId", 0)

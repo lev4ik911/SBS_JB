@@ -12,7 +12,7 @@
         android:id="@+id/l_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:onRefreshListener="@{() -> viewmodel.loadInstructions(true)}"
+        app:onRefreshListener="@{() -> viewmodel.loadUserGuidelines(true)}"
         app:refreshing="@{viewmodel.isLoading.ld}">
 
         <androidx.recyclerview.widget.RecyclerView

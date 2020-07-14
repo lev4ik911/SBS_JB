@@ -16,7 +16,7 @@ enum class ActiveTabEnum(var index: Int) {
 }
 
 class MainViewModel : BaseViewModel(), EventsDispatcherOwner<MainViewModel.EventsListener> {
-    override val eventsDispatcher: EventsDispatcher<MainViewModel.EventsListener> =
+    override val eventsDispatcher: EventsDispatcher<EventsListener> =
         eventsDispatcherOnMain()
     val activeTab: MutableLiveData<Int> = MutableLiveData(ActiveTabEnum.ID_HOME.index)
     fun onOpenGuidelineClick(view: View, guideline: Guideline) {
