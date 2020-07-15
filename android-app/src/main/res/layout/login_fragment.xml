@@ -95,7 +95,7 @@
             android:layout_margin="@dimen/spacing_normal"
             android:layout_marginTop="12dp"
             android:onClick="@{() -> viewmodel.onRegisterClick()}"
-            android:text="Don't have an account?"
+            android:text="@string/don_t_have_an_account"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="@+id/tv_register"
             app:layout_constraintTop_toBottomOf="@+id/flipper_login" />

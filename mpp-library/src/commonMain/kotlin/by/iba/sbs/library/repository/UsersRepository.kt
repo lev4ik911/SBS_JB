@@ -144,24 +144,26 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
             override suspend fun loadFromDb(): List<Guideline> = coroutineScope {
 
                 val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
-                return@coroutineScope guidelinesQueries.selectGuidelinesByAuthorId(userId)
-                    .executeAsList().map {
-                    val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
-                    if (rating != null) {
-                        Guideline(
-                            it.id, it.name, it.description,
-                            author = it.author,
-                            authorId = it.authorId,
-                            rating = RatingSummary(
-                                rating.positive!!.toInt(),
-                                rating.negative!!.toInt(),
-                                rating.overall!!.toInt()
+                return@coroutineScope guidelinesQueries.selectAllGuidelines()//GuidelinesByAuthorId(userId)
+                    .executeAsList()
+                    .filter { it.authorId == userId }
+                    .map {
+                        val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
+                        if (rating != null) {
+                            Guideline(
+                                it.id, it.name, it.description,
+                                author = it.author,
+                                authorId = it.authorId,
+                                rating = RatingSummary(
+                                    rating.positive!!.toInt(),
+                                    rating.negative!!.toInt(),
+                                    rating.overall!!.toInt()
+                                )
                             )
-                        )
-                    } else {
-                        Guideline(it.id, it.name, it.description, it.author, it.authorId)
+                        } else {
+                            Guideline(it.id, it.name, it.description, it.author, it.authorId)
+                        }
                     }
-                }
             }
 
             override fun createCallAsync(): Deferred<List<Guideline>> {

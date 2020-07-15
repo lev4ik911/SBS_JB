@@ -80,9 +80,9 @@ class ProfileFragment :
             viewPager.adapter = TabsFragmentAdapter(this)
             TabLayoutMediator(binding.tabsProfile, viewPager) { tab, position ->
                 tab.text = when (position) {
-                    0 -> getString(R.string.title_instructions)
-                    1 -> getString(R.string.title_subscribers)
-                    2 -> getString(R.string.title_settings)
+                    0 -> if (viewModel.isMyProfile.value) getString(R.string.title_settings) else getString(R.string.title_instructions)
+                    1 -> if (viewModel.isMyProfile.value) getString(R.string.title_instructions) else getString(R.string.title_subscribers)
+                    2 -> getString(R.string.title_subscribers)
                     else -> ""
                 }
             }.attach()
@@ -181,9 +181,9 @@ class ProfileFragment :
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> ProfileGuidelinesFragment()
-                1 -> SubscribersFragment()
-                2 -> SettingsFragment()
+                0 -> if (viewModel.isMyProfile.value) SettingsFragment() else ProfileGuidelinesFragment()
+                1 -> if (viewModel.isMyProfile.value) ProfileGuidelinesFragment() else SubscribersFragment()
+                2 -> SubscribersFragment()
                 else -> ProfileGuidelinesFragment()
             }
         }
