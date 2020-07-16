@@ -182,6 +182,9 @@ class ProfileFragment :
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> if (viewModel.isMyProfile.value) SettingsFragment() else ProfileGuidelinesFragment()
+                    .apply {
+                        arguments?.putString("userId", viewModel.user.value.id)
+                    }
                 1 -> if (viewModel.isMyProfile.value) ProfileGuidelinesFragment() else SubscribersFragment()
                 2 -> SubscribersFragment()
                 else -> ProfileGuidelinesFragment()
