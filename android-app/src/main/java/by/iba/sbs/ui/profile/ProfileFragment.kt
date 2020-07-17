@@ -19,6 +19,7 @@ import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.tools.Tools
 import by.iba.sbs.tools.Tools.Companion.startAlphaAnimation
+import by.iba.sbs.tools.visibleOrGone
 import by.iba.sbs.ui.MainActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator

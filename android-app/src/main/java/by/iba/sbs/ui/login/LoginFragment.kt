@@ -11,8 +11,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import by.iba.mvvmbase.Extentions.Companion.waitForLayout
-import by.iba.mvvmbase.visibleOrNot
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.LoginFragmentBinding
@@ -20,6 +18,8 @@ import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.viewmodel.LoginViewModel
 import by.iba.sbs.tools.SystemInfo
 import by.iba.sbs.tools.Tools
+import by.iba.sbs.tools.Tools.Companion.waitForLayout
+import by.iba.sbs.tools.visibleOrNot
 import com.github.ybq.android.spinkit.style.FadingCircle
 import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmEventsFragment

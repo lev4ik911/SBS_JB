@@ -164,7 +164,7 @@ class GuidelineListFragment :
                 }
             }
         })
-        searchView.setOnItemClickListener { parent, view, position, id ->
+        searchView.setOnItemClickListener { _, _, position, _ ->
             showSuggestions = false
             val query = searchAdapter!!.getItem(position)
             if (query != null) {

@@ -51,7 +51,7 @@ android {
     }
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = "1.8"
-        kotlinOptions.freeCompilerArgs += "-Xopt-in=by.iba.sbs.OptInAnnotation"
+        kotlinOptions.freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }
 
     packagingOptions {
@@ -71,7 +71,7 @@ dependencies {
     implementation(Deps.Libs.MultiPlatform.napier.android!!)
 
     implementation("com.google.android.material:material:1.1.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta7")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta8")
     implementation("androidx.navigation:navigation-fragment:2.3.0")
     implementation("androidx.navigation:navigation-ui:2.3.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
