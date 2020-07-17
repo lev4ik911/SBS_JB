@@ -10,10 +10,12 @@ import UIKit
 import Foundation
 import MultiPlatformLibrary
 
-class MainViewController : UIViewController {
+class MainViewController : UITabBarController {
     
     var vm : GuidelineListViewModelShared!
 
+    @IBOutlet var mainTabBar: UITabBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

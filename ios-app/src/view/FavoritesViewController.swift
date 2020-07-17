@@ -38,7 +38,7 @@ class FavoritesViewController : UITableViewController  {
             description: item.descr
         )
     }
-    
+    /*
     lazy var table: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -65,11 +65,13 @@ class FavoritesViewController : UITableViewController  {
                                               toItem: self.view, attribute: .bottom, multiplier: 1.0, constant: 1.0))
         return constraints
     }
-
+*/
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.rowHeight = 90
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        
         let myFieldCell = UINib(nibName: consts.InstructionCellName,
                                   bundle: nil)
         self.tableView.register(myFieldCell,

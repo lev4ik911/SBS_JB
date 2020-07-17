@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F10FB9824B8665A0076FD6B /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F10FB9724B8665A0076FD6B /* Toast.swift */; };
+		0F10FB9A24B889D70076FD6B /* LoginAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F10FB9924B889D70076FD6B /* LoginAlert.swift */; };
 		0F822EAC248A634300A3E3CE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F822EAB248A634300A3E3CE /* MainViewController.swift */; };
 		0F8F77832492E0AC00E3A0A5 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F77822492E0AC00E3A0A5 /* HomeViewController.swift */; };
 		0F8F77852492E0D100E3A0A5 /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F8F77842492E0D100E3A0A5 /* FavoritesViewController.swift */; };
@@ -46,6 +48,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0F10FB9724B8665A0076FD6B /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		0F10FB9924B889D70076FD6B /* LoginAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAlert.swift; sourceTree = "<group>"; };
 		0F822EAB248A634300A3E3CE /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		0F8F77822492E0AC00E3A0A5 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		0F8F77842492E0D100E3A0A5 /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
@@ -184,6 +188,8 @@
 				0FB8EB4424B5F48900085C75 /* SignUpView.swift */,
 				0FB8EB4624B5F60800085C75 /* UserView.xib */,
 				0FB8EB4824B5F61A00085C75 /* UserView.swift */,
+				0F10FB9724B8665A0076FD6B /* Toast.swift */,
+				0F10FB9924B889D70076FD6B /* LoginAlert.swift */,
 			);
 			path = units;
 			sourceTree = "<group>";
@@ -350,6 +356,7 @@
 				0F8F77832492E0AC00E3A0A5 /* HomeViewController.swift in Sources */,
 				0F8F77922497925700E3A0A5 /* HorizontalTableViewCell.swift in Sources */,
 				0FC51DC924A66C0D00B8964D /* InstructionDetailViewController.swift in Sources */,
+				0F10FB9824B8665A0076FD6B /* Toast.swift in Sources */,
 				0F9EACA224AE147F00F0F3D9 /* StepTableViewCell.swift in Sources */,
 				0F8F7794249793FB00E3A0A5 /* InstructionsTableViewCell.swift in Sources */,
 				0F8F77872492E0EC00E3A0A5 /* SearchViewController.swift in Sources */,
@@ -362,6 +369,7 @@
 				0F9EACA424AE148F00F0F3D9 /* CommentTableViewCell.swift in Sources */,
 				0FB8EB4524B5F48900085C75 /* SignUpView.swift in Sources */,
 				0F8F77892492E10300E3A0A5 /* ProfileViewController.swift in Sources */,
+				0F10FB9A24B889D70076FD6B /* LoginAlert.swift in Sources */,
 				0F8F77A224A0D3A900E3A0A5 /* LoginView.swift in Sources */,
 				45F47922219463C7003D25FA /* AppDelegate.swift in Sources */,
 				0F8F77A624A0D3D000E3A0A5 /* RecommendedHomeView.swift in Sources */,

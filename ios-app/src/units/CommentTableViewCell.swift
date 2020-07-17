@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import MultiPlatformLibraryUnits
 
-class CommentTableViewCell : UITableViewCell, Fillable {
+class CommentTableViewCell : UITableViewCell {
     typealias DataType = CellModel
     
     struct CellModel {
@@ -33,7 +33,7 @@ class CommentTableViewCell : UITableViewCell, Fillable {
                            UIImage(systemName: "hand.thumbsup.fill") :
                            UIImage(systemName: "hand.thumbsdown.fill"))
         
-        avatarImage.layer.borderWidth = 0
+        avatarImage.layer.borderWidth = 1
         avatarImage.layer.masksToBounds = false
         avatarImage.layer.borderColor = UIColor.black.cgColor
         avatarImage.layer.cornerRadius = avatarImage.frame.height/2
@@ -45,23 +45,4 @@ class CommentTableViewCell : UITableViewCell, Fillable {
         descriptionText.text = data.description
     }
     
-    func update(_ data: CellModel) {
-        
-    }
-    
 }
-
-extension CommentTableViewCell: Reusable {
-    static func reusableIdentifier() -> String {
-        return "CommentTableViewCell"
-    }
-    
-    static func xibName() -> String {
-        return "CommentTableViewCell"
-    }
-    
-    static func bundle() -> Bundle {
-        return Bundle.main
-    }
-}
-

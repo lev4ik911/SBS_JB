@@ -11,15 +11,76 @@ import UIKit
 import MultiPlatformLibrary
 
 
-class ProfileViewController : UIViewController  {
+class ProfileViewController : UITableViewController {
+
+    @IBOutlet var parentView: UIView!
     
-    var loginView = LoginView()
-    var userView = UserView()
+    var loginViewModel: LoginViewModel!
+    var profileViewModel: ProfileViewModel!
+    var signUpViewModel: RegisterViewModel!
+    
+    var cnt = 0
     
     override func viewDidLoad() {
+        /*
+        let view = parentView as! LoginView
+        let user = view.userText.text
+        let pass = view.passwordText.text
+        Toast.show(message: "login", controller: self)
+        loginViewModel = LoginViewModel(settings: AppleSettings(delegate: UserDefaults.standard),
+                                        eventsDispatcher: EventsDispatcher(listener: self), systemInfo: self)
+        */
+        /*
+        loginViewModel.login.setValue(value: user, async: false)
+        loginViewModel.password.setValue(value: pass, async: false)
+        loginViewModel.onLoginButtonClick()
+        */
         //TODO: check if user logged
-        self.view.addSubview(loginView)
-        //self.addSubView(loginView)
+        //self.profileView.addSubview(loginView)
+        //parentView = LoginView.loadViewFromNib(
+        //parentView.layoutSubviews()
+        //loginView = LoginView().self
+        //cnt = parentView.subviews.count
+    }
+
+}
+
+extension ProfileViewController : SystemInformation {
+    func getAppVersion() -> String {
+        return ""
     }
     
+    func getDeviceID() -> String {
+        return ""
+    }
+    
+    func getDeviceName() -> String {
+        return ""
+    }
+}
+
+extension ProfileViewController : LoginViewModelEventsListener  {
+    func flipToLogin() {
+        
+    }
+    
+    func flipToPassword() {
+        
+    }
+    
+    func onRegister() {
+        
+    }
+    
+    func onResetPassword() {
+        
+    }
+    
+    func routeToProfile(userId: String) {
+        
+    }
+    
+    func showToast(msg: ToastMessage) {
+        Toast.show(message: msg.message, controller: self)
+    }
 }

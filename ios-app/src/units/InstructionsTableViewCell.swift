@@ -8,9 +8,8 @@
 
 import Foundation
 import UIKit
-import MultiPlatformLibraryUnits
 
-class InstructionsTableViewCell : UITableViewCell, Fillable {
+class InstructionsTableViewCell : UITableViewCell {
     
     typealias DataType = CellModel
     
@@ -66,21 +65,14 @@ class InstructionsTableViewCell : UITableViewCell, Fillable {
         descriptionLabel.text = data.description
     }
     
-    func update(_ data: CellModel) {
-        
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
     }
-}
 
-extension InstructionsTableViewCell: Reusable {
-    static func reusableIdentifier() -> String {
-        return "InstructionsTableViewCell"
-    }
-    
-    static func xibName() -> String {
-        return "InstructionsTableViewCell"
-    }
-    
-    static func bundle() -> Bundle {
-        return Bundle.main
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
     }
 }
