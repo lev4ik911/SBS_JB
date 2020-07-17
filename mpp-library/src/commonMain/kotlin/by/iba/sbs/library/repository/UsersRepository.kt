@@ -115,6 +115,13 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
         if (forceRefresh) {
             clearCache()
         }
+//        lateinit var user: User
+//
+//        getUser(userId, forceRefresh)
+//            .addObserver {
+//                user = it.data!!
+//            }
+
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
 
@@ -144,9 +151,9 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
             override suspend fun loadFromDb(): List<Guideline> = coroutineScope {
 
                 val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
-                return@coroutineScope guidelinesQueries.selectAllGuidelines()//GuidelinesByAuthorId(userId)
+                return@coroutineScope guidelinesQueries.selectGuidelinesByAuthorId(userId)
                     .executeAsList()
-                    .filter { it.authorId == userId }
+                    //      .filter { it.authorId == user.id }
                     .map {
                         val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
                         if (rating != null) {
@@ -166,27 +173,20 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                     }
             }
 
+
             override fun createCallAsync(): Deferred<List<Guideline>> {
                 return GlobalScope.async(applicationDispatcher) {
                     val result = users.getUserGuidelines(userId)
                     if (result.isSuccess) {
                         result.data!!.map { item ->
-                            getUser(item.activity.createdBy, forceRefresh)
-                                .addObserver {
-                                    Guideline(
-                                        item.id,
-                                        item.name,
-                                        item.description ?: "",
-                                        rating = item.rating,
-                                        author = if (it.data == null) "" else it.data.name,
-                                        authorId = item.activity.createdBy
-                                    )
-                                }
+
                             Guideline(
                                 item.id,
                                 item.name,
                                 item.description ?: "",
-                                rating = item.rating
+                                rating = item.rating,
+                                authorId = userId
+                                // author = user.name
                             )
                         }
                     } else {

@@ -60,6 +60,10 @@ interface IGuidelineRepository {
 @ImplicitReflectionSerializer
 class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettings) :
     IGuidelineRepository {
+    @OptIn(UnstableDefault::class)
+    @ImplicitReflectionSerializer
+    private val usersRepository by lazy { UsersRepository(settings) }
+
     @UnstableDefault
     private val guidelines by lazy { Guidelines(settings) }
 
@@ -136,14 +140,13 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     val result = guidelines.getAllGuidelines()
                     if (result.isSuccess) {
                         result.data!!.map { item ->
-                            val user = users.getUserById(item.activity.createdBy)
                             Guideline(
                                 item.id,
                                 item.name,
                                 item.description ?: "",
                                 rating = item.rating,
-                                authorId = item.activity.createdBy,
-                                author = if (user.data == null) "" else user.data.name
+                                authorId = item.activity.createdBy.id,
+                                author = item.activity.createdBy.name
                             )
                         }
                     } else {
@@ -212,13 +215,12 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     val result = guidelines.getGuideline(guidelineId)
                     if (result.isSuccess) {
                         val item = result.data!!
-                        val user = users.getUserById(item.activity.createdBy)
                         Guideline(
                             item.id,
                             item.name,
                             item.description!!,
-                            authorId = item.activity.createdBy,
-                            author = if (user.data == null) "" else user.data.name,
+                            authorId = item.activity.createdBy.id,
+                            author = item.activity.createdBy.name,
                             rating = RatingSummary(
                                 item.rating.positive,
                                 item.rating.negative,
@@ -313,13 +315,12 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             val result = guidelines.postGuideline(GuidelineCreate(data.name, data.descr))
             if (result.isSuccess) {
                 val item = result.data!!
-                val user = users.getUserById(item.activity.createdBy)
                 guidelinesQueries.insertGuideline(
                     item.id,
                     item.name,
                     item.description ?: "",
-                    item.activity.createdBy,
-                    if (user.data == null) "" else user.data.name
+                    item.activity.createdBy.id,
+                    item.activity.createdBy.name
                 )
                 ratingSummaryQueries.insertRating(
                     item.id,
@@ -341,13 +342,12 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 guidelines.putGuideline(data.id, GuidelineEdit(data.name, data.descr))
             if (result.isSuccess) {
                 val item = result.data!!
-                val user = users.getUserById(item.activity.createdBy)
                 guidelinesQueries.insertGuideline(
                     item.id,
                     item.name,
                     item.description ?: "",
-                    item.activity.createdBy,
-                    if (user.data == null) "" else user.data.name
+                    item.activity.createdBy.id,
+                    item.activity.createdBy.name
                 )
             }
 //            else {

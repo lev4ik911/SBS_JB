@@ -8,10 +8,10 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import by.iba.mvvmbase.visibleOrGone
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileFragmentBinding
@@ -39,6 +39,10 @@ class ProfileFragment :
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModelClass: Class<ProfileViewModel> =
         ProfileViewModel::class.java
+
+    override fun viewModelStoreOwner(): ViewModelStoreOwner {
+        return requireActivity()
+    }
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         ProfileViewModel(
@@ -182,10 +186,14 @@ class ProfileFragment :
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> if (viewModel.isMyProfile.value) SettingsFragment() else ProfileGuidelinesFragment()
-                    .apply {
-                        arguments?.putString("userId", viewModel.user.value.id)
+                    .also {
+                        it.arguments?.putString("userId", viewModel.user.value.id)
                     }
-                1 -> if (viewModel.isMyProfile.value) ProfileGuidelinesFragment() else SubscribersFragment()
+                1 -> if (viewModel.isMyProfile.value) ProfileGuidelinesFragment()
+                    .also {
+                        it.arguments?.putString("userId", viewModel.user.value.id)
+                    }
+                else SubscribersFragment()
                 2 -> SubscribersFragment()
                 else -> ProfileGuidelinesFragment()
             }

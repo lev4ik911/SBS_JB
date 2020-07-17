@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import by.iba.mvvmbase.adapter.BaseBindingAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
@@ -31,13 +32,18 @@ class ProfileGuidelinesFragment :
     override val viewModelClass: Class<ProfileViewModel> =
         ProfileViewModel::class.java
     private lateinit var instructionsAdapter: BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>
-
-    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        ProfileViewModel(
-            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(requireContext())),
-            eventsDispatcherOnMain()
-        )
+    override fun viewModelStoreOwner(): ViewModelStoreOwner {
+        return requireActivity()
     }
+
+    override fun viewModelFactory(): ViewModelProvider.Factory =
+        createViewModelFactory {
+            ProfileViewModel(
+                AndroidSettings(PreferenceManager.getDefaultSharedPreferences(requireContext())),
+                eventsDispatcherOnMain()
+            )
+        }
+
 
     private val mainViewModel: MainViewModel by sharedViewModel()
 
@@ -60,7 +66,7 @@ class ProfileGuidelinesFragment :
                         PreferenceManager.getDefaultSharedPreferences(requireContext())
                     )
                 )
-                if (settings.accessToken == viewModel.user.value.id) {
+                if (settings.userId == viewModel.user.value.id) {
                     emptyViewId = R.layout.new_item
                     onEmptyViewItemClick = {
                         val intent = Intent(activity, GuidelineActivity::class.java)
@@ -89,6 +95,7 @@ class ProfileGuidelinesFragment :
             startActivity(intent)
         }
     }
-
-
 }
+
+
+

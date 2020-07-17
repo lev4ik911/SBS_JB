@@ -2,6 +2,7 @@ package by.iba.sbs.library.viewmodel
 
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.*
+import by.iba.sbs.library.repository.GuidelineRepository
 import by.iba.sbs.library.repository.UsersRepository
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
@@ -21,6 +22,9 @@ class ProfileViewModel(
     @ImplicitReflectionSerializer
     private val usersRepository by lazy { UsersRepository(localStorage) }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    private val repository by lazy { GuidelineRepository(localStorage) }
     val showRecommended = MutableLiveData(true).apply {
         value = localStorage.showRecommended
         addObserver {
@@ -83,7 +87,7 @@ class ProfileViewModel(
                         user.postValue(it.data!!)
                     } else if (it.error != null) eventsDispatcher.dispatchEvent {
                         showToast(
-                            ToastMessage(it.error.message.toString(), MessageType.ERROR)
+                            ToastMessage("LoadUser: ${it.error}", MessageType.ERROR)
                         )
                     }
                     loading.postValue(it.status == Response.Status.LOADING)
@@ -91,7 +95,7 @@ class ProfileViewModel(
             } catch (e: Exception) {
                 eventsDispatcher.dispatchEvent {
                     showToast(
-                        ToastMessage(e.message.orEmpty(), MessageType.ERROR)
+                        ToastMessage(e.toString(), MessageType.ERROR)
                     )
                 }
             }
@@ -102,24 +106,16 @@ class ProfileViewModel(
     @ImplicitReflectionSerializer
     fun loadUserGuidelines(forceRefresh: Boolean) {
         loading.value = true
-        eventsDispatcher.dispatchEvent {
-            showToast(
-                ToastMessage(
-                    "UserID: ${user.value.id}",
-                    MessageType.INFO
-                )
-            )
-        }
         viewModelScope.launch {
             try {
-
-                val guidelinesLiveData =
-                    usersRepository.getUserGuidelines(user.value.id, forceRefresh)
+                val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
                 guidelinesLiveData.addObserver {
                     if (it.isSuccess && it.isNotEmpty) {
-                        val gl = it.data!!
-                        guidelines.postValue(gl.sortedBy { item -> item.name }
+                        var gl = it.data!!
+
+                        guidelines.postValue(gl.sortedBy { item -> item.id }
                             .toList())
+
                     } else if (it.error != null)
                         eventsDispatcher.dispatchEvent {
                             showToast(
