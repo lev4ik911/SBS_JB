@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import by.iba.sbs.R
@@ -18,16 +17,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.shashank.sony.fancytoastlib.FancyToast
 import java.io.File
-
-@BindingAdapter("textColorByValue")
-fun TextView.textColorByValue(value: Int) {
-    val color = when {
-        value < 0 -> resources.getColor(R.color.colorLightRed)
-        value > 0 -> resources.getColor(R.color.colorLightGreen)
-        else -> resources.getColor(R.color.textColorSecondary)
-    }
-    setTextColor(color)
-}
 
 @BindingAdapter("imageFromPath")
 fun ImageView.imageFromPath(imagePath: String) {

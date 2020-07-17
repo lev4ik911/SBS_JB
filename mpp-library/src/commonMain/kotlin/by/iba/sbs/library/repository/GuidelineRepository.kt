@@ -588,6 +588,8 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     if (rating != null) {
                         Guideline(
                             it.id, it.name, it.description,
+                            author = it.author,
+                            authorId = it.authorId,
                             rating = RatingSummary(
                                 rating.positive!!.toInt(),
                                 rating.negative!!.toInt(),

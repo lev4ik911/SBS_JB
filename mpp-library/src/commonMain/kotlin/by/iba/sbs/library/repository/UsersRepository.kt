@@ -179,14 +179,13 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                     val result = users.getUserGuidelines(userId)
                     if (result.isSuccess) {
                         result.data!!.map { item ->
-
                             Guideline(
                                 item.id,
                                 item.name,
                                 item.description ?: "",
                                 rating = item.rating,
-                                authorId = userId
-                                // author = user.name
+                                authorId = userId,
+                                author = item.activity.createdBy.name
                             )
                         }
                     } else {

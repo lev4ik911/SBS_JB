@@ -87,13 +87,6 @@ class ProfileGuidelinesFragment :
             instructionsAdapter.addItems(it)
         }
         viewModel.loadUserGuidelines(false)//TODO: refresh implementation needed
-
-        instructionsAdapter.onEmptyViewItemClick = {
-            val intent = Intent(activity, GuidelineActivity::class.java)
-            intent.putExtra("instructionId", 0)
-            // findNavController().navigate(R.id.navigation_instruction_edit, bundle)
-            startActivity(intent)
-        }
     }
 }
 

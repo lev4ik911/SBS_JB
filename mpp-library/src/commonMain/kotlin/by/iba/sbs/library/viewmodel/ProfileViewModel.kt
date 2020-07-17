@@ -2,7 +2,6 @@ package by.iba.sbs.library.viewmodel
 
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.*
-import by.iba.sbs.library.repository.GuidelineRepository
 import by.iba.sbs.library.repository.UsersRepository
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
@@ -22,9 +21,7 @@ class ProfileViewModel(
     @ImplicitReflectionSerializer
     private val usersRepository by lazy { UsersRepository(localStorage) }
 
-    @UnstableDefault
-    @ImplicitReflectionSerializer
-    private val repository by lazy { GuidelineRepository(localStorage) }
+
     val showRecommended = MutableLiveData(true).apply {
         value = localStorage.showRecommended
         addObserver {
@@ -108,12 +105,10 @@ class ProfileViewModel(
         loading.value = true
         viewModelScope.launch {
             try {
-                val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
+                val guidelinesLiveData = usersRepository.getUserGuidelines(user.value.id, forceRefresh)
                 guidelinesLiveData.addObserver {
                     if (it.isSuccess && it.isNotEmpty) {
-                        var gl = it.data!!
-
-                        guidelines.postValue(gl.sortedBy { item -> item.id }
+                        guidelines.postValue(it.data!!.sortedBy { item -> item.id }
                             .toList())
 
                     } else if (it.error != null)

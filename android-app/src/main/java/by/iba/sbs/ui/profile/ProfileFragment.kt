@@ -81,16 +81,18 @@ class ProfileFragment :
 
         binding.appbar.addOnOffsetChangedListener(this)
         viewModel.user.addObserver {
-            viewPager = binding.viewPager
-            viewPager.adapter = TabsFragmentAdapter(this)
-            TabLayoutMediator(binding.tabsProfile, viewPager) { tab, position ->
-                tab.text = when (position) {
-                    0 -> if (viewModel.isMyProfile.value) getString(R.string.title_settings) else getString(R.string.title_instructions)
-                    1 -> if (viewModel.isMyProfile.value) getString(R.string.title_instructions) else getString(R.string.title_subscribers)
-                    2 -> getString(R.string.title_subscribers)
-                    else -> ""
-                }
-            }.attach()
+            if (isAdded) {
+                viewPager = binding.viewPager
+                viewPager.adapter = TabsFragmentAdapter(this)
+                TabLayoutMediator(binding.tabsProfile, viewPager) { tab, position ->
+                    tab.text = when (position) {
+                        0 -> if (viewModel.isMyProfile.value) getString(R.string.title_settings) else getString(R.string.title_instructions)
+                        1 -> if (viewModel.isMyProfile.value) getString(R.string.title_instructions) else getString(R.string.title_subscribers)
+                        2 -> getString(R.string.title_subscribers)
+                        else -> ""
+                    }
+                }.attach()
+            }
         }
     }
 
