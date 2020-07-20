@@ -298,15 +298,17 @@ class GuidelineViewModel(
                         showToast(
                             ToastMessage("Successful insert", MessageType.SUCCESS)
                         )
+                        val resultGuideline = result.data!!
+                        guideline.value = Guideline(
+                            id = resultGuideline.id,
+                            name = resultGuideline.name,
+                            descr = resultGuideline.description ?: "",
+                            author = resultGuideline.activity.createdBy.name,
+                            authorId = resultGuideline.activity.createdBy.id
+                        )
+                        saveSteps()
                     }
                     //TODO(Add to total res)
-                    val resultGuideline = result.data!!
-                    guideline.value = Guideline(
-                        id = resultGuideline.id,
-                        name = resultGuideline.name,
-                        descr = resultGuideline.description ?: ""
-                    )
-                    saveSteps()
                 } else if (result.error != null) eventsDispatcher.dispatchEvent {
                     showToast(
                         ToastMessage(result.error.message.toString(), MessageType.ERROR)

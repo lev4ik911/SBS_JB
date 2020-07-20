@@ -1,7 +1,6 @@
 package by.iba.sbs.library.repository
 
 import by.iba.sbs.library.data.local.createDb
-import by.iba.sbs.library.data.remote.Guidelines
 import by.iba.sbs.library.data.remote.NetworkBoundResource
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.data.remote.Users
@@ -43,8 +42,6 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
     @UnstableDefault
     private val users by lazy { Users(settings) }
 
-    @UnstableDefault
-    private val guidelines by lazy { Guidelines(settings) }
     private val sbsDb = createDb()
     private val usersQueries = sbsDb.usersEntityQueries
     private val guidelinesQueries = sbsDb.guidelinesEntityQueries
@@ -115,12 +112,6 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
         if (forceRefresh) {
             clearCache()
         }
-//        lateinit var user: User
-//
-//        getUser(userId, forceRefresh)
-//            .addObserver {
-//                user = it.data!!
-//            }
 
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response

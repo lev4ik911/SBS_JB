@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.core.util.Pair
 import androidx.navigation.findNavController
 import by.iba.mvvmbase.BaseEventsActivity
@@ -82,21 +83,19 @@ class MainActivity :
         navView.setOnClickMenuListener {
             navController.popBackStack()
             viewModel.activeTab.value = it.id
-            navController.navigate(
-                when (it.id) {
-                    ActiveTabEnum.ID_HOME.index -> R.id.navigation_dashboard
-                    ActiveTabEnum.ID_FAVORITES.index -> R.id.navigation_favorites
-                    ActiveTabEnum.ID_SEARCH.index -> R.id.navigation_guideline_list
-                    ActiveTabEnum.ID_PROFILE.index -> {
-                        if (settings.accessToken.isEmpty()) {
-                            R.id.navigation_login_fragment
-                        } else {
-                            R.id.navigation_profile_fragment
-                        }
+            when (it.id) {
+                ActiveTabEnum.ID_HOME.index -> navController.navigate(R.id.navigation_dashboard)
+                ActiveTabEnum.ID_FAVORITES.index -> navController.navigate(R.id.navigation_favorites)
+                ActiveTabEnum.ID_SEARCH.index -> navController.navigate(R.id.navigation_guideline_list)
+                ActiveTabEnum.ID_PROFILE.index -> {
+                    if (settings.accessToken.isEmpty()) {
+                        navController.navigate(R.id.navigation_login_fragment)
+                    } else {
+                        navController.navigate(R.id.navigation_profile_fragment, bundleOf("userId" to settings.userId))
                     }
-                    else -> R.id.navigation_home
                 }
-            )
+                else -> navController.navigate(R.id.navigation_home)
+            }
             invalidateOptionsMenu()
             toolbar.visibility =
                 if (it.id == ActiveTabEnum.ID_PROFILE.index) View.GONE else View.VISIBLE

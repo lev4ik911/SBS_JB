@@ -10,13 +10,13 @@ import android.widget.Filterable
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import by.iba.mvvmbase.BaseViewModel
 
 
-open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM : BaseViewModel>(
+open class BaseBindingAdapter<T, DB : androidx.databinding.ViewDataBinding, VM : ViewModel>(
     @LayoutRes private val layoutId: Int,
     @LayoutRes val collectionVariableId: Int,
     @LayoutRes val viewModelVariableId: Int,
