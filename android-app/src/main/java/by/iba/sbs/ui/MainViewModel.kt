@@ -2,11 +2,11 @@ package by.iba.sbs.ui
 
 import android.view.View
 import androidx.lifecycle.MutableLiveData
-import by.iba.mvvmbase.BaseViewModel
-import by.iba.mvvmbase.dispatcher.EventsDispatcher
-import by.iba.mvvmbase.dispatcher.EventsDispatcherOwner
-import by.iba.mvvmbase.dispatcher.eventsDispatcherOnMain
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.viewmodel.ViewModelExt
+import com.russhwolf.settings.Settings
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
+import dev.icerock.moko.mvvm.dispatcher.EventsDispatcherOwner
 
 enum class ActiveTabEnum(var index: Int) {
     ID_HOME(1),
@@ -15,9 +15,10 @@ enum class ActiveTabEnum(var index: Int) {
     ID_SETTINGS(5)
 }
 
-class MainViewModel : BaseViewModel(), EventsDispatcherOwner<MainViewModel.EventsListener> {
-    override val eventsDispatcher: EventsDispatcher<EventsListener> =
-        eventsDispatcherOnMain()
+class MainViewModel(
+    settings: Settings,
+    override val eventsDispatcher: EventsDispatcher<EventsListener>
+) : ViewModelExt(settings), EventsDispatcherOwner<MainViewModel.EventsListener> {
     val activeTab: MutableLiveData<Int> = MutableLiveData(ActiveTabEnum.ID_HOME.index)
     fun onOpenGuidelineClick(view: View, guideline: Guideline) {
         eventsDispatcher.dispatchEvent { onOpenGuidelineAction(view, guideline) }

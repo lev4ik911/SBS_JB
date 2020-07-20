@@ -22,6 +22,7 @@ import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileGuidelinesFragment :
     MvvmFragment<ProfileInstructionsFragmentBinding, ProfileViewModel>() {
@@ -45,6 +46,7 @@ class ProfileGuidelinesFragment :
             }
         }
 
+    private val mainViewModel: MainViewModel by viewModel()
     @UnstableDefault
     @OptIn(ImplicitReflectionSerializer::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,9 +57,8 @@ class ProfileGuidelinesFragment :
                 R.layout.instruction_list_item,
                 BR.instruction,
                 BR.viewmodel,
-                requireActivity().let {
-                    ViewModelProvider(it).get(MainViewModel::class.java)
-                },
+                mainViewModel
+                ,
                 isItemsEquals = { oldItem, newItem ->
                     oldItem.name == newItem.name
                 })

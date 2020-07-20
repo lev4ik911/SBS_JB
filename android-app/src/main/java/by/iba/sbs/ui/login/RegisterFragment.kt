@@ -3,6 +3,7 @@ package by.iba.sbs.ui.login
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import by.iba.sbs.BR
@@ -17,7 +18,6 @@ import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
-import kotlinx.android.synthetic.main.login_register_fragment.*
 
 
 class RegisterFragment :
@@ -44,22 +44,22 @@ class RegisterFragment :
     }
 
     override fun showErrors(errorList: List<ValidationErrors>) {
-        et_login_layout.error = null
-        et_email_layout.error = null
-        et_new_password_layout.error = null
-        et_confirm_password_layout.error = null
+        binding.etLoginLayout.error = null
+        binding.etEmailLayout.error = null
+        binding.etNewPasswordLayout.error = null
+        binding.etConfirmPasswordLayout.error = null
 
         errorList.forEach {
             when (it) {
-                ValidationErrors.LOGIN_IS_EMPTY -> et_login_layout.error =
+                ValidationErrors.LOGIN_IS_EMPTY -> binding.etLoginLayout.error =
                     resources.getString(R.string.error_login_is_empty)
-                ValidationErrors.INVALID_EMAIL -> et_email_layout.error =
+                ValidationErrors.INVALID_EMAIL -> binding.etEmailLayout.error =
                     resources.getString(R.string.error_invalid_email)
-                ValidationErrors.PASSWORD_IS_TOO_SMALL -> et_new_password_layout.error =
+                ValidationErrors.PASSWORD_IS_TOO_SMALL -> binding.etNewPasswordLayout.error =
                     resources.getString(R.string.error_password_is_too_small)
-                ValidationErrors.PASSWORD_HAS_INCORRECT_SYMBOLS -> et_new_password_layout.error =
+                ValidationErrors.PASSWORD_HAS_INCORRECT_SYMBOLS -> binding.etNewPasswordLayout.error =
                     resources.getString(R.string.error_password_has_incorrect_symbols)
-                ValidationErrors.PASSWORD_MISMATCH -> et_confirm_password_layout.error =
+                ValidationErrors.PASSWORD_MISMATCH -> binding.etConfirmPasswordLayout.error =
                     resources.getString(R.string.error_password_mismatch)
             }
         }
@@ -67,17 +67,17 @@ class RegisterFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        et_login.doOnTextChanged { _, _, _, _ ->
-            et_login_layout.error = null
+        binding.etLogin.doOnTextChanged { _, _, _, _ ->
+            binding.etLoginLayout.error = null
         }
-        et_email.doOnTextChanged { _, _, _, _ ->
-            et_email_layout.error = null
+        binding.etEmail.doOnTextChanged { _, _, _, _ ->
+            binding.etEmailLayout.error = null
         }
-        et_new_password.doOnTextChanged { _, _, _, _ ->
-            et_new_password_layout.error = null
+        binding.etNewPassword.doOnTextChanged { _, _, _, _ ->
+            binding.etNewPasswordLayout.error = null
         }
-        et_confirm_password.doOnTextChanged { _, _, _, _ ->
-            et_confirm_password_layout.error = null
+        binding.etConfirmPassword.doOnTextChanged { _, _, _, _ ->
+            binding.etConfirmPasswordLayout.error = null
         }
     }
 

@@ -57,7 +57,7 @@ android {
     packagingOptions {
         exclude("META-INF/*.kotlin_module")
     }
-    buildToolsVersion = "30.0.0"
+    buildToolsVersion = "30.0.1"
 }
 
 dependencies {
@@ -84,6 +84,7 @@ dependencies {
     implementation("org.koin:koin-androidx-viewmodel:2.1.5")
 // Koin AndroidX Experimental features
     implementation("org.koin:koin-androidx-ext:2.1.5")
+    implementation("androidx.core:core-ktx:1.3.0")
     implementation("org.koin:koin-androidx-fragment:2.1.5")
     implementation("com.futuremind.recyclerfastscroll:fastscroll:0.2.5")
     implementation("com.facebook.shimmer:shimmer:0.5.0")

@@ -144,7 +144,6 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                 val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
                 return@coroutineScope guidelinesQueries.selectGuidelinesByAuthorId(userId)
                     .executeAsList()
-                    //      .filter { it.authorId == user.id }
                     .map {
                         val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
                         if (rating != null) {
@@ -175,7 +174,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                                 item.name,
                                 item.description ?: "",
                                 rating = item.rating,
-                                authorId = userId,
+                                authorId = item.activity.createdBy.id,
                                 author = item.activity.createdBy.name
                             )
                         }

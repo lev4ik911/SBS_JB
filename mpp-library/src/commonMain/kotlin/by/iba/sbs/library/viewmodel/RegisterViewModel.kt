@@ -5,7 +5,6 @@ import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.model.request.RegisterData
 import by.iba.sbs.library.repository.AuthRepository
-import by.iba.sbs.library.repository.UsersRepository
 import by.iba.sbs.library.service.SystemInformation
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
@@ -35,10 +34,6 @@ class RegisterViewModel(
     @OptIn(UnstableDefault::class)
     @ImplicitReflectionSerializer
     private val authRepository by lazy { AuthRepository(localStorage) }
-
-    @OptIn(UnstableDefault::class)
-    @ImplicitReflectionSerializer
-    private val usersRepository by lazy { UsersRepository(localStorage) }
 
     private val sbsDb = createDb()
     private val usersQueries = sbsDb.usersEntityQueries

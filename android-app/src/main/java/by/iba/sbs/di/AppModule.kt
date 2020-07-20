@@ -19,7 +19,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
     single<SystemInformation> { SystemInfo(androidContext()) }
     single<Settings> { AndroidSettings(PreferenceManager.getDefaultSharedPreferences(androidContext())) }
-    viewModel { MainViewModel() }
+    viewModel { MainViewModel(get(), eventsDispatcherOnMain()) }
   //  viewModel { SplashViewModel(get()) }
     viewModel { LoginViewModel(get(), eventsDispatcherOnMain(), get()) }
     viewModel { WalkthroughViewModel() }
