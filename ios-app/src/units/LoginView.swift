@@ -30,9 +30,9 @@ class LoginView : UIView {
     
     @IBAction func signUpButtonClick(_ sender: Any) {
         print("SignUp pressed - load SignUpView.xib")
-        
-        let signUpView = SignUpView()
-        addSubview(signUpView)
+        self.parentViewController?.performSegue(withIdentifier: "show_sign_up", sender: self.parentViewController)
+        //let signUpView = SignUpView()
+        //addSubview(signUpView)
     }
     
     @IBOutlet var mainView: UIView!
@@ -71,6 +71,19 @@ class LoginView : UIView {
         return nib.instantiate(withOwner: self, options: nil).first as? UIView
     }
     
+}
+
+extension UIView {
+    var parentViewController: UIViewController? {
+        var parentResponder: UIResponder? = self
+        while parentResponder != nil {
+            parentResponder = parentResponder!.next
+            if let viewController = parentResponder as? UIViewController {
+                return viewController
+            }
+        }
+        return nil
+    }
 }
 
 extension LoginView :LoginViewModelEventsListener, SystemInformation {

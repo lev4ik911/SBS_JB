@@ -11,7 +11,7 @@ import UIKit
 import MultiPlatformLibrary
 
 
-class ProfileViewController : UITableViewController {
+class ProfileViewController : UIViewController {
 
     @IBOutlet var parentView: UIView!
     
@@ -42,6 +42,8 @@ class ProfileViewController : UITableViewController {
         //loginView = LoginView().self
         //cnt = parentView.subviews.count
     }
+    
+    
 
 }
 
