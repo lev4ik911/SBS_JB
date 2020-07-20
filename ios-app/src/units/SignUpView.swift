@@ -11,11 +11,23 @@ import UIKit
 import MultiPlatformLibrary
 import MultiPlatformLibraryMvvm
 
-class SignUpView : UIView{
+class SignUpView : UIView {
     
     let nibName = "SignUpView"
     
     @IBOutlet var mainView: UIView!
+    
+    @IBOutlet var nameTextField: UITextField!
+    @IBOutlet var emailTextField: UITextField!
+    @IBOutlet var passwordTextField: UITextField!
+    @IBOutlet var repeatTextField: UITextField!
+    
+    @IBOutlet var signUpButton: UIButton!
+    
+    @IBAction func onSignUpButton_TouchUp(_ sender: Any) {
+        
+        registerVM.onRegisterButtonClick()
+    }
     
     var registerVM : RegisterViewModel!
     
@@ -24,6 +36,13 @@ class SignUpView : UIView{
       //Do stuff here
         registerVM = RegisterViewModel(settings: AppleSettings(delegate: UserDefaults.standard),
         eventsDispatcher: EventsDispatcher(listener: self), systemInfo: self)
+        
+        nameTextField.bindTextTwoWay(liveData: registerVM.login)
+        emailTextField.bindTextTwoWay(liveData: registerVM.email)
+        passwordTextField.bindTextTwoWay(liveData: registerVM.password)
+        repeatTextField.bindTextTwoWay(liveData: registerVM.passwordConfirm)
+        
+        signUpButton.bindEnabled(liveData: registerVM.isRegisterEnabled)
         
         //userText.bindTextTwoWay(liveData: loginVM.login)
         //passwordText.bindText(liveData: loginVM.password)
@@ -45,14 +64,17 @@ class SignUpView : UIView{
     }
 }
 
+
+
 extension SignUpView : RegisterViewModelEventsListener, SystemInformation {
+    
 func routeToLoginScreen() {
     //TODO: route to profile
-    
+    self.parentViewController?.tabBarController?.selectedIndex = 4
 }
 
 func showErrors() {
-    
+    Toast.show(message: "Smth went wrong", controller: self.parentViewController!)
 }
 
 func showToast(msg: ToastMessage) {
