@@ -120,5 +120,8 @@
     <string name="error_password_is_too_small">Короткий пароль</string>
     <string name="error_password_has_incorrect_symbols">Пароль содержит пробел</string>
     <string name="error_password_mismatch">Пароли не совпадают</string>
+    <string name="feedback">Отзывы:</string>
+    <string name="caption_step">Шаг %s из %s</string>
+    <string name="don_t_have_an_account">Нет учетной записи?</string>
 
 </resources>

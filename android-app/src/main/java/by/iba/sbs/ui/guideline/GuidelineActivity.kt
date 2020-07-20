@@ -633,10 +633,10 @@ class GuidelineActivity :
             setTitle(resources.getString(R.string.title_dialog_authorization))
             setMessage(resources.getString(R.string.msg_authorization_dialog))
             setPositiveButton(
-                resources.getString(R.string.btn_login),
-                { dialogInterface: DialogInterface, i: Int ->
-                    findNavController(R.id.fragment_navigation_instruction).navigate(R.id.navigation_login_fragment)
-                })
+                resources.getString(R.string.btn_login)
+            ) { _: DialogInterface, _: Int ->
+                findNavController(R.id.fragment_navigation_instruction).navigate(R.id.navigation_login_fragment)
+            }
             setNegativeButton(resources.getString(R.string.btn_cancel), null)
         }
         val dialog = builder.create()

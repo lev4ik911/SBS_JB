@@ -1,6 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -9,13 +8,20 @@
             type="by.iba.sbs.library.viewmodel.ProfileViewModel" />
     </data>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_instructions"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/l_swipe_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/spacing_xsmall"
-        android:nestedScrollingEnabled="false"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:context="by.iba.sbs.ui.guideline.StepsFragment"
-        tools:listitem="@layout/instruction_step_list_item"/>
+        android:layout_height="match_parent"
+        app:onRefreshListener="@{() -> viewmodel.loadUserGuidelines(true)}"
+        app:refreshing="@{viewmodel.isLoading.ld}">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_instructions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingBottom="@dimen/bottom_navigation_height"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

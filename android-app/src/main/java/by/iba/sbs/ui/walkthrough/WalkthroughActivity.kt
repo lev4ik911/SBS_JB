@@ -60,14 +60,14 @@ class WalkthroughActivity : BaseActivity<WalkthroughActivityBinding, Walkthrough
         mAdapter = ViewsSliderAdapter()
         binding.viewPager.adapter = mAdapter
         binding.viewPager.registerOnPageChangeCallback(pageChangeCallback)
-        binding.btnSkip.setOnClickListener { v -> launchHomeScreen() }
-        binding.btnNext.setOnClickListener { v ->
+        binding.btnSkip.setOnClickListener { launchHomeScreen() }
+        binding.btnNext.setOnClickListener {
             // checking for last page
             // if last page home screen will be launched
             val current = getItem(+1)
             if (current < layouts.size) {
                 // move to next screen
-                binding.viewPager.setCurrentItem(current)
+                binding.viewPager.currentItem = current
             } else {
                 launchHomeScreen()
             }

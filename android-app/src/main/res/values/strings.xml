@@ -119,4 +119,7 @@
     <string name="error_password_is_too_small">Password is too small</string>
     <string name="error_password_has_incorrect_symbols">Password has incorrect symbols</string>
     <string name="error_password_mismatch">Password mismatch</string>
+    <string name="feedback">Feedback:</string>
+    <string name="caption_step">Step %s of %S</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
 </resources>

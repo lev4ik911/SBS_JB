@@ -8,10 +8,10 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import by.iba.mvvmbase.visibleOrGone
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileFragmentBinding
@@ -19,6 +19,7 @@ import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.tools.Tools
 import by.iba.sbs.tools.Tools.Companion.startAlphaAnimation
+import by.iba.sbs.tools.visibleOrGone
 import by.iba.sbs.ui.MainActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -39,6 +40,10 @@ class ProfileFragment :
     override val viewModelVariableId: Int = BR.viewmodel
     override val viewModelClass: Class<ProfileViewModel> =
         ProfileViewModel::class.java
+
+    override fun viewModelStoreOwner(): ViewModelStoreOwner {
+        return requireActivity()
+    }
 
     override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
         ProfileViewModel(
@@ -75,17 +80,20 @@ class ProfileFragment :
         }
 
         binding.appbar.addOnOffsetChangedListener(this)
-        viewPager = binding.viewPager
-        viewPager.adapter = TabsFragmentAdapter(this)
-
-        TabLayoutMediator(binding.tabsProfile, viewPager) { tab, position ->
-            tab.text = when (position) {
-                0 -> getString(R.string.title_instructions)
-                1 -> getString(R.string.title_subscribers)
-                2 -> getString(R.string.title_settings)
-                else -> ""
+        viewModel.user.addObserver {
+            if (isAdded) {
+                viewPager = binding.viewPager
+                viewPager.adapter = TabsFragmentAdapter(this)
+                TabLayoutMediator(binding.tabsProfile, viewPager) { tab, position ->
+                    tab.text = when (position) {
+                        0 -> if (viewModel.isMyProfile.value) getString(R.string.title_settings) else getString(R.string.title_instructions)
+                        1 -> if (viewModel.isMyProfile.value) getString(R.string.title_instructions) else getString(R.string.title_subscribers)
+                        2 -> getString(R.string.title_subscribers)
+                        else -> ""
+                    }
+                }.attach()
             }
-        }.attach()
+        }
     }
 
     private fun initActionButton() {
@@ -180,10 +188,17 @@ class ProfileFragment :
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> ProfileInstructionsFragment()
-                1 -> SubscribersFragment()
-                2 -> SettingsFragment()
-                else -> ProfileInstructionsFragment()
+                0 -> if (viewModel.isMyProfile.value) SettingsFragment() else ProfileGuidelinesFragment()
+                    .also {
+                        it.arguments?.putString("userId", viewModel.user.value.id)
+                    }
+                1 -> if (viewModel.isMyProfile.value) ProfileGuidelinesFragment()
+                    .also {
+                        it.arguments?.putString("userId", viewModel.user.value.id)
+                    }
+                else SubscribersFragment()
+                2 -> SubscribersFragment()
+                else -> ProfileGuidelinesFragment()
             }
         }
     }

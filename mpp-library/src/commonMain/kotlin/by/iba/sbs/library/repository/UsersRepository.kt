@@ -1,11 +1,14 @@
 package by.iba.sbs.library.repository
 
 import by.iba.sbs.library.data.local.createDb
+import by.iba.sbs.library.data.remote.Guidelines
 import by.iba.sbs.library.data.remote.NetworkBoundResource
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.data.remote.Users
+import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.User
 import by.iba.sbs.library.model.request.UserCreate
+import by.iba.sbs.library.model.response.RatingSummary
 import by.iba.sbs.library.model.response.UserView
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.service.applicationDispatcher
@@ -21,6 +24,11 @@ interface IUsersRepository {
     suspend fun addUser(data: User): Response<UserView>
 
     suspend fun getAllUsers(forceRefresh: Boolean): LiveData<Response<List<User>>>
+    suspend fun getUserGuidelines(
+        userId: String,
+        forceRefresh: Boolean
+    ): LiveData<Response<List<Guideline>>>
+
     suspend fun getUser(
         userId: String,
         forceRefresh: Boolean
@@ -34,8 +42,13 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
     IUsersRepository {
     @UnstableDefault
     private val users by lazy { Users(settings) }
+
+    @UnstableDefault
+    private val guidelines by lazy { Guidelines(settings) }
     private val sbsDb = createDb()
     private val usersQueries = sbsDb.usersEntityQueries
+    private val guidelinesQueries = sbsDb.guidelinesEntityQueries
+    private val ratingSummaryQueries = sbsDb.ratingSummaryQueries
 
     @UnstableDefault
     override suspend fun addUser(data: User): Response<UserView> = coroutineScope {
@@ -91,6 +104,97 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                     }
                 }
             }
+        }.build()
+            .asLiveData()
+    }
+
+    @UnstableDefault
+    override suspend fun getUserGuidelines(
+        userId: String, forceRefresh: Boolean
+    ): LiveData<Response<List<Guideline>>> {
+        if (forceRefresh) {
+            clearCache()
+        }
+//        lateinit var user: User
+//
+//        getUser(userId, forceRefresh)
+//            .addObserver {
+//                user = it.data!!
+//            }
+
+        return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
+            override fun processResponse(response: List<Guideline>): List<Guideline> = response
+
+            override suspend fun saveCallResults(data: List<Guideline>) = coroutineScope {
+                data.forEach {
+                    guidelinesQueries.insertGuideline(
+                        it.id,
+                        it.name,
+                        it.descr,
+                        it.authorId,
+                        it.author
+                    )
+                    it.rating.apply {
+                        ratingSummaryQueries.insertRating(
+                            it.id,
+                            positive.toLong(),
+                            negative.toLong(),
+                            overall.toLong()
+                        )
+                    }
+                }
+            }
+
+            override fun shouldFetch(data: List<Guideline>?): Boolean =
+                data == null || data.isEmpty() || forceRefresh
+
+            override suspend fun loadFromDb(): List<Guideline> = coroutineScope {
+
+                val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
+                return@coroutineScope guidelinesQueries.selectGuidelinesByAuthorId(userId)
+                    .executeAsList()
+                    //      .filter { it.authorId == user.id }
+                    .map {
+                        val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
+                        if (rating != null) {
+                            Guideline(
+                                it.id, it.name, it.description,
+                                author = it.author,
+                                authorId = it.authorId,
+                                rating = RatingSummary(
+                                    rating.positive!!.toInt(),
+                                    rating.negative!!.toInt(),
+                                    rating.overall!!.toInt()
+                                )
+                            )
+                        } else {
+                            Guideline(it.id, it.name, it.description, it.author, it.authorId)
+                        }
+                    }
+            }
+
+
+            override fun createCallAsync(): Deferred<List<Guideline>> {
+                return GlobalScope.async(applicationDispatcher) {
+                    val result = users.getUserGuidelines(userId)
+                    if (result.isSuccess) {
+                        result.data!!.map { item ->
+                            Guideline(
+                                item.id,
+                                item.name,
+                                item.description ?: "",
+                                rating = item.rating,
+                                authorId = userId,
+                                author = item.activity.createdBy.name
+                            )
+                        }
+                    } else {
+                        if (result.status == Response.Status.ERROR) error(result.error!!)
+                        listOf()
+                    }
+                }
+            }
+
         }.build()
             .asLiveData()
     }

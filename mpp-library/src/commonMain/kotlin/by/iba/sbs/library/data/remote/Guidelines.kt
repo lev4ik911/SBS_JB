@@ -26,7 +26,6 @@ internal class Guidelines(override val settings: LocalSettings) : Client(setting
         )
     }
 
-
     suspend fun postGuideline(guideline: GuidelineCreate): Response<GuidelineView> {
         return post(
             Routes.Guidelines.URL_GUIDELINES,
@@ -40,10 +39,10 @@ internal class Guidelines(override val settings: LocalSettings) : Client(setting
             requestBody = guideline
         )
     }
+
     suspend fun deleteGuideline(guidelineId: String): Response<String> {
         return delete(
             Utils.formatString(Routes.Guidelines.URL_GUIDELINE_DETAILS, guidelineId)
         )
     }
-
 }

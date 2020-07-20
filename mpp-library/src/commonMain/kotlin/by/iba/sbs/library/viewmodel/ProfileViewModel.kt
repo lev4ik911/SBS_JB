@@ -21,6 +21,7 @@ class ProfileViewModel(
     @ImplicitReflectionSerializer
     private val usersRepository by lazy { UsersRepository(localStorage) }
 
+
     val showRecommended = MutableLiveData(true).apply {
         value = localStorage.showRecommended
         addObserver {
@@ -47,16 +48,13 @@ class ProfileViewModel(
     val user = MutableLiveData(User()).apply {
         addObserver {
             isMyProfile.value = it.id == localStorage.userId
+            isFavorite.value = !isMyProfile.value
         }
     }
     val rating = MutableLiveData("547")
 
-    val instructions = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
-        val mData = ArrayList<Guideline>()
-        mData.add(Guideline("1", "Как стать счастливым", "Dobry"))
-        mData.add(Guideline("2", "Отпадный шашлычок", "Dobry"))
-        value = mData
-    }
+    val guidelines = MutableLiveData<List<Guideline>>(mutableListOf())
+
     val subscribers = MutableLiveData<List<Author>>(mutableListOf()).apply {
         val mData = ArrayList<Author>()
         mData.add(Author("Petey Cruiser", 12, 123, 547))
@@ -86,7 +84,7 @@ class ProfileViewModel(
                         user.postValue(it.data!!)
                     } else if (it.error != null) eventsDispatcher.dispatchEvent {
                         showToast(
-                            ToastMessage(it.error.message.toString(), MessageType.ERROR)
+                            ToastMessage("LoadUser: ${it.error}", MessageType.ERROR)
                         )
                     }
                     loading.postValue(it.status == Response.Status.LOADING)
@@ -94,7 +92,43 @@ class ProfileViewModel(
             } catch (e: Exception) {
                 eventsDispatcher.dispatchEvent {
                     showToast(
-                        ToastMessage(e.message.orEmpty(), MessageType.ERROR)
+                        ToastMessage(e.toString(), MessageType.ERROR)
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun loadUserGuidelines(forceRefresh: Boolean) {
+        loading.value = true
+        viewModelScope.launch {
+            try {
+                val guidelinesLiveData = usersRepository.getUserGuidelines(user.value.id, forceRefresh)
+                guidelinesLiveData.addObserver {
+                    if (it.isSuccess && it.isNotEmpty) {
+                        guidelines.postValue(it.data!!.sortedBy { item -> item.id }
+                            .toList())
+
+                    } else if (it.error != null)
+                        eventsDispatcher.dispatchEvent {
+                            showToast(
+                                ToastMessage(
+                                    it.error.toString(),
+                                    MessageType.ERROR
+                                )
+                            )
+                        }
+                    loading.postValue(it.status == Response.Status.LOADING)
+                }
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
                     )
                 }
             }
