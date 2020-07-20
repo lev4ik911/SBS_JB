@@ -130,7 +130,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                             )
                         )
                     } else {
-                        Guideline(it.id, it.name, it.description, it.authorId)
+                        Guideline(it.id, it.name, it.description, it.authorId, it.author)
                     }
                 }
             }
@@ -597,7 +597,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                             )
                         )
                 } else {
-                    Guideline(it.id, it.name, it.description)
+                        Guideline(it.id, it.name, it.description, it.author, it.authorId)
                 }
             }
 

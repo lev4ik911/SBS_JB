@@ -85,7 +85,7 @@ class RegisterViewModel(
             }
         }
         else {
-            eventsDispatcher.dispatchEvent { showErrors() }
+            eventsDispatcher.dispatchEvent { showErrors(errorList) }
         }
 
     }
@@ -113,6 +113,6 @@ class RegisterViewModel(
     interface EventsListener {
         fun routeToLoginScreen()
         fun showToast(msg: ToastMessage)
-        fun showErrors()
+        fun showErrors(errorList: List<ValidationErrors>)
     }
 }

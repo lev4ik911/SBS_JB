@@ -3,7 +3,6 @@ package by.iba.sbs.ui.login
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
-import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import by.iba.sbs.BR
@@ -44,9 +43,31 @@ class RegisterFragment :
         Tools.showToast(requireContext(), viewModelClass.name, msg)
     }
 
+    override fun showErrors(errorList: List<ValidationErrors>) {
+        et_login_layout.error = null
+        et_email_layout.error = null
+        et_new_password_layout.error = null
+        et_confirm_password_layout.error = null
+
+        errorList.forEach {
+            when (it) {
+                ValidationErrors.LOGIN_IS_EMPTY -> et_login_layout.error =
+                    resources.getString(R.string.error_login_is_empty)
+                ValidationErrors.INVALID_EMAIL -> et_email_layout.error =
+                    resources.getString(R.string.error_invalid_email)
+                ValidationErrors.PASSWORD_IS_TOO_SMALL -> et_new_password_layout.error =
+                    resources.getString(R.string.error_password_is_too_small)
+                ValidationErrors.PASSWORD_HAS_INCORRECT_SYMBOLS -> et_new_password_layout.error =
+                    resources.getString(R.string.error_password_has_incorrect_symbols)
+                ValidationErrors.PASSWORD_MISMATCH -> et_confirm_password_layout.error =
+                    resources.getString(R.string.error_password_mismatch)
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        et_login.doOnTextChanged {  _, _, _, _ ->
+        et_login.doOnTextChanged { _, _, _, _ ->
             et_login_layout.error = null
         }
         et_email.doOnTextChanged { _, _, _, _ ->
@@ -60,20 +81,20 @@ class RegisterFragment :
         }
     }
 
-    override fun showErrors() {
-        et_login_layout.error = null
-        et_email_layout.error = null
-        et_new_password_layout.error = null
-        et_confirm_password_layout.error = null
-
-        viewModel.errorList.forEach{
-            when (it) {
-                ValidationErrors.LOGIN_IS_EMPTY -> et_login_layout.error = resources.getString(R.string.error_login_is_empty)
-                ValidationErrors.INVALID_EMAIL -> et_email_layout.error = resources.getString(R.string.error_invalid_email)
-                ValidationErrors.PASSWORD_IS_TOO_SMALL -> et_new_password_layout.error = resources.getString(R.string.error_password_is_too_small)
-                ValidationErrors.PASSWORD_HAS_INCORRECT_SYMBOLS -> et_new_password_layout.error = resources.getString(R.string.error_password_has_incorrect_symbols)
-                ValidationErrors.PASSWORD_MISMATCH -> et_confirm_password_layout.error = resources.getString(R.string.error_password_mismatch)
-            }
-        }
-    }
+//    override fun showErrors() {
+//        et_login_layout.error = null
+//        et_email_layout.error = null
+//        et_new_password_layout.error = null
+//        et_confirm_password_layout.error = null
+//
+//        viewModel.errorList.forEach{
+//            when (it) {
+//                ValidationErrors.LOGIN_IS_EMPTY -> et_login_layout.error = resources.getString(R.string.error_login_is_empty)
+//                ValidationErrors.INVALID_EMAIL -> et_email_layout.error = resources.getString(R.string.error_invalid_email)
+//                ValidationErrors.PASSWORD_IS_TOO_SMALL -> et_new_password_layout.error = resources.getString(R.string.error_password_is_too_small)
+//                ValidationErrors.PASSWORD_HAS_INCORRECT_SYMBOLS -> et_new_password_layout.error = resources.getString(R.string.error_password_has_incorrect_symbols)
+//                ValidationErrors.PASSWORD_MISMATCH -> et_confirm_password_layout.error = resources.getString(R.string.error_password_mismatch)
+//            }
+//        }
+//    }
 }
