@@ -56,6 +56,9 @@ class GuidelineFragment :
 
         binding.toolbarDescription.apply {
             title = viewModel.guideline.value.name
+            setNavigationOnClickListener {
+                activity?.finish()
+            }
         }
 
         initActionButton()

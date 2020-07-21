@@ -115,7 +115,6 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:onClick="onToolbarClick"
                     app:contentInsetStartWithNavigation="0dp"
                     app:layout_collapseMode="pin"
                     app:navigationIcon="@drawable/chevron_left"

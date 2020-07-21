@@ -116,10 +116,6 @@ class MainActivity :
         navView.show(viewModel.activeTab.value!!)
     }
 
-    fun onToolbarClick(view: View) {
-        onBackPressed()
-    }
-
     fun setNavigationIcon(visible: Boolean) {
         if (visible)
             toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.chevron_left)

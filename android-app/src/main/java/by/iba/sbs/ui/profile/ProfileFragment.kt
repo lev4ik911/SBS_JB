@@ -66,6 +66,9 @@ class ProfileFragment :
     @ImplicitReflectionSerializer
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.toolbar.setNavigationOnClickListener {
+            activity?.finish()
+        }
         viewModel.user.addObserver {
             if (isAdded) {
                 viewPager = binding.viewPager
@@ -90,8 +93,14 @@ class ProfileFragment :
                 binding.toolbar.navigationIcon = null
             }
             else -> {
-                binding.toolbar.navigationIcon =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
+                binding.toolbar
+                    .apply {
+                        navigationIcon =
+                            ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
+                        setNavigationOnClickListener {
+                            activity?.finish()
+                        }
+                    }
             }
         }
 

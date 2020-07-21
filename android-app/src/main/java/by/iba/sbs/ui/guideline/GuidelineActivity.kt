@@ -14,7 +14,6 @@ import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.text.InputType
 import android.view.Gravity
-import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.Toast
@@ -102,6 +101,7 @@ class GuidelineActivity :
     @UnstableDefault
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         instructionId = intent?.getStringExtra("instructionId") ?: ""
         val forceRefresh = Date().day != Date(viewModel.localStorage.lastUpdate).day
         viewModel.loadGuideline(instructionId, forceRefresh)
@@ -357,10 +357,6 @@ class GuidelineActivity :
             mediaScanIntent.data = Uri.parse(absolutePhotoPath)
             sendBroadcast(mediaScanIntent)
         }
-    }
-
-    fun onToolbarClick(view: View) {
-        onBackPressed()
     }
 
     override fun onCallInstructionEditor(instructionId: String) {
