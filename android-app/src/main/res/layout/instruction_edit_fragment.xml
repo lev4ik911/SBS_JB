@@ -58,7 +58,6 @@
                     android:background="@drawable/bg_gradient_top"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:navigationIcon="@drawable/chevron_left"
-                    android:onClick="onToolbarClick"
                     app:title="Recipe Detail"
                     app:titleTextColor="?attr/colorPrimaryDark">
 

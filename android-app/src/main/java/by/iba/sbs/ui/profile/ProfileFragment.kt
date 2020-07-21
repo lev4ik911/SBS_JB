@@ -67,7 +67,7 @@ class ProfileFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.setNavigationOnClickListener {
-            activity?.finish()
+            activity?.onBackPressed()
         }
         viewModel.user.addObserver {
             if (isAdded) {
@@ -97,9 +97,6 @@ class ProfileFragment :
                     .apply {
                         navigationIcon =
                             ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
-                        setNavigationOnClickListener {
-                            activity?.finish()
-                        }
                     }
             }
         }
