@@ -44,32 +44,31 @@ class GuidelineListViewModelShared(
         loading.value = true
         viewModelScope.launch {
             try {
-                val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
-                guidelinesLiveData.addObserver {
-                    if (it.isSuccess && it.isNotEmpty) {
-                        var guidelines = it.data!!
-                        if(searchedText.value.isNotEmpty()) {
-                            viewModelScope.launch {
-                                guidelines = repository.getFilteredGuidelines(searchedText.value)
+                repository.getAllGuidelines(forceRefresh)
+                    .addObserver {
+                        loading.postValue(it.status == Response.Status.LOADING)
+                        if (it.isSuccess && it.isNotEmpty) {
+                            var guidelines = it.data!!
+                            if (searchedText.value.isNotEmpty()) {
+                                viewModelScope.launch {
+                                    guidelines = repository.getFilteredGuidelines(searchedText.value)
+                                    instructions.postValue(guidelines.sortedBy { item -> item.id }
+                                        .toList())
+                                }
+                            } else {
                                 instructions.postValue(guidelines.sortedBy { item -> item.id }
                                     .toList())
                             }
-                        }
-                        else {
-                            instructions.postValue(guidelines.sortedBy { item -> item.id }
-                                .toList())
-                        }
-                    } else if (it.error != null)
-                        eventsDispatcher.dispatchEvent {
-                            showToast(
-                                ToastMessage(
-                                    it.error.toString(),
-                                    MessageType.ERROR
+                        } else if (it.error != null)
+                            eventsDispatcher.dispatchEvent {
+                                showToast(
+                                    ToastMessage(
+                                        it.error.toString(),
+                                        MessageType.ERROR
+                                    )
                                 )
-                            )
-                        }
-                    loading.postValue(it.status == Response.Status.LOADING)
-                }
+                            }
+                    }
             } catch (e: Exception) {
                 eventsDispatcher.dispatchEvent {
                     showToast(
@@ -85,7 +84,7 @@ class GuidelineListViewModelShared(
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun loadSuggestions(searchText: String){
+    fun loadSuggestions(searchText: String) {
         viewModelScope.launch {
             try {
                 suggestions.postValue(repository.getSuggestions(searchText))
@@ -101,9 +100,10 @@ class GuidelineListViewModelShared(
             }
         }
     }
+
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun getFilteredGuidelines(searchText: String){
+    fun getFilteredGuidelines(searchText: String) {
         viewModelScope.launch {
             try {
                 instructions.postValue(repository.getFilteredGuidelines(searchText))
@@ -120,8 +120,8 @@ class GuidelineListViewModelShared(
         }
     }
 
-    fun saveSearchHistoryList(searchText:String){
-        if (localStorage.searchHistoryCount>0) {
+    fun saveSearchHistoryList(searchText: String) {
+        if (localStorage.searchHistoryCount > 0) {
             searchHistoryList.removeAll {
                 searchHistoryList.indexOf(it).plus(1) >= localStorage.searchHistoryCount || it == searchText
             }
@@ -136,13 +136,15 @@ class GuidelineListViewModelShared(
         }
     }
 
-    fun getSearchHistoryList(){
+    fun getSearchHistoryList() {
         val stringJson = localStorage.searchHistoryJson
         if (stringJson.isNotEmpty())
             Json(JsonConfiguration.Stable).apply {
                 this.parse(String.serializer().list, stringJson).apply {
-                    if (!this.isNullOrEmpty() && localStorage.searchHistoryCount>0)
-                        searchHistoryList.addAll(this.filter { this.indexOf(it).plus(1) <= localStorage.searchHistoryCount })
+                    if (!this.isNullOrEmpty() && localStorage.searchHistoryCount > 0)
+                        searchHistoryList.addAll(this.filter {
+                            this.indexOf(it).plus(1) <= localStorage.searchHistoryCount
+                        })
                 }
             }
     }

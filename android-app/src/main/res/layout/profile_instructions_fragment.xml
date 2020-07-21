@@ -16,12 +16,11 @@
         app:refreshing="@{viewmodel.isLoading.ld}">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_instructions"
+            android:id="@+id/rv_profile_instructions"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            android:paddingBottom="@dimen/bottom_navigation_height"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </layout>

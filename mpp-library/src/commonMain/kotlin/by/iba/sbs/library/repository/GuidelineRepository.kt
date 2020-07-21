@@ -60,18 +60,12 @@ interface IGuidelineRepository {
 @ImplicitReflectionSerializer
 class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettings) :
     IGuidelineRepository {
-    @OptIn(UnstableDefault::class)
-    @ImplicitReflectionSerializer
-    private val usersRepository by lazy { UsersRepository(settings) }
 
     @UnstableDefault
     private val guidelines by lazy { Guidelines(settings) }
 
     @UnstableDefault
     private val steps by lazy { Steps(settings) }
-
-    @UnstableDefault
-    private val users by lazy { Users(settings) }
 
     @UnstableDefault
     private val feedback by lazy { Feedbacks(settings) }
@@ -193,19 +187,26 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             override suspend fun loadFromDb(): Guideline? = coroutineScope {
                 val item = guidelinesQueries.selectGuidelineById(guidelineId).executeAsOneOrNull()
                 val ratingSummary =
-                    ratingSummaryQueries.selectRatingByGuidelineId(guidelineId).executeAsOne()
-                //  return@coroutineScope
+                    ratingSummaryQueries.selectRatingByGuidelineId(guidelineId).executeAsOneOrNull()
                 if (item != null) {
-                    Guideline(
-                        item.id, item.name, item.description,
-                        authorId = item.authorId,
-                        author = item.author,
-                        rating = RatingSummary(
-                            ratingSummary.positive!!.toInt(),
-                            ratingSummary.negative!!.toInt(),
-                            ratingSummary.overall!!.toInt()
+                    if (ratingSummary != null) {
+                        Guideline(
+                            item.id, item.name, item.description,
+                            authorId = item.authorId,
+                            author = item.author,
+                            rating = RatingSummary(
+                                ratingSummary.positive!!.toInt(),
+                                ratingSummary.negative!!.toInt(),
+                                ratingSummary.overall!!.toInt()
+                            )
                         )
-                    )
+                    } else {
+                        Guideline(
+                            item.id, item.name, item.description,
+                            authorId = item.authorId,
+                            author = item.author
+                        )
+                    }
                 } else return@coroutineScope null
 
             }
@@ -596,10 +597,10 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                                 rating.overall!!.toInt()
                             )
                         )
-                } else {
+                    } else {
                         Guideline(it.id, it.name, it.description, it.author, it.authorId)
+                    }
                 }
-            }
 
         }
 

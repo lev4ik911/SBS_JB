@@ -64,7 +64,7 @@ class ProfileViewModel(
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun loadUser(userId: String) {
+    fun loadUser(userId: String, forceRefresh: Boolean) {
         loading.value = true
         val mUserId = if (userId.isEmpty())
             if (localStorage.userId.isEmpty()) {
@@ -77,11 +77,12 @@ class ProfileViewModel(
             try {
                 val resultLiveData = usersRepository.getUser(
                     mUserId,
-                    false
+                    forceRefresh
                 )
                 resultLiveData.addObserver {
                     if (it.isSuccess && it.isNotEmpty) {
                         user.postValue(it.data!!)
+                        loadUserGuidelines(forceRefresh)
                     } else if (it.error != null) eventsDispatcher.dispatchEvent {
                         showToast(
                             ToastMessage("LoadUser: ${it.error}", MessageType.ERROR)
@@ -105,23 +106,23 @@ class ProfileViewModel(
         loading.value = true
         viewModelScope.launch {
             try {
-                val guidelinesLiveData = usersRepository.getUserGuidelines(user.value.id, forceRefresh)
-                guidelinesLiveData.addObserver {
-                    if (it.isSuccess && it.isNotEmpty) {
-                        guidelines.postValue(it.data!!.sortedBy { item -> item.id }
-                            .toList())
+                usersRepository.getUserGuidelines(user.value.id, forceRefresh)
+                    .addObserver {
+                        loading.postValue(it.status == Response.Status.LOADING)
+                        if (it.isSuccess && it.isNotEmpty) {
+                            guidelines.postValue(it.data!!.sortedBy { item -> item.id }
+                                .toList())
 
-                    } else if (it.error != null)
-                        eventsDispatcher.dispatchEvent {
-                            showToast(
-                                ToastMessage(
-                                    it.error.toString(),
-                                    MessageType.ERROR
+                        } else if (it.error != null)
+                            eventsDispatcher.dispatchEvent {
+                                showToast(
+                                    ToastMessage(
+                                        it.error.toString(),
+                                        MessageType.ERROR
+                                    )
                                 )
-                            )
-                        }
-                    loading.postValue(it.status == Response.Status.LOADING)
-                }
+                            }
+                    }
             } catch (e: Exception) {
                 eventsDispatcher.dispatchEvent {
                     showToast(
@@ -133,6 +134,10 @@ class ProfileViewModel(
                 }
             }
         }
+    }
+
+    fun onOpenGuidelineClick(guideline: Guideline) {
+        eventsDispatcher.dispatchEvent { onOpenGuidelineAction(guideline) }
     }
 
     fun onActionButtonClick() {
@@ -163,6 +168,7 @@ class ProfileViewModel(
         fun routeToLoginScreen()
         fun showToast(msg: ToastMessage)
         fun requireAccept()
+        fun onOpenGuidelineAction(guideline: Guideline)
     }
 
 }
