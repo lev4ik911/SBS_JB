@@ -93,16 +93,11 @@ class ProfileFragment :
                 binding.toolbar.navigationIcon = null
             }
             else -> {
-                binding.toolbar
-                    .apply {
-                        navigationIcon =
-                            ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
-                    }
+                binding.toolbar.navigationIcon =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
             }
         }
-
         binding.appbar.addOnOffsetChangedListener(this)
-
     }
 
     private fun initActionButton() {
@@ -196,9 +191,12 @@ class ProfileFragment :
         }
     }
 
+    @ImplicitReflectionSerializer
+    @UnstableDefault
     inner class TabsFragmentAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
         override fun getItemCount(): Int = if (viewModel.isMyProfile.value) 3 else 2
+
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {

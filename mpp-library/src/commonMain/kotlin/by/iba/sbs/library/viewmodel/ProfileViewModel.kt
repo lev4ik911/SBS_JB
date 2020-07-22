@@ -45,10 +45,14 @@ class ProfileViewModel(
     val fullName = MutableLiveData("John Doe")
     val isFavorite = MutableLiveData(true)
     val isMyProfile = MutableLiveData(true)
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     val user = MutableLiveData(User()).apply {
         addObserver {
             isMyProfile.value = it.id == localStorage.userId
             isFavorite.value = !isMyProfile.value
+            loadUserGuidelines(false)
         }
     }
     val rating = MutableLiveData("547")
@@ -75,21 +79,20 @@ class ProfileViewModel(
         else userId
         viewModelScope.launch {
             try {
-                val resultLiveData = usersRepository.getUser(
+                usersRepository.getUser(
                     mUserId,
                     forceRefresh
                 )
-                resultLiveData.addObserver {
-                    if (it.isSuccess && it.isNotEmpty) {
-                        user.postValue(it.data!!)
-                        loadUserGuidelines(forceRefresh)
-                    } else if (it.error != null) eventsDispatcher.dispatchEvent {
-                        showToast(
-                            ToastMessage("LoadUser: ${it.error}", MessageType.ERROR)
-                        )
+                    .addObserver {
+                        loading.postValue(it.status == Response.Status.LOADING)
+                        if (it.isSuccess && it.isNotEmpty) {
+                            user.postValue(it.data!!)
+                        } else if (it.error != null) eventsDispatcher.dispatchEvent {
+                            showToast(
+                                ToastMessage("LoadUser: ${it.error}", MessageType.ERROR)
+                            )
+                        }
                     }
-                    loading.postValue(it.status == Response.Status.LOADING)
-                }
             } catch (e: Exception) {
                 eventsDispatcher.dispatchEvent {
                     showToast(

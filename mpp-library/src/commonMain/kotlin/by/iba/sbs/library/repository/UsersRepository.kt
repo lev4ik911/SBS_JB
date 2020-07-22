@@ -109,10 +109,6 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
     override suspend fun getUserGuidelines(
         userId: String, forceRefresh: Boolean
     ): LiveData<Response<List<Guideline>>> {
-        if (forceRefresh) {
-            clearCache()
-        }
-
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
 
