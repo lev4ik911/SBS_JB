@@ -136,12 +136,11 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                 data == null || data.isEmpty() || forceRefresh
 
             override suspend fun loadFromDb(): List<Guideline> = coroutineScope {
-
-                val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
                 return@coroutineScope guidelinesQueries.selectGuidelinesByAuthorId(userId)
                     .executeAsList()
                     .map {
-                        val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
+                        val rating = ratingSummaryQueries.selectAllRatings().executeAsList()
+                            .firstOrNull { rating -> rating.id == it.id }
                         if (rating != null) {
                             Guideline(
                                 it.id, it.name, it.description,

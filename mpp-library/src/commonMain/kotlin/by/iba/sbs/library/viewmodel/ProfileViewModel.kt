@@ -113,9 +113,7 @@ class ProfileViewModel(
                     .addObserver {
                         loading.postValue(it.status == Response.Status.LOADING)
                         if (it.isSuccess && it.isNotEmpty) {
-                            guidelines.postValue(it.data!!.sortedBy { item -> item.id }
-                                .toList())
-
+                            guidelines.postValue(it.data!!.sortedBy { item -> item.id }.toList())
                         } else if (it.error != null)
                             eventsDispatcher.dispatchEvent {
                                 showToast(

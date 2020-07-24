@@ -74,25 +74,13 @@ class ProfileGuidelinesFragment :
                         }
                     }
                 }
-        binding.rvProfileInstructions.apply {
-            adapter = instructionsAdapter
-        }
         binding.rvProfileInstructions.also {
             it.adapter = instructionsAdapter
             instructionsAdapter.itemTouchHelper.attachToRecyclerView(it)
-
         }
         viewModel.guidelines.addObserver {
             instructionsAdapter.addItems(it)
         }
-
-    }
-
-    @UnstableDefault
-    @OptIn(ImplicitReflectionSerializer::class)
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadUserGuidelines(false)//TODO: refresh implementation needed
     }
 }
 
