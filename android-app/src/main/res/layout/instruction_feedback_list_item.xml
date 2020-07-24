@@ -85,8 +85,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/spacing_xxsmall"
+                        tools:text="@{feedback.author}"
                         android:gravity="center"
-                        tools:text="Jon Doe" />
+                    />
 
 
                 </LinearLayout>

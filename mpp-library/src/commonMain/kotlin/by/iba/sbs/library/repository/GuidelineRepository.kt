@@ -473,7 +473,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         it.id,
                         guidelineId,
                         it.rating.toLong(),
-                        it.comment ?: ""
+                        it.comment ?: "",
+                        it.author,
+                        it.authorId
                     )
                 }
             }
@@ -485,7 +487,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 return@coroutineScope feedbackQueries.selectAllFeedbacks(guidelineId)
                     .executeAsList()
                     .map {
-                        Feedback(it.id, it.rating.toInt(), it.comment)
+                        Feedback(it.id, it.rating.toInt(), it.comment, it.author, it.authorId)
                     }
             }
 
@@ -497,7 +499,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                             Feedback(
                                 item.id,
                                 item.rating,
-                                item.comment
+                                item.comment,
+                                item.activity.createdBy.name,
+                                item.activity.createdBy.id
                             )
                         }
                     } else {
@@ -526,7 +530,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     item.id,
                     guidelineId,
                     item.rating.toLong(),
-                    item.comment ?: ""
+                    item.comment ?: "",
+                    item.activity.createdBy.name,
+                    item.activity.createdBy.id
                 )
                 ratingSummaryQueries.insertRating(
                     guidelineId,
@@ -554,7 +560,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     item.id,
                     guidelineId,
                     item.rating.toLong(),
-                    item.comment ?: ""
+                    item.comment ?: "",
+                    item.activity.createdBy.name,
+                    item.activity.createdBy.id
                 )
             } else {
                 if (result.status == Response.Status.ERROR) error(result.error!!)
