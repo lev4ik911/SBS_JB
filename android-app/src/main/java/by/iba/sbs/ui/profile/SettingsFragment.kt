@@ -5,6 +5,7 @@ import android.preference.PreferenceManager
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.SettingsFragmentBinding
@@ -13,7 +14,6 @@ import by.iba.sbs.library.viewmodel.ProfileViewModel
 import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import nl.dionsegijn.steppertouch.OnStepCallback
 import nl.dionsegijn.steppertouch.StepperTouch
 
@@ -29,12 +29,17 @@ class SettingsFragment : MvvmFragment<SettingsFragmentBinding, ProfileViewModel>
     override val viewModelClass: Class<ProfileViewModel> =
         ProfileViewModel::class.java
 
-    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        ProfileViewModel(
-            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(requireContext())),
-            eventsDispatcherOnMain()
-        )
+    override fun viewModelStoreOwner(): ViewModelStoreOwner {
+        return requireActivity()
     }
+
+    override fun viewModelFactory(): ViewModelProvider.Factory =
+        createViewModelFactory {
+            requireActivity().let {
+                ViewModelProvider(it).get(ProfileViewModel::class.java)
+            }
+        }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

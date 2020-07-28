@@ -50,9 +50,11 @@ class ProfileViewModel(
     @ImplicitReflectionSerializer
     val user = MutableLiveData(User()).apply {
         addObserver {
-            isMyProfile.value = it.id == localStorage.userId
-            isFavorite.value = !isMyProfile.value
-            loadUserGuidelines(false)
+            if (it.id.isNotEmpty()) {
+                isMyProfile.value = it.id == localStorage.userId
+                isFavorite.value = !isMyProfile.value
+                loadUserGuidelines(false)
+            }
         }
     }
     val rating = MutableLiveData("547")
@@ -138,6 +140,7 @@ class ProfileViewModel(
     }
 
     fun onOpenGuidelineClick(guideline: Guideline) {
+        println("MyApp onOpenGuidelineClick")
         eventsDispatcher.dispatchEvent { onOpenGuidelineAction(guideline) }
     }
 

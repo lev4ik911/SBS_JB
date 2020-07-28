@@ -35,10 +35,6 @@ class ProfileGuidelinesFragment :
 
     override fun viewModelFactory(): ViewModelProvider.Factory =
         createViewModelFactory {
-//            ProfileViewModel(
-//                AndroidSettings(PreferenceManager.getDefaultSharedPreferences(requireContext())),
-//                eventsDispatcherOnMain()
-//            )
             requireActivity().let {
                 ViewModelProvider(it).get(ProfileViewModel::class.java)
             }
