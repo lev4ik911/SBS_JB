@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="48" id="KGk-i7-Jjw" customClass="SubscriberTableViewCell" customModule="SBS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_profile.png" translatesAutoresizingMaskIntoConstraints="NO" id="VZs-Fh-xJ8">
+                        <rect key="frame" x="8" y="8" width="32" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="32" id="Mgl-yA-5DU"/>
+                            <constraint firstAttribute="height" constant="32" id="nPT-wB-Rq4"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subscriber Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rTY-ci-9at">
+                        <rect key="frame" x="48" y="8" width="112" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subscribers: XXX" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KrZ-ZP-yiD">
+                        <rect key="frame" x="48" y="27" width="84.5" height="12"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L5p-pJ-PLm" customClass="CosmosView" customModule="Cosmos">
+                        <rect key="frame" x="217" y="8" width="95" height="22"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="22" id="ugY-N0-aPF"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="totalStars">
+                                <integer key="value" value="5"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="starSize">
+                                <real key="value" value="15"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Instructions: XXX" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Clu-2C-oTq">
+                        <rect key="frame" x="228" y="27" width="84" height="12"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="KrZ-ZP-yiD" secondAttribute="bottom" constant="4" id="1eb-SD-Fwf"/>
+                    <constraint firstItem="VZs-Fh-xJ8" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="23w-1X-3lv"/>
+                    <constraint firstItem="KrZ-ZP-yiD" firstAttribute="top" secondItem="rTY-ci-9at" secondAttribute="bottom" constant="2" id="7kc-Vg-0BT"/>
+                    <constraint firstItem="rTY-ci-9at" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="8vW-Bv-xL2"/>
+                    <constraint firstItem="L5p-pJ-PLm" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="rTY-ci-9at" secondAttribute="trailing" constant="8" id="IFX-Jr-vtS"/>
+                    <constraint firstItem="L5p-pJ-PLm" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="QLF-Pb-pAH"/>
+                    <constraint firstAttribute="bottom" secondItem="Clu-2C-oTq" secondAttribute="bottom" constant="4" id="WV7-zs-UDQ"/>
+                    <constraint firstAttribute="bottom" secondItem="VZs-Fh-xJ8" secondAttribute="bottom" constant="8" id="a41-ay-CjW"/>
+                    <constraint firstAttribute="trailing" secondItem="Clu-2C-oTq" secondAttribute="trailing" constant="8" id="m6u-SJ-rID"/>
+                    <constraint firstItem="rTY-ci-9at" firstAttribute="leading" secondItem="VZs-Fh-xJ8" secondAttribute="trailing" constant="8" id="o1Q-68-UNd"/>
+                    <constraint firstItem="KrZ-ZP-yiD" firstAttribute="leading" secondItem="rTY-ci-9at" secondAttribute="leading" id="sU3-Zm-7sJ"/>
+                    <constraint firstItem="VZs-Fh-xJ8" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="yPj-eI-LHh"/>
+                    <constraint firstAttribute="trailing" secondItem="L5p-pJ-PLm" secondAttribute="trailing" constant="8" id="zwh-wX-8wf"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="ratingCosmoView" destination="L5p-pJ-PLm" id="WVR-vs-32Y"/>
+                <outlet property="userAvatar" destination="VZs-Fh-xJ8" id="R4V-WO-0gt"/>
+                <outlet property="userIntructionsCount" destination="Clu-2C-oTq" id="YSJ-V1-L7l"/>
+                <outlet property="userName" destination="rTY-ci-9at" id="O0j-WC-bTD"/>
+                <outlet property="userSubscribersCount" destination="KrZ-ZP-yiD" id="KIb-zF-ItR"/>
+            </connections>
+            <point key="canvasLocation" x="137.68115942028987" y="92.410714285714278"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="ic_profile.png" width="400" height="400"/>
+    </resources>
+</document>

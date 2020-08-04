@@ -71,6 +71,19 @@ class LoginView : UIView {
         return nib.instantiate(withOwner: self, options: nil).first as? UIView
     }
     
+    override init(frame: CGRect) {
+        // 1. setup any properties here
+
+        // 2. call super.init(frame:)
+        super.init(frame: frame)
+
+        // 3. Setup view from .xib file
+        guard let view = loadViewFromNib() else { return }
+        view.frame = self.bounds
+        self.addSubview(view)
+        mainView = view
+    }
+    
 }
 
 extension UIView {

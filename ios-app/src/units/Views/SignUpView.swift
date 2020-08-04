@@ -29,10 +29,20 @@ class SignUpView : UIView {
         registerVM.onRegisterButtonClick()
     }
     
+    @IBAction func onBackToLogin_Tap(_ sender: Any) {
+        self.parentViewController?.navigationController?.popViewController(animated: true)
+    }
+    
     var registerVM : RegisterViewModel!
     
     override func willMove(toSuperview newSuperview: UIView?) {
       super.willMove(toSuperview: newSuperview)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        
+        self.parentViewController!.hideKeyboardWhenTappedAround()
+        
       //Do stuff here
         registerVM = RegisterViewModel(settings: AppleSettings(delegate: UserDefaults.standard),
         eventsDispatcher: EventsDispatcher(listener: self), systemInfo: self)
@@ -43,9 +53,20 @@ class SignUpView : UIView {
         repeatTextField.bindTextTwoWay(liveData: registerVM.passwordConfirm)
         
         signUpButton.bindEnabled(liveData: registerVM.isRegisterEnabled)
-        
-        //userText.bindTextTwoWay(liveData: loginVM.login)
-        //passwordText.bindText(liveData: loginVM.password)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.frame.origin.y == 0 {
+                self.frame.origin.y -= keyboardSize.height/2.5
+            }
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.frame.origin.y != 0 {
+            self.frame.origin.y = 0
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -64,32 +85,32 @@ class SignUpView : UIView {
     }
 }
 
+extension SignUpView : SystemInformation {
+    func getAppVersion() -> String {
+        return ""
+    }
 
+    func getDeviceID() -> String {
+        return ""
+    }
 
-extension SignUpView : RegisterViewModelEventsListener, SystemInformation {
+    func getDeviceName() -> String {
+        return ""
+    }
+}
+
+extension SignUpView : RegisterViewModelEventsListener {
+    func showErrors(errorList: [ValidationErrors]) {
+        //TODO: add validation for text fields
+        Toast.show(message: "Smth went wrong", controller: self.parentViewController!)
+    }
     
-func routeToLoginScreen() {
-    //TODO: route to profile
-    self.parentViewController?.tabBarController?.selectedIndex = 4
-}
+    func routeToLoginScreen() {
+        //TODO: route to profile
+        self.parentViewController?.tabBarController?.selectedIndex = 4
+    }
 
-func showErrors() {
-    Toast.show(message: "Smth went wrong", controller: self.parentViewController!)
-}
-
-func showToast(msg: ToastMessage) {
-    
-}
-
-func getAppVersion() -> String {
-    return ""
-}
-
-func getDeviceID() -> String {
-    return ""
-}
-
-func getDeviceName() -> String {
-    return ""
-}
+    func showToast(msg: ToastMessage) {
+        
+    }
 }
