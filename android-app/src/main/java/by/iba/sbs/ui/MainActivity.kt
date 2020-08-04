@@ -10,19 +10,22 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.util.Pair
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import by.iba.mvvmbase.BaseEventsActivity
 import by.iba.mvvmbase.custom.bottomnavigation.BottomNavigation
+import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ActivityMainBinding
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.ui.guideline.GuidelineActivity
 import com.russhwolf.settings.AndroidSettings
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dev.icerock.moko.mvvm.MvvmEventsActivity
+import dev.icerock.moko.mvvm.createViewModelFactory
+import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 
 class MainActivity :
-    BaseEventsActivity<ActivityMainBinding, MainViewModel, MainViewModel.EventsListener>(),
+    MvvmEventsActivity<ActivityMainBinding, MainViewModel, MainViewModel.EventsListener>(),
     MainViewModel.EventsListener {
     enum class ActiveTabEnum(var index: Int) {
         ID_HOME(1),
@@ -34,9 +37,19 @@ class MainActivity :
     private val settings: LocalSettings by lazy {
         LocalSettings(AndroidSettings(PreferenceManager.getDefaultSharedPreferences(this)))
     }
-    override val viewModel: MainViewModel by viewModel()
     override val layoutId: Int = R.layout.activity_main
-    override val viewModelVariableId: Int = by.iba.sbs.BR.viewmodel
+    override val viewModelVariableId: Int = BR.viewmodel
+
+    override val viewModelClass: Class<MainViewModel> =
+        MainViewModel::class.java
+
+    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
+        MainViewModel(
+            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(this)),
+            eventsDispatcherOnMain()
+        )
+    }
+
     lateinit var toolbar: androidx.appcompat.widget.Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,10 +116,6 @@ class MainActivity :
         navView.show(viewModel.activeTab.value!!)
     }
 
-    fun onToolbarClick(view: View) {
-        onBackPressed()
-    }
-
     fun setNavigationIcon(visible: Boolean) {
         if (visible)
             toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.chevron_left)
@@ -137,4 +146,6 @@ class MainActivity :
         startActivity(intent, options.toBundle())
 
     }
+
+
 }

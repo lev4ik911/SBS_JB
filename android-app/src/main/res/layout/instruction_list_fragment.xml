@@ -16,7 +16,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             visibleOrGone="@{viewmodel.isLoading.ld}"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_small"
+            android:layout_height="@dimen/spacing_xsmall"
             android:layout_alignParentTop="true"
             android:indeterminate="true"
         />

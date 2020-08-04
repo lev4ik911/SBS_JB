@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
-import com.futuremind.recyclerviewfastscroll.SectionTitleProvider
 import kotlin.math.max
 
 
@@ -17,11 +16,8 @@ class SectionsAdapter<T>(
     override val onBind: (view: View, item: T, position: Int) -> Unit,
     override val isItemsEquals: (oldItem: T, newItem: T) -> Boolean,
     val getSectionTitle: (item: T) -> String
-) : BaseAdapter<T>(layoutId, onBind, isItemsEquals), SectionTitleProvider {
+) : BaseAdapter<T>(layoutId, onBind, isItemsEquals) {
 
-    override fun getSectionTitle(position: Int): String {
-        return getSectionTitle(itemsList[position])
-    }
 
     inner class StickySectionItemDecoration(
         private val headerOffset: Int,

@@ -1,5 +1,6 @@
 package by.iba.sbs.ui.profile
 
+import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
@@ -35,11 +36,20 @@ class ProfileEditFragment :
     private val mAlphaAnimationsDuration = 200L
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
+    }
+
     override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
         val maxScroll = binding.appbar.totalScrollRange
         val percentage = abs(p1).toFloat() / maxScroll.toFloat()
         handleAlphaOnTitle(percentage)
         handleToolbarTitleVisibility(percentage)
+
     }
 
     private fun handleToolbarTitleVisibility(percentage: Float) {

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import by.iba.mvvmbase.adapter.BaseAdapter
 import by.iba.sbs.BR
 import by.iba.sbs.R
@@ -13,7 +14,6 @@ import by.iba.sbs.library.model.Author
 import by.iba.sbs.library.viewmodel.ProfileViewModel
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class SubscribersFragment : MvvmFragment<SubscribersFragmentBinding, ProfileViewModel>() {
 
@@ -22,10 +22,16 @@ class SubscribersFragment : MvvmFragment<SubscribersFragmentBinding, ProfileView
     override val viewModelClass: Class<ProfileViewModel> =
         ProfileViewModel::class.java
 
-    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        val viewModel: ProfileViewModel by sharedViewModel()
-        return@createViewModelFactory viewModel
+    override fun viewModelStoreOwner(): ViewModelStoreOwner {
+        return requireActivity()
     }
+
+    override fun viewModelFactory(): ViewModelProvider.Factory =
+        createViewModelFactory {
+            requireActivity().let {
+                ViewModelProvider(it).get(ProfileViewModel::class.java)
+            }
+        }
 
     private lateinit var subscribersStr: String
     private lateinit var instructionsStr: String

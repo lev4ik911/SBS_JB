@@ -2,12 +2,14 @@ CREATE TABLE feedbacks (
     id TEXT NOT NULL UNIQUE PRIMARY KEY,
     guidelineId TEXT NOT NULL,
     rating INTEGER NOT NULL DEFAULT 0,
-    comment TEXT NOT NULL DEFAULT ""
+    comment TEXT NOT NULL DEFAULT "",
+    author TEXT NOT NULL DEFAULT "",
+    authorId TEXT NOT NULL DEFAULT ""
 );
 
 insertFeedback:
-INSERT OR REPLACE INTO feedbacks (id, guidelineId, rating, comment)
-VALUES (?, ?, ?, ?);
+INSERT OR REPLACE INTO feedbacks (id, guidelineId, rating, comment,author,authorId)
+VALUES (?, ?, ?, ?, ?, ?);
 
 selectAllFeedbacks:
 SELECT *

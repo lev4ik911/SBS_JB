@@ -1,6 +1,6 @@
 package com.futuremind.recyclerviewfastscroll
 
-interface SectionTitleProvider {
+interface SectionTitleProvider123 {
     /**
      * Should be implemented by the adapter of the RecyclerView.
      * Provides a text to be shown by the bubble, when RecyclerView reaches

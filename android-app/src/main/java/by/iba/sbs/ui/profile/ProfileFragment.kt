@@ -2,6 +2,7 @@ package by.iba.sbs.ui.profile
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.View
@@ -15,12 +16,14 @@ import androidx.viewpager2.widget.ViewPager2
 import by.iba.sbs.BR
 import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileFragmentBinding
+import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.tools.Tools
 import by.iba.sbs.tools.Tools.Companion.startAlphaAnimation
 import by.iba.sbs.tools.visibleOrGone
 import by.iba.sbs.ui.MainActivity
+import by.iba.sbs.ui.guideline.GuidelineActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.russhwolf.settings.AndroidSettings
@@ -63,23 +66,9 @@ class ProfileFragment :
     @ImplicitReflectionSerializer
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val userId = arguments?.getString("userId").orEmpty()
-        viewModel.loadUser(userId)
-        initActionButton()
-        viewModel.isFavorite.addObserver {
-            initActionButton()
+        binding.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
         }
-        when (activity) {
-            is MainActivity -> {
-                binding.toolbar.navigationIcon = null
-            }
-            else -> {
-                binding.toolbar.navigationIcon =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
-            }
-        }
-
-        binding.appbar.addOnOffsetChangedListener(this)
         viewModel.user.addObserver {
             if (isAdded) {
                 viewPager = binding.viewPager
@@ -94,6 +83,21 @@ class ProfileFragment :
                 }.attach()
             }
         }
+        viewModel.isFavorite.addObserver {
+            initActionButton()
+        }
+        val userId = arguments?.getString("userId").orEmpty()
+        viewModel.loadUser(userId, false)
+        when (activity) {
+            is MainActivity -> {
+                binding.toolbar.navigationIcon = null
+            }
+            else -> {
+                binding.toolbar.navigationIcon =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.chevron_left)
+            }
+        }
+        binding.appbar.addOnOffsetChangedListener(this)
     }
 
     private fun initActionButton() {
@@ -130,6 +134,11 @@ class ProfileFragment :
             }
         }
         binding.btnToolbarLogout.visibleOrGone(viewModel.isMyProfile.value)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initActionButton()
     }
 
     override fun onOffsetChanged(p0: AppBarLayout?, p1: Int) {
@@ -182,9 +191,12 @@ class ProfileFragment :
         }
     }
 
+    @ImplicitReflectionSerializer
+    @UnstableDefault
     inner class TabsFragmentAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
         override fun getItemCount(): Int = if (viewModel.isMyProfile.value) 3 else 2
+
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
@@ -257,5 +269,11 @@ class ProfileFragment :
         }
         val dialog = builder.create()
         dialog.show()
+    }
+
+    override fun onOpenGuidelineAction(guideline: Guideline) {
+        val intent = Intent(requireContext(), GuidelineActivity::class.java)
+        intent.putExtra("instructionId", guideline.id)
+        startActivity(intent)
     }
 }

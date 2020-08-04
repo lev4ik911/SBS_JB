@@ -28,6 +28,9 @@ class StepEditFragment : MvvmFragment<StepEditFragmentBinding, GuidelineViewMode
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.toolbarDescription.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
         stepWeight = arguments?.getInt("stepWeight") ?: 0
         if (stepWeight > 0)
             binding.step = viewModel.steps.value!!.find { step -> step.weight == stepWeight }

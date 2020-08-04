@@ -42,6 +42,9 @@ class GuidelineEditFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.toolbarDescription.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
         binding.appBar.addOnOffsetChangedListener(this)
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             if (instructionId == "")

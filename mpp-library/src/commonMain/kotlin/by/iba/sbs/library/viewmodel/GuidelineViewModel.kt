@@ -156,8 +156,7 @@ class GuidelineViewModel(
         } else {
             if (localStorage.userId.isNotEmpty()) {
                 isFavorite.value = !isFavorite.value
-            }
-            else {
+            } else {
                 eventsDispatcher.dispatchEvent { onAuthorizationRequired() }
             }
 
@@ -170,8 +169,7 @@ class GuidelineViewModel(
         eventsDispatcher.dispatchEvent {
             if (localStorage.userId.isNotEmpty()) {
                 onRatingUpAction()
-            }
-            else {
+            } else {
                 onAuthorizationRequired()
             }
         }
@@ -182,8 +180,7 @@ class GuidelineViewModel(
         eventsDispatcher.dispatchEvent {
             if (localStorage.userId.isNotEmpty()) {
                 onRatingDownAction()
-            }
-            else {
+            } else {
                 onAuthorizationRequired()
             }
         }
@@ -212,6 +209,10 @@ class GuidelineViewModel(
                 }
             }
         }
+    }
+
+    fun onEditFeedbackClick(feedback: Feedback) {
+
     }
 
     fun onOpenProfileClick() {

@@ -45,10 +45,16 @@ class ProfileViewModel(
     val fullName = MutableLiveData("John Doe")
     val isFavorite = MutableLiveData(true)
     val isMyProfile = MutableLiveData(true)
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     val user = MutableLiveData(User()).apply {
         addObserver {
-            isMyProfile.value = it.id == localStorage.userId
-            isFavorite.value = !isMyProfile.value
+            if (it.id.isNotEmpty()) {
+                isMyProfile.value = it.id == localStorage.userId
+                isFavorite.value = !isMyProfile.value
+                loadUserGuidelines(false)
+            }
         }
     }
     val rating = MutableLiveData("547")
@@ -64,7 +70,7 @@ class ProfileViewModel(
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun loadUser(userId: String) {
+    fun loadUser(userId: String, forceRefresh: Boolean) {
         loading.value = true
         val mUserId = if (userId.isEmpty())
             if (localStorage.userId.isEmpty()) {
@@ -75,20 +81,20 @@ class ProfileViewModel(
         else userId
         viewModelScope.launch {
             try {
-                val resultLiveData = usersRepository.getUser(
+                usersRepository.getUser(
                     mUserId,
-                    false
+                    forceRefresh
                 )
-                resultLiveData.addObserver {
-                    if (it.isSuccess && it.isNotEmpty) {
-                        user.postValue(it.data!!)
-                    } else if (it.error != null) eventsDispatcher.dispatchEvent {
-                        showToast(
-                            ToastMessage("LoadUser: ${it.error}", MessageType.ERROR)
-                        )
+                    .addObserver {
+                        loading.postValue(it.status == Response.Status.LOADING)
+                        if (it.isSuccess && it.isNotEmpty) {
+                            user.postValue(it.data!!)
+                        } else if (it.error != null) eventsDispatcher.dispatchEvent {
+                            showToast(
+                                ToastMessage("LoadUser: ${it.error}", MessageType.ERROR)
+                            )
+                        }
                     }
-                    loading.postValue(it.status == Response.Status.LOADING)
-                }
             } catch (e: Exception) {
                 eventsDispatcher.dispatchEvent {
                     showToast(
@@ -105,23 +111,21 @@ class ProfileViewModel(
         loading.value = true
         viewModelScope.launch {
             try {
-                val guidelinesLiveData = usersRepository.getUserGuidelines(user.value.id, forceRefresh)
-                guidelinesLiveData.addObserver {
-                    if (it.isSuccess && it.isNotEmpty) {
-                        guidelines.postValue(it.data!!.sortedBy { item -> item.id }
-                            .toList())
-
-                    } else if (it.error != null)
-                        eventsDispatcher.dispatchEvent {
-                            showToast(
-                                ToastMessage(
-                                    it.error.toString(),
-                                    MessageType.ERROR
+                usersRepository.getUserGuidelines(user.value.id, forceRefresh)
+                    .addObserver {
+                        loading.postValue(it.status == Response.Status.LOADING)
+                        if (it.isSuccess && it.isNotEmpty) {
+                            guidelines.postValue(it.data!!.sortedBy { item -> item.id }.toList())
+                        } else if (it.error != null)
+                            eventsDispatcher.dispatchEvent {
+                                showToast(
+                                    ToastMessage(
+                                        it.error.toString(),
+                                        MessageType.ERROR
+                                    )
                                 )
-                            )
-                        }
-                    loading.postValue(it.status == Response.Status.LOADING)
-                }
+                            }
+                    }
             } catch (e: Exception) {
                 eventsDispatcher.dispatchEvent {
                     showToast(
@@ -133,6 +137,10 @@ class ProfileViewModel(
                 }
             }
         }
+    }
+
+    fun onOpenGuidelineClick(guideline: Guideline) {
+        eventsDispatcher.dispatchEvent { onOpenGuidelineAction(guideline) }
     }
 
     fun onActionButtonClick() {
@@ -163,6 +171,7 @@ class ProfileViewModel(
         fun routeToLoginScreen()
         fun showToast(msg: ToastMessage)
         fun requireAccept()
+        fun onOpenGuidelineAction(guideline: Guideline)
     }
 
 }
