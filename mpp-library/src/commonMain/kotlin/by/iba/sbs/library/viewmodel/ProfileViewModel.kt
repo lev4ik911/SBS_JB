@@ -140,7 +140,6 @@ class ProfileViewModel(
     }
 
     fun onOpenGuidelineClick(guideline: Guideline) {
-        println("MyApp onOpenGuidelineClick")
         eventsDispatcher.dispatchEvent { onOpenGuidelineAction(guideline) }
     }
 
