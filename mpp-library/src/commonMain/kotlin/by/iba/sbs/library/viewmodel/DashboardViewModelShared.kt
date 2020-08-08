@@ -7,6 +7,7 @@ import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.repository.GuidelineRepository
+import by.iba.sbs.library.repository.UsersRepository
 
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
@@ -41,6 +42,10 @@ class DashboardViewModelShared(
     @UnstableDefault
     @ImplicitReflectionSerializer
     private val repository by lazy { GuidelineRepository(localStorage) }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    private val usersRepository by lazy { UsersRepository(localStorage) }
 
     val categories = MutableLiveData<List<Category>>(mutableListOf()).apply {
         val mData = ArrayList<Category>()
@@ -81,14 +86,20 @@ class DashboardViewModelShared(
                     if (it.isSuccess && it.isNotEmpty) {
                         val guidelines = it.data!!
                         favorite.postValue(
-                            if (itemsCount == -1)
-                                guidelines
-                                    //  .filter { item -> item.isFavorite }
-                                    .sortedBy { item -> item.id }
-                                    .toList()
+                            if (itemsCount == -1) {
+                                if (localStorage.userId.isNotEmpty())
+                                    guidelines
+                                        .filter { item -> item.isFavorite }
+                                        .sortedBy { item -> item.id }
+                                        .toList()
+                                else
+                                    guidelines
+                                        .sortedBy { item -> item.id }
+                                        .toList()
+                            }
                             else
                                 guidelines
-                                    // .filter { item -> item.isFavorite }
+                                    .filter { item -> item.isFavorite }
                                     .take(itemsCount)
                                     .sortedBy { item -> item.id }
                                     .toList()
@@ -207,6 +218,43 @@ class DashboardViewModelShared(
         }
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun loadUserFavorites(forceRefresh: Boolean) {
+        val userId = localStorage.userId
+        if (userId.isEmpty() || !forceRefresh) {
+            eventsDispatcher.dispatchEvent { onFavoritesLoaded(forceRefresh) }
+            return
+        }
+        loading.value = true
+        viewModelScope.launch {
+            try {
+                repository.clearFavorites()
+                val result = usersRepository.getUserFavorites(userId)
+                if (result.error != null)
+                    eventsDispatcher.dispatchEvent {
+                        showToast(
+                            ToastMessage(
+                                result.error.toString(),
+                                MessageType.ERROR
+                            )
+                        )
+                    }
+                loading.postValue(result.status == Response.Status.LOADING)
+                eventsDispatcher.dispatchEvent { onFavoritesLoaded(forceRefresh) }
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     fun onViewFavoritesClick() {
         eventsDispatcher.dispatchEvent { onViewFavoritesAction() }
     }
@@ -228,5 +276,6 @@ class DashboardViewModelShared(
         fun onViewRecommendedAction()
         fun onViewPopularAction()
         fun showToast(msg: ToastMessage)
+        fun onFavoritesLoaded(forceRefresh:Boolean)
     }
 }

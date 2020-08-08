@@ -147,6 +147,8 @@ class GuidelineViewModel(
         }
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     fun onActionButtonClick() {
         if (isMyInstruction.value) {
             if (!steps.value.isNullOrEmpty())
@@ -155,7 +157,18 @@ class GuidelineViewModel(
             eventsDispatcher.dispatchEvent { onCallInstructionEditor(guideline.value.id) }
         } else {
             if (localStorage.userId.isNotEmpty()) {
-                isFavorite.value = !isFavorite.value
+                val currentGuideline = guideline.value
+                if(!localStorage.userId.equals(currentGuideline.authorId)) {
+                    isFavorite.value = !isFavorite.value
+                    if (isFavorite.value)
+                        addGuidelineToFavorite(currentGuideline.id)
+                    else
+                        removeGuidelineFromFavorite(currentGuideline.id)
+                }
+                else{
+                    //TODO(Add message "it is user gideline")
+                }
+
             } else {
                 eventsDispatcher.dispatchEvent { onAuthorizationRequired() }
             }
@@ -480,6 +493,56 @@ class GuidelineViewModel(
                 }
                 loading.postValue(result.status == Response.Status.LOADING)
                 eventsDispatcher.dispatchEvent { onAfterSaveStepAction() }
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(e.message.orEmpty(), MessageType.ERROR)
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun addGuidelineToFavorite(guidelineId: String) {
+        loading.value = true
+        viewModelScope.launch {
+            try {
+                val result = repository.addGuidelineToFavorite(guidelineId)
+                if (result.isSuccess && result.isNotEmpty) {
+                    guideline.value.isFavorite = true
+                } else if (result.error != null) eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(result.error.message.orEmpty(), MessageType.ERROR)
+                    )
+                }
+                loading.postValue(result.status == Response.Status.LOADING)
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(e.message.orEmpty(), MessageType.ERROR)
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun removeGuidelineFromFavorite(guidelineId: String) {
+        loading.value = true
+        viewModelScope.launch {
+            try {
+                val result = repository.removeGuidelineFromFavorite(guidelineId)
+                if (result.isSuccess && result.isNotEmpty) {
+                    guideline.value.isFavorite = false
+                } else if (result.error != null) eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(result.error.message.orEmpty(), MessageType.ERROR)
+                    )
+                }
+                loading.postValue(result.status == Response.Status.LOADING)
             } catch (e: Exception) {
                 eventsDispatcher.dispatchEvent {
                     showToast(

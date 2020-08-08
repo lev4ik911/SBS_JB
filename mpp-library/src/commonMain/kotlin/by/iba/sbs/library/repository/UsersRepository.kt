@@ -7,6 +7,7 @@ import by.iba.sbs.library.data.remote.Users
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.User
 import by.iba.sbs.library.model.request.UserCreate
+import by.iba.sbs.library.model.response.FavoriteView
 import by.iba.sbs.library.model.response.RatingSummary
 import by.iba.sbs.library.model.response.UserView
 import by.iba.sbs.library.service.LocalSettings
@@ -28,12 +29,16 @@ interface IUsersRepository {
         forceRefresh: Boolean
     ): LiveData<Response<List<Guideline>>>
 
+
     suspend fun getUser(
         userId: String,
         forceRefresh: Boolean
     ): LiveData<Response<User>>
 
     suspend fun deleteUser(userId: String): Response<UserView>
+
+    @UnstableDefault
+    suspend fun getUserFavorites(userId: String): Response<List<FavoriteView>>
 }
 
 @ImplicitReflectionSerializer
@@ -46,6 +51,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
     private val usersQueries = sbsDb.usersEntityQueries
     private val guidelinesQueries = sbsDb.guidelinesEntityQueries
     private val ratingSummaryQueries = sbsDb.ratingSummaryQueries
+    private val favoritesQueries = sbsDb.favoritesEntityQueries
 
     @UnstableDefault
     override suspend fun addUser(data: User): Response<UserView> = coroutineScope {
@@ -244,5 +250,62 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
 
     suspend fun clearCache() {
         usersQueries.deleteAllUsers()
+    }
+
+//    @UnstableDefault
+//    override suspend fun getUserFavorites(userId: String
+//    ): LiveData<Response<List<FavoriteView>>> {
+//        favoritesQueries.clearFavorites()
+//        return object : NetworkBoundResource<List<FavoriteView>, List<FavoriteView>>() {
+//            override fun processResponse(response: List<FavoriteView>): List<FavoriteView> = response
+//
+//            override suspend fun saveCallResults(data: List<FavoriteView>) = coroutineScope {
+//                data.forEach {
+//                    favoritesQueries.addGuidelineToFavorites(
+//                        it.id,
+//                        it.entity.type,
+//                        it.entity.id
+//                    )
+//                }
+//            }
+//
+//            override fun shouldFetch(data: List<FavoriteView>?): Boolean = true
+//
+//            override fun createCallAsync(): Deferred<List<FavoriteView>> {
+//                return GlobalScope.async(applicationDispatcher) {
+//                    val result = users.getUserFavorites(userId)
+//                    if (result.isSuccess) {
+//                        result.data!!
+//                    } else {
+//                        if (result.status == Response.Status.ERROR) error(result.error!!)
+//                        listOf()
+//                    }
+//                }
+//            }
+//
+//            override suspend fun loadFromDb(): List<FavoriteView>? {
+//                TODO("Not yet implemented")
+//            }
+//
+//        }.build()
+//            .asLiveData()
+//    }
+
+    @UnstableDefault
+    override suspend fun getUserFavorites(userId: String
+    ): Response<List<FavoriteView>> = coroutineScope {
+        val result = users.getUserFavorites(userId)
+        if (result.isSuccess) {
+            result.data!!.forEach {
+                    favoritesQueries.addGuidelineToFavorites(
+                        it.id,
+                        it.entity.type,
+                        it.entity.id
+                    )
+                }
+        } else {
+            if (result.status == Response.Status.ERROR) error(result.error!!)
+        }
+        return@coroutineScope result
     }
 }

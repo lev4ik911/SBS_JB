@@ -105,7 +105,6 @@ class DashboardFragment :
         viewModel.recommended.addObserver {
             recommendedAdapter.addItems(it)
         }
-        viewModel.loadRecommended(forceRefresh, 4)
         val favoritesAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>(
                 R.layout.instruction_list_item,
@@ -123,7 +122,6 @@ class DashboardFragment :
         viewModel.favorite.addObserver {
             favoritesAdapter.addItems(it)
         }
-        viewModel.loadFavorites(forceRefresh, 3)
 
         val popularAdapter =
             BaseBindingAdapter<Guideline, InstructionListItemBinding, MainViewModel>(
@@ -152,7 +150,7 @@ class DashboardFragment :
             popularAdapter.addItems(it)
             binding.lSwipeRefresh.isRefreshing = false
         }
-        viewModel.loadPopular(forceRefresh, 3)
+        viewModel.loadUserFavorites(forceRefresh)
         binding.lSwipeRefresh.setOnRefreshListener {
             viewModel.loadRecommended(true, 4)
             viewModel.loadFavorites(true, 3)
@@ -166,9 +164,7 @@ class DashboardFragment :
         super.onStart()
         (activity as MainActivity).setNavigationIcon(false)
         val forceRefresh = Date().day != Date(settings.lastUpdate).day
-        viewModel.loadRecommended(forceRefresh, 4)
-        viewModel.loadFavorites(forceRefresh, 3)
-        viewModel.loadPopular(forceRefresh, 3)
+        viewModel.loadUserFavorites(forceRefresh)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -207,6 +203,14 @@ class DashboardFragment :
 
     override fun showToast(msg: ToastMessage) {
         Tools.showToast(requireContext(), viewModel::class.java.name, msg)
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun onFavoritesLoaded(forceRefresh: Boolean) {
+        viewModel.loadRecommended(forceRefresh, 4)
+        viewModel.loadFavorites(forceRefresh, 3)
+        viewModel.loadPopular(forceRefresh, 3)
     }
 
     override fun onResume() {

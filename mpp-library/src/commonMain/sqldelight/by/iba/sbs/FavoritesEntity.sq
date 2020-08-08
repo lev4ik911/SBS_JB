@@ -1,0 +1,24 @@
+CREATE TABLE favorites (
+    id TEXT NOT NULL UNIQUE PRIMARY KEY,
+    entityType TEXT NOT NULL DEFAULT "",
+    entityId TEXT NOT NULL DEFAULT ""
+);
+
+-- selectAllFromFavorites:
+-- SELECT * FROM favorites;
+
+selectAllGuidelinesIdFromFavorites:
+SELECT entityId FROM favorites;
+
+selectFavoriteIdByGuidelineId:
+SELECT id FROM favorites WHERE entityId = ? LIMIT 1;
+
+addGuidelineToFavorites:
+INSERT OR REPLACE INTO favorites (id, entityType, entityId)
+VALUES (?, ?, ?);
+
+removeGuidelineFromFavoritesById:
+DELETE FROM favorites WHERE id = ?;
+
+clearFavorites:
+DELETE FROM favorites;

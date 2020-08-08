@@ -2,6 +2,7 @@ package by.iba.sbs.library.viewmodel
 
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.*
+import by.iba.sbs.library.repository.GuidelineRepository
 import by.iba.sbs.library.repository.UsersRepository
 import com.russhwolf.settings.Settings
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
@@ -20,6 +21,10 @@ class ProfileViewModel(
     @OptIn(UnstableDefault::class)
     @ImplicitReflectionSerializer
     private val usersRepository by lazy { UsersRepository(localStorage) }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    private val guidelineRepository by lazy { GuidelineRepository(localStorage) }
 
 
     val showRecommended = MutableLiveData(true).apply {
@@ -151,9 +156,25 @@ class ProfileViewModel(
         eventsDispatcher.dispatchEvent { onLogoutAction() }
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     fun logout() {
         localStorage.accessToken = ""
         localStorage.userId = ""
+        viewModelScope.launch {
+            try {
+                guidelineRepository.clearFavorites()
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
         eventsDispatcher.dispatchEvent { routeToLoginScreen() }
     }
 

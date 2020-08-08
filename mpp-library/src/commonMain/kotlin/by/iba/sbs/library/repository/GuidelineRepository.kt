@@ -6,10 +6,7 @@ import by.iba.sbs.library.model.Feedback
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.model.request.*
-import by.iba.sbs.library.model.response.GuidelineView
-import by.iba.sbs.library.model.response.RatingSummary
-import by.iba.sbs.library.model.response.RatingView
-import by.iba.sbs.library.model.response.StepView
+import by.iba.sbs.library.model.response.*
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.service.applicationDispatcher
 import dev.icerock.moko.mvvm.livedata.LiveData
@@ -55,6 +52,12 @@ interface IGuidelineRepository {
     suspend fun deleteRating(guidelineId: String, feedbackId: String): Response<String?>
     suspend fun getSuggestions(searchText: String): List<String>
     suspend fun getFilteredGuidelines(searchText: String): List<Guideline>
+    @UnstableDefault
+    suspend fun addGuidelineToFavorite(guidelineId: String): Response<FavoriteView>
+    @UnstableDefault
+    suspend fun removeGuidelineFromFavorite(guidelineId: String): Response<String?>
+    @UnstableDefault
+    suspend fun clearFavorites()
 }
 
 @ImplicitReflectionSerializer
@@ -68,12 +71,16 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     private val steps by lazy { Steps(settings) }
 
     @UnstableDefault
+    private val favorites by lazy { Favorites(settings) }
+
+    @UnstableDefault
     private val feedback by lazy { Feedbacks(settings) }
     private val sbsDb = createDb()
     private val guidelinesQueries = sbsDb.guidelinesEntityQueries
     private val ratingSummaryQueries = sbsDb.ratingSummaryQueries
     private val feedbackQueries = sbsDb.feedbackEntityQueries
     private val suggestionsQueries = sbsDb.suggestionsEntityQueries
+    private val favoritesQueries = sbsDb.favoritesEntityQueries
 
 
     @UnstableDefault
@@ -81,6 +88,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
         if (forceRefresh) {
             clearCache()
         }
+        val favorites = favoritesQueries.selectAllGuidelinesIdFromFavorites().executeAsList()
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
 
@@ -117,6 +125,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                             it.id, it.name, it.description,
                             authorId = it.authorId,
                             author = it.author,
+                            isFavorite = favorites.any { fav -> fav == it.id },
                             rating = RatingSummary(
                                 rating.positive!!.toInt(),
                                 rating.negative!!.toInt(),
@@ -140,7 +149,8 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                                 item.description ?: "",
                                 rating = item.rating,
                                 authorId = item.activity.createdBy.id,
-                                author = item.activity.createdBy.name
+                                author = item.activity.createdBy.name,
+                                isFavorite = favorites.any { fav -> fav == item.id }
                             )
                         }
                     } else {
@@ -159,6 +169,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
         guidelineId: String,
         forceRefresh: Boolean
     ): LiveData<Response<Guideline>> {
+        val favorite = favoritesQueries.selectFavoriteIdByGuidelineId(guidelineId).executeAsOneOrNull()
         return object : NetworkBoundResource<Guideline, Guideline>() {
             override fun processResponse(response: Guideline): Guideline = response
 
@@ -194,6 +205,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                             item.id, item.name, item.description,
                             authorId = item.authorId,
                             author = item.author,
+                            isFavorite = favorite != null,
                             rating = RatingSummary(
                                 ratingSummary.positive!!.toInt(),
                                 ratingSummary.negative!!.toInt(),
@@ -222,6 +234,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                             item.description!!,
                             authorId = item.activity.createdBy.id,
                             author = item.activity.createdBy.name,
+                            isFavorite = favorite != null,
                             rating = RatingSummary(
                                 item.rating.positive,
                                 item.rating.negative,
@@ -591,6 +604,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     override suspend fun getFilteredGuidelines(searchText: String): List<Guideline> =
         coroutineScope {
             val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
+            val favorites = favoritesQueries.selectAllGuidelinesIdFromFavorites().executeAsList()
             return@coroutineScope suggestionsQueries.searchGuidelinesByText(searchText)
                 .executeAsList().map {
                     val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
@@ -599,6 +613,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                             it.id, it.name, it.description,
                             author = it.author,
                             authorId = it.authorId,
+                            isFavorite = favorites.any { fav -> fav == it.id },
                             rating = RatingSummary(
                                 rating.positive!!.toInt(),
                                 rating.negative!!.toInt(),
@@ -610,6 +625,44 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     }
                 }
 
+        }
+
+    @UnstableDefault
+    override suspend fun addGuidelineToFavorite(
+        guidelineId: String
+    ): Response<FavoriteView> =
+        coroutineScope {
+            val result = favorites.postFavorite(guidelineId)
+            if (result.isSuccess) {
+                val item = result.data!!
+                favoritesQueries.addGuidelineToFavorites(item.id, item.entity.type, item.entity.id)
+            } else {
+                if (result.status == Response.Status.ERROR) error(result.error!!)
+            }
+            return@coroutineScope result
+        }
+
+    @UnstableDefault
+    override suspend fun removeGuidelineFromFavorite(
+        guidelineId: String
+    ): Response<String?> =
+        coroutineScope {
+            var result: Response<String?>
+            favoritesQueries.selectFavoriteIdByGuidelineId(guidelineId).executeAsOne().apply {
+                result = favorites.deleteFavorite(guidelineId, this)
+                if (result.isSuccess) {
+                    favoritesQueries.removeGuidelineFromFavoritesById(this)
+                } else {
+                    if (result.status == Response.Status.ERROR) error(result.error!!)
+                }
+            }
+            return@coroutineScope result
+        }
+
+    @UnstableDefault
+    override suspend fun clearFavorites() =
+        coroutineScope {
+            return@coroutineScope favoritesQueries.clearFavorites()
         }
 
 }

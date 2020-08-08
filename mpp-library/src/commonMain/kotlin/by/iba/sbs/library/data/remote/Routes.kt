@@ -15,6 +15,8 @@ object Routes {
         const val URL_USER_DETAILS = "$baseRoute/$version/users/item/%s"
         const val URL_USER_GUIDELINES =
             "$baseRoute/$version/users/item/15929ff9-b97c-436b-a246-adb83e8ccf08/guidelines/list"
+        const val URL_USER_FAVORITES =
+            "$baseRoute/$version/users/item/%s/favourites/list"
     }
 
     object Guidelines {
@@ -31,5 +33,11 @@ object Routes {
         const val URL_GUIDELINE_RATINGS = "$baseRoute/$version/guidelines/item/%s/ratings/list"
         const val URL_GUIDELINE_RATING_DETAILS =
             "$baseRoute/$version/guidelines/item/%s/ratings/item/%s"
+    }
+
+    object Favorites {
+        const val URL_GUIDELINE_FAVORITES = "$baseRoute/$version/guidelines/item/%s/favourites/list"
+        const val URL_GUIDELINE_FAVORITES_DETAILS =
+            "$baseRoute/$version/guidelines/item/%s/favourites/item/%s"
     }
 }

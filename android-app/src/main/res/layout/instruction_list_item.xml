@@ -61,7 +61,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom|end"
                             android:elevation="@dimen/spacing_xxsmall"
-                            android:src="@{instruction.favorite ? @drawable/star : @drawable/star_outline}"
+                            android:src="@{instruction.isFavorite ? @drawable/star : @drawable/star_outline}"
                             android:tint="@color/colorGold" />
                     </androidx.cardview.widget.CardView>
 

@@ -73,6 +73,7 @@ class LoginViewModel(
                         it.user.apply {
                             usersQueries.addUser(id, name, email)
                             localStorage.userId = id
+                            usersRepository.getUserFavorites(id)
                             eventsDispatcher.dispatchEvent { routeToProfile(id) }
                         }
                     }

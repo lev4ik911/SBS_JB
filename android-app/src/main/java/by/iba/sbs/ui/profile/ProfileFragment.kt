@@ -226,6 +226,8 @@ class ProfileFragment :
         }
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     override fun onLogoutAction() {
         AlertDialog.Builder(requireContext()).apply {
             setTitle(resources.getString(R.string.title_logout_dialog))
