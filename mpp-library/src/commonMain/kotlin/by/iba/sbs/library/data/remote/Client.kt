@@ -69,7 +69,7 @@ open class Client(open val settings: LocalSettings, private val heedAuth: Boolea
                 level = LogLevel.ALL
                 logger = Logger.DEFAULT
             }
-            if (heedAuth)
+            if (heedAuth && settings.accessToken.isNotEmpty())
                 install(TokenFeature) {
                     tokenHeaderName = "Authorization"
                     tokenProvider = object : TokenFeature.TokenProvider {
