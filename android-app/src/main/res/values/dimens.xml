@@ -29,6 +29,8 @@
     <dimen name="progress_bar_layout_margin">-4dp</dimen>
     <dimen name="stepper_touch_width">88dp</dimen>
     <dimen name="stepper_touch_height">28dp</dimen>
+    <dimen name="infinity_image_size">100dp</dimen>
+    <dimen name="infinity_animation_vertical_margin">50dp</dimen>
     <!-- text size!-->
     <dimen name="text_size_smallest">8sp</dimen>
     <dimen name="text_size_small">12sp</dimen>

@@ -7,7 +7,6 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -18,13 +17,11 @@ import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.viewmodel.LoginViewModel
 import by.iba.sbs.tools.SystemInfo
 import by.iba.sbs.tools.Tools
-import by.iba.sbs.tools.Tools.Companion.waitForLayout
-import by.iba.sbs.tools.visibleOrNot
-import com.github.ybq.android.spinkit.style.FadingCircle
 import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
+import kotlinx.android.synthetic.main.login_fragment.*
 
 
 class LoginFragment :
@@ -53,31 +50,6 @@ class LoginFragment :
         viewModel.init()
         binding.includePassword.etPassword.setOnEditorActionListener(this)
         binding.includeEmail.etLogin.setOnEditorActionListener(this)
-        binding.shimmerViewContainer.also {
-            it.waitForLayout { inner ->
-                inner.visibleOrNot(inner.top > 0)
-            }
-        }
-        val mWaveDrawable = FadingCircle().apply {
-            val size = resources.getDimension(R.dimen.spacing_large).toInt()
-            this.setBounds(0, 0, size, size)
-            this.color = ContextCompat.getColor(requireContext(), R.color.textColorPrimaryInverse)
-            binding.includePassword.btnLogin.also {
-                it.setCompoundDrawables(this, null, null, null)
-                it.setPadding(
-                    it.paddingLeft,
-                    it.paddingTop,
-                    it.paddingRight + size,
-                    it.paddingBottom
-                )
-            }
-        }
-        viewModel.isLoading.addObserver {
-            if (it)
-                mWaveDrawable.start()
-            else
-                mWaveDrawable.stop()
-        }
     }
 
     override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
@@ -117,9 +89,32 @@ class LoginFragment :
             it.setOutAnimation(context, R.anim.slide_out_left)
             it.showPrevious()
         }
+        motion_container.setTransition(R.id.transition_movement)
+        motion_container.transitionToEnd()
+//        val tl = object: MotionLayout.TransitionListener {
+//            override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
+//            }
+//
+//            override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+//            }
+//
+//            override fun onTransitionChange(p0: MotionLayout?, startId: Int, endId: Int, progress: Float) {
+//            }
+//
+//            override fun onTransitionCompleted(p0: MotionLayout?, currentId: Int) {
+//                if(currentId == R.id.set2) {
+//                    motion_container.setTransition(R.id.transition_rotation)
+//                    motion_container.transitionToEnd()
+//                }
+//            }
+//        }
+//        motion_container.setTransitionListener(tl)
     }
 
     override fun flipToLogin() {
+//        motion_container.setTransition(R.id.transition_return)
+//        motion_container.transitionToEnd()
+        motion_container.transitionToStart()
         binding.flipperLogin.also {
             it.setInAnimation(context, android.R.anim.slide_in_left)
             it.setOutAnimation(context, android.R.anim.slide_out_right)
