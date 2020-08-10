@@ -1,7 +1,10 @@
 package by.iba.sbs.tools
 
+import android.app.ActivityManager
 import android.content.Context
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.util.Log
 import android.view.View
@@ -126,7 +129,7 @@ class Tools {
             val appProcesses = activityManager.runningAppProcesses ?: return false
             val packageName = context.packageName
             for (appProcess in appProcesses) {
-                if (appProcess.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName == packageName) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName == packageName) {
                     return true
                 }
             }
