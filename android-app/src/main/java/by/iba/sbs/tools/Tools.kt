@@ -121,6 +121,30 @@ class Tools {
                 false
             ).show()
         }
+        fun isAppOnForeground(context: Context): Boolean {
+            val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+            val appProcesses = activityManager.runningAppProcesses ?: return false
+            val packageName = context.packageName
+            for (appProcess in appProcesses) {
+                if (appProcess.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName == packageName) {
+                    return true
+                }
+            }
+            return false
+        }
+        fun isInternetConnectionExists(context: Context): Boolean {
+            val connectivity = context.getSystemService(
+                Context.CONNECTIVITY_SERVICE
+            ) as ConnectivityManager
+
+            val info = connectivity.allNetworkInfo
+
+            for (i in info)
+                if (i.state == NetworkInfo.State.CONNECTED) {
+                    return true
+                }
+            return false
+        }
     }
 
 }
