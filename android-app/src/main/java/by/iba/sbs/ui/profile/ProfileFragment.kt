@@ -240,6 +240,7 @@ class ProfileFragment :
                 resources.getString(R.string.btn_logout)
             ) { _: DialogInterface, _: Int ->
                 viewModel.logout()
+                (requireActivity() as MainActivity).setVisibilityForFavorites()
             }
             setNegativeButton(resources.getString(R.string.btn_cancel), null)
         }

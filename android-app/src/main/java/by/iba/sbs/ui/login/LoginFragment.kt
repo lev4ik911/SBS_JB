@@ -17,6 +17,7 @@ import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.viewmodel.LoginViewModel
 import by.iba.sbs.tools.SystemInfo
 import by.iba.sbs.tools.Tools
+import by.iba.sbs.ui.MainActivity
 import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
@@ -77,6 +78,7 @@ class LoginFragment :
 
 
     override fun routeToProfile(userId: String) {
+        (requireActivity() as MainActivity).setVisibilityForFavorites()
         findNavController().navigate(
             R.id.action_navigation_login_fragment_to_navigation_profile_fragment,
             bundleOf("userId" to userId)

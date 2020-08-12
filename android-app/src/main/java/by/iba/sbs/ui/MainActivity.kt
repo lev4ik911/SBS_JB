@@ -29,8 +29,8 @@ class MainActivity :
     MainViewModel.EventsListener {
     enum class ActiveTabEnum(var index: Int) {
         ID_HOME(1),
-        ID_FAVORITES(2),
-        ID_SEARCH(3),
+        ID_SEARCH(2),
+        ID_FAVORITES(3),
         ID_PROFILE(4)
     }
 
@@ -50,10 +50,11 @@ class MainActivity :
         )
     }
 
+    lateinit var navView: BottomNavigation
     lateinit var toolbar: androidx.appcompat.widget.Toolbar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val navView: BottomNavigation = this.findViewById(R.id.nav_view)
+        navView = this.findViewById(R.id.nav_view)
         toolbar = this.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar_main)
         setSupportActionBar(toolbar)
         val navController = findNavController(R.id.fragment_navigation_main)
@@ -66,14 +67,14 @@ class MainActivity :
         )
         navView.add(
             BottomNavigation.Model(
-                ActiveTabEnum.ID_FAVORITES.index,
-                R.drawable.star_outline
+                ActiveTabEnum.ID_SEARCH.index,
+                R.drawable.baseline_search_24
             )
         )
         navView.add(
             BottomNavigation.Model(
-                ActiveTabEnum.ID_SEARCH.index,
-                R.drawable.baseline_search_24
+                ActiveTabEnum.ID_FAVORITES.index,
+                R.drawable.star_outline
             )
         )
         navView.add(
@@ -83,6 +84,8 @@ class MainActivity :
             )
         )
         navView.setCount(ActiveTabEnum.ID_HOME.index, "15")
+
+        setVisibilityForFavorites()
 
         navView.setOnShowListener {
 
@@ -121,6 +124,17 @@ class MainActivity :
             toolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.chevron_left)
         else
             toolbar.navigationIcon = null
+    }
+
+    fun setVisibilityForFavorites() {
+        if(viewModel.localStorage.userId.isEmpty()) {
+            navView.getCellById(ActiveTabEnum.ID_FAVORITES.index)?.visibility = View.GONE
+            navView.getCellById(ActiveTabEnum.ID_FAVORITES.index)?.disableCell()
+        }
+        else{
+            navView.getCellById(ActiveTabEnum.ID_FAVORITES.index)?.visibility = View.VISIBLE
+            navView.getCellById(ActiveTabEnum.ID_FAVORITES.index)?.enableCell(false)
+        }
     }
 
     override fun onOpenGuidelineAction(view: View, guideline: Guideline) {
