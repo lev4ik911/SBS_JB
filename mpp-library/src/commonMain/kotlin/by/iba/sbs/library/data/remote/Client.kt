@@ -8,6 +8,7 @@ import dev.icerock.moko.network.exceptionfactory.parser.ValidationExceptionParse
 import dev.icerock.moko.network.features.ExceptionFeature
 import dev.icerock.moko.network.features.TokenFeature
 import io.ktor.client.HttpClient
+import io.ktor.client.features.HttpTimeout
 import io.ktor.client.features.ResponseException
 import io.ktor.client.features.defaultRequest
 import io.ktor.client.features.json.JsonFeature
@@ -48,6 +49,12 @@ open class Client(open val settings: LocalSettings, private val heedAuth: Boolea
                     append("Accept-Language", "en-US")
                     append("Accept", "application/json")
                 }
+            }
+            install(HttpTimeout) {
+                // timeout config
+                connectTimeoutMillis = 1000
+                socketTimeoutMillis = 2000
+                requestTimeoutMillis = 2000
             }
             install(ExceptionFeature) {
                 exceptionFactory = HttpExceptionFactory(

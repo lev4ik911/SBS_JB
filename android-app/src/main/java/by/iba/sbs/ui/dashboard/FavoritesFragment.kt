@@ -19,13 +19,15 @@ import by.iba.sbs.R
 import by.iba.sbs.databinding.FavoritesFragmentBinding
 import by.iba.sbs.databinding.InstructionListItemBinding
 import by.iba.sbs.library.model.Guideline
+import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.viewmodel.DashboardViewModelShared
+import by.iba.sbs.tools.Tools
 import by.iba.sbs.ui.MainActivity
 import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.guideline.GuidelineActivity
 import com.russhwolf.settings.AndroidSettings
-import dev.icerock.moko.mvvm.MvvmFragment
+import dev.icerock.moko.mvvm.MvvmEventsFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlinx.android.synthetic.main.toolbar.*
@@ -37,7 +39,8 @@ import java.util.*
 /**
  * A simple [Fragment] subclass.
  */
-class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewModelShared>() {
+class FavoritesFragment : MvvmEventsFragment<FavoritesFragmentBinding, DashboardViewModelShared, DashboardViewModelShared.EventsListener>(),
+    DashboardViewModelShared.EventsListener {
     override val layoutId: Int = R.layout.favorites_fragment
     override val viewModelVariableId: Int = BR.viewmodel
 
@@ -199,6 +202,27 @@ class FavoritesFragment : MvvmFragment<FavoritesFragmentBinding, DashboardViewMo
             GuidelineCategory.FAVORITE.ordinal -> viewModel.loadFavorites(forceRefresh)
             else -> viewModel.loadFavorites(forceRefresh)
         }
+    }
+
+
+    override fun showToast(msg: ToastMessage) {
+        Tools.showToast(requireContext(), viewModel::class.java.name, msg)
+    }
+
+    override fun onViewFavoritesAction() {
+        //TODO("Not nessesary in implementation")
+    }
+
+    override fun onViewRecommendedAction() {
+        //TODO("Not nessesary in implementation")
+    }
+
+    override fun onViewPopularAction() {
+        //TODO("Not nessesary in implementation")
+    }
+
+    override fun onFavoritesLoaded(forceRefresh: Boolean) {
+        //TODO("Not nessesary in implementation")
     }
 
 }

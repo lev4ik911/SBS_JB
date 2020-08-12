@@ -85,9 +85,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
 
     @UnstableDefault
     override suspend fun getAllGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>> {
-        if (forceRefresh) {
-            clearCache()
-        }
+
         val favorites = favoritesQueries.selectAllGuidelinesIdFromFavorites().executeAsList()
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
@@ -142,6 +140,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 return GlobalScope.async(applicationDispatcher) {
                     val result = guidelines.getAllGuidelines()
                     if (result.isSuccess) {
+                        clearCache()
                         result.data!!.map { item ->
                             Guideline(
                                 item.id,
@@ -155,7 +154,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         }
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
-                        listOf()
+                        loadFromDb()
                     }
                 }
             }
@@ -243,7 +242,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         )
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
-                        Guideline()
+                        loadFromDb()?: Guideline()
                     }
                 }
             }
@@ -313,7 +312,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         }
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
-                        listOf()
+                        loadFromDb() ?: listOf()
 
                     }
                 }
@@ -519,7 +518,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         }
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
-                        listOf()
+                        loadFromDb()?: listOf()
                     }
                 }
             }

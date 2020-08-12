@@ -47,7 +47,19 @@ class GuidelineListViewModelShared(
                 repository.getAllGuidelines(forceRefresh)
                     .addObserver {
                         loading.postValue(it.status == Response.Status.LOADING)
-                        if (it.isSuccess && it.isNotEmpty) {
+                        if (it.isNotEmpty) {
+                            if(it.error != null){
+                                eventsDispatcher.dispatchEvent {
+                                    showToast(
+                                        ToastMessage(
+                                            "Offline mode",
+                                            MessageType.WARNING,
+                                            it.error.toString()
+                                        )
+                                    )
+                                }
+                            }
+
                             var guidelines = it.data!!
                             if (searchedText.value.isNotEmpty()) {
                                 viewModelScope.launch {

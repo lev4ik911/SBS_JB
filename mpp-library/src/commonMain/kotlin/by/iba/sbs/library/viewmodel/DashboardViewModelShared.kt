@@ -83,7 +83,18 @@ class DashboardViewModelShared(
             try {
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
                 guidelinesLiveData.addObserver {
-                    if (it.isSuccess && it.isNotEmpty) {
+                    if (it.isNotEmpty) {
+                        if(it.error != null){
+                            eventsDispatcher.dispatchEvent {
+                                showToast(
+                                    ToastMessage(
+                                        "Offline mode",
+                                        MessageType.WARNING,
+                                        it.error.toString()
+                                    )
+                                )
+                            }
+                        }
                         val guidelines = it.data!!
                         favorite.postValue(
                             if (itemsCount == -1) {
@@ -136,7 +147,18 @@ class DashboardViewModelShared(
             try {
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
                 guidelinesLiveData.addObserver {
-                    if (it.isSuccess && it.isNotEmpty) {
+                    if (it.isNotEmpty) {
+                        if(it.error != null){
+                            eventsDispatcher.dispatchEvent {
+                                showToast(
+                                    ToastMessage(
+                                        "Offline mode",
+                                        MessageType.WARNING,
+                                        it.error.toString()
+                                    )
+                                )
+                            }
+                        }
                         val guidelines = it.data!!
                         recommended.postValue(
                             if (itemsCount == -1)
@@ -181,7 +203,18 @@ class DashboardViewModelShared(
             try {
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
                 guidelinesLiveData.addObserver {
-                    if (it.isSuccess && it.isNotEmpty) {
+                    if (it.isNotEmpty) {
+                        if(it.error != null){
+                            eventsDispatcher.dispatchEvent {
+                                showToast(
+                                    ToastMessage(
+                                        "Offline mode",
+                                        MessageType.WARNING,
+                                        it.error.toString()
+                                    )
+                                )
+                            }
+                        }
                         val guidelines = it.data!!
                         popular.postValue(
                             if (itemsCount == -1)
