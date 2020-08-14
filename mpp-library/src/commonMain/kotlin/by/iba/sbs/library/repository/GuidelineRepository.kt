@@ -252,9 +252,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     }
 
     private fun clearCache() {
-        feedbackQueries.deleteAllFeedbacks()
         ratingSummaryQueries.deleteRatings()
-        guidelinesQueries.deleteAllSteps()
         guidelinesQueries.deleteAllGuidelines()
         settings.lastUpdate = getCurrentMilliSeconds()
     }
@@ -300,6 +298,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 return GlobalScope.async(applicationDispatcher) {
                     val result = steps.getAllSteps(guidelineId)
                     if (result.isSuccess) {
+                        guidelinesQueries.deleteAllStepsByGuidelineId(guidelineId)
                         result.data!!.map { item ->
                             Step(
                                 item.id,
@@ -507,6 +506,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 return GlobalScope.async(applicationDispatcher) {
                     val result = feedback.getAllFeedbacks(guidelineId)
                     if (result.isSuccess) {
+                        feedbackQueries.deleteAllFeedbacksByGuidelineId(guidelineId)
                         result.data!!.map { item ->
                             Feedback(
                                 item.id,

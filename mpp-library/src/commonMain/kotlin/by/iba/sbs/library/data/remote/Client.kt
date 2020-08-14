@@ -52,9 +52,9 @@ open class Client(open val settings: LocalSettings, private val heedAuth: Boolea
             }
             install(HttpTimeout) {
                 // timeout config
-                connectTimeoutMillis = 1000
-                socketTimeoutMillis = 2000
-                requestTimeoutMillis = 2000
+                connectTimeoutMillis = 5000
+                socketTimeoutMillis = 5000
+                requestTimeoutMillis = 5000
             }
             install(ExceptionFeature) {
                 exceptionFactory = HttpExceptionFactory(

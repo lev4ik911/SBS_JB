@@ -224,6 +224,7 @@
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tabs_profile"
                         style="@style/TabLayout"
+                        app:tabMaxWidth="0dp"
                         app:tabGravity="fill"
                         app:tabMode="fixed"
                         android:layout_width="match_parent"
