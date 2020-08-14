@@ -208,12 +208,14 @@ class GuidelineListFragment :
 
         viewModel.instructions.addObserver {
             instructionsAdapter.addItems(it)
-            binding.rvInstructions.apply {
-                layoutAnimation = AnimationUtils.loadLayoutAnimation(
-                    requireContext(),
-                    R.anim.layout_animation_left_to_right
-                )
-                scheduleLayoutAnimation()
+            if(isAdded) {
+                binding.rvInstructions.apply {
+                    layoutAnimation = AnimationUtils.loadLayoutAnimation(
+                        requireContext(),
+                        R.anim.layout_animation_left_to_right
+                    )
+                    scheduleLayoutAnimation()
+                }
             }
         }
     }

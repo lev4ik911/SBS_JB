@@ -85,6 +85,10 @@ class RegisterViewModel(
 
     }
 
+    fun onRouteTologinScreenClick(){
+        eventsDispatcher.dispatchEvent {routeToLoginScreen()}
+    }
+
     fun validation() {
         errorList.clear()
         if (login.value.isEmpty()) {
