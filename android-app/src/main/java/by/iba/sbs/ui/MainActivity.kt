@@ -83,7 +83,7 @@ class MainActivity :
                 R.drawable.account_tie
             )
         )
-        navView.setCount(ActiveTabEnum.ID_HOME.index, "15")
+     //   navView.setCount(ActiveTabEnum.ID_HOME.index, "15")
 
         setVisibilityForFavorites()
 

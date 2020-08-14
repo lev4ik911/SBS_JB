@@ -143,6 +143,33 @@
             android:onClick="@{() -> viewmodel.onRegisterButtonClick()}"
             android:paddingHorizontal="@dimen/spacing_xlarge"
             android:text="@string/btn_register" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/appCompatTextView"
+                    style="@style/Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/spacing_normal"
+                    android:layout_marginTop="12dp"
+                    android:onClick="@{() -> viewmodel.onRouteTologinScreenClick()}"
+                    android:text="@string/already_registered"
+/>
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_register"
+                    style="@style/Text.Email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/spacing_normal"
+                    android:layout_marginTop="12dp"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:onClick="@{() -> viewmodel.onRouteTologinScreenClick()}"
+                    android:text="@string/caption_please_login"
+            />
+
+        </LinearLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.core.widget.NestedScrollView>
 </layout>
