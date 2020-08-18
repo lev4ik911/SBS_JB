@@ -14,7 +14,7 @@
         <ImageView
             android:layout_width="@dimen/profile_image_size"
             android:layout_height="@dimen/profile_image_size"
-            android:src="@drawable/camera_outline"
+            android:src="@drawable/star_outline"
             android:tint="@color/colorSecondary"/>
 
         <TextView

@@ -1,6 +1,7 @@
 package by.iba.sbs.library.viewmodel
 
 import by.iba.sbs.library.data.local.createDb
+import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.MessageType
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.model.request.LoginData
@@ -68,22 +69,25 @@ class LoginViewModel(
             try {
                 val response = authRepository.login(LoginData(login.value, password.value))
                 if (response.isSuccess && response.isNotEmpty) {
-                    response.data?.let {
-                        localStorage.accessToken = it.accessToken
-                        it.user.apply {
-                            usersQueries.addUser(id, name, email)
-                            localStorage.userId = id
-                            usersRepository.getUserFavorites(id)
-                            eventsDispatcher.dispatchEvent { routeToProfile(id) }
+                    if (response.status == Response.Status.SUCCESS) {
+                        response.data?.let {
+                            localStorage.accessToken = it.accessToken
+                            it.user.apply {
+                                usersQueries.addUser(id, name, email)
+                                localStorage.userId = id
+                                usersRepository.getUserFavorites(id)
+                                eventsDispatcher.dispatchEvent { routeToProfile(id) }
+                            }
                         }
                     }
-                } else if (response.error != null) {
+                } else {
                     eventsDispatcher.dispatchEvent {
                         showToast(
-                            ToastMessage(response.error.toString(), MessageType.ERROR)
+                            ToastMessage(response.status.toString(), MessageType.INFO, response.error.toString())
                         )
                     }
                 }
+
                 loading.postValue(false)
 
             } catch (e: Exception) {

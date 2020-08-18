@@ -6,7 +6,7 @@ import dev.icerock.moko.mvvm.dispatcher.EventsDispatcher
 import dev.icerock.moko.mvvm.dispatcher.EventsDispatcherOwner
 
 class SplashViewModel(
-    settings: Settings,
+    val settings: Settings,
     systemInfo: SystemInformation,
     override val eventsDispatcher: EventsDispatcher<EventsListener>
 ) : ViewModelExt(settings),
@@ -14,10 +14,10 @@ class SplashViewModel(
 
     val appVersion: String = systemInfo.getAppVersion()
     fun checkCredentials() {
-        //if(settings.userCredentials.isValid())
-        //    eventsDispatcher.dispatchEvent { routeToMainScreen() }
-        //else
-        //   eventsDispatcher.dispatchEvent { routeToLoginScreen() }
+        if (localStorage.userId.isEmpty())
+            eventsDispatcher.dispatchEvent { routeToMainScreen() }
+        else
+            eventsDispatcher.dispatchEvent { routeToLoginScreen() }
     }
 
     fun onLoginButtonClick() {

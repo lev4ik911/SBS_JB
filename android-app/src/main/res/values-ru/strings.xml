@@ -65,7 +65,7 @@
     <string name="walkthrough_description_1">Поиск популярных рецептов со всего мира</string>
     <string name="walkthrough_description_2">Создавайте свои собственные рецепты и зарабатывайте рейтинг</string>
     <string name="walkthrough_description_3">Улучшайте свои знания шаг за шагом</string>
-    <string name="walkthrough_description_4">Create your own recipes and earn your rating</string>
+    <string name="walkthrough_description_4">Сохраняйте ваши любимые инструкции свой собственный список</string>
     <string name="btn_save">Сохранить</string>
 
     <string name="select_variant_edit_current">Редактировать текущее</string>
