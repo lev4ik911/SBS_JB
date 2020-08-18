@@ -11,33 +11,27 @@ object Routes {
     }
 
     object Users {
-        const val URL_USERS = "$baseRoute/$version/users/list"
-        const val URL_USER_DETAILS = "$baseRoute/$version/users/item/%s"
-        const val URL_USER_GUIDELINES =
-            "$baseRoute/$version/users/item/15929ff9-b97c-436b-a246-adb83e8ccf08/guidelines/list"
-        const val URL_USER_FAVORITES =
-            "$baseRoute/$version/users/item/%s/favourites/list"
+        const val URL_USERS = "$baseRoute/$version/users"
+        const val URL_USER_DETAILS = "$baseRoute/$version/users/%s"
+        const val URL_USER_GUIDELINES = "$baseRoute/$version/users/%s/guidelines"
+        const val URL_USER_FAVORITES = "$baseRoute/$version/users/%s/favourites"
     }
 
     object Guidelines {
-        const val URL_GUIDELINES = "$baseRoute/$version/guidelines/list"
-        const val URL_GUIDELINE_DETAILS = "$baseRoute/$version/guidelines/item/%s"
-        const val URL_GUIDELINE_STEPS = "$baseRoute/$version/guidelines/item/%s/steps/list"
-        const val URL_GUIDELINE_STEPS_BATCHING =
-            "$baseRoute/$version/guidelines/item/%s/steps/batching"
-        const val URL_GUIDELINE_STEP_DETAILS =
-            "$baseRoute/$version/guidelines/item/%s/steps/item/%s"
+        const val URL_GUIDELINES = "$baseRoute/$version/guidelines"
+        const val URL_GUIDELINE_DETAILS = "$baseRoute/$version/guidelines/%s"
+        const val URL_GUIDELINE_STEPS = "$baseRoute/$version/guidelines/%s/steps"
+        const val URL_GUIDELINE_STEPS_BATCHING = "$baseRoute/$version/guidelines/%s/steps/batching"
+        const val URL_GUIDELINE_STEP_DETAILS = "$baseRoute/$version/guidelines/%s/steps/%s"
     }
 
     object Ratings {
-        const val URL_GUIDELINE_RATINGS = "$baseRoute/$version/guidelines/item/%s/ratings/list"
-        const val URL_GUIDELINE_RATING_DETAILS =
-            "$baseRoute/$version/guidelines/item/%s/ratings/item/%s"
+        const val URL_GUIDELINE_RATINGS = "$baseRoute/$version/guidelines/%s/ratings"
+        const val URL_GUIDELINE_RATING_DETAILS = "$baseRoute/$version/guidelines/%s/ratings/%s"
     }
 
     object Favorites {
-        const val URL_GUIDELINE_FAVORITES = "$baseRoute/$version/guidelines/item/%s/favourites/list"
-        const val URL_GUIDELINE_FAVORITES_DETAILS =
-            "$baseRoute/$version/guidelines/item/%s/favourites/item/%s"
+        const val URL_GUIDELINE_FAVORITES = "$baseRoute/$version/guidelines/%s/favourites"
+        const val URL_GUIDELINE_FAVORITES_DETAILS = "$baseRoute/$version/guidelines/%s/favourites/%s"
     }
 }

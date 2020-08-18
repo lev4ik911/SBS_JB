@@ -77,6 +77,12 @@ class LoginViewModel(
                             eventsDispatcher.dispatchEvent { routeToProfile(id) }
                         }
                     }
+                } else if (response.error != null) {
+                    eventsDispatcher.dispatchEvent {
+                        showToast(
+                            ToastMessage(response.error.toString(), MessageType.ERROR)
+                        )
+                    }
                 }
                 loading.postValue(false)
 

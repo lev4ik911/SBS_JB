@@ -70,7 +70,7 @@ dependencies {
 
     implementation(Deps.Libs.MultiPlatform.napier.android!!)
 
-    implementation("com.google.android.material:material:1.1.0")
+    implementation("com.google.android.material:material:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-rc1")
     implementation("androidx.navigation:navigation-fragment:2.3.0")
     implementation("androidx.navigation:navigation-ui:2.3.0")
@@ -84,7 +84,7 @@ dependencies {
     implementation("org.koin:koin-androidx-viewmodel:2.1.5")
 // Koin AndroidX Experimental features
     implementation("org.koin:koin-androidx-ext:2.1.5")
-    implementation("androidx.core:core-ktx:1.3.0")
+    implementation("androidx.core:core-ktx:1.3.1")
     implementation("org.koin:koin-androidx-fragment:2.1.5")
     implementation("com.futuremind.recyclerfastscroll:fastscroll:0.2.5")
     implementation("com.facebook.shimmer:shimmer:0.5.0")
