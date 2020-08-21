@@ -5,7 +5,7 @@
     <data>
 
         <import type="by.iba.sbs.tools.Tools" />
-
+        <import type="android.graphics.Color"/>
         <variable
             name="category"
             type="by.iba.sbs.library.model.Category" />
@@ -24,6 +24,6 @@
             app:checkedIcon="@drawable/check"
             app:chipBackgroundColor="@color/colorSecondaryVariant"
             app:chipIcon="@drawable/heart_outline"
-            app:chipIconTint="@color/colorPrimary" />
+            app:chipIconTint="@{Color.parseColor(category.iconColorHex)}"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

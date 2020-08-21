@@ -50,15 +50,15 @@ class DashboardViewModelShared(
     val categories = MutableLiveData<List<Category>>(mutableListOf()).apply {
         val mData = ArrayList<Category>()
         mData.add(Category("Кулинария", "", true, "#f08c8c"))
-        mData.add(Category("Медицина", "", false, "#c1cefa"))
-        mData.add(Category("Ремонт авто", "", false, "#fad1c1"))
+        mData.add(Category("Медицина", "", false, "#660066"))
+        mData.add(Category("Ремонт авто", "", false, "#5ac18e"))
         //mData.add(Category("Выживание", "", true, "#060054"))
         mData.add(Category("IBA info", "", true, "#246801"))
         //mData.add(Category("Документы", "", true, "#246801"))
-        mData.add(Category("СМК", "", true, "#246801"))
+        mData.add(Category("СМК", "", true, "#003366"))
         //mData.add(Category("Строительство", "", true, "#246801"))
         //mData.add(Category("Экстренная помощь", "", true, "#246801"))
-        mData.add(Category("IBA docs", "", true, "#246801"))
+        mData.add(Category("IBA docs", "", true, "#407294"))
         value = mData
     }
     val recommended = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
