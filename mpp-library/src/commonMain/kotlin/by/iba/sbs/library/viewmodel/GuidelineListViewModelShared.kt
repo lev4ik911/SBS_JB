@@ -48,16 +48,11 @@ class GuidelineListViewModelShared(
                     .addObserver {
                         loading.postValue(it.status == Response.Status.LOADING)
                         if (it.isNotEmpty) {
-                            if(it.error != null){
-                                eventsDispatcher.dispatchEvent {
-                                    showToast(
-                                        ToastMessage(
-                                            "Offline mode",
-                                            MessageType.WARNING,
-                                            it.error.toString()
-                                        )
-                                    )
-                                }
+                            if (it.error != null) {
+                                offlineMode.value = true
+                            }
+                            else if (forceRefresh) {
+                                offlineMode.value = false
                             }
 
                             var guidelines = it.data!!

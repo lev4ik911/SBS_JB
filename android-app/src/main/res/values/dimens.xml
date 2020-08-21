@@ -31,6 +31,7 @@
     <dimen name="stepper_touch_height">28dp</dimen>
     <dimen name="infinity_image_size">100dp</dimen>
     <dimen name="infinity_animation_vertical_margin">50dp</dimen>
+    <dimen name="spacing_zero">0dp</dimen>
     <!-- text size!-->
     <dimen name="text_size_smallest">8sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
@@ -42,5 +43,5 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
-
+    <dimen name="label_offline_mode_alpha">0.6</dimen>
 </resources>

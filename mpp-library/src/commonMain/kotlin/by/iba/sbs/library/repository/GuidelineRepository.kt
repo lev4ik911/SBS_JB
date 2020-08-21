@@ -459,13 +459,15 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     override suspend fun getStepByIdFromLocalDB(guidelineId: String, stepId: String): Step =
         coroutineScope {
             val result = Step()
-            guidelinesQueries.selectStepById(guidelineId, stepId).executeAsOne().apply {
-                result.stepId = this.id
-                result.name = this.name
-                result.descr = this.description
-                result.weight = this.weight!!.toInt()
-                result.imagePath = this.imagePath
-                result.updateImageTimeSpan = this.updateImageTimeSpan!!.toInt()
+            guidelinesQueries.selectStepById(guidelineId, stepId).executeAsOneOrNull().apply {
+                if (this != null) {
+                    result.stepId = this.id
+                    result.name = this.name
+                    result.descr = this.description
+                    result.weight = this.weight!!.toInt()
+                    result.imagePath = this.imagePath
+                    result.updateImageTimeSpan = this.updateImageTimeSpan!!.toInt()
+                }
             }
             return@coroutineScope result
         }

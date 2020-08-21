@@ -113,6 +113,7 @@
     <string name="lbl_clear_history">Clear history</string>
     <string name="hint_search">Start enter text</string>
     <string name="title_search_results">Result for: \"%s\"</string>
+    <string name="lbl_offline_mode">Offline mode</string>
 
     <string name="error_login_is_empty">Login is empty</string>
     <string name="error_invalid_email">Invalid email</string>

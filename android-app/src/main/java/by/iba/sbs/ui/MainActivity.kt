@@ -23,6 +23,7 @@ import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmEventsActivity
 import dev.icerock.moko.mvvm.createViewModelFactory
 import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
+import kotlinx.android.synthetic.main.toolbar.*
 
 class MainActivity :
     MvvmEventsActivity<ActivityMainBinding, MainViewModel, MainViewModel.EventsListener>(),
@@ -117,6 +118,9 @@ class MainActivity :
                 if (it.id == ActiveTabEnum.ID_PROFILE.index) View.GONE else View.VISIBLE
         }
         navView.show(viewModel.activeTab.value!!)
+        btn_close_offline_mode.setOnClickListener {
+            viewModel.setOfflineMode(false)
+        }
     }
 
     fun setNavigationIcon(visible: Boolean) {

@@ -14,7 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         childrenEnabled="@{!viewmodel.isLoading.ld}"
-        android:layout_marginTop="?attr/actionBarSize">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:paddingTop="@{viewmodel.Companion.offlineMode.ld ? @dimen/spacing_xlarge : @dimen/spacing_zero}">
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/progressBar"

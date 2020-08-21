@@ -59,7 +59,13 @@ class GuidelineViewModel(
                 try {
                     val guidelinesLiveData = repository.getGuideline(instructionId, forceRefresh)
                     guidelinesLiveData.addObserver {
-                        if (it.isSuccess && it.isNotEmpty) {
+                        if (it.isNotEmpty) {
+                            if (it.error != null) {
+                                offlineMode.value = true
+                            }
+                            else if (forceRefresh) {
+                                offlineMode.value = false
+                            }
                             guideline.value = it.data!!
                         } else if (it.error != null)
                             eventsDispatcher.dispatchEvent {
@@ -80,7 +86,13 @@ class GuidelineViewModel(
                 try {
                     val stepsLiveData = repository.getAllSteps(instructionId, forceRefresh)
                     stepsLiveData.addObserver {
-                        if (it.isSuccess && it.isNotEmpty) {
+                        if (it.isNotEmpty) {
+                            if (it.error != null) {
+                                offlineMode.value = true
+                            }
+                            else if (forceRefresh) {
+                                offlineMode.value = false
+                            }
                             if (forceRefresh) {
                                 //check image info on actual
                                 val tempListOfSteps = it.data!!.toMutableList()
@@ -128,7 +140,13 @@ class GuidelineViewModel(
                 try {
                     val feedbackLiveData = repository.getAllFeedbacks(instructionId, forceRefresh)
                     feedbackLiveData.addObserver {
-                        if (it.isSuccess && it.isNotEmpty) {
+                        if (it.isNotEmpty) {
+                            if (it.error != null) {
+                                offlineMode.value = true
+                            }
+                            else if (forceRefresh) {
+                                offlineMode.value = false
+                            }
                             feedback.value = it.data!!.toMutableList()
                         } else if (it.error != null) eventsDispatcher.dispatchEvent {
                             showToast(

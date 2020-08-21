@@ -84,16 +84,11 @@ class DashboardViewModelShared(
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
                 guidelinesLiveData.addObserver {
                     if (it.isNotEmpty) {
-                        if(it.error != null){
-                            eventsDispatcher.dispatchEvent {
-                                showToast(
-                                    ToastMessage(
-                                        "Offline mode",
-                                        MessageType.WARNING,
-                                        it.error.toString()
-                                    )
-                                )
-                            }
+                        if (it.error != null) {
+                            offlineMode.value = true
+                        }
+                        else if (forceRefresh) {
+                            offlineMode.value = false
                         }
                         val guidelines = it.data!!
                         favorite.postValue(
@@ -148,16 +143,11 @@ class DashboardViewModelShared(
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
                 guidelinesLiveData.addObserver {
                     if (it.isNotEmpty) {
-                        if(it.error != null){
-                            eventsDispatcher.dispatchEvent {
-                                showToast(
-                                    ToastMessage(
-                                        "Offline mode",
-                                        MessageType.WARNING,
-                                        it.error.toString()
-                                    )
-                                )
-                            }
+                        if (it.error != null) {
+                            offlineMode.value = true
+                        }
+                        else if (forceRefresh) {
+                            offlineMode.value = false
                         }
                         val guidelines = it.data!!
                         recommended.postValue(
@@ -204,16 +194,11 @@ class DashboardViewModelShared(
                 val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
                 guidelinesLiveData.addObserver {
                     if (it.isNotEmpty) {
-                        if(it.error != null){
-                            eventsDispatcher.dispatchEvent {
-                                showToast(
-                                    ToastMessage(
-                                        "Offline mode",
-                                        MessageType.WARNING,
-                                        it.error.toString()
-                                    )
-                                )
-                            }
+                        if (it.error != null) {
+                            offlineMode.value = true
+                        }
+                        else if (forceRefresh) {
+                            offlineMode.value = false
                         }
                         val guidelines = it.data!!
                         popular.postValue(

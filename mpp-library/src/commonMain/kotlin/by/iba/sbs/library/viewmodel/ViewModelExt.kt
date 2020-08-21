@@ -11,4 +11,11 @@ open class ViewModelExt(private val settings: Settings) : ViewModel() {
     val loading: MutableLiveData<Boolean> = MutableLiveData(false)
     var isLoading: LiveData<Boolean> = loading.readOnly()
     val localStorage: LocalSettings by lazy { LocalSettings(settings) }
+
+    companion object{
+        val offlineMode = MutableLiveData(false)
+    }
+    fun setOfflineMode(value:Boolean){
+        offlineMode.value = value
+    }
 }

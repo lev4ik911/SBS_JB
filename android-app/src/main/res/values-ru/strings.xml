@@ -114,6 +114,7 @@
     <string name="caption_login">Ваше имя</string>
     <string name="hint_confirm_password">Подтвердите ваш пароль</string>
     <string name="hint_your_password">Ваш пароль</string>
+    <string name="lbl_offline_mode">Офлайн режим</string>
 
     <string name="error_login_is_empty">Пустое Имя пользователя</string>
     <string name="error_invalid_email">Некорректный Email</string>

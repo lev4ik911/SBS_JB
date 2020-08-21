@@ -17,6 +17,7 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
+import kotlinx.android.synthetic.main.instruction_fragment.*
 import kotlinx.serialization.UnstableDefault
 import kotlin.math.abs
 
@@ -75,6 +76,10 @@ class GuidelineFragment :
                 else -> ""
             }
         }.attach()
+
+        btn_close_offline_mode?.setOnClickListener {
+            viewModel.setOfflineMode(false)
+        }
     }
 
     private fun initActionButton() {
