@@ -63,7 +63,7 @@ class GuidelineViewModel(
                             if (it.error != null) {
                                 offlineMode.value = true
                             }
-                            else if (forceRefresh) {
+                            else if (forceRefresh && it.isSuccess) {
                                 offlineMode.value = false
                             }
                             guideline.value = it.data!!
@@ -90,7 +90,7 @@ class GuidelineViewModel(
                             if (it.error != null) {
                                 offlineMode.value = true
                             }
-                            else if (forceRefresh) {
+                            else if (forceRefresh && it.isSuccess) {
                                 offlineMode.value = false
                             }
                             if (forceRefresh) {
@@ -144,7 +144,7 @@ class GuidelineViewModel(
                             if (it.error != null) {
                                 offlineMode.value = true
                             }
-                            else if (forceRefresh) {
+                            else if (forceRefresh && it.isSuccess) {
                                 offlineMode.value = false
                             }
                             feedback.value = it.data!!.toMutableList()
@@ -314,7 +314,7 @@ class GuidelineViewModel(
         eventsDispatcher.dispatchEvent { onRemoveStep(step) }
     }
 
-    fun onBackBtnClick() {
+    fun returnOldGuideline(){
         steps.value = oldSteps
         guideline.value = oldGuideline
     }
@@ -342,12 +342,14 @@ class GuidelineViewModel(
                     }
                     //TODO(Add to total res)
                 } else if (result.error != null) eventsDispatcher.dispatchEvent {
+                    returnOldGuideline()
                     showToast(
                         ToastMessage(result.error.message.toString(), MessageType.ERROR)
                     )
                 }
                 loading.postValue(result.status == Response.Status.LOADING)
             } catch (e: Exception) {
+                returnOldGuideline()
                 eventsDispatcher.dispatchEvent {
                     showToast(
                         ToastMessage(e.message.toString(), MessageType.ERROR)
@@ -373,12 +375,14 @@ class GuidelineViewModel(
                     //TODO(Add to total res)
                     saveSteps()
                 } else if (result.error != null) eventsDispatcher.dispatchEvent {
+                    returnOldGuideline()
                     showToast(
                         ToastMessage(result.error.message.orEmpty(), MessageType.ERROR)
                     )
                 }
                 loading.postValue(result.status == Response.Status.LOADING)
             } catch (e: Exception) {
+                returnOldGuideline()
                 eventsDispatcher.dispatchEvent {
                     showToast(
                         ToastMessage(e.message.orEmpty(), MessageType.ERROR)

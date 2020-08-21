@@ -50,7 +50,7 @@ class GuidelineEditFragment :
             if (instructionId == "")
                 activity?.finish()
             else {
-                viewModel.onBackBtnClick()
+                viewModel.returnOldGuideline()
                 findNavController().navigate(R.id.navigation_instruction_view)
             }
         }

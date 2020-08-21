@@ -51,7 +51,7 @@ class GuidelineListViewModelShared(
                             if (it.error != null) {
                                 offlineMode.value = true
                             }
-                            else if (forceRefresh) {
+                            else if (forceRefresh && it.isSuccess) {
                                 offlineMode.value = false
                             }
 

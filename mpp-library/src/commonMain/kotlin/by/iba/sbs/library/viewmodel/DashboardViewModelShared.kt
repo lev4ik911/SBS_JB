@@ -87,7 +87,7 @@ class DashboardViewModelShared(
                         if (it.error != null) {
                             offlineMode.value = true
                         }
-                        else if (forceRefresh) {
+                        else if (forceRefresh && it.isSuccess) {
                             offlineMode.value = false
                         }
                         val guidelines = it.data!!
@@ -146,7 +146,7 @@ class DashboardViewModelShared(
                         if (it.error != null) {
                             offlineMode.value = true
                         }
-                        else if (forceRefresh) {
+                        else if (forceRefresh && it.isSuccess) {
                             offlineMode.value = false
                         }
                         val guidelines = it.data!!
@@ -197,7 +197,7 @@ class DashboardViewModelShared(
                         if (it.error != null) {
                             offlineMode.value = true
                         }
-                        else if (forceRefresh) {
+                        else if (forceRefresh && it.isSuccess) {
                             offlineMode.value = false
                         }
                         val guidelines = it.data!!
