@@ -86,6 +86,13 @@ class FavoritesViewController : UITableViewController  {
         search.searchResultsUpdater = self
         self.navigationItem.searchController = search
 
+        self.tableView.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        self.tableView.refreshControl?.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        
+        
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        self.refreshControl?.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        
         vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
            eventsDispatcher: EventsDispatcher(listener: self))
         vm.loadInstructions(forceRefresh: true)
@@ -102,7 +109,13 @@ class FavoritesViewController : UITableViewController  {
         // Dispose of any resources that can be recreated.
     }
     
-    
+
+    @objc func refresh(_ sender: AnyObject) {
+       // Code to refresh table view
+        vm.loadInstructions(forceRefresh: true)
+        tableView.reloadData()
+        refreshControl?.endRefreshing()
+    }
     
     override func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
@@ -153,6 +166,6 @@ extension FavoritesViewController: UISearchResultsUpdating {
 
 extension FavoritesViewController: GuidelineListViewModelSharedEventsListener {
     func showToast(msg: ToastMessage) {
-
+        Toast.show(message: msg.message, controller: self)
     }
 }

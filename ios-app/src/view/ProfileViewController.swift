@@ -97,6 +97,10 @@ extension ProfileViewController : SystemInformation {
 }
 
 extension ProfileViewController : ProfileViewModelEventsListener {
+    func onOpenGuidelineAction(guideline: Guideline) {
+        
+    }
+    
     func showToast(msg: ToastMessage) {
         
     }

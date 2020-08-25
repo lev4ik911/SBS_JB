@@ -7,12 +7,48 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TableFragment" customModule="SBS" customModuleProvider="target">
+            <connections>
+                <outlet property="activityIndicator" destination="kVg-mR-6vB" id="3pG-ur-Oci"/>
+                <outlet property="navigationBar" destination="dV5-G2-gPI" id="cdp-ZT-Led"/>
+                <outlet property="showAllButton" destination="tsL-5x-f4e" id="Kdd-Ic-Hoj"/>
+                <outlet property="tableView" destination="tCu-Wr-gd1" id="QHs-T3-Tdu"/>
+            </connections>
+        </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="X56-JX-tH2">
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dV5-G2-gPI">
+                    <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                    <items>
+                        <navigationItem title="Fragment name" id="zAb-jK-8E0">
+                            <barButtonItem key="rightBarButtonItem" title="Show all »" id="tsL-5x-f4e"/>
+                        </navigationItem>
+                    </items>
+                </navigationBar>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="tCu-Wr-gd1">
+                    <rect key="frame" x="0.0" y="88" width="414" height="270"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="270" id="Ppi-Zc-bH0"/>
+                    </constraints>
+                </tableView>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="kVg-mR-6vB">
+                    <rect key="frame" x="197" y="213" width="20" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </activityIndicatorView>
+            </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="dV5-G2-gPI" firstAttribute="leading" secondItem="kA3-tY-q2R" secondAttribute="leading" id="5pQ-Tr-7KQ"/>
+                <constraint firstItem="dV5-G2-gPI" firstAttribute="top" secondItem="kA3-tY-q2R" secondAttribute="top" id="AtZ-kN-dUa"/>
+                <constraint firstItem="tCu-Wr-gd1" firstAttribute="leading" secondItem="kA3-tY-q2R" secondAttribute="leading" id="CWF-JT-rev"/>
+                <constraint firstItem="tCu-Wr-gd1" firstAttribute="top" secondItem="dV5-G2-gPI" secondAttribute="bottom" id="tjI-Bp-fNA"/>
+                <constraint firstItem="kA3-tY-q2R" firstAttribute="trailing" secondItem="tCu-Wr-gd1" secondAttribute="trailing" id="uaT-60-44b"/>
+                <constraint firstItem="dV5-G2-gPI" firstAttribute="trailing" secondItem="kA3-tY-q2R" secondAttribute="trailing" id="yD7-DM-kFD"/>
+            </constraints>
             <viewLayoutGuide key="safeArea" id="kA3-tY-q2R"/>
             <point key="canvasLocation" x="152" y="91"/>
         </view>

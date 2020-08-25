@@ -109,7 +109,17 @@ class DetailFromHomeView: UIView {
         )
     }
     
-    override func tableView(_ tableView: UITableView,
+
+}
+
+extension DetailFromHomeView: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data.count
+    }
+    
+    
+    
+    func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = mainTableView.dequeueReusableCell(withIdentifier: consts.InstructionCellName) as? InstructionsTableViewCell {
             cell.fill(self.createGuidlinesTile(item: data[indexPath.row]))
@@ -119,21 +129,15 @@ class DetailFromHomeView: UIView {
         return UITableViewCell()
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //TODO: add navigation to Instruction detail View
         self.parentViewController!.performSegue(withIdentifier: consts.NavigationIdentifier, sender: self)
         //vm.openNews(vm.getWorkplaceNewsItem(for: indexPath.row))
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? InstructionDetailViewController{
             destination.instructionID = self.data[(mainTableView.indexPathForSelectedRow?.row)!].id
         }
     }
-
-}
-
-extension DetailFromHomeView: UITableViewDataSource, UITableViewDelegate {
-    
-    
 }
