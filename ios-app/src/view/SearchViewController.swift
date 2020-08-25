@@ -38,7 +38,7 @@ class SearchViewController : UITableViewController  {
             description: item.descr
         )
     }
-    
+    /*
     lazy var table: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -52,7 +52,7 @@ class SearchViewController : UITableViewController  {
 
         return tableView
     }()
-    
+    */
     var tableConstraints: [NSLayoutConstraint]  {
         var constraints = [NSLayoutConstraint]()
         constraints.append(NSLayoutConstraint(item: self.tableView, attribute: .left, relatedBy: .equal,
@@ -69,7 +69,9 @@ class SearchViewController : UITableViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.tableView.rowHeight = 90
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+        
         let myFieldCell = UINib(nibName: consts.InstructionCellName,
                                   bundle: nil)
         self.tableView.register(myFieldCell,

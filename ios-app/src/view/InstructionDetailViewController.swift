@@ -127,9 +127,55 @@ class InstructionDetailViewController : UIViewController {
         let tmpImage = UIImage(named: "ic_paneer.jpg")
         instructionImage.image = tmpImage
         
+        let positiveTap = UITapGestureRecognizer(target: self, action: #selector(self.positiveFeedback))
+        positiveImage.addGestureRecognizer(positiveTap)
+        positiveImage.isUserInteractionEnabled = true
+        
+        let negativeTap = UITapGestureRecognizer(target: self, action: #selector(self.negativeFeedback))
+        negativeImage.addGestureRecognizer(negativeTap)
+        negativeImage.isUserInteractionEnabled = true
+        
         setTablesProperties()
     }
     
+    @objc func positiveFeedback()
+    {
+        vm.onRatingUpButtonClick()
+        print("Tapped on positiveImage")
+        //alertWithTF(ratingType: 1)
+    }
+    
+    @objc func negativeFeedback()
+    {
+        vm.onRatingDownButtonClick()
+        print("Tapped on negativeImage")
+        //alertWithTF(ratingType: -1)
+    }
+}
+
+extension InstructionDetailViewController {
+    func alertWithTF(ratingType: Int32) {
+
+        let msg = (ratingType == 1) ? "WOW! You are the amazing!" : "Why u didn't like this?"
+        let alert = UIAlertController(title: "New feedback", message: "Please, leave your feedback about this guidline", preferredStyle: UIAlertController.Style.alert )
+
+        let save = UIAlertAction(title: "Add", style: .default) { (alertAction) in
+            let textField = alert.textFields![0] as UITextField
+            let tmpRating = RatingCreate(rating: ratingType, comment: textField.text!)
+            self.vm.createFeedback(newFeedback: tmpRating)
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .default) { (alertAction) in }
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = msg
+            textField.textColor = .black
+        }
+
+        alert.addAction(save)
+        alert.addAction(cancel)
+
+        self.present(alert, animated:true, completion: nil)
+    }
 }
 
 extension InstructionDetailViewController : UITableViewDataSource, UITableViewDelegate {
@@ -163,6 +209,17 @@ extension InstructionDetailViewController : UITableViewDataSource, UITableViewDe
 }
 
 extension InstructionDetailViewController : GuidelineViewModelEventsListener{
+    func onAuthorizationRequired() {
+        //TODO: route to login
+        
+        Toast.show(message: "Need authorzation", controller: self)
+        LoginAlert.show(controller: self, mainTabBarcontroller: self.tabBarController ?? nil)
+    }
+    
+    func onOpenProfile(profileId: String) {
+        
+    }
+    
     func showToast(msg: ToastMessage) {
         print("////////////////////////////")
         print(msg.type)
@@ -224,10 +281,13 @@ extension InstructionDetailViewController : GuidelineViewModelEventsListener{
     
     func onRatingDownAction() {
         
+        Toast.show(message: "Positive rating added", controller: self)
+        alertWithTF(ratingType: 1)
     }
     
     func onRatingUpAction() {
-        
+        Toast.show(message: "Negative rating added", controller: self)
+        alertWithTF(ratingType: 1)
     }
     
     func onRemoveInstruction() {

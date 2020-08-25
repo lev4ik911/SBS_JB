@@ -8,27 +8,28 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="191" id="QQ0-IK-KEn" customClass="StepTableViewCell" customModule="SBS" customModuleProvider="target">
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="QQ0-IK-KEn" customClass="StepTableViewCell" customModule="SBS" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="414" height="191"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="QQ0-IK-KEn" id="XLI-xU-Ovf">
                 <rect key="frame" x="0.0" y="0.0" width="414" height="191"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ic_paneer.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="dWU-xB-GMA">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_paneer.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="dWU-xB-GMA">
                         <rect key="frame" x="6" y="6" width="64" height="64"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="64" id="Mbe-v2-cIV"/>
+                            <constraint firstAttribute="width" constant="64" id="kch-8g-N8E"/>
+                        </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0LZ-QC-zEz">
-                        <rect key="frame" x="78" y="6" width="327" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0LZ-QC-zEz">
+                        <rect key="frame" x="78" y="6" width="330" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Dwo-ae-tkf">
-                        <rect key="frame" x="6" y="78" width="399" height="102"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Dwo-ae-tkf">
+                        <rect key="frame" x="6" y="78" width="402" height="107"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                         <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -36,6 +37,17 @@
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     </textView>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="Dwo-ae-tkf" secondAttribute="trailing" constant="6" id="4Jb-jM-Cde"/>
+                    <constraint firstAttribute="bottom" secondItem="Dwo-ae-tkf" secondAttribute="bottom" constant="6" id="6bu-45-J3H"/>
+                    <constraint firstItem="0LZ-QC-zEz" firstAttribute="top" secondItem="XLI-xU-Ovf" secondAttribute="top" constant="6" id="NLb-Vi-pCP"/>
+                    <constraint firstItem="Dwo-ae-tkf" firstAttribute="leading" secondItem="XLI-xU-Ovf" secondAttribute="leading" constant="6" id="S8a-jI-QiL"/>
+                    <constraint firstItem="Dwo-ae-tkf" firstAttribute="top" secondItem="dWU-xB-GMA" secondAttribute="bottom" constant="8" id="V1x-pn-BpW"/>
+                    <constraint firstItem="dWU-xB-GMA" firstAttribute="leading" secondItem="XLI-xU-Ovf" secondAttribute="leading" constant="6" id="cDE-RT-cS2"/>
+                    <constraint firstAttribute="trailing" secondItem="0LZ-QC-zEz" secondAttribute="trailing" constant="6" id="osG-yF-9hp"/>
+                    <constraint firstItem="dWU-xB-GMA" firstAttribute="top" secondItem="XLI-xU-Ovf" secondAttribute="top" constant="6" id="rn1-4n-4fn"/>
+                    <constraint firstItem="0LZ-QC-zEz" firstAttribute="leading" secondItem="dWU-xB-GMA" secondAttribute="trailing" constant="8" id="yYG-EP-kQc"/>
+                </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="descriptionLabel" destination="Dwo-ae-tkf" id="3Ci-3v-Kql"/>
