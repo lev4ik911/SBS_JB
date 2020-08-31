@@ -16,7 +16,7 @@
 
         <RelativeLayout
             android:id="@+id/rl_offline_mode"
-            visibleOrGone="@{viewmodel.Companion.offlineMode.ld}"
+            visibleOrGone="@{viewmodel.isOfflineMode.ld}"
             android:layout_width="match_parent"
             android:layout_height="@dimen/spacing_xlarge"
             android:alpha="@dimen/label_offline_mode_alpha"

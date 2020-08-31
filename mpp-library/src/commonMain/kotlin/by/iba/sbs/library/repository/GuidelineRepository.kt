@@ -304,9 +304,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                                 item.id,
                                 item.name,
                                 item.description,
-                                item.weight,
-                                item.imagePath,
-                                item.updateImageTimeSpan
+                                item.weight
                             )
                         }
                     } else {
@@ -402,7 +400,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     it.description,
                     it.weight.toLong(),
                     data.first { step -> step.weight == it.weight }.imagePath, // save local path in db
-                    it.updateImageTimeSpan.toLong()
+                    0L// it.updateImageTimeSpan.toLong()
                 )
             }
 
@@ -434,7 +432,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     it.description,
                     it.weight.toLong(),
                     data.first { step -> step.weight == it.weight }.imagePath, // save local path in db
-                    it.updateImageTimeSpan.toLong()
+                    0L//it.updateImageTimeSpan.toLong()
                 )
             }
         }

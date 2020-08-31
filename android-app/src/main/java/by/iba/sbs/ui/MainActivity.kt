@@ -119,7 +119,7 @@ class MainActivity :
         }
         navView.show(viewModel.activeTab.value!!)
         btn_close_offline_mode.setOnClickListener {
-            viewModel.setOfflineMode(false)
+            viewModel.offlineMode.value = false
         }
     }
 

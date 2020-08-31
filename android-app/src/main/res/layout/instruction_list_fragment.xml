@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
-        android:paddingTop="@{viewmodel.Companion.offlineMode.ld ? @dimen/spacing_xlarge : @dimen/spacing_zero}">
+        android:paddingTop="@{viewmodel.isOfflineMode.ld ? @dimen/spacing_xlarge : @dimen/spacing_zero}">
+
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
@@ -19,8 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/spacing_xsmall"
             android:layout_alignParentTop="true"
-            android:indeterminate="true"
-        />
+            android:indeterminate="true" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/l_swipe_refresh"
