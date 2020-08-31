@@ -19,11 +19,10 @@
         <com.google.android.material.chip.Chip
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="@{category.active}"
+            android:checked="@={category.active}"
             android:text="@{category.name}"
-            app:checkedIcon="@drawable/check"
             app:chipBackgroundColor="@color/colorSecondaryVariant"
-            app:chipIcon="@drawable/heart_outline"
+            app:chipIcon="@{category.active ? @drawable/heart : @drawable/heart_outline}"
             app:chipIconTint="@{Color.parseColor(category.iconColorHex)}"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
