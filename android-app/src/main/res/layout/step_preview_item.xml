@@ -89,7 +89,7 @@
                         android:layout_height="@dimen/preview_image_height_land"
                         android:layout_gravity="center"
                         android:layout_margin="@dimen/spacing_small"
-                        android:src="@drawable/image_background"
+                        imageFromPath="@{ step.imagePath }"
                         tools:ignore="ContentDescription" />
 
                     <TextView

@@ -44,8 +44,8 @@
                     android:id="@+id/iv_preview"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/list_image_height_land"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_paneer" />
+                    imageFromPath="@{ instruction.imagePath }"
+                    android:scaleType="centerCrop" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="wrap_content"

@@ -22,6 +22,7 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.request
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.readText
+import io.ktor.content.ByteArrayContent
 import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -201,4 +202,23 @@ open class Client(open val settings: LocalSettings, private val heedAuth: Boolea
             Response.error(ex, null)
         }
     }
+
+    internal suspend inline fun <reified T : Any> uploadFile(
+        route: String,
+        requestMethod: HttpMethod,
+        requestBody: ByteArray
+    ): Response<T> {
+        return try {
+            ktor
+                .request<HttpResponse>(route) {
+                    method = requestMethod
+                    body = ByteArrayContent(requestBody, contentType = ContentType.Application.OctetStream)
+                }
+                .processResponse()
+
+        } catch (ex: Exception) {
+            Response.error(ex, null)
+        }
+    }
+
 }

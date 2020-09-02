@@ -2,6 +2,9 @@ package by.iba.sbs.ui.guidelines
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuInflater
@@ -23,6 +26,7 @@ import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.viewmodel.GuidelineListViewModelShared
+import by.iba.sbs.tools.DownloadManager
 import by.iba.sbs.tools.Tools
 import by.iba.sbs.ui.MainViewModel
 import by.iba.sbs.ui.guideline.GuidelineActivity
@@ -218,6 +222,12 @@ class GuidelineListFragment :
                 }
             }
         }
+        viewModel.updatedGuidelineId.addObserver {
+            instructionsAdapter.itemsList.indexOfFirst { guideline -> guideline.id == it }.apply {
+                if (this != -1)
+                    instructionsAdapter.notifyItemChanged(this)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -254,5 +264,28 @@ class GuidelineListFragment :
         super.onStart()
         val forceRefresh = Date().day != Date(settings.lastUpdate).day
         viewModel.loadInstructions(forceRefresh)
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun loadImage(url: String, guideline: Guideline) {
+        DownloadManager(requireContext()).apply {
+            this.downloadImage(url,
+                                guideline.id,
+                                remoteImageId = guideline.remoteImageId,
+                                item = guideline,
+                                imageHandler =  imageHandler)
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    private val imageHandler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            val guideline = msg.obj as Guideline
+            viewModel.updatedGuidelineId.value = guideline.id
+            viewModel.saveGuidelinePreviewImageInLocalDB(guideline)
+            super.handleMessage(msg)
+        }
     }
 }

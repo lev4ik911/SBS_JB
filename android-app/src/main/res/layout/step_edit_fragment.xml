@@ -47,6 +47,7 @@
                         android:layout_margin="@dimen/spacing_xxlarge"
                         android:elevation="@dimen/spacing_xsmall"
                         android:src="@drawable/camera_outline"
+                        android:onClick="@{() ->  viewmodel.onEditStepImageClick(step)}"
                         android:tint="@android:color/white"/>
 
                     <androidx.appcompat.widget.AppCompatImageView

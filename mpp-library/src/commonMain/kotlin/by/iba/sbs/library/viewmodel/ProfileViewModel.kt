@@ -75,6 +75,8 @@ class ProfileViewModel(
         value = mData
     }
 
+    val updatedGuidelineId = MutableLiveData("")
+
     @UnstableDefault
     @ImplicitReflectionSerializer
     fun loadUser(userId: String, forceRefresh: Boolean) {
@@ -122,7 +124,8 @@ class ProfileViewModel(
                     .addObserver {
                         loading.postValue(it.status == Response.Status.LOADING)
                         if (it.isSuccess && it.isNotEmpty) {
-                            guidelines.postValue(it.data!!.sortedBy { item -> item.id }.toList())
+                            guidelines.value = it.data!!.sortedBy { item -> item.id }.toList()
+                            checkPreviewImage(guidelines.value)
                         } else if (it.error != null)
                             eventsDispatcher.dispatchEvent {
                                 showToast(
@@ -188,6 +191,54 @@ class ProfileViewModel(
         localStorage.searchHistoryJson = ""
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun checkPreviewImage(source: List<Guideline>) {
+        viewModelScope.launch {
+            try {
+                source.forEach {
+                    if (!it.isEmptyPreview) {
+                        guidelineRepository.checkPreviewImageForGuideline(it)?.let { url ->
+                            eventsDispatcher.dispatchEvent {loadImage(url, it)}
+                        }
+                    }
+                    else {
+                        //TODO("Add check removed images")
+                    }
+                }
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun saveGuidelinePreviewImageInLocalDB(guideline: Guideline){
+        viewModelScope.launch {
+            try {
+                guidelines.value.find { g ->  g.id == guideline.id}?.imagePath = guideline.imagePath
+                guidelineRepository.saveGuidelineImageInLocalDB(guideline)
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     interface EventsListener {
         fun onActionButtonAction()
         fun onLogoutAction()
@@ -195,6 +246,7 @@ class ProfileViewModel(
         fun showToast(msg: ToastMessage)
         fun requireAccept()
         fun onOpenGuidelineAction(guideline: Guideline)
+        fun loadImage(url: String, guideline: Guideline)
     }
 
 }

@@ -4,12 +4,12 @@ CREATE TABLE guidelines (
     description TEXT NOT NULL DEFAULT "",
     authorId TEXT NOT NULL DEFAULT "",
     author TEXT NOT NULL DEFAULT "",
-    imagePath TEXT NOT NULL DEFAULT "",
-    updateImageTimeSpan INTEGER DEFAULT 0
+    remoteImageId TEXT NOT NULL DEFAULT "",
+    updateImageDateTime TEXT NOT NULL DEFAULT ""
 );
 insertGuideline:
-INSERT OR REPLACE INTO guidelines (id, name, description, authorId, author)
-VALUES (?, ?, ?, ?, ?);
+INSERT OR REPLACE INTO guidelines (id, name, description, authorId, author, remoteImageId, updateImageDateTime)
+VALUES (?, ?, ?, ?, ?, ?, ?);
 
 selectAllGuidelines:
 SELECT *
@@ -34,17 +34,13 @@ CREATE TABLE steps (
     name TEXT NOT NULL DEFAULT "",
     description TEXT NOT NULL DEFAULT "",
     weight INTEGER DEFAULT 0,
-    imagePath TEXT NOT NULL DEFAULT "",
-    updateImageTimeSpan INTEGER DEFAULT 0
+    remoteImageId TEXT NOT NULL DEFAULT "",
+    updateImageDateTime TEXT NOT NULL DEFAULT ""
 );
 
 
 insertStep:
-INSERT OR REPLACE INTO steps (id, guidelineId, name, description, weight)
-VALUES (?, ?, ?, ?, ?);
-
-insertStepWithImage:
-INSERT OR REPLACE INTO steps (id, guidelineId, name, description, weight, imagePath, updateImageTimeSpan)
+INSERT OR REPLACE INTO steps (id, guidelineId, name, description, weight, remoteImageId, updateImageDateTime)
 VALUES (?, ?, ?, ?, ?, ?, ?);
 
 selectAllSteps:
@@ -64,31 +60,3 @@ DELETE FROM steps WHERE guidelineId = ?;
 
 deleteAllSteps:
 DELETE FROM steps;
-
--- CREATE TABLE stepImages (
---     id TEXT NOT NULL UNIQUE PRIMARY KEY,
---     stepId TEXT NOT NULL,
---     localPath TEXT NOT NULL DEFAULT "",
---     updateTimespan INTEGER DEFAULT 0
--- );
---
--- insertStepImage:
--- INSERT OR REPLACE INTO stepImages (id, stepId,  localPath, updateTimespan)
--- VALUES (?, ?, ?, ?);
---
--- selectImagesForStep:
--- SELECT *
--- FROM stepImages
--- WHERE stepId = ?;
---
--- deleteStepImageById:
--- DELETE FROM stepImages WHERE id = ?;
---
--- deleteAllStepsImagesByStepId:
--- DELETE FROM stepImages WHERE stepId = ?;
---
--- deleteAllStepsImagesByGuidelineId:
--- DELETE FROM stepImages WHERE stepId IN (SELECT id FROM steps WHERE guidelineId = ?);
---
--- deleteAllStepsImages:
--- DELETE FROM stepImages;

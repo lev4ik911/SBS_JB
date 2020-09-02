@@ -50,7 +50,8 @@ class StepsFragment : MvvmFragment<StepsFragmentBinding, GuidelineViewModel>() {
         }
         viewModel.updatedStepId.addObserver {
             stepsAdapter.itemsList.indexOfFirst { step -> step.stepId == it }.apply {
-                stepsAdapter.notifyItemChanged(this)
+                if (this != -1)
+                    stepsAdapter.notifyItemChanged(this)
             }
         }
     }

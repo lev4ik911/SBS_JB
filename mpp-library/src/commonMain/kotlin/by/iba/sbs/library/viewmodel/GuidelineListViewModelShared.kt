@@ -33,6 +33,7 @@ class GuidelineListViewModelShared(
         }
     }
     val searchHistoryList = mutableListOf<String>()
+    val updatedGuidelineId = MutableLiveData("")
 
     @UnstableDefault
     @ImplicitReflectionSerializer
@@ -59,13 +60,12 @@ class GuidelineListViewModelShared(
                             if (searchedText.value.isNotEmpty()) {
                                 viewModelScope.launch {
                                     guidelines = repository.getFilteredGuidelines(searchedText.value)
-                                    instructions.postValue(guidelines.sortedBy { item -> item.id }
-                                        .toList())
+                                    instructions.value = guidelines.sortedBy { item -> item.id }.toList()
                                 }
                             } else {
-                                instructions.postValue(guidelines.sortedBy { item -> item.id }
-                                    .toList())
+                                instructions.value = guidelines.sortedBy { item -> item.id }.toList()
                             }
+                            checkPreviewImage(instructions.value)
                         } else if (it.error != null)
                             eventsDispatcher.dispatchEvent {
                                 showToast(
@@ -156,7 +156,56 @@ class GuidelineListViewModelShared(
             }
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun checkPreviewImage(source: List<Guideline>) {
+        viewModelScope.launch {
+            try {
+                source.forEach {
+                    if (!it.isEmptyPreview) {
+                        repository.checkPreviewImageForGuideline(it)?.let { url ->
+                            eventsDispatcher.dispatchEvent {loadImage(url, it)}
+                        }
+                    }
+                    else {
+                        //TODO("Add check removed images")
+                    }
+                }
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun saveGuidelinePreviewImageInLocalDB(guideline: Guideline){
+        viewModelScope.launch {
+            try {
+                instructions.value.find { g ->  g.id == guideline.id}?.imagePath = guideline.imagePath
+                repository.saveGuidelineImageInLocalDB(guideline)
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     interface EventsListener {
         fun showToast(msg: ToastMessage)
+        fun loadImage(url: String, guideline: Guideline)
     }
 }

@@ -60,13 +60,15 @@ class GuidelineViewModel(
                     val guidelinesLiveData = repository.getGuideline(instructionId, forceRefresh)
                     guidelinesLiveData.addObserver {
                         if (it.isNotEmpty) {
+                            guideline.value = it.data!!
                             if (it.error != null) {
                                 offlineMode.value = true
                             }
-                            else if (forceRefresh && it.isSuccess) {
-                                offlineMode.value = false
+                            else if (it.isSuccess) {
+                                checkPreviewImageForGuideline(guideline.value)
+                                if (forceRefresh)
+                                    offlineMode.value = false
                             }
-                            guideline.value = it.data!!
                         } else if (it.error != null)
                             eventsDispatcher.dispatchEvent {
                                 showToast(
@@ -87,40 +89,16 @@ class GuidelineViewModel(
                     val stepsLiveData = repository.getAllSteps(instructionId, forceRefresh)
                     stepsLiveData.addObserver {
                         if (it.isNotEmpty) {
+                            steps.value = it.data!!
                             if (it.error != null) {
                                 offlineMode.value = true
                             }
-                            else if (forceRefresh && it.isSuccess) {
-                                offlineMode.value = false
+                            else if (it.isSuccess) {
+                                checkPreviewImageForSteps(steps.value)
+                                if (forceRefresh)
+                                    offlineMode.value = false
                             }
-                            if (forceRefresh) {
-                                //check image info on actual
-                                val tempListOfSteps = it.data!!.toMutableList()
-                                tempListOfSteps.forEach { step ->
-                                    step.updateImageTimeSpan = 1 //TODO (delete fake data!!!)
-                                    if (step.updateImageTimeSpan != 0) {
-                                        viewModelScope.launch {
-                                            val stepFromLocalDB =
-                                                repository.getStepByIdFromLocalDB(
-                                                    instructionId,
-                                                    step.stepId
-                                                )
-                                            if (stepFromLocalDB.updateImageTimeSpan != step.updateImageTimeSpan) {
-                                                eventsDispatcher.dispatchEvent {
-                                                    onLoadImageFromAPI(
-                                                        step
-                                                    )
-                                                }
-                                            }
-                                            step.imagePath = stepFromLocalDB.imagePath
-                                            step.updateImageTimeSpan =
-                                                stepFromLocalDB.updateImageTimeSpan
-                                        }
-                                    }
-                                }
-                                steps.value = tempListOfSteps
-                            } else
-                                steps.value = it.data!!
+
                         } else if (it.error != null) eventsDispatcher.dispatchEvent {
                             showToast(
                                 ToastMessage(it.error.message.toString(), MessageType.ERROR)
@@ -298,7 +276,8 @@ class GuidelineViewModel(
                 Step(
                     name = step.name,
                     descr = step.descr,
-                    weight = step.weight
+                    weight = step.weight,
+                    imagePath = step.imagePath
                 )
             )
             steps.value = stepArr
@@ -330,16 +309,21 @@ class GuidelineViewModel(
                         showToast(
                             ToastMessage("Successful insert", MessageType.SUCCESS)
                         )
-                        val resultGuideline = result.data!!
-                        guideline.value = Guideline(
-                            id = resultGuideline.id,
-                            name = resultGuideline.name,
-                            descr = resultGuideline.description ?: "",
-                            author = resultGuideline.activity.createdBy.name,
-                            authorId = resultGuideline.activity.createdBy.id
-                        )
-                        saveSteps()
                     }
+                    val resultGuideline = result.data!!
+                    guideline.value = Guideline(
+                        id = resultGuideline.id,
+                        name = resultGuideline.name,
+                        descr = resultGuideline.description.orEmpty(),
+                        author = resultGuideline.activity.createdBy.name,
+                        authorId = resultGuideline.activity.createdBy.id,
+                        imagePath = newGuideline.imagePath
+                    )
+                    if (newGuideline.imagePath.isNotEmpty()) {
+                        eventsDispatcher.dispatchEvent { getGuidelineImageData() }
+                    }
+                    saveSteps()
+
                     //TODO(Add to total res)
                 } else if (result.error != null) eventsDispatcher.dispatchEvent {
                     returnOldGuideline()
@@ -373,6 +357,9 @@ class GuidelineViewModel(
                         )
                     }
                     //TODO(Add to total res)
+                    if (guideline.isImageNotUploaded) {
+                        eventsDispatcher.dispatchEvent { getGuidelineImageData() }
+                    }
                     saveSteps()
                 } else if (result.error != null) eventsDispatcher.dispatchEvent {
                     returnOldGuideline()
@@ -405,6 +392,7 @@ class GuidelineViewModel(
                             ToastMessage("Successful delete", MessageType.SUCCESS)
                         )
                     }
+                    eventsDispatcher.dispatchEvent { deleteImagesOnDevice(guideline.id) }
                     //TODO(Add to total res)
                 } else if (result.error != null) eventsDispatcher.dispatchEvent {
                     showToast(
@@ -451,7 +439,16 @@ class GuidelineViewModel(
         viewModelScope.launch {
             try {
                 val result = repository.insertSteps(guidelineId, newSteps)
-                if (result.error != null) eventsDispatcher.dispatchEvent {
+                if (result.isSuccess && result.isNotEmpty) {
+                    val savedSteps = result.data!!
+                    newSteps.forEach {
+                        savedSteps.firstOrNull{st -> st.weight == it.weight}?.let { ns ->
+                            it.stepId = ns.id
+                        }
+                    }
+                    checkSavedStepsForAvailabilityImage(newSteps)
+                }
+                else if (result.error != null) eventsDispatcher.dispatchEvent {
                     showToast(
                         ToastMessage(result.error.message.orEmpty(), MessageType.ERROR)
                     )
@@ -474,6 +471,9 @@ class GuidelineViewModel(
         viewModelScope.launch {
             try {
                 val result = repository.updateSteps(guidelineId, updatedSteps)
+                if (result.isSuccess && result.isNotEmpty) {
+                    checkSavedStepsForAvailabilityImage(updatedSteps)
+                }
                 if (result.error != null) eventsDispatcher.dispatchEvent {
                     showToast(
                         ToastMessage(result.error.message.orEmpty(), MessageType.ERROR)
@@ -508,6 +508,7 @@ class GuidelineViewModel(
                     stepArr.remove(step)
                     stepArr.forEachIndexed { index, step -> step.weight = index + 1 }
                     steps.value = stepArr
+                    eventsDispatcher.dispatchEvent { deleteImagesOnDevice(guidelineId, step.stepId) }
                 } else if (result.error != null) eventsDispatcher.dispatchEvent {
                     showToast(
                         ToastMessage(result.error.message.orEmpty(), MessageType.ERROR)
@@ -575,6 +576,168 @@ class GuidelineViewModel(
         }
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    private fun checkPreviewImageForSteps(source: List<Step>) {
+        viewModelScope.launch {
+            try {
+                source.forEach {
+                    if (!it.isEmptyPreview) {
+                        repository.checkPreviewImageForStep(guideline.value.id, it)?.let { url ->
+                            eventsDispatcher.dispatchEvent {loadImage(url, guideline.value.id, it.stepId, it.remoteImageId, it)}
+                        }
+                    }
+                    else {
+                        //TODO("Add check removed images")
+                    }
+                }
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    private fun checkPreviewImageForGuideline(source: Guideline) {
+        viewModelScope.launch {
+            try {
+                if (!source.isEmptyPreview) {
+                    repository.checkPreviewImageForGuideline(source)?.let { url ->
+                        eventsDispatcher.dispatchEvent { loadImage(url, source.id, remoteImageId = source.remoteImageId, source = source) }
+                    }
+                }
+                else {
+                    //TODO("Add check removed images")
+                }
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun saveGuidelinePreviewImageInLocalDB(data: Guideline){
+        viewModelScope.launch {
+            try {
+                repository.saveGuidelineImageInLocalDB(data)
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun saveStepPreviewImageInLocalDB(data: Step){
+        viewModelScope.launch {
+            try {
+                repository.saveStepImageInLocalDB(guideline.value.id, data)
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun uploadGuidelineImage(data: ByteArray) {
+        viewModelScope.launch {
+            try {
+                val result = repository.uploadGuidelineImage(guideline.value, data)
+                if (result.isSuccess && result.isNotEmpty) {
+                    val guideline = guideline.value
+                    eventsDispatcher.dispatchEvent {transferTempImage(guideline.imagePath,
+                                                                        guideline.id,
+                                                                        remoteImageId = guideline.remoteImageId,
+                                                                        source = guideline)}
+                }
+                if (result.error != null) eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(result.error.message.orEmpty(), MessageType.ERROR)
+                    )
+                }
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(e.message.toString(), MessageType.ERROR)
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun uploadStepImage(step: Step, data: ByteArray) {
+        viewModelScope.launch {
+            try {
+                val result = repository.uploadStepImage(guideline.value.id, step, data)
+                if (result.isSuccess && result.isNotEmpty) {
+                    eventsDispatcher.dispatchEvent {transferTempImage(step.imagePath,
+                        guidelineId = guideline.value.id,
+                        stepId = step.stepId,
+                        remoteImageId = step.remoteImageId,
+                        source = step)}
+                }
+                if (result.error != null) eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(result.error.message.orEmpty(), MessageType.ERROR)
+                    )
+                }
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(e.message.toString(), MessageType.ERROR)
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    private fun checkSavedStepsForAvailabilityImage(steps: List<Step>) {
+        steps.forEach {
+            if (it.isImageNotUploaded && it.stepId.isNotEmpty()) {
+                eventsDispatcher.dispatchEvent { getStepImageData(it) }
+            }
+        }
+    }
+
+    override fun onCleared() {
+
+    }
+
     interface EventsListener {
         fun onCallInstructionEditor(instructionId: String)
         fun onOpenProfile(profileId: String)
@@ -592,8 +755,12 @@ class GuidelineViewModel(
         fun onRatingDownAction()
         fun onRatingUpAction()
         fun onRemoveStep(step: Step)
-        fun onLoadImageFromAPI(step: Step)
         fun showToast(msg: ToastMessage)
         fun onAuthorizationRequired()
+        fun loadImage(url: String, guidelineId: String, stepId: String = "", remoteImageId: String, source: Any)
+        fun getGuidelineImageData()
+        fun getStepImageData(step: Step)
+        fun deleteImagesOnDevice(guidelineId :String, stepId :String = "")
+        fun transferTempImage(localPath: String, guidelineId: String, stepId: String = "", remoteImageId: String, source: Any)
     }
 }

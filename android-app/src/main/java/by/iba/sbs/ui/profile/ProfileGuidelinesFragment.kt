@@ -77,6 +77,19 @@ class ProfileGuidelinesFragment :
         viewModel.guidelines.addObserver {
             instructionsAdapter.addItems(it)
         }
+        viewModel.updatedGuidelineId.addObserver {
+            instructionsAdapter.itemsList.indexOfFirst { guideline -> guideline.id == it }.apply {
+                if (this != -1)
+                    instructionsAdapter.notifyItemChanged(this)
+            }
+        }
+    }
+
+    @ImplicitReflectionSerializer
+    @UnstableDefault
+    override fun onStart() {
+        super.onStart()
+        viewModel.loadUserGuidelines(false)
     }
 }
 

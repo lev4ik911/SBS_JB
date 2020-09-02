@@ -58,6 +58,23 @@ interface IGuidelineRepository {
     suspend fun removeGuidelineFromFavorite(guidelineId: String): Response<String?>
     @UnstableDefault
     suspend fun clearFavorites()
+
+    @UnstableDefault
+    suspend fun uploadGuidelineImage(guideline: Guideline, data: ByteArray): Response<FileView>
+    @UnstableDefault
+    suspend fun checkPreviewImageForGuideline(guideline: Guideline): String?
+    @UnstableDefault
+    suspend fun saveGuidelineImageInLocalDB(guideline: Guideline)
+    @UnstableDefault
+    suspend fun checkPreviewImageForStep(guidelineId: String, step: Step): String?
+    @UnstableDefault
+    suspend fun saveStepImageInLocalDB(guidelineId: String, step: Step)
+    @UnstableDefault
+    suspend fun uploadStepImage(
+        guidelineId: String,
+        step: Step,
+        data: ByteArray
+    ): Response<FileView>
 }
 
 @ImplicitReflectionSerializer
@@ -77,6 +94,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     private val feedback by lazy { Feedbacks(settings) }
     private val sbsDb = createDb()
     private val guidelinesQueries = sbsDb.guidelinesEntityQueries
+    private val imagesQueries = sbsDb.imagesEntityQueries
     private val ratingSummaryQueries = sbsDb.ratingSummaryQueries
     private val feedbackQueries = sbsDb.feedbackEntityQueries
     private val suggestionsQueries = sbsDb.suggestionsEntityQueries
@@ -87,6 +105,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     override suspend fun getAllGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>> {
 
         val favorites = favoritesQueries.selectAllGuidelinesIdFromFavorites().executeAsList()
+        val imagesCache = imagesQueries.selectImagesForGuidelines().executeAsList()
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
 
@@ -97,7 +116,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         it.name,
                         it.descr,
                         it.authorId,
-                        it.author
+                        it.author,
+                        it.remoteImageId,
+                        it.updateImageDateTime
                     )
                     it.rating.apply {
                         ratingSummaryQueries.insertRating(
@@ -114,7 +135,6 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 data == null || data.isEmpty() || forceRefresh
 
             override suspend fun loadFromDb(): List<Guideline> = coroutineScope {
-
                 val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
                 return@coroutineScope guidelinesQueries.selectAllGuidelines().executeAsList().map {
                     val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
@@ -128,10 +148,21 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                                 rating.positive!!.toInt(),
                                 rating.negative!!.toInt(),
                                 rating.overall!!.toInt()
-                            )
+                            ),
+                            imagePath = imagesCache.firstOrNull{im->im.guidelineId == it.id}?.localImagePath.orEmpty(),
+                            remoteImageId = it.remoteImageId,
+                            updateImageDateTime = it.updateImageDateTime
                         )
                     } else {
-                        Guideline(it.id, it.name, it.description, it.authorId, it.author)
+                        Guideline(it.id,
+                            it.name,
+                            it.description,
+                            it.authorId,
+                            it.author,
+                            imagePath = imagesCache.firstOrNull{im->im.guidelineId == it.id}?.localImagePath .orEmpty(),
+                            remoteImageId = it.remoteImageId,
+                            updateImageDateTime = it.updateImageDateTime
+                        )
                     }
                 }
             }
@@ -149,7 +180,10 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                                 rating = item.rating,
                                 authorId = item.activity.createdBy.id,
                                 author = item.activity.createdBy.name,
-                                isFavorite = favorites.any { fav -> fav == item.id }
+                                isFavorite = favorites.any { fav -> fav == item.id },
+                                imagePath = imagesCache.firstOrNull{im->im.guidelineId == item.id}?.localImagePath.orEmpty(),
+                                remoteImageId = item.preview?.id ?: "",
+                                updateImageDateTime = item.preview?.activity?.updatedAt ?: ""
                             )
                         }
                     } else {
@@ -169,6 +203,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
         forceRefresh: Boolean
     ): LiveData<Response<Guideline>> {
         val favorite = favoritesQueries.selectFavoriteIdByGuidelineId(guidelineId).executeAsOneOrNull()
+        val imagesCashe = imagesQueries.selectImageForGuideline(guidelineId).executeAsOneOrNull()
         return object : NetworkBoundResource<Guideline, Guideline>() {
             override fun processResponse(response: Guideline): Guideline = response
 
@@ -186,7 +221,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     data.name,
                     data.descr,
                     data.authorId,
-                    data.author
+                    data.author,
+                    data.remoteImageId,
+                    data.updateImageDateTime
                 )
 
             }
@@ -209,13 +246,20 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                                 ratingSummary.positive!!.toInt(),
                                 ratingSummary.negative!!.toInt(),
                                 ratingSummary.overall!!.toInt()
-                            )
+                            ),
+
+                            imagePath = imagesCashe?.localImagePath.orEmpty(),
+                            remoteImageId = item.remoteImageId,
+                            updateImageDateTime = item.updateImageDateTime
                         )
                     } else {
                         Guideline(
                             item.id, item.name, item.description,
                             authorId = item.authorId,
-                            author = item.author
+                            author = item.author,
+                            imagePath = imagesCashe?.localImagePath.orEmpty(),
+                            remoteImageId = item.remoteImageId,
+                            updateImageDateTime = item.updateImageDateTime
                         )
                     }
                 } else return@coroutineScope null
@@ -238,7 +282,10 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                                 item.rating.positive,
                                 item.rating.negative,
                                 item.rating.overall
-                            )
+                            ),
+                            imagePath = imagesCashe?.localImagePath.orEmpty(),
+                            remoteImageId = item.preview?.id.orEmpty(),
+                            updateImageDateTime = item.preview?.activity?.updatedAt.orEmpty()
                         )
                     } else {
                         if (result.status == Response.Status.ERROR) error(result.error!!)
@@ -262,6 +309,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
         guidelineId: String,
         forceRefresh: Boolean
     ): LiveData<Response<List<Step>>> {
+        val imagesCache = imagesQueries.selectAllImagesForGuideline(guidelineId).executeAsList()
         return object : NetworkBoundResource<List<Step>, List<Step>>() {
             override fun processResponse(response: List<Step>): List<Step> = response
 
@@ -272,7 +320,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         guidelineId,
                         it.name,
                         it.descr,
-                        it.weight.toLong()
+                        it.weight.toLong(),
+                        it.remoteImageId,
+                        it.updateImageDateTime
                     )
                 }
             }
@@ -288,8 +338,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                             it.name,
                             it.description,
                             it.weight!!.toInt(),
-                            it.imagePath,
-                            it.updateImageTimeSpan!!.toInt()
+                            imagePath = imagesCache.firstOrNull{im->im.stepId == it.id}?.localImagePath.orEmpty(),
+                            remoteImageId = it.remoteImageId,
+                            updateImageDateTime = it.updateImageDateTime
                         )
                     }
             }
@@ -304,7 +355,10 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                                 item.id,
                                 item.name,
                                 item.description,
-                                item.weight
+                                item.weight,
+                                imagePath = imagesCache.firstOrNull{im->im.stepId == item.id}?.localImagePath.orEmpty(),
+                                remoteImageId = item.preview?.id.orEmpty(),
+                                updateImageDateTime = item.preview?.activity?.updatedAt.orEmpty()
                             )
                         }
                     } else {
@@ -330,7 +384,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     item.name,
                     item.description ?: "",
                     item.activity.createdBy.id,
-                    item.activity.createdBy.name
+                    item.activity.createdBy.name,
+                    remoteImageId = item.preview?.id.orEmpty(),
+                    updateImageDateTime = item.preview?.activity?.updatedAt.orEmpty()
                 )
                 ratingSummaryQueries.insertRating(
                     item.id,
@@ -357,7 +413,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     item.name,
                     item.description ?: "",
                     item.activity.createdBy.id,
-                    item.activity.createdBy.name
+                    item.activity.createdBy.name,
+                    remoteImageId = item.preview?.id.orEmpty(),
+                    updateImageDateTime = item.preview?.activity?.updatedAt.orEmpty()
                 )
             }
 //            else {
@@ -375,6 +433,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             ratingSummaryQueries.deleteRatingByGuidelineId(guidelineId)
             guidelinesQueries.deleteAllStepsByGuidelineId(guidelineId)
             guidelinesQueries.deleteGuidelineById(guidelineId)
+            imagesQueries.deleteGuidelineImages(guidelineId)
         }
 //        else {
 //            if (result.status == Response.Status.ERROR) error(result.error!!)
@@ -393,14 +452,14 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
         if (result.isSuccess) {
             val items = result.data!!
             items.forEach {
-                guidelinesQueries.insertStepWithImage(
+                guidelinesQueries.insertStep(
                     it.id,
                     guidelineId,
                     it.name,
                     it.description,
                     it.weight.toLong(),
-                    data.first { step -> step.weight == it.weight }.imagePath, // save local path in db
-                    0L// it.updateImageTimeSpan.toLong()
+                    remoteImageId = it.preview?.id.orEmpty(),
+                    updateImageDateTime = it.preview?.activity?.updatedAt.orEmpty()
                 )
             }
 
@@ -425,14 +484,14 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
         if (result.isSuccess) {
             val items = result.data!!
             items.forEach {
-                guidelinesQueries.insertStepWithImage(
+                guidelinesQueries.insertStep(
                     it.id,
                     guidelineId,
                     it.name,
                     it.description,
                     it.weight.toLong(),
-                    data.first { step -> step.weight == it.weight }.imagePath, // save local path in db
-                    0L//it.updateImageTimeSpan.toLong()
+                    remoteImageId = it.preview?.id.orEmpty(),
+                    updateImageDateTime = it.preview?.activity?.updatedAt.orEmpty()
                 )
             }
         }
@@ -448,6 +507,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
             val result = steps.deleteStep(guidelineId, stepId)
             if (result.isSuccess) {
                 guidelinesQueries.deleteStepById(stepId)
+                imagesQueries.deleteStepImages(guidelineId, stepId)
             } else {
                 if (result.status == Response.Status.ERROR) error(result.error!!)
             }
@@ -463,8 +523,9 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     result.name = this.name
                     result.descr = this.description
                     result.weight = this.weight!!.toInt()
-                    result.imagePath = this.imagePath
-                    result.updateImageTimeSpan = this.updateImageTimeSpan!!.toInt()
+                    result.imagePath = imagesQueries.selectImageForStep(this.id).executeAsOneOrNull()?.localImagePath ?: ""
+                    result.remoteImageId = this.remoteImageId
+                    result.updateImageDateTime = this.updateImageDateTime
                 }
             }
             return@coroutineScope result
@@ -604,6 +665,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
         coroutineScope {
             val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
             val favorites = favoritesQueries.selectAllGuidelinesIdFromFavorites().executeAsList()
+            val imagesCache = imagesQueries.selectImagesForGuidelines().executeAsList()
             return@coroutineScope suggestionsQueries.searchGuidelinesByText(searchText)
                 .executeAsList().map {
                     val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
@@ -617,10 +679,21 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                                 rating.positive!!.toInt(),
                                 rating.negative!!.toInt(),
                                 rating.overall!!.toInt()
-                            )
+                            ),
+                            imagePath = imagesCache.firstOrNull{im->im.guidelineId == it.id}?.localImagePath.orEmpty(),
+                            remoteImageId = it.remoteImageId,
+                            updateImageDateTime = it.updateImageDateTime
                         )
                     } else {
-                        Guideline(it.id, it.name, it.description, it.author, it.authorId)
+                        Guideline(it.id,
+                            it.name,
+                            it.description,
+                            it.author,
+                            it.authorId,
+                            imagePath = imagesCache.firstOrNull{im->im.guidelineId == it.id}?.localImagePath.orEmpty(),
+                            remoteImageId = it.remoteImageId,
+                            updateImageDateTime = it.updateImageDateTime
+                        )
                     }
                 }
 
@@ -662,6 +735,122 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
     override suspend fun clearFavorites() =
         coroutineScope {
             return@coroutineScope favoritesQueries.clearFavorites()
+        }
+
+    @UnstableDefault
+    override suspend fun checkPreviewImageForGuideline(guideline: Guideline): String? =
+        coroutineScope {
+            var url:String? = null
+            if (!guideline.isEmptyPreview) {
+                imagesQueries.selectImageForGuideline(guideline.id).executeAsOneOrNull().apply {
+                    if (this == null
+                        || !this.updateImageDateTime.equals(guideline.updateImageDateTime)
+                        || guideline.isImageNotDownloaded) {
+                        url = guidelines.generateURLForGuidelineImage(
+                            guideline.id,
+                            guideline.remoteImageId
+                        )
+                    }
+                }
+            }
+            return@coroutineScope url
+        }
+
+    @UnstableDefault
+    override suspend fun saveGuidelineImageInLocalDB(guideline: Guideline) =
+        coroutineScope {
+                imagesQueries.selectImageForGuideline(guideline.id).executeAsOneOrNull().apply {
+                    if (this != null)
+                        imagesQueries.updateImageById(guideline.imagePath,
+                                                        guideline.remoteImageId,
+                                                        guideline.updateImageDateTime,
+                                                        this.id)
+                    else
+                        imagesQueries.insertGuidelineImage(guideline.id,
+                                                        guideline.imagePath,
+                                                        guideline.remoteImageId,
+                                                        guideline.updateImageDateTime)
+                }
+                return@coroutineScope
+            }
+
+    @UnstableDefault
+    override suspend fun checkPreviewImageForStep(guidelineId: String, step: Step): String? =
+        coroutineScope {
+            var url:String? = null
+            if (!step.isEmptyPreview) {
+                imagesQueries.selectImageForStep(step.stepId).executeAsOneOrNull().apply {
+                    if (this == null
+                        || !this.updateImageDateTime.equals(step.updateImageDateTime)
+                        || step.isImageNotDownloaded) {
+                        url = guidelines.generateURLForStepImage(
+                            guidelineId,
+                            step.stepId,
+                            step.remoteImageId
+                        )
+                    }
+                }
+            }
+            return@coroutineScope url
+        }
+
+    @UnstableDefault
+    override suspend fun saveStepImageInLocalDB(guidelineId: String, step: Step) =
+        coroutineScope {
+            imagesQueries.selectImageForStep(step.stepId).executeAsOneOrNull().apply {
+                if (this != null)
+                    imagesQueries.updateImageById(step.imagePath,
+                        step.remoteImageId,
+                        step.updateImageDateTime,
+                        this.id)
+                else
+                    imagesQueries.insertStepImage(guidelineId,
+                        step.stepId,
+                        step.imagePath,
+                        step.remoteImageId,
+                        step.updateImageDateTime)
+            }
+            return@coroutineScope
+        }
+
+    @UnstableDefault
+    override suspend fun uploadGuidelineImage(guideline: Guideline, data: ByteArray): Response<FileView> =
+        coroutineScope {
+            lateinit var result: Response<FileView>;
+            if (guideline.isEmptyPreview) {
+                result = guidelines.postGuidelineImage(guideline.id, data)
+            }
+            else if (guideline.isImageNotUploaded){
+                result = guidelines.putGuidelineImage(guideline.id, guideline.remoteImageId, data)
+            }
+            if (result.isSuccess && result.isNotEmpty) {
+                result.data!!.apply {
+                    guideline.remoteImageId = this.id
+                    guideline.updateImageDateTime = this.activity.updatedAt
+                    saveGuidelineImageInLocalDB(guideline)
+                }
+            }
+            return@coroutineScope result
+        }
+
+    @UnstableDefault
+    override suspend fun uploadStepImage(guidelineId: String, step:Step, data: ByteArray): Response<FileView> =
+        coroutineScope {
+            lateinit var result: Response<FileView>;
+            if (step.isEmptyPreview) {
+                result = guidelines.postStepImage(guidelineId, step.stepId, data)
+            }
+            else if (step.isImageNotUploaded){
+                result = guidelines.putStepImage(guidelineId, step.stepId, step.remoteImageId, data)
+            }
+            if (result.isSuccess && result.isNotEmpty) {
+                result.data!!.apply {
+                    step.remoteImageId = this.id
+                    step.updateImageDateTime = this.activity.updatedAt
+                    saveStepImageInLocalDB(guidelineId, step)
+                }
+            }
+            return@coroutineScope result
         }
 
 }

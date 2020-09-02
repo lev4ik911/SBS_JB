@@ -74,6 +74,7 @@ class DashboardViewModelShared(
     val popular = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
 
     }
+    val updatedGuidelineId = MutableLiveData("")
 
     @UnstableDefault
     @ImplicitReflectionSerializer
@@ -92,7 +93,7 @@ class DashboardViewModelShared(
                             offlineMode.postValue(false)
                         }
                         val guidelines = it.data!!
-                        favorite.postValue(
+                        favorite.value = (
                             if (itemsCount == -1) {
                                 if (localStorage.userId.isNotEmpty())
                                     guidelines
@@ -110,7 +111,8 @@ class DashboardViewModelShared(
                                     .take(itemsCount)
                                     .sortedBy { item -> item.id }
                                     .toList()
-                        )
+                                )
+                        checkPreviewImage(favorite.value)
                     } else if (it.error != null)
                         eventsDispatcher.dispatchEvent {
                             showToast(
@@ -152,7 +154,7 @@ class DashboardViewModelShared(
                             offlineMode.postValue(false)
                         }
                         val guidelines = it.data!!
-                        recommended.postValue(
+                        recommended.value = (
                             if (itemsCount == -1)
                                 guidelines
                                     .sortedBy { item -> item.id }
@@ -163,6 +165,7 @@ class DashboardViewModelShared(
                                     .sortedBy { item -> item.id }
                                     .toList()
                         )
+                        checkPreviewImage(recommended.value)
                     } else if (it.error != null)
                         eventsDispatcher.dispatchEvent {
                             showToast(
@@ -204,7 +207,7 @@ class DashboardViewModelShared(
                             offlineMode.postValue(false)
                         }
                         val guidelines = it.data!!
-                        popular.postValue(
+                        popular.value = (
                             if (itemsCount == -1)
                                 guidelines
                                     .sortedBy { item -> item.id }
@@ -215,6 +218,7 @@ class DashboardViewModelShared(
                                     .sortedBy { item -> item.id }
                                     .toList()
                         )
+                        checkPreviewImage(popular.value )
                     } else if (it.error != null)
                         eventsDispatcher.dispatchEvent {
                             showToast(
@@ -292,11 +296,62 @@ class DashboardViewModelShared(
 
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun checkPreviewImage(source: List<Guideline>) {
+        viewModelScope.launch {
+            try {
+                source.forEach {
+                    if (!it.isEmptyPreview) {
+                        repository.checkPreviewImageForGuideline(it)?.let { url ->
+                            eventsDispatcher.dispatchEvent {loadImage(url, it)}
+                        }
+                    }
+                    else {
+                    //TODO("Add check removed images")
+                    }
+                }
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun saveGuidelinePreviewImageInLocalDB(guideline: Guideline){
+        viewModelScope.launch {
+            try {
+                recommended.value.find { g ->  g.id == guideline.id}?.imagePath = guideline.imagePath
+                favorite.value.find { g ->  g.id == guideline.id}?.imagePath = guideline.imagePath
+                popular.value.find { g ->  g.id == guideline.id}?.imagePath = guideline.imagePath
+                repository.saveGuidelineImageInLocalDB(guideline)
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(
+                            e.toString(),
+                            MessageType.ERROR
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     interface EventsListener {
         fun onViewFavoritesAction()
         fun onViewRecommendedAction()
         fun onViewPopularAction()
         fun showToast(msg: ToastMessage)
         fun onFavoritesLoaded(forceRefresh:Boolean)
+        fun loadImage(url: String, guideline: Guideline)
     }
 }

@@ -4,6 +4,9 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.preference.PreferenceManager
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -19,6 +22,7 @@ import by.iba.sbs.databinding.ProfileFragmentBinding
 import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.viewmodel.ProfileViewModel
+import by.iba.sbs.tools.DownloadManager
 import by.iba.sbs.tools.Tools
 import by.iba.sbs.tools.Tools.Companion.startAlphaAnimation
 import by.iba.sbs.tools.visibleOrGone
@@ -278,5 +282,28 @@ class ProfileFragment :
         val intent = Intent(requireContext(), GuidelineActivity::class.java)
         intent.putExtra("instructionId", guideline.id)
         startActivity(intent)
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun loadImage(url: String, guideline: Guideline) {
+        DownloadManager(requireContext()).apply {
+            this.downloadImage(url,
+                guideline.id,
+                remoteImageId = guideline.remoteImageId,
+                item = guideline,
+                imageHandler =  imageHandler)
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    private val imageHandler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            val guideline = msg.obj as Guideline
+            viewModel.updatedGuidelineId.value = guideline.id
+            viewModel.saveGuidelinePreviewImageInLocalDB(guideline)
+            super.handleMessage(msg)
+        }
     }
 }

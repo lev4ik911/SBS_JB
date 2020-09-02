@@ -52,6 +52,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
     private val guidelinesQueries = sbsDb.guidelinesEntityQueries
     private val ratingSummaryQueries = sbsDb.ratingSummaryQueries
     private val favoritesQueries = sbsDb.favoritesEntityQueries
+    private val imagesQueries = sbsDb.imagesEntityQueries
 
     @UnstableDefault
     override suspend fun addUser(data: User): Response<UserView> = coroutineScope {
@@ -115,6 +116,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
     override suspend fun getUserGuidelines(
         userId: String, forceRefresh: Boolean
     ): LiveData<Response<List<Guideline>>> {
+        val imagesCache = imagesQueries.selectImagesForGuidelines().executeAsList()
         return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
             override fun processResponse(response: List<Guideline>): List<Guideline> = response
 
@@ -125,7 +127,9 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                         it.name,
                         it.descr,
                         it.authorId,
-                        it.author
+                        it.author,
+                        it.remoteImageId,
+                        it.updateImageDateTime
                     )
                     it.rating.apply {
                         ratingSummaryQueries.insertRating(
@@ -156,10 +160,21 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                                     rating.positive!!.toInt(),
                                     rating.negative!!.toInt(),
                                     rating.overall!!.toInt()
-                                )
+                                ),
+                                imagePath = imagesCache.firstOrNull{im->im.guidelineId == it.id}?.localImagePath.orEmpty(),
+                                remoteImageId = it.remoteImageId,
+                                updateImageDateTime = it.updateImageDateTime
                             )
                         } else {
-                            Guideline(it.id, it.name, it.description, it.author, it.authorId)
+                            Guideline(it.id,
+                                it.name,
+                                it.description,
+                                it.author,
+                                it.authorId,
+                                imagePath = imagesCache.firstOrNull{im->im.guidelineId == it.id}?.localImagePath.orEmpty(),
+                                remoteImageId = it.remoteImageId,
+                                updateImageDateTime = it.updateImageDateTime
+                            )
                         }
                     }
             }
@@ -176,7 +191,10 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                                 item.description ?: "",
                                 rating = item.rating,
                                 authorId = item.activity.createdBy.id,
-                                author = item.activity.createdBy.name
+                                author = item.activity.createdBy.name,
+                                imagePath = imagesCache.firstOrNull{im->im.guidelineId == item.id}?.localImagePath.orEmpty(),
+                                remoteImageId = item.preview?.id.orEmpty(),
+                                updateImageDateTime = item.preview?.activity?.updatedAt.orEmpty()
                             )
                         }
                     } else {

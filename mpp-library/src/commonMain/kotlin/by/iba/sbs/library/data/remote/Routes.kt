@@ -23,6 +23,10 @@ object Routes {
         const val URL_GUIDELINE_STEPS = "$baseRoute/$version/guidelines/%s/steps"
         const val URL_GUIDELINE_STEPS_BATCHING = "$baseRoute/$version/guidelines/%s/steps/batching"
         const val URL_GUIDELINE_STEP_DETAILS = "$baseRoute/$version/guidelines/%s/steps/%s"
+        const val URL_GUIDELINE_FILES = "$baseRoute/$version/guidelines/%s/files"
+        const val URL_GUIDELINE_FILE_DETAILS = "$baseRoute/$version/guidelines/%s/files/%s"
+        const val URL_GUIDELINE_STEP_FILES = "$baseRoute/$version/guidelines/%s/steps/%s/files"
+        const val URL_GUIDELINE_STEP_FILE_DETAILS = "$baseRoute/$version/guidelines/%s/steps/%s/files/%s"
     }
 
     object Ratings {

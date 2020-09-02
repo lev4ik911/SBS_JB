@@ -16,7 +16,7 @@ class StepEditFragment : MvvmFragment<StepEditFragmentBinding, GuidelineViewMode
 
     override val layoutId: Int = R.layout.step_edit_fragment
     override val viewModelVariableId: Int = BR.viewmodel
-    private var stepWeight = 0
+    private var selectedStep = Step()
     override val viewModelClass: Class<GuidelineViewModel> =
         GuidelineViewModel::class.java
 
@@ -31,13 +31,18 @@ class StepEditFragment : MvvmFragment<StepEditFragmentBinding, GuidelineViewMode
         binding.toolbarDescription.setNavigationOnClickListener {
             activity?.onBackPressed()
         }
-        stepWeight = arguments?.getInt("stepWeight") ?: 0
+        val stepWeight = arguments?.getInt("stepWeight") ?: 0
         if (stepWeight > 0)
-            binding.step = viewModel.steps.value!!.find { step -> step.weight == stepWeight }
+            selectedStep = viewModel.steps.value.find { step -> step.weight == stepWeight }!!
         else {
             if (viewModel.steps.value.isNullOrEmpty())
                 viewModel.steps.value = listOf()
-            binding.step = Step(weight = viewModel.steps.value!!.size.plus(1))
+            selectedStep = Step(weight = viewModel.steps.value.size.plus(1))
+        }
+        binding.step = selectedStep
+
+        viewModel.steps.addObserver {
+            binding.step = selectedStep
         }
     }
 
