@@ -39,6 +39,7 @@ class AppStart : Application() {
         }
 
         val settings = LocalSettings(AndroidSettings(PreferenceManager.getDefaultSharedPreferences(this)))
+        settings.offlineMode = false
         if (isAppOnForeground(applicationContext)) {
             if (settings.userId.isEmpty()) {
                 val intent =

@@ -6,5 +6,7 @@ data class Category(
     var isActive: Boolean,
     val iconColorHex: String
 ) {
-
+    fun onClick() {
+        isActive = !isActive
+    }
 }

@@ -8,14 +8,21 @@ import dev.icerock.moko.mvvm.livedata.readOnly
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 
 open class ViewModelExt(private val settings: Settings) : ViewModel() {
+    val localStorage: LocalSettings by lazy { LocalSettings(settings) }
     val loading: MutableLiveData<Boolean> = MutableLiveData(false)
     var isLoading: LiveData<Boolean> = loading.readOnly()
-    val localStorage: LocalSettings by lazy { LocalSettings(settings) }
-
-    companion object{
-        val offlineMode = MutableLiveData(false)
-    }
-    fun setOfflineMode(value:Boolean){
-        offlineMode.value = value
-    }
+    val offlineMode: MutableLiveData<Boolean> = MutableLiveData(localStorage.offlineMode)
+        .also {
+            it.addObserver { item ->
+                localStorage.offlineMode = item
+            }
+        }
+    var isOfflineMode: LiveData<Boolean> = offlineMode.readOnly()
+//
+//    companion object{
+//        val offlineMode = MutableLiveData(false)
+//    }
+//    fun setOfflineMode(value:Boolean){
+//        offlineMode.value = value
+//    }
 }

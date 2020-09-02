@@ -78,7 +78,7 @@ class GuidelineFragment :
         }.attach()
 
         btn_close_offline_mode?.setOnClickListener {
-            viewModel.setOfflineMode(false)
+            viewModel.offlineMode.value = false
         }
     }
 

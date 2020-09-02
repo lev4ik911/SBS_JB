@@ -85,10 +85,11 @@ class DashboardViewModelShared(
                 guidelinesLiveData.addObserver {
                     if (it.isNotEmpty) {
                         if (it.error != null) {
-                            offlineMode.value = true
+                            println(it.error)
+                            offlineMode.postValue(true)
                         }
                         else if (forceRefresh && it.isSuccess) {
-                            offlineMode.value = false
+                            offlineMode.postValue(false)
                         }
                         val guidelines = it.data!!
                         favorite.postValue(
@@ -144,10 +145,11 @@ class DashboardViewModelShared(
                 guidelinesLiveData.addObserver {
                     if (it.isNotEmpty) {
                         if (it.error != null) {
-                            offlineMode.value = true
+                            println(it.error)
+                            offlineMode.postValue(true)
                         }
                         else if (forceRefresh && it.isSuccess) {
-                            offlineMode.value = false
+                            offlineMode.postValue(false)
                         }
                         val guidelines = it.data!!
                         recommended.postValue(
@@ -195,10 +197,11 @@ class DashboardViewModelShared(
                 guidelinesLiveData.addObserver {
                     if (it.isNotEmpty) {
                         if (it.error != null) {
-                            offlineMode.value = true
+                            println(it.error)
+                            offlineMode.postValue(true)
                         }
                         else if (forceRefresh && it.isSuccess) {
-                            offlineMode.value = false
+                            offlineMode.postValue(false)
                         }
                         val guidelines = it.data!!
                         popular.postValue(

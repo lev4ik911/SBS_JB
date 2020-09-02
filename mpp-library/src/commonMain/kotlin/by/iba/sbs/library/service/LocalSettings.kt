@@ -13,6 +13,7 @@ class LocalSettings(settings: Settings) {
     var lastUpdate by settings.long("last_update", defaultValue = 0L)
     var keepLogin by settings.boolean("pref_remember_login")
     var showRecommended by settings.boolean("pref_show_recommended", defaultValue = true)
+    var offlineMode by settings.boolean("pref_offline_mode", defaultValue = false)
     var showFavorites by settings.boolean("pref_show_favorites", defaultValue = true)
     var searchHistoryJson by settings.string("pref_search_history_json")
     var searchHistoryCount by settings.int("pref_search_history_count", defaultValue = 5)

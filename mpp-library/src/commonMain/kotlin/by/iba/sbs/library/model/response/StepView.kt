@@ -8,7 +8,6 @@ data class StepView(
     var name: String,
     var description: String,
     var weight: Int,
-    var imagePath: String = "",
-    var updateImageTimeSpan: Int = 0,
-    var activity: ActionSummary = ActionSummary()
+    var activity: ActionSummary = ActionSummary(),
+    var preview: FileView? = null
 )
