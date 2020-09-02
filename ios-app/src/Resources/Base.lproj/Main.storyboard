@@ -10,7 +10,7 @@
         <scene sceneID="ZQa-bz-ioo">
             <objects>
                 <navigationController id="o1w-5U-Zch" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="house" catalog="system" id="t9D-l6-Rva"/>
+                    <tabBarItem key="tabBarItem" tag="1" title="" image="house" catalog="system" id="t9D-l6-Rva"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="3Lf-86-T4X">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -58,7 +58,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FrF-ud-enI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1335" y="-2205"/>
+            <point key="canvasLocation" x="-1300" y="-2205"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="zQ5-kc-8yM">
@@ -96,7 +96,7 @@
         <scene sceneID="5s1-VE-hSf">
             <objects>
                 <navigationController id="yNe-YF-YLI" userLabel="Navigation Favorite Controller" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="star" catalog="system" id="mWw-yt-fYT"/>
+                    <tabBarItem key="tabBarItem" tag="2" title="" image="star" catalog="system" id="mWw-yt-fYT"/>
                     <navigationItem key="navigationItem" id="nG6-Io-NS3"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Tld-mi-ln0">
@@ -128,7 +128,7 @@
         <scene sceneID="azo-Hq-ljV">
             <objects>
                 <navigationController id="TA4-dx-3gb" userLabel="Navigation Search Controller" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="magnifyingglass" catalog="system" id="mKy-7l-coo"/>
+                    <tabBarItem key="tabBarItem" tag="4" title="" image="magnifyingglass" catalog="system" id="mKy-7l-coo"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="G2y-l1-hxr">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -145,7 +145,7 @@
         <!--Main View Controller-->
         <scene sceneID="7Yk-xF-DhL">
             <objects>
-                <tabBarController id="Hlv-96-eeZ" customClass="MainViewController" customModule="SBS" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="MainID" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Hlv-96-eeZ" customClass="MainViewController" customModule="SBS" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="OPK-3d-b6N"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="nQ7-C4-GLB">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
@@ -169,7 +169,7 @@
         <scene sceneID="hJY-Sg-a3G">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="u0H-Iy-AFR" userLabel="Navigation Search Controller" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="plus" catalog="system" id="lBv-gl-CgX"/>
+                    <tabBarItem key="tabBarItem" tag="3" title="" image="plus" catalog="system" id="lBv-gl-CgX"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Qfg-QR-VLV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -185,7 +185,7 @@
         <scene sceneID="P3p-Me-hW5">
             <objects>
                 <navigationController id="bVe-9w-pZv" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="person.crop.square.fill" catalog="system" id="HTs-If-SYg"/>
+                    <tabBarItem key="tabBarItem" tag="5" title="" image="person.crop.square.fill" catalog="system" id="HTs-If-SYg"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" hidden="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="8RT-oe-AZi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>

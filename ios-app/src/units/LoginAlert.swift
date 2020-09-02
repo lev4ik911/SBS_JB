@@ -26,3 +26,44 @@ class LoginAlert {
         controller.present(alert, animated:true, completion: nil)
     }
 }
+
+class DeclineStepAlert {
+    static func show(controller: UIViewController){
+        let ttl = "Cancel step"
+        let msg = "Are you sure?"
+        let alert = UIAlertController(title: ttl, message: msg, preferredStyle: UIAlertController.Style.alert )
+
+        let save = UIAlertAction(title: "Yes", style: .default) { (alertAction) in
+            controller.dismiss(animated: true, completion: nil)
+        }
+        let cancel = UIAlertAction(title: "No", style: .default) { (alertAction) in }
+
+        alert.addAction(save)
+        alert.addAction(cancel)
+
+        controller.present(alert, animated:true, completion: nil)
+    }
+}
+
+class DeclineInstructionAlert {
+    static func show(controller: UIViewController){
+        let ttl = "Cancel instruction"
+        let msg = "Are you sure?"
+        let alert = UIAlertController(title: ttl, message: msg, preferredStyle: UIAlertController.Style.alert )
+
+        let save = UIAlertAction(title: "Yes", style: .default) { (alertAction) in
+            //show main storyboard
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "MainID") as UIViewController
+            
+            controller.dismiss(animated: true, completion: nil)
+            //controller.prepare(vc, animated: true, completion: nil)
+        }
+        let cancel = UIAlertAction(title: "No", style: .default) { (alertAction) in }
+
+        alert.addAction(save)
+        alert.addAction(cancel)
+
+        controller.present(alert, animated:true, completion: nil)
+    }
+}

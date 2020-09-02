@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainViewController.swift
 //  ios-app
 //
 //  Created by ECL User on 6/5/20.
@@ -12,61 +12,71 @@ import MultiPlatformLibrary
 
 class MainViewController : UITabBarController {
     
-    var vm : GuidelineListViewModelShared!
-
-    @IBOutlet var mainTabBar: UITabBar!
+    var settings : LocalSettings!
     
+    @IBOutlet var mainTabBar: UITabBar!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        settings = LocalSettings(settings: AppleSettings(delegate: UserDefaults.standard))
         /*
-        vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
-           eventsDispatcher: EventsDispatcher(listener: self))
-        vm.loadInstructions(forceRefresh: false)
-        
-        // binding methods from https://github.com/icerockdev/moko-mvvm
-        //activityIndicator.bindVisibility(liveData: vm.state.isLoadingState())
-        //tableView.bindVisibility(liveData: vm.state.isSuccessState())
-        //emptyView.bindVisibility(liveData: vm.state.isEmptyState())
-        //errorView.bindVisibility(liveData: vm.state.isErrorState())
-
-        // in/out generics of Kotlin removed in swift, so we should map to valid class
-        //let errorText: LiveData<StringDesc> = viewModel.state.error().map { $0 as? StringDesc ?? StringDesc.Raw(string: "") } as! LiveData<StringDesc>
-        //errorLabel.bindText(liveData: errorText)
-
-        // datasource from https://github.com/icerockdev/moko-units
-        //dataSource = TableUnitsSourceKt.default(for: tableView)
-        
-        
-        //vm.instructions.addObserver{[weak self] itemsObject in
-        //guard let items = itemsObject as? [Guideline] else { return }
-        //self?.dataSource.unitItems = items
-        //self?.tableView.reloadData()
-            
-        ///}
+        if (settings.accessToken.isEmpty){
+            print("hide")
+            hideTabBarItems()
+        }
+        else{
+            print("show")
+            showTabBarItems()
+        }
         */
     }
     
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-    }
-    
-    @IBAction func onRetryPressed() {
-        //vm.onRetryPressed()
-    }
-    
-    @objc func onRefresh() {
-        /*vm.onRefresh { [weak self] in
-            self?.refreshControl.endRefreshing()
-        }*/
-    }
-    
-}
-
-extension MainViewController: GuidelineListViewModelSharedEventsListener {
-    func showToast(msg: ToastMessage) {
+        print(settings.accessToken)
         
     }
     
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        print(settings.accessToken)
+        switch item.tag {
+        case 1:
+            //Home view
+            print("Home pressed")
+        case 2:
+            // Favorites view
+            print("Favorites pressed")
+            if settings.accessToken.isEmpty {
+                self.tabBarController?.selectedIndex = 1
+                LoginAlert.show(controller: self, mainTabBarcontroller: self)
+            }
+        case 3:
+            //Add new
+            print("Add new pressed")
+            //TODO: route to another storyboard
+            if settings.accessToken.isEmpty{
+                self.tabBarController?.selectedIndex = 1
+                LoginAlert.show(controller: self, mainTabBarcontroller: self)
+            }
+            let storyboard = UIStoryboard(name: "AddEvent", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "AddEventID") as UIViewController
+            present(vc, animated: true, completion: nil)
+        case 4:
+            print("Search pressed")
+        case 5:
+            print("User pressed")
+        default:
+            print("default")
+        }
+    }
+    
+    func showTabBarItems(){
+        
+    }
+    
+    func hideTabBarItems(){
+        var items = tabBarController?.toolbarItems
+        items?.remove(at: 2)
+    }
 }
