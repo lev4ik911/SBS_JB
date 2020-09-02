@@ -58,6 +58,8 @@ class ProfileViewModel(
             if (it.id.isNotEmpty()) {
                 isMyProfile.value = it.id == localStorage.userId
                 isFavorite.value = !isMyProfile.value
+                email.value = it.email
+                fullName.value = it.name
                 loadUserGuidelines(false)
             }
         }
