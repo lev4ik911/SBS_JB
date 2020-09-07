@@ -522,7 +522,7 @@ class GuidelineActivity :
             title(R.string.title_dialog_feedback)
             input(
                 hint = "Leave feedback",
-                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
             ) { _, text ->
                 result = text.toString()
             }
@@ -542,7 +542,7 @@ class GuidelineActivity :
             title(R.string.title_dialog_feedback)
             input(
                 hint = "Leave feedback",
-                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
             ) { _, text ->
                 result = text.toString()
             }
