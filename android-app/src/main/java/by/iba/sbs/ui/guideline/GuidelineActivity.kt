@@ -7,7 +7,6 @@ import android.content.ContextWrapper
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.*
 import android.preference.PreferenceManager
@@ -34,20 +33,17 @@ import by.iba.sbs.adapters.BaseBindingAdapter
 import by.iba.sbs.databinding.InstructionActivityBinding
 import by.iba.sbs.databinding.StepPreviewItemBinding
 import by.iba.sbs.databinding.StepPreviewLayoutBinding
+import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.Step
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.model.request.RatingCreate
 import by.iba.sbs.library.viewmodel.GuidelineViewModel
+import by.iba.sbs.tools.DownloadManager
 import by.iba.sbs.tools.Tools
+import by.iba.sbs.tools.copyTo
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
 import com.afollestad.materialdialogs.lifecycle.lifecycleOwner
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.russhwolf.settings.AndroidSettings
 import com.yalantis.ucrop.UCrop
 import dev.icerock.moko.mvvm.MvvmEventsActivity
@@ -56,7 +52,6 @@ import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.UnstableDefault
 import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 
 
@@ -206,7 +201,7 @@ class GuidelineActivity :
                         if (isStepEditing) _editStep.imagePath else viewModel.guideline.value.imagePath
                     if (path.isNotEmpty()) {
                         val sourcePath = Uri.fromFile(File(path))
-                        val destinationUri = createTempImageFileInInternalStorage()
+                        val destinationUri = createImageFileInInternalStorage()
                         UCrop.of(sourcePath, destinationUri)
                             .withAspectRatio(16f, 9f)
                             .start(this@GuidelineActivity)
@@ -259,10 +254,14 @@ class GuidelineActivity :
                     if (resultUri != null && resultUri!!.path.isNotEmpty()) {
                         if (isStepEditing) {
                             _editStep.imagePath = resultUri!!.path
+                            _editStep.updateImageDateTime = ""
                             viewModel.steps.value = viewModel.steps.value
-                        } else
-                            viewModel.guideline.value.imagePath = resultUri!!.path
-                        viewModel.guideline.value = viewModel.guideline.value
+                        } else {
+                            val guideline = viewModel.guideline.value
+                            guideline.imagePath = resultUri!!.path
+                            guideline.updateImageDateTime = ""
+                            viewModel.guideline.value = viewModel.guideline.value
+                        }
                     }
                 } else if (resultCode == UCrop.RESULT_ERROR) {
                     val toast = Toast.makeText(
@@ -279,9 +278,9 @@ class GuidelineActivity :
                     //TODO("Add offer cut image by default" )
                     try {
                         val sourceUri = data.data as Uri
-                        val destinationUri = createTempImageFileInInternalStorage()
+                        val destinationUri = createImageFileInInternalStorage()
                         UCrop.of(sourceUri, destinationUri)
-                            .withAspectRatio(1f, 1f)
+                            .withAspectRatio(16f, 9f)
                             .start(this)
                     } catch (ex: Exception) {
                         val toast = Toast.makeText(
@@ -299,7 +298,7 @@ class GuidelineActivity :
                     //TODO("Add offer cut image by default" )
                     try {
                         val photoUri = Uri.parse(absolutePhotoPath)
-                        val destinationUri = createTempImageFileInInternalStorage()
+                        val destinationUri = createImageFileInInternalStorage()
                         UCrop.of(photoUri, destinationUri)
                             .withAspectRatio(16f, 9f)
                             .start(this)
@@ -316,18 +315,10 @@ class GuidelineActivity :
         }
     }
 
-    private fun createTempImageFileInInternalStorage(): Uri {
-        val imageFileName = UUID.randomUUID().toString()
-        val cw = ContextWrapper(applicationContext)
-        val directory = cw.getDir("imageDir", Context.MODE_PRIVATE)
-
-        if (!directory.exists())
-            directory.mkdirs()
-
-        val file = File.createTempFile(
-            imageFileName, ".jpg", directory
-        )
-        return Uri.fromFile(file)
+    private fun createImageFileInInternalStorage(guidelineId: String="", stepId: String = "", remoteImageId: String=""): Uri {
+         DownloadManager(applicationContext).apply {
+             return this.createImageFileInInternalStorage(guidelineId, stepId, remoteImageId)
+        }
     }
 
     // if we select "Take photo", photo also will be saved in DCIM
@@ -462,6 +453,14 @@ class GuidelineActivity :
                 bindingPopup!!.rvSteps.scrollToPosition(step.weight - 1)
             }
             mPopupWindow.showAtLocation(binding.container, Gravity.CENTER, 0, 0)
+
+            viewModel.updatedStepId.addObserver {
+                stepsAdapter.itemsList.indexOfFirst { step -> step.stepId == it }.apply {
+                    if (this != -1)
+                        stepsAdapter.notifyItemChanged(this)
+                }
+            }
+
         }
 
     }
@@ -523,7 +522,7 @@ class GuidelineActivity :
             title(R.string.title_dialog_feedback)
             input(
                 hint = "Leave feedback",
-                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
             ) { _, text ->
                 result = text.toString()
             }
@@ -543,7 +542,7 @@ class GuidelineActivity :
             title(R.string.title_dialog_feedback)
             input(
                 hint = "Leave feedback",
-                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_WORDS
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE
             ) { _, text ->
                 result = text.toString()
             }
@@ -580,45 +579,6 @@ class GuidelineActivity :
         dialog.show()
     }
 
-    override fun onLoadImageFromAPI(step: Step) {
-        Glide.with(this)
-            .asBitmap()
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
-            .load("https://avatars.mds.yandex.net/get-pdb/1911901/744af759-4eca-4050-8582-b8211e14a1e2/s1200")
-            .listener(object : RequestListener<Bitmap> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Bitmap>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    //TODO("add handler")
-                    return false
-                }
-
-                override fun onResourceReady(
-                    resource: Bitmap?,
-                    model: Any?,
-                    target: Target<Bitmap>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-
-                    val destFile = File(createTempImageFileInInternalStorage().path.orEmpty())
-                    val fos = FileOutputStream(destFile)
-                    resource?.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-                    step.imagePath = destFile.path
-                    Message().apply {
-                        this.obj = step.stepId
-                        imageHandler.sendMessage(this)
-                    }
-                    return false
-                }
-            })
-            .submit()
-
-    }
 
     override fun showToast(msg: ToastMessage) {
         Tools.showToast(this, viewModelClass.name, msg)
@@ -639,9 +599,105 @@ class GuidelineActivity :
         dialog.show()
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun loadImage(url: String,
+                           guidelineId: String,
+                           stepId: String,
+                           remoteImageId: String,
+                           source: Any) {
+        DownloadManager(applicationContext).apply {
+            this.downloadImage(url,
+                guidelineId =  guidelineId,
+                stepId = stepId,
+                remoteImageId = remoteImageId,
+                item = source,
+                imageHandler =  imageHandler)
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun getGuidelineImageData() {
+        File(viewModel.guideline.value.imagePath).apply {
+            viewModel.uploadGuidelineImage(this.readBytes())
+        }
+    }
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun getStepImageData(step: Step) {
+        File(step.imagePath).apply {
+            viewModel.uploadStepImage(step, this.readBytes())
+        }
+    }
+
+    override fun deleteImagesOnDevice(guidelineId: String, stepId: String) {
+        ContextWrapper(applicationContext).apply {
+            val builder = StringBuilder()
+            builder.append(this.getDir("imageDir", Context.MODE_PRIVATE).path )
+            if (guidelineId.isNotEmpty()) {
+                builder.append("/")
+                    .append(guidelineId)
+            }
+            if (stepId.isNotEmpty()) {
+                builder.append("/")
+                    .append(stepId)
+            }
+            deleteFileFolderRecursive(File(builder.toString()))
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun transferTempImage(
+        localPath: String,
+        guidelineId: String,
+        stepId: String,
+        remoteImageId: String,
+        source: Any
+    ) {
+        val file = File(localPath)
+        val newLocalPath = createImageFileInInternalStorage(guidelineId, stepId, remoteImageId).path
+        file.copyTo(File(newLocalPath))
+        when (source) {
+            is Guideline -> {
+                source.imagePath = newLocalPath
+                viewModel.saveGuidelinePreviewImageInLocalDB(source)
+            }
+            is Step -> {
+                source.imagePath = newLocalPath
+                viewModel.saveStepPreviewImageInLocalDB(source)
+            }
+            else -> {}
+        }
+        deleteFileFolderRecursive(file)
+    }
+
+    private fun deleteFileFolderRecursive(fileOrDirectory: File) {
+        if (fileOrDirectory.isDirectory)
+            for (child in fileOrDirectory.listFiles())
+                deleteFileFolderRecursive(child)
+        fileOrDirectory.delete()
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     private val imageHandler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(msg: Message) {
-            viewModel.updatedStepId.value = msg.obj as String
+            when (msg.obj) {
+                is Guideline -> {
+                    val guideline = msg.obj as Guideline
+                    viewModel.guideline.value = guideline
+                    viewModel.saveGuidelinePreviewImageInLocalDB(guideline)
+                }
+                is Step -> {
+                    val step = msg.obj as Step
+                    viewModel.updatedStepId.value = step.stepId
+                    viewModel.saveStepPreviewImageInLocalDB(step)
+                }
+                else -> {}
+            }
+
             super.handleMessage(msg)
         }
     }

@@ -41,7 +41,7 @@
                     android:layout_gravity="center">
 
                     <ImageView
-                        android:id="@+id/iv_preview"
+                        android:id="@+id/iv_step_preview"
                         android:layout_width="@dimen/list_image_size"
                         android:layout_height="@dimen/list_image_size"
                         android:scaleType="centerCrop"

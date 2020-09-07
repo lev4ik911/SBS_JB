@@ -1,0 +1,71 @@
+CREATE TABLE images (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    guidelineId TEXT NOT NULL DEFAULT "",
+    stepId TEXT NOT NULL DEFAULT "",
+    localImagePath TEXT NOT NULL DEFAULT "",
+    remoteImageId TEXT NOT NULL DEFAULT "",
+    updateImageDateTime TEXT NOT NULL DEFAULT ""
+);
+insertGuidelineImage:
+INSERT INTO images (guidelineId, localImagePath, remoteImageId, updateImageDateTime)
+VALUES ( ?,  ?,  ?,  ?);
+
+insertStepImage:
+INSERT INTO images (guidelineId, stepId, localImagePath, remoteImageId, updateImageDateTime)
+VALUES ( ?, ?,  ?,  ?,  ?);
+
+updateImageById:
+UPDATE images
+SET localImagePath = ?,
+    remoteImageId = ?,
+    updateImageDateTime = ?
+WHERE id = ?;
+
+--select last image in list
+selectImageForGuideline:
+SELECT *
+FROM images
+WHERE guidelineId = ?
+AND stepId = ''
+ORDER BY id DESC
+LIMIT 1;
+
+--select last image in list
+selectImageForStep:
+SELECT *
+FROM images
+WHERE stepId = ?
+ORDER BY id DESC
+LIMIT 1;
+
+selectAllImagesForGuideline:
+SELECT im.*
+FROM images AS im,
+    (SELECT MAX (id) AS id, guidelineId, stepId
+    FROM images
+    WHERE guidelineId = ?
+    GROUP BY id) AS maxgroup
+WHERE im.id = maxgroup.id;
+
+selectImagesForGuidelines:
+SELECT im.*
+FROM images AS im,
+    (SELECT MAX (id) AS id, guidelineId
+    FROM images
+    WHERE stepId = ''
+    GROUP BY id) AS maxgroup
+WHERE im.id = maxgroup.id;
+
+deleteStepImages:
+DELETE
+FROM images
+WHERE guidelineId = ?
+AND stepId = ?;
+
+deleteGuidelineImages:
+DELETE
+FROM images
+WHERE guidelineId = ?;
+
+
+

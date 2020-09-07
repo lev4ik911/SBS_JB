@@ -2,6 +2,9 @@ package by.iba.sbs.ui.dashboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuInflater
@@ -25,6 +28,7 @@ import by.iba.sbs.library.model.Guideline
 import by.iba.sbs.library.model.ToastMessage
 import by.iba.sbs.library.service.LocalSettings
 import by.iba.sbs.library.viewmodel.DashboardViewModelShared
+import by.iba.sbs.tools.DownloadManager
 import by.iba.sbs.tools.Tools
 import by.iba.sbs.ui.MainActivity
 import by.iba.sbs.ui.MainViewModel
@@ -156,6 +160,23 @@ class DashboardFragment :
             viewModel.loadFavorites(true, 3)
             viewModel.loadPopular(true, 3)
         }
+
+        viewModel.updatedGuidelineId.addObserver {
+            recommendedAdapter.itemsList.indexOfFirst { guideline -> guideline.id == it }.apply {
+                if (this != -1)
+                    recommendedAdapter.notifyItemChanged(this)
+            }
+            favoritesAdapter.itemsList.indexOfFirst { guideline -> guideline.id == it }.apply {
+                if (this != -1) {
+                    favoritesAdapter.notifyItemChanged(this)
+                }
+            }
+            popularAdapter.itemsList.indexOfFirst { guideline -> guideline.id == it }.apply {
+                if (this != -1)
+                    popularAdapter.notifyItemChanged(this)
+            }
+        }
+
     }
 
     @UnstableDefault
@@ -211,6 +232,29 @@ class DashboardFragment :
         viewModel.loadRecommended(forceRefresh, 4)
         viewModel.loadFavorites(forceRefresh, 3)
         viewModel.loadPopular(forceRefresh, 3)
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun loadImage(url: String, guideline: Guideline) {
+       DownloadManager(requireContext()).apply {
+           this.downloadImage(url,
+                               guideline.id,
+                               remoteImageId =  guideline.remoteImageId,
+                               item = guideline,
+                               imageHandler =  imageHandler)
+       }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    private val imageHandler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            val guideline = msg.obj as Guideline
+            viewModel.updatedGuidelineId.value = guideline.id
+            viewModel.saveGuidelinePreviewImageInLocalDB(guideline)
+            super.handleMessage(msg)
+        }
     }
 
     override fun onResume() {

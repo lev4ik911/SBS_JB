@@ -27,7 +27,7 @@ fun ImageView.imageFromPath(imagePath: String) {
         val imageUri = Uri.fromFile(File(imagePath))
         this.setImageURI(imageUri)
     } else {
-        this.setImageResource(R.drawable.clouds)
+        this.setImageResource(R.drawable.no_image)
     }
 }
 

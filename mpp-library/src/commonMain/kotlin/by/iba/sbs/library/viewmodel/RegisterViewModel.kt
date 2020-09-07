@@ -68,6 +68,12 @@ class RegisterViewModel(
                             localStorage.userId = it.id
                             eventsDispatcher.dispatchEvent { routeToLoginScreen() }
                         }
+                    } else {
+                        eventsDispatcher.dispatchEvent {
+                            showToast(
+                                ToastMessage(response.error.toString(), MessageType.CONFUSING)
+                            )
+                        }
                     }
                     loading.postValue(false)
                 } catch (e: Exception) {
