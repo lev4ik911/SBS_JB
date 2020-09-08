@@ -9,5 +9,6 @@ data class GuidelineView(
     var description: String? = "",
     var rating: RatingSummary = RatingSummary(),
     var activity: ActionSummary = ActionSummary(),
+    var favourited: Int = 0,
     var preview: FileView? = null
 )
