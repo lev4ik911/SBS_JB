@@ -2,25 +2,37 @@ CREATE TABLE guidelines (
     id TEXT NOT NULL UNIQUE PRIMARY KEY,
     name TEXT NOT NULL DEFAULT "",
     description TEXT NOT NULL DEFAULT "",
+    favourited INTEGER DEFAULT 0,
     authorId TEXT NOT NULL DEFAULT "",
     author TEXT NOT NULL DEFAULT "",
     remoteImageId TEXT NOT NULL DEFAULT "",
     updateImageDateTime TEXT NOT NULL DEFAULT ""
 );
 insertGuideline:
-INSERT OR REPLACE INTO guidelines (id, name, description, authorId, author, remoteImageId, updateImageDateTime)
-VALUES (?, ?, ?, ?, ?, ?, ?);
+INSERT OR REPLACE INTO guidelines (id, name, description, favourited, authorId, author, remoteImageId, updateImageDateTime)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
 
 selectAllGuidelines:
 SELECT *
 FROM guidelines
 ORDER BY name;
 
+selectPopularGuidelines:
+SELECT *
+FROM guidelines
+ORDER BY favourited DESC
+LIMIT 10;
+
 selectGuidelineById:
 SELECT * FROM guidelines WHERE id = ?;
 
 selectGuidelinesByAuthorId:
 SELECT * FROM guidelines WHERE authorId = ?;
+
+updateGuidelineFavourited:
+UPDATE guidelines
+SET favourited = ?
+WHERE id = ?;
 
 deleteGuidelineById:
 DELETE FROM guidelines WHERE id = ?;

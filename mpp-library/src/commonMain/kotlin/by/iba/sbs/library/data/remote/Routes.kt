@@ -19,6 +19,7 @@ object Routes {
 
     object Guidelines {
         const val URL_GUIDELINES = "$baseRoute/$version/guidelines"
+        const val URL_GUIDELINES_POPULAR = "$baseRoute/$version/guidelines/popular"
         const val URL_GUIDELINE_DETAILS = "$baseRoute/$version/guidelines/%s"
         const val URL_GUIDELINE_STEPS = "$baseRoute/$version/guidelines/%s/steps"
         const val URL_GUIDELINE_STEPS_BATCHING = "$baseRoute/$version/guidelines/%s/steps/batching"

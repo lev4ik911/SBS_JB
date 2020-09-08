@@ -126,6 +126,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                         it.id,
                         it.name,
                         it.descr,
+                        it.favourited.toLong(),
                         it.authorId,
                         it.author,
                         it.remoteImageId,
@@ -153,7 +154,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                             .firstOrNull { rating -> rating.id == it.id }
                         if (rating != null) {
                             Guideline(
-                                it.id, it.name, it.description,
+                                it.id, it.name, it.description, it.favourited!!.toInt(),
                                 author = it.author,
                                 authorId = it.authorId,
                                 rating = RatingSummary(
@@ -169,6 +170,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                             Guideline(it.id,
                                 it.name,
                                 it.description,
+                                it.favourited!!.toInt(),
                                 it.author,
                                 it.authorId,
                                 imagePath = imagesCache.firstOrNull{im->im.guidelineId == it.id}?.localImagePath.orEmpty(),
@@ -189,6 +191,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                                 item.id,
                                 item.name,
                                 item.description ?: "",
+                                item.favourited,
                                 rating = item.rating,
                                 authorId = item.activity.createdBy.id,
                                 author = item.activity.createdBy.name,

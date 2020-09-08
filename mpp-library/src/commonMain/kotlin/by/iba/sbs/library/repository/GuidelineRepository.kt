@@ -53,9 +53,9 @@ interface IGuidelineRepository {
     suspend fun getSuggestions(searchText: String): List<String>
     suspend fun getFilteredGuidelines(searchText: String): List<Guideline>
     @UnstableDefault
-    suspend fun addGuidelineToFavorite(guidelineId: String): Response<FavoriteView>
+    suspend fun addGuidelineToFavorite(guidelineId: String, favorited: Int): Response<FavoriteView>
     @UnstableDefault
-    suspend fun removeGuidelineFromFavorite(guidelineId: String): Response<String?>
+    suspend fun removeGuidelineFromFavorite(guidelineId: String, favorited: Int): Response<String?>
     @UnstableDefault
     suspend fun clearFavorites()
 
@@ -75,6 +75,9 @@ interface IGuidelineRepository {
         step: Step,
         data: ByteArray
     ): Response<FileView>
+
+    @UnstableDefault
+    suspend fun getPopularGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>>
 }
 
 @ImplicitReflectionSerializer
@@ -115,6 +118,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         it.id,
                         it.name,
                         it.descr,
+                        it.favourited.toLong(),
                         it.authorId,
                         it.author,
                         it.remoteImageId,
@@ -140,7 +144,10 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
                     if (rating != null) {
                         Guideline(
-                            it.id, it.name, it.description,
+                            it.id,
+                            it.name,
+                            it.description,
+                            it.favourited!!.toInt(),
                             authorId = it.authorId,
                             author = it.author,
                             isFavorite = favorites.any { fav -> fav == it.id },
@@ -157,6 +164,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         Guideline(it.id,
                             it.name,
                             it.description,
+                            it.favourited!!.toInt(),
                             it.authorId,
                             it.author,
                             imagePath = imagesCache.firstOrNull{im->im.guidelineId == it.id}?.localImagePath .orEmpty(),
@@ -177,6 +185,108 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                                 item.id,
                                 item.name,
                                 item.description ?: "",
+                                item.favourited,
+                                rating = item.rating,
+                                authorId = item.activity.createdBy.id,
+                                author = item.activity.createdBy.name,
+                                isFavorite = favorites.any { fav -> fav == item.id },
+                                imagePath = imagesCache.firstOrNull{im->im.guidelineId == item.id}?.localImagePath.orEmpty(),
+                                remoteImageId = item.preview?.id ?: "",
+                                updateImageDateTime = item.preview?.activity?.updatedAt ?: ""
+                            )
+                        }
+                    } else {
+                        if (result.status == Response.Status.ERROR) error(result.error!!)
+                        loadFromDb()
+                    }
+                }
+            }
+
+        }.build()
+            .asLiveData()
+    }
+
+    @UnstableDefault
+    override suspend fun getPopularGuidelines(forceRefresh: Boolean): LiveData<Response<List<Guideline>>> {
+
+        val favorites = favoritesQueries.selectAllGuidelinesIdFromFavorites().executeAsList()
+        val imagesCache = imagesQueries.selectImagesForGuidelines().executeAsList()
+        return object : NetworkBoundResource<List<Guideline>, List<Guideline>>() {
+            override fun processResponse(response: List<Guideline>): List<Guideline> = response
+
+            override suspend fun saveCallResults(data: List<Guideline>) = coroutineScope {
+                data.forEach {
+                    guidelinesQueries.insertGuideline(
+                        it.id,
+                        it.name,
+                        it.descr,
+                        it.favourited.toLong(),
+                        it.authorId,
+                        it.author,
+                        it.remoteImageId,
+                        it.updateImageDateTime
+                    )
+                    it.rating.apply {
+                        ratingSummaryQueries.insertRating(
+                            it.id,
+                            positive.toLong(),
+                            negative.toLong(),
+                            overall.toLong()
+                        )
+                    }
+                }
+            }
+
+            override fun shouldFetch(data: List<Guideline>?): Boolean =
+                data == null || data.isEmpty() || forceRefresh
+
+            override suspend fun loadFromDb(): List<Guideline> = coroutineScope {
+                val ratingSummaryCache = ratingSummaryQueries.selectAllRatings().executeAsList()
+                return@coroutineScope guidelinesQueries.selectPopularGuidelines().executeAsList().map {
+                    val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
+                    if (rating != null) {
+                        Guideline(
+                            it.id,
+                            it.name,
+                            it.description,
+                            it.favourited!!.toInt(),
+                            authorId = it.authorId,
+                            author = it.author,
+                            isFavorite = favorites.any { fav -> fav == it.id },
+                            rating = RatingSummary(
+                                rating.positive!!.toInt(),
+                                rating.negative!!.toInt(),
+                                rating.overall!!.toInt()
+                            ),
+                            imagePath = imagesCache.firstOrNull{im->im.guidelineId == it.id}?.localImagePath.orEmpty(),
+                            remoteImageId = it.remoteImageId,
+                            updateImageDateTime = it.updateImageDateTime
+                        )
+                    } else {
+                        Guideline(it.id,
+                            it.name,
+                            it.description,
+                            it.favourited!!.toInt(),
+                            it.authorId,
+                            it.author,
+                            imagePath = imagesCache.firstOrNull{im->im.guidelineId == it.id}?.localImagePath .orEmpty(),
+                            remoteImageId = it.remoteImageId,
+                            updateImageDateTime = it.updateImageDateTime
+                        )
+                    }
+                }
+            }
+
+            override fun createCallAsync(): Deferred<List<Guideline>> {
+                return GlobalScope.async(applicationDispatcher) {
+                    val result = guidelines.getPopularGuidelines()
+                    if (result.isSuccess) {
+                        result.data!!.map { item ->
+                            Guideline(
+                                item.id,
+                                item.name,
+                                item.description ?: "",
+                                item.favourited,
                                 rating = item.rating,
                                 authorId = item.activity.createdBy.id,
                                 author = item.activity.createdBy.name,
@@ -220,6 +330,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     data.id,
                     data.name,
                     data.descr,
+                    data.favourited.toLong(),
                     data.authorId,
                     data.author,
                     data.remoteImageId,
@@ -238,7 +349,10 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 if (item != null) {
                     if (ratingSummary != null) {
                         Guideline(
-                            item.id, item.name, item.description,
+                            item.id,
+                            item.name,
+                            item.description,
+                            item.favourited!!.toInt(),
                             authorId = item.authorId,
                             author = item.author,
                             isFavorite = favorite != null,
@@ -254,7 +368,10 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         )
                     } else {
                         Guideline(
-                            item.id, item.name, item.description,
+                            item.id,
+                            item.name,
+                            item.description,
+                            item.favourited!!.toInt(),
                             authorId = item.authorId,
                             author = item.author,
                             imagePath = imagesCashe?.localImagePath.orEmpty(),
@@ -275,6 +392,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                             item.id,
                             item.name,
                             item.description!!,
+                            item.favourited,
                             authorId = item.activity.createdBy.id,
                             author = item.activity.createdBy.name,
                             isFavorite = favorite != null,
@@ -383,6 +501,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     item.id,
                     item.name,
                     item.description ?: "",
+                    item.favourited.toLong(),
                     item.activity.createdBy.id,
                     item.activity.createdBy.name,
                     remoteImageId = item.preview?.id.orEmpty(),
@@ -412,6 +531,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     item.id,
                     item.name,
                     item.description ?: "",
+                    item.favourited.toLong(),
                     item.activity.createdBy.id,
                     item.activity.createdBy.name,
                     remoteImageId = item.preview?.id.orEmpty(),
@@ -671,7 +791,10 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                     val rating = ratingSummaryCache.firstOrNull { rating -> rating.id == it.id }
                     if (rating != null) {
                         Guideline(
-                            it.id, it.name, it.description,
+                            it.id,
+                            it.name,
+                            it.description,
+                            it.favourited!!.toInt(),
                             author = it.author,
                             authorId = it.authorId,
                             isFavorite = favorites.any { fav -> fav == it.id },
@@ -688,6 +811,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                         Guideline(it.id,
                             it.name,
                             it.description,
+                            it.favourited!!.toInt(),
                             it.author,
                             it.authorId,
                             imagePath = imagesCache.firstOrNull{im->im.guidelineId == it.id}?.localImagePath.orEmpty(),
@@ -701,13 +825,15 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
 
     @UnstableDefault
     override suspend fun addGuidelineToFavorite(
-        guidelineId: String
+        guidelineId: String,
+        favorited: Int
     ): Response<FavoriteView> =
         coroutineScope {
             val result = favorites.postFavorite(guidelineId)
             if (result.isSuccess) {
                 val item = result.data!!
                 favoritesQueries.addGuidelineToFavorites(item.id, item.entity.type, item.entity.id)
+                guidelinesQueries.updateGuidelineFavourited(favorited.plus(1).toLong(), guidelineId)
             } else {
                 if (result.status == Response.Status.ERROR) error(result.error!!)
             }
@@ -716,7 +842,8 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
 
     @UnstableDefault
     override suspend fun removeGuidelineFromFavorite(
-        guidelineId: String
+        guidelineId: String,
+        favorited: Int
     ): Response<String?> =
         coroutineScope {
             var result: Response<String?>
@@ -724,6 +851,7 @@ class GuidelineRepository @UnstableDefault constructor(val settings: LocalSettin
                 result = favorites.deleteFavorite(guidelineId, this)
                 if (result.isSuccess) {
                     favoritesQueries.removeGuidelineFromFavoritesById(this)
+                    guidelinesQueries.updateGuidelineFavourited(favorited.minus(1).toLong(), guidelineId)
                 } else {
                     if (result.status == Response.Status.ERROR) error(result.error!!)
                 }

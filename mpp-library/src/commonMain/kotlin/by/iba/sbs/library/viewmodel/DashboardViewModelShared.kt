@@ -68,7 +68,7 @@ class DashboardViewModelShared(
     }
     val favorite = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
         val mData = ArrayList<Guideline>()
-        mData.add(Guideline("1", "Loading guidelines...", "Loading...", "Dobry"))
+        mData.add(Guideline("1", "Loading guidelines...", "Loading...", 0, "Dobry"))
         value = mData
     }
     val popular = MutableLiveData<List<Guideline>>(mutableListOf()).apply {
@@ -196,7 +196,7 @@ class DashboardViewModelShared(
         loading.value = true
         viewModelScope.launch {
             try {
-                val guidelinesLiveData = repository.getAllGuidelines(forceRefresh)
+                val guidelinesLiveData = repository.getPopularGuidelines(forceRefresh)
                 guidelinesLiveData.addObserver {
                     if (it.isNotEmpty) {
                         if (it.error != null) {
@@ -210,12 +210,10 @@ class DashboardViewModelShared(
                         popular.value = (
                             if (itemsCount == -1)
                                 guidelines
-                                    .sortedBy { item -> item.id }
                                     .toList()
                             else
                                 guidelines
                                     .take(itemsCount)
-                                    .sortedBy { item -> item.id }
                                     .toList()
                         )
                         checkPreviewImage(popular.value )
