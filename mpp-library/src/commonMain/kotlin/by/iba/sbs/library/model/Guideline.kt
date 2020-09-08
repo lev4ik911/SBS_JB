@@ -13,6 +13,7 @@ data class Guideline(
     var isFavorite: Boolean = false,
     var rating: RatingSummary = RatingSummary(),
     var imagePath: String = "",
+    var favourited: Int = 0,
     var remoteImageId: String = "",
     var updateImageDateTime: String = ""
 //    var steps: MutableList<Step> = mutableListOf(),
