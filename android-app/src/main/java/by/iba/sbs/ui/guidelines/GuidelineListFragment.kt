@@ -269,12 +269,16 @@ class GuidelineListFragment :
     @UnstableDefault
     @ImplicitReflectionSerializer
     override fun loadImage(url: String, guideline: Guideline) {
-        DownloadManager(requireContext()).apply {
-            this.downloadImage(url,
-                                guideline.id,
-                                remoteImageId = guideline.remoteImageId,
-                                item = guideline,
-                                imageHandler =  imageHandler)
+        if (isAdded) {
+            DownloadManager(requireContext()).apply {
+                this.downloadImage(
+                    url,
+                    guideline.id,
+                    remoteImageId = guideline.remoteImageId,
+                    item = guideline,
+                    imageHandler = imageHandler
+                )
+            }
         }
     }
 
