@@ -29,14 +29,6 @@
             android:gravity="top"
             android:padding="@dimen/spacing_xxsmall">
 
-            <TextView
-                android:id="@+id/tv_step_number"
-                style="@style/Text.Main.Bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@id/cards"
-                android:padding="@dimen/spacing_xsmall"
-                android:text="@{@string/caption_step(step.weight, viewmodel.steps.ld.size)}" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cards"
@@ -50,46 +42,65 @@
                 android:padding="@dimen/spacing_small"
                 app:cardCornerRadius="@dimen/corner_radius">
 
-                <ImageButton
-                    android:id="@+id/btn_previous"
-                    visibleOrGone="@{step.weight!=1}"
-                    android:onClick="@{()-> viewmodel.onPreviewStepPreviousClick(step)}"
-                    style="@style/Widget.AppCompat.ActionButton.Overflow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:background="@drawable/selector_list_item"
-                    android:src="@drawable/chevron_left"
-                    android:tint="@color/textColorSecondary"
-                    tools:ignore="ContentDescription" />
-
-                <ImageButton
-                    android:id="@+id/btn_next"
-                    visibleOrGone="@{step.weight != viewmodel.steps.ld.size()}"
-                    android:onClick="@{()-> viewmodel.onPreviewStepNextClick(step)}"
-                    style="@style/Widget.AppCompat.ActionButton.Overflow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:background="@drawable/selector_list_item"
-                    android:src="@drawable/chevron_right"
-                    android:tint="@color/textColorSecondary"
-                    tools:ignore="ContentDescription" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/spacing_small"
+                    android:layout_marginHorizontal="@dimen/spacing_xsmall"
                     android:layout_marginBottom="@dimen/spacing_small"
                     android:orientation="vertical">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageButton
+                            android:id="@+id/btn_previous"
+                            style="@style/Widget.AppCompat.ActionButton.Overflow"
+                            visibleOrNot="@{step.weight!=1}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:background="@drawable/selector_list_item"
+                            android:onClick="@{()-> viewmodel.onPreviewStepPreviousClick(step)}"
+                            android:src="@drawable/chevron_left"
+                            android:tint="@color/textColorSecondary"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/tv_step_number"
+                            style="@style/Text.Main.Bold"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:padding="@dimen/spacing_xsmall"
+                            android:text="@{@string/caption_step(step.weight, viewmodel.steps.ld.size)}"
+                            android:textAlignment="center" />
+
+                        <ImageButton
+                            android:id="@+id/btn_next"
+                            style="@style/Widget.AppCompat.ActionButton.Overflow"
+                            visibleOrNot="@{step.weight != viewmodel.steps.ld.size()}"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:background="@drawable/selector_list_item"
+                            android:onClick="@{()-> viewmodel.onPreviewStepNextClick(step)}"
+                            android:src="@drawable/chevron_right"
+                            android:tint="@color/textColorSecondary"
+                            tools:ignore="ContentDescription" />
+                    </LinearLayout>
+
                     <ImageView
                         android:id="@+id/iv_step_image"
-                        android:layout_width="@dimen/preview_image_width_land"
+                        imageFromPath="@{ step.imagePath }"
+                        visibleOrGone="@{step.imagePath.length() !=0}"
+                        android:layout_width="match_parent"
                         android:layout_height="@dimen/preview_image_height_land"
                         android:layout_gravity="center"
-                        android:layout_margin="@dimen/spacing_small"
-                        imageFromPath="@{ step.imagePath }"
+                        android:layout_margin="@dimen/spacing_xxsmall"
+                        android:scaleType="fitCenter"
                         tools:ignore="ContentDescription" />
 
                     <TextView
