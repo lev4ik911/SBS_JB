@@ -37,6 +37,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="@dimen/spacing_xxlarge"
                         android:elevation="@dimen/spacing_xsmall"
+                        android:background="@color/colorBlack10Alpha"
                         android:onClick="@{() -> viewmodel.onEditGuidelineImageClick()}"
                         android:src="@drawable/camera_outline"
                         android:tint="@android:color/white"/>

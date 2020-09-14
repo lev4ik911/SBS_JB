@@ -34,6 +34,8 @@
     <color name="colorLightYellow">#ffdc73</color>
     <color name="colorGold">#ffa500</color>
     <color name="colorLightGreen">#5ac18e</color>
+    <color name="colorBlack10Alpha">#1A000000</color>
+    <color name="colorBlack20Alpha">#33000000</color>
     <array name="array_dot_active">
         <item>@color/colorPrimaryVariant</item>
         <item>@color/colorPrimary</item>
