@@ -22,7 +22,7 @@ import kotlinx.serialization.UnstableDefault
 
 interface IUsersRepository {
     suspend fun addUser(data: User): Response<UserView>
-
+    suspend fun updateUser(data: User): Response<UserView>
     suspend fun getAllUsers(forceRefresh: Boolean): LiveData<Response<List<User>>>
     suspend fun getUserGuidelines(
         userId: String,
@@ -56,7 +56,19 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
 
     @UnstableDefault
     override suspend fun addUser(data: User): Response<UserView> = coroutineScope {
-        val result = users.postUser(UserCreate(data.name, data.email))
+        val result = users.createUser(UserCreate(data.name, data.email))
+        if (result.isSuccess) {
+            val item = result.data!!
+            usersQueries.addUser(item.id, item.name, item.email)
+        } else {
+            if (result.status == Response.Status.ERROR) error(result.error!!)
+        }
+        return@coroutineScope result
+    }
+
+    @UnstableDefault
+    override suspend fun updateUser(data: User): Response<UserView> = coroutineScope {
+        val result = users.updateUser(UserCreate(data.name, data.email))
         if (result.isSuccess) {
             val item = result.data!!
             usersQueries.addUser(item.id, item.name, item.email)
@@ -269,7 +281,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
         return@coroutineScope result
     }
 
-    suspend fun clearCache() {
+    private fun clearCache() {
         usersQueries.deleteAllUsers()
     }
 

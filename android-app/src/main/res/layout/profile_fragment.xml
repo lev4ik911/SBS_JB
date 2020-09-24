@@ -99,7 +99,7 @@
                             android:gravity="center"
 
                             android:padding="@dimen/spacing_xxsmall"
-                            android:text="@{viewmodel.user.ld.name}" />
+                            android:text="@{viewmodel.fullName.ld}" />
 
                         <TextView
                             android:id="@+id/tv_user_email"

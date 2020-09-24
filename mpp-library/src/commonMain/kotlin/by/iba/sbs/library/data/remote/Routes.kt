@@ -12,6 +12,7 @@ object Routes {
 
     object Users {
         const val URL_USERS = "$baseRoute/$version/users"
+        const val URL_USERS_MY = "$baseRoute/$version/users/my"
         const val URL_USER_DETAILS = "$baseRoute/$version/users/%s"
         const val URL_USER_GUIDELINES = "$baseRoute/$version/users/%s/selfs/guidelines"
         const val URL_USER_FAVORITES = "$baseRoute/$version/users/%s/selfs/favourites"

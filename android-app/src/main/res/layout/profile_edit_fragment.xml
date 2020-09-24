@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewmodel"
             type="by.iba.sbs.library.viewmodel.ProfileViewModel" />
@@ -59,24 +60,17 @@
                             app:layout_anchorGravity="top|center"
                             app:layout_collapseMode="pin"/>
 
-                        <androidx.appcompat.widget.LinearLayoutCompat
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/layout_avatar"
                             android:layout_width="@dimen/image_padding"
                             android:layout_height="@dimen/image_padding"
                             app:layout_anchor="@id/iv_profile"
+                            android:src="@drawable/camera_outline"
+                            android:tint="@android:color/white"
                             app:layout_anchorGravity="center">
 
-                        </androidx.appcompat.widget.LinearLayoutCompat>
+                        </androidx.appcompat.widget.AppCompatImageView>
 
-                        <ImageView
-                            android:id="@+id/iv_status"
-                            android:layout_width="@dimen/spacing_xxxlarge"
-                            android:layout_height="@dimen/spacing_xxxlarge"
-                            android:padding="@dimen/spacing_xxsmall"
-                            android:src="@drawable/star"
-                            android:tint="@color/colorGold"
-                            app:layout_anchor="@id/layout_avatar"
-                            app:layout_anchorGravity="bottom|right"/>
                     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
                     <LinearLayout
@@ -169,6 +163,24 @@
             android:overScrollMode="never"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/ti_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_small"
+                app:counterEnabled="true"
+                app:counterMaxLength="80">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/te_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/spacing_normal"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:hint="@string/hint_login_name"
+                    android:text="@={viewmodel.fullName.ld}"
+                    android:textAppearance="@style/Text" />
+            </com.google.android.material.textfield.TextInputLayout>
         </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -177,7 +189,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_large"
             android:backgroundTint="@android:color/white"
-            android:onClick="@{() -> viewmodel.onActionButtonClick()}"
             android:src="@drawable/check_bold"
             android:tint="@color/colorAccent"
             app:borderWidth="0dp"
