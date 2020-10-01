@@ -177,6 +177,17 @@ class DashboardFragment :
             }
         }
 
+        viewModel.isOfflineMode.addObserver {
+            val offlineMode = mainViewModel.offlineMode
+            if(offlineMode.value != it)
+                offlineMode.value = it
+        }
+        mainViewModel.isOfflineMode.addObserver {
+            val offlineMode = viewModel.offlineMode
+            if(offlineMode.value != it)
+                offlineMode.value = it
+        }
+
     }
 
     @UnstableDefault

@@ -228,6 +228,17 @@ class GuidelineListFragment :
                     instructionsAdapter.notifyItemChanged(this)
             }
         }
+
+        viewModel.isOfflineMode.addObserver {
+            val offlineMode = mainViewModel.offlineMode
+            if(offlineMode.value != it)
+                offlineMode.value = it
+        }
+        mainViewModel.isOfflineMode.addObserver {
+            val offlineMode = viewModel.offlineMode
+            if(offlineMode.value != it)
+                offlineMode.value = it
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -165,14 +165,23 @@ class FavoritesFragment : MvvmEventsFragment<FavoritesFragmentBinding, Dashboard
             }
         }
 
-
-
         binding.lSwipeRefresh.setOnRefreshListener {
             when (activeCategory) {
                 GuidelineCategory.RECOMMENDED.ordinal -> viewModel.loadRecommended(true)
                 GuidelineCategory.POPULAR.ordinal -> viewModel.loadPopular(true)
                 else -> viewModel.loadFavorites(true)
             }
+        }
+
+        viewModel.isOfflineMode.addObserver {
+            val offlineMode = mainViewModel.offlineMode
+            if(offlineMode.value != it)
+                offlineMode.value = it
+        }
+        mainViewModel.isOfflineMode.addObserver {
+            val offlineMode = viewModel.offlineMode
+            if(offlineMode.value != it)
+                offlineMode.value = it
         }
     }
 
