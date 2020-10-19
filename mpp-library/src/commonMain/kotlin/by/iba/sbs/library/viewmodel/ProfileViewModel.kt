@@ -1,5 +1,6 @@
 package by.iba.sbs.library.viewmodel
 
+import by.iba.sbs.library.data.local.createDb
 import by.iba.sbs.library.data.remote.Response
 import by.iba.sbs.library.model.*
 import by.iba.sbs.library.repository.GuidelineRepository
@@ -17,6 +18,8 @@ class ProfileViewModel(
     override val eventsDispatcher: EventsDispatcher<EventsListener>
 ) : ViewModelExt(settings),
     EventsDispatcherOwner<ProfileViewModel.EventsListener> {
+    private val sbsDb = createDb()
+    private val usersQueries = sbsDb.usersEntityQueries
 
     @OptIn(UnstableDefault::class)
     @ImplicitReflectionSerializer
@@ -72,6 +75,7 @@ class ProfileViewModel(
         val mData = ArrayList<Author>()
         mData.add(Author("Petey Cruiser", 12, 123, 547))
         mData.add(Author("Mario Speedwagon", 33, 21, 123))
+        mData.add(Author("Michael A. Shaffer", 23, 17, 99))
         value = mData
     }
 
@@ -108,6 +112,38 @@ class ProfileViewModel(
                 eventsDispatcher.dispatchEvent {
                     showToast(
                         ToastMessage(e.toString(), MessageType.ERROR)
+                    )
+                }
+            }
+        }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    fun updateUser() {
+        loading.value = true
+        user.value = User(user.value.id, fullName.value, user.value.email)
+        viewModelScope.launch {
+            try {
+                val response = usersRepository.updateUser(user.value)
+                if (response.isSuccess && response.isNotEmpty) {
+                    response.data?.let {
+                        user.postValue(User(it.id, it.name, it.email))
+                        usersQueries.addUser(it.id, it.name, it.email)
+                        //    eventsDispatcher.dispatchEvent { routeToProfileScreen() }
+                    }
+                } else {
+                    eventsDispatcher.dispatchEvent {
+                        showToast(
+                            ToastMessage(response.error.toString(), MessageType.CONFUSING)
+                        )
+                    }
+                }
+                loading.postValue(false)
+            } catch (e: Exception) {
+                eventsDispatcher.dispatchEvent {
+                    showToast(
+                        ToastMessage(e.message.toString(), MessageType.ERROR)
                     )
                 }
             }
@@ -163,6 +199,13 @@ class ProfileViewModel(
 
     @UnstableDefault
     @ImplicitReflectionSerializer
+    fun onSaveProfileButtonClick() {
+        updateUser()
+        //   eventsDispatcher.dispatchEvent { onSaveProfileAction() }
+    }
+
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     fun logout() {
         localStorage.accessToken = ""
         localStorage.userId = ""
@@ -199,10 +242,9 @@ class ProfileViewModel(
                 source.forEach {
                     if (!it.isEmptyPreview) {
                         guidelineRepository.checkPreviewImageForGuideline(it)?.let { url ->
-                            eventsDispatcher.dispatchEvent {loadImage(url, it)}
+                            eventsDispatcher.dispatchEvent { loadImage(url, it) }
                         }
-                    }
-                    else {
+                    } else {
                         //TODO("Add check removed images")
                     }
                 }
@@ -221,10 +263,10 @@ class ProfileViewModel(
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun saveGuidelinePreviewImageInLocalDB(guideline: Guideline){
+    fun saveGuidelinePreviewImageInLocalDB(guideline: Guideline) {
         viewModelScope.launch {
             try {
-                guidelines.value.find { g ->  g.id == guideline.id}?.imagePath = guideline.imagePath
+                guidelines.value.find { g -> g.id == guideline.id }?.imagePath = guideline.imagePath
                 guidelineRepository.saveGuidelineImageInLocalDB(guideline)
             } catch (e: Exception) {
                 eventsDispatcher.dispatchEvent {
@@ -242,7 +284,9 @@ class ProfileViewModel(
     interface EventsListener {
         fun onActionButtonAction()
         fun onLogoutAction()
+        fun onSaveProfileAction()
         fun routeToLoginScreen()
+        fun routeToProfileScreen()
         fun showToast(msg: ToastMessage)
         fun requireAccept()
         fun onOpenGuidelineAction(guideline: Guideline)

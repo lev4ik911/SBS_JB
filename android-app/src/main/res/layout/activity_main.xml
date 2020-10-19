@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <import type="by.iba.sbs.ui.MainViewModel" />
         <variable
             name="viewmodel"
             type="by.iba.sbs.ui.MainViewModel" />
@@ -16,7 +16,8 @@
         android:layout_height="match_parent"
         android:background="@drawable/bg_gradient">
 
-        <include layout="@layout/toolbar" />
+        <include layout="@layout/toolbar"
+            app:viewmodel="@{(MainViewModel) viewmodel}"/>
 
         <fragment
             android:id="@+id/fragment_navigation_main"

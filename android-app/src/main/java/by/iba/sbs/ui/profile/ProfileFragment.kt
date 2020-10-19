@@ -252,9 +252,19 @@ class ProfileFragment :
             .show()
     }
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
+    override fun onSaveProfileAction() {
+        findNavController().navigate(R.id.action_navigation_profile_edit_fragment_to_navigation_profile_fragment)
+    }
+
     override fun routeToLoginScreen() {
         findNavController().navigate(R.id.action_navigation_profile_to_navigation_login_fragment)
         // findNavController().navigate()
+    }
+
+    override fun routeToProfileScreen() {
+        findNavController().navigate(R.id.action_navigation_profile_edit_fragment_to_navigation_profile_fragment)
     }
 
     override fun showToast(msg: ToastMessage) {

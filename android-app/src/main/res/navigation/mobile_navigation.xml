@@ -70,7 +70,14 @@
         android:id="@+id/navigation_profile_edit_fragment"
         android:name="by.iba.sbs.ui.profile.ProfileEditFragment"
         android:label="profile_edit_fragment"
-        tools:layout="@layout/profile_edit_fragment" />
+        tools:layout="@layout/profile_edit_fragment">
+        <action
+            android:id="@+id/action_navigation_profile_edit_fragment_to_navigation_profile_fragment"
+            app:destination="@id/navigation_profile_fragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/navigation_profile_edit_fragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_login_fragment"
         android:name="by.iba.sbs.ui.login.LoginFragment"

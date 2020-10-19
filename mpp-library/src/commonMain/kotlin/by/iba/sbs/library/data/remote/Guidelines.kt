@@ -22,6 +22,13 @@ internal class Guidelines(override val settings: LocalSettings) : Client(setting
         )
     }
 
+    suspend fun getPopularGuidelines(): Response<List<GuidelineView>> {
+        return get(
+            Routes.Guidelines.URL_GUIDELINES_POPULAR,
+            deserializer = GuidelineView::class.serializer().list
+        )
+    }
+
     suspend fun getGuideline(id: String): Response<GuidelineView> {
         return get(
             Utils.formatString(Routes.Guidelines.URL_GUIDELINE_DETAILS, id)

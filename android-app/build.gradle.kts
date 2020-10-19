@@ -22,8 +22,8 @@ android {
         minSdkVersion(Versions.Android.minSdk)
         targetSdkVersion(Versions.Android.targetSdk)
         applicationId = "by.iba.sbs"
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.1.1"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -70,8 +70,8 @@ dependencies {
 
     implementation(Deps.Libs.MultiPlatform.napier.android!!)
 
-    implementation("com.google.android.material:material:1.2.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.0-rc1")
+    implementation("com.google.android.material:material:1.2.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.1")
     implementation("androidx.navigation:navigation-fragment:2.3.0")
     implementation("androidx.navigation:navigation-ui:2.3.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")

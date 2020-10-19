@@ -12,6 +12,7 @@ object Routes {
 
     object Users {
         const val URL_USERS = "$baseRoute/$version/users"
+        const val URL_USERS_MY = "$baseRoute/$version/users/my"
         const val URL_USER_DETAILS = "$baseRoute/$version/users/%s"
         const val URL_USER_GUIDELINES = "$baseRoute/$version/users/%s/selfs/guidelines"
         const val URL_USER_FAVORITES = "$baseRoute/$version/users/%s/selfs/favourites"
@@ -19,6 +20,7 @@ object Routes {
 
     object Guidelines {
         const val URL_GUIDELINES = "$baseRoute/$version/guidelines"
+        const val URL_GUIDELINES_POPULAR = "$baseRoute/$version/guidelines/popular"
         const val URL_GUIDELINE_DETAILS = "$baseRoute/$version/guidelines/%s"
         const val URL_GUIDELINE_STEPS = "$baseRoute/$version/guidelines/%s/steps"
         const val URL_GUIDELINE_STEPS_BATCHING = "$baseRoute/$version/guidelines/%s/steps/batching"

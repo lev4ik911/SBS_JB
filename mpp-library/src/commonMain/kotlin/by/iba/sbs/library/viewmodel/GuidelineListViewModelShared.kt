@@ -55,7 +55,6 @@ class GuidelineListViewModelShared(
                             else if (forceRefresh && it.isSuccess) {
                                 offlineMode.value = false
                             }
-
                             var guidelines = it.data!!
                             if (searchedText.value.isNotEmpty()) {
                                 viewModelScope.launch {

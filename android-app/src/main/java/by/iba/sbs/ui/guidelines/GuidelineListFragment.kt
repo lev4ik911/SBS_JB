@@ -228,6 +228,17 @@ class GuidelineListFragment :
                     instructionsAdapter.notifyItemChanged(this)
             }
         }
+
+        viewModel.isOfflineMode.addObserver {
+            val offlineMode = mainViewModel.offlineMode
+            if(offlineMode.value != it)
+                offlineMode.value = it
+        }
+        mainViewModel.isOfflineMode.addObserver {
+            val offlineMode = viewModel.offlineMode
+            if(offlineMode.value != it)
+                offlineMode.value = it
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -269,12 +280,16 @@ class GuidelineListFragment :
     @UnstableDefault
     @ImplicitReflectionSerializer
     override fun loadImage(url: String, guideline: Guideline) {
-        DownloadManager(requireContext()).apply {
-            this.downloadImage(url,
-                                guideline.id,
-                                remoteImageId = guideline.remoteImageId,
-                                item = guideline,
-                                imageHandler =  imageHandler)
+        if (isAdded) {
+            DownloadManager(requireContext()).apply {
+                this.downloadImage(
+                    url,
+                    guideline.id,
+                    remoteImageId = guideline.remoteImageId,
+                    item = guideline,
+                    imageHandler = imageHandler
+                )
+            }
         }
     }
 

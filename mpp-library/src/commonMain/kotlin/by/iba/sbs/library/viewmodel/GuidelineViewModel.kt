@@ -153,13 +153,12 @@ class GuidelineViewModel(
             eventsDispatcher.dispatchEvent { onCallInstructionEditor(guideline.value.id) }
         } else {
             if (localStorage.userId.isNotEmpty()) {
-                val currentGuideline = guideline.value
-                if(!localStorage.userId.equals(currentGuideline.authorId)) {
+                if(!localStorage.userId.equals(guideline.value.authorId)) {
                     isFavorite.value = !isFavorite.value
                     if (isFavorite.value)
-                        addGuidelineToFavorite(currentGuideline.id)
+                        addGuidelineToFavorite()
                     else
-                        removeGuidelineFromFavorite(currentGuideline.id)
+                        removeGuidelineFromFavorite()
                 }
                 else{
                     //TODO(Add message "it is user gideline")
@@ -528,13 +527,14 @@ class GuidelineViewModel(
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun addGuidelineToFavorite(guidelineId: String) {
+    fun addGuidelineToFavorite() {
         loading.value = true
         viewModelScope.launch {
             try {
-                val result = repository.addGuidelineToFavorite(guidelineId)
+                val currentGuideline = guideline.value
+                val result = repository.addGuidelineToFavorite(currentGuideline.id, currentGuideline.favourited)
                 if (result.isSuccess && result.isNotEmpty) {
-                    guideline.value.isFavorite = true
+                    currentGuideline.isFavorite = true
                 } else if (result.error != null) eventsDispatcher.dispatchEvent {
                     showToast(
                         ToastMessage(result.error.message.orEmpty(), MessageType.ERROR)
@@ -553,13 +553,14 @@ class GuidelineViewModel(
 
     @UnstableDefault
     @ImplicitReflectionSerializer
-    fun removeGuidelineFromFavorite(guidelineId: String) {
+    fun removeGuidelineFromFavorite() {
         loading.value = true
         viewModelScope.launch {
             try {
-                val result = repository.removeGuidelineFromFavorite(guidelineId)
+                val currentGuideline = guideline.value
+                val result = repository.removeGuidelineFromFavorite(currentGuideline.id, currentGuideline.favourited)
                 if (result.isSuccess && result.isNotEmpty) {
-                    guideline.value.isFavorite = false
+                    currentGuideline.isFavorite = false
                 } else if (result.error != null) eventsDispatcher.dispatchEvent {
                     showToast(
                         ToastMessage(result.error.message.orEmpty(), MessageType.ERROR)

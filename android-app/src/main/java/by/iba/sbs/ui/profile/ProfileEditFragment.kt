@@ -1,18 +1,20 @@
 package by.iba.sbs.ui.profile
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.navigation.fragment.findNavController
 import by.iba.sbs.BR
+import by.iba.sbs.R
 import by.iba.sbs.databinding.ProfileEditFragmentBinding
 import by.iba.sbs.library.viewmodel.ProfileViewModel
 import by.iba.sbs.tools.Tools
 import com.google.android.material.appbar.AppBarLayout
-import com.russhwolf.settings.AndroidSettings
 import dev.icerock.moko.mvvm.MvvmFragment
 import dev.icerock.moko.mvvm.createViewModelFactory
-import dev.icerock.moko.mvvm.dispatcher.eventsDispatcherOnMain
+import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.UnstableDefault
 import kotlin.math.abs
 
 
@@ -24,12 +26,16 @@ class ProfileEditFragment :
     override val viewModelClass: Class<ProfileViewModel> =
         ProfileViewModel::class.java
 
-    override fun viewModelFactory(): ViewModelProvider.Factory = createViewModelFactory {
-        ProfileViewModel(
-            AndroidSettings(PreferenceManager.getDefaultSharedPreferences(context)),
-            eventsDispatcherOnMain()
-        )
+    override fun viewModelStoreOwner(): ViewModelStoreOwner {
+        return requireActivity()
     }
+
+    override fun viewModelFactory(): ViewModelProvider.Factory =
+        createViewModelFactory {
+            requireActivity().let {
+                ViewModelProvider(it).get(ProfileViewModel::class.java)
+            }
+        }
 
     private val percentageToShowTitleAtToolbar = 0.7f
     private val percentageToHideTitleDetails = 0.7f
@@ -37,10 +43,16 @@ class ProfileEditFragment :
     private var mIsTheTitleVisible = false
     private var mIsTheTitleContainerVisible = true
 
+    @UnstableDefault
+    @ImplicitReflectionSerializer
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.setNavigationOnClickListener {
             activity?.onBackPressed()
+        }
+        binding.fActionButton.setOnClickListener {
+            viewModel.onSaveProfileButtonClick()
+            findNavController().navigate(R.id.action_navigation_profile_edit_fragment_to_navigation_profile_fragment)
         }
     }
 

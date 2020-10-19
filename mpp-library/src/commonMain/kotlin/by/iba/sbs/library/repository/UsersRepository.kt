@@ -22,7 +22,7 @@ import kotlinx.serialization.UnstableDefault
 
 interface IUsersRepository {
     suspend fun addUser(data: User): Response<UserView>
-
+    suspend fun updateUser(data: User): Response<UserView>
     suspend fun getAllUsers(forceRefresh: Boolean): LiveData<Response<List<User>>>
     suspend fun getUserGuidelines(
         userId: String,
@@ -56,7 +56,19 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
 
     @UnstableDefault
     override suspend fun addUser(data: User): Response<UserView> = coroutineScope {
-        val result = users.postUser(UserCreate(data.name, data.email))
+        val result = users.createUser(UserCreate(data.name, data.email))
+        if (result.isSuccess) {
+            val item = result.data!!
+            usersQueries.addUser(item.id, item.name, item.email)
+        } else {
+            if (result.status == Response.Status.ERROR) error(result.error!!)
+        }
+        return@coroutineScope result
+    }
+
+    @UnstableDefault
+    override suspend fun updateUser(data: User): Response<UserView> = coroutineScope {
+        val result = users.updateUser(UserCreate(data.name, data.email))
         if (result.isSuccess) {
             val item = result.data!!
             usersQueries.addUser(item.id, item.name, item.email)
@@ -126,6 +138,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                         it.id,
                         it.name,
                         it.descr,
+                        it.favourited.toLong(),
                         it.authorId,
                         it.author,
                         it.remoteImageId,
@@ -153,7 +166,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                             .firstOrNull { rating -> rating.id == it.id }
                         if (rating != null) {
                             Guideline(
-                                it.id, it.name, it.description,
+                                it.id, it.name, it.description, it.favourited!!.toInt(),
                                 author = it.author,
                                 authorId = it.authorId,
                                 rating = RatingSummary(
@@ -169,6 +182,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                             Guideline(it.id,
                                 it.name,
                                 it.description,
+                                it.favourited!!.toInt(),
                                 it.author,
                                 it.authorId,
                                 imagePath = imagesCache.firstOrNull{im->im.guidelineId == it.id}?.localImagePath.orEmpty(),
@@ -189,6 +203,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
                                 item.id,
                                 item.name,
                                 item.description ?: "",
+                                item.favourited,
                                 rating = item.rating,
                                 authorId = item.activity.createdBy.id,
                                 author = item.activity.createdBy.name,
@@ -266,7 +281,7 @@ class UsersRepository @UnstableDefault constructor(settings: LocalSettings) :
         return@coroutineScope result
     }
 
-    suspend fun clearCache() {
+    private fun clearCache() {
         usersQueries.deleteAllUsers()
     }
 

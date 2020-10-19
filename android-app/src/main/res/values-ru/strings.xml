@@ -126,5 +126,6 @@
     <string name="don_t_have_an_account">Нет учетной записи?</string>
     <string name="caption_please_login">Пожалуйста авторизуйтесь</string>
     <string name="already_registered">Уже зарегистрированы?</string>
+    <string name="hint_login_name">Введите ваше имя</string>
 
 </resources>
