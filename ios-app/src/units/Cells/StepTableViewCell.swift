@@ -10,49 +10,35 @@ import Foundation
 import UIKit
 import MultiPlatformLibraryUnits
 
-class StepTableViewCell : UITableViewCell, Fillable {
+class StepTableViewCell : UITableViewCell {
     
     @IBOutlet var pictureImage: UIImageView!
-    @IBOutlet var descriptionLabel: UITextView!
     @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var textView: UITextView!
     
     typealias DataType = CellModel
     
     struct CellModel {
         let id: String
         let stepPath: String
-        
         let title: String
-        
         let description: String
     }
     
     func fill(_ data: StepTableViewCell.CellModel) {
         //TODO: check the stepPath
-        let stepPicture = UIImage(named: "ic_profile.jpg")
+        let stepPicture = UIImage(named: "iba_logo.png")
         
+        pictureImage.layer.borderWidth = 0.3
+        pictureImage.layer.masksToBounds = false
+        pictureImage.layer.borderColor = UIColor.gray.cgColor
+        pictureImage.layer.cornerRadius = 20
+        pictureImage.clipsToBounds = true
         pictureImage.image = stepPicture
         
-        titleLabel.text = data.title
+        titleLabel.text = " " + data.title
         
-        descriptionLabel.text = data.description
-    }
-    
-    func update(_ data: CellModel) {
-        
-    }
-}
-
-extension StepTableViewCell: Reusable {
-    static func reusableIdentifier() -> String {
-        return "StepTableViewCell"
-    }
-    
-    static func xibName() -> String {
-        return "StepTableViewCell"
-    }
-    
-    static func bundle() -> Bundle {
-        return Bundle.main
+        textView.text = data.description
+        textView.backgroundColor = UIColor(white: 1, alpha: 0.1)
     }
 }

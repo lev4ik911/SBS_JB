@@ -38,21 +38,7 @@ class SearchViewController : UITableViewController  {
             description: item.descr
         )
     }
-    /*
-    lazy var table: UITableView = {
-        let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.rowHeight = 90
-        tableView.delegate = self
-        tableView.dataSource = self
-        let myFieldCell = UINib(nibName: consts.InstructionCellName,
-                                  bundle: nil)
-        tableView.register(myFieldCell,
-                                forCellReuseIdentifier: consts.InstructionCellName)
-
-        return tableView
-    }()
-    */
+    
     var tableConstraints: [NSLayoutConstraint]  {
         var constraints = [NSLayoutConstraint]()
         constraints.append(NSLayoutConstraint(item: self.tableView, attribute: .left, relatedBy: .equal,
@@ -72,20 +58,23 @@ class SearchViewController : UITableViewController  {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         
-        let myFieldCell = UINib(nibName: consts.InstructionCellName,
-                                  bundle: nil)
-        self.tableView.register(myFieldCell,
-                                forCellReuseIdentifier: consts.InstructionCellName)
+        let myFieldCell = UINib(nibName: consts.InstructionCellName, bundle: nil)
+        self.tableView.register(myFieldCell, forCellReuseIdentifier: consts.InstructionCellName)
                 
         self.view.backgroundColor = UIColor.white
         
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.largeTitleDisplayMode = .always
+        self.navigationItem.largeTitleDisplayMode = .automatic
                 
         let search = UISearchController(searchResultsController: nil)
         search.searchResultsUpdater = self
         self.navigationItem.searchController = search
 
+        let refControl = UIRefreshControl()
+        self.refreshControl = refControl
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "Reload instructions")
+        self.refreshControl?.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+                
         vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
            eventsDispatcher: EventsDispatcher(listener: self))
         vm.loadInstructions(forceRefresh: true)
@@ -93,16 +82,22 @@ class SearchViewController : UITableViewController  {
         vm.instructions.addObserver{[weak self] itemsObject in
         guard let items = itemsObject as? [Guideline] else { return }
             self?.data = items
+            self?.vm.checkPreviewImage(source: items)
             self?.tableView.reloadData()
         }
+                
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 90
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @objc func refresh(_ sender: AnyObject) {
+       // Code to refresh table view
+        self.data.removeAll()
+        tableView.reloadData()
+        
+        vm.loadInstructions(forceRefresh: true)
+        self.refreshControl?.endRefreshing()
     }
-    
-    
     
     override func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
@@ -122,7 +117,6 @@ class SearchViewController : UITableViewController  {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //TODO: add navigation to Instruction detail View
         performSegue(withIdentifier: consts.NavigationIdentifier, sender: self)
-        //vm.openNews(vm.getWorkplaceNewsItem(for: indexPath.row))
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -131,9 +125,18 @@ class SearchViewController : UITableViewController  {
         }
     }
     
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+        
+    }
+    
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
 }
 
-extension SearchViewController: UISearchResultsUpdating {
+extension SearchViewController : UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         /*
         if let text = searchController.searchBar.text, !text.isEmpty {
@@ -150,32 +153,13 @@ extension SearchViewController: UISearchResultsUpdating {
         */
     }
 }
-/*
-extension FavoritesViewController : UITableViewDataSource, UITableViewDelegate{
-    override func tableView(_ tableView: UITableView,
-                   numberOfRowsInSection section: Int) -> Int {
-        return data.count
-    }
-    
-    override func tableView(_ tableView: UITableView,
-                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "InstructionsTableViewCell") as? InstructionsTableViewCell {
-            cell.fill(self.createGuidlinesTile(item: data[indexPath.row]))
-            return cell
-        }
-        
-        return UITableViewCell()
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //TODO: add navigation to Instruction detail View
-        
-        //vm.openNews(vm.getWorkplaceNewsItem(for: indexPath.row))
-    }
-}
-*/
-extension SearchViewController: GuidelineListViewModelSharedEventsListener {
-    func showToast(msg: ToastMessage) {
 
+extension SearchViewController: GuidelineListViewModelSharedEventsListener {
+    func loadImage(url: String, guideline: Guideline) {
+        Toast.show(message: url, controller: self)
+    }
+    
+    func showToast(msg: ToastMessage) {
+        Toast.show(message: msg.message, controller: self)
     }
 }

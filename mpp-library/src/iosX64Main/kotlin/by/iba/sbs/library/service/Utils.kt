@@ -9,19 +9,19 @@ actual class Utils {
         actual fun formatString(source: String, vararg args: Any): String {
             var startIdx = 0
             var result = ""
-            for (arg in args){
-                var idx = source.indexOf("%s")
-                var ts = source.substring(startIdx, idx) + arg
+            var next = ""
+            var tmpSource = source
+            for (arg in args) {
+                startIdx = 0
+                var idx = tmpSource.indexOf("%s")
+                var ts = tmpSource.substring(startIdx, idx) + arg
                 startIdx = idx + 2
+                next = tmpSource.substring(startIdx)
+                tmpSource = next
                 result += ts
             }
-            result += source.substring(startIdx)
+            if (next.length>0) result+=next
             return result
-            //return NSString.localizedStringWithFormat(source.replace("%s","%@",false),args)
-
-            //return NSString.stringWithFormat(source, args.map { it.toString() }.toTypedArray())
-
-            //return "Not yet implemented"
         }
     }
 }

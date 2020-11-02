@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 class LoginAlert {
+    static var navigate_index = -1
     static func show(controller: UIViewController, mainTabBarcontroller: UITabBarController?){
         let msg = "Authorization is required to perform this action"
         let alert = UIAlertController(title: "Authorization required", message: msg, preferredStyle: UIAlertController.Style.alert )
@@ -18,7 +19,13 @@ class LoginAlert {
             //route to login
             mainTabBarcontroller?.selectedIndex = 4
         }
-        let cancel = UIAlertAction(title: "Cancel", style: .default) { (alertAction) in }
+        let cancel = UIAlertAction(title: "Cancel", style: .default) { (alertAction) in
+            if (navigate_index > -1)
+            {
+                mainTabBarcontroller?.selectedIndex = navigate_index
+                self.navigate_index = -1
+            }
+        }
 
         alert.addAction(save)
         alert.addAction(cancel)

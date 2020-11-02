@@ -26,4 +26,5 @@ target 'ios-app' do
   pod 'MultiPlatformLibraryUnits/Core', :git => 'https://github.com/icerockdev/moko-units.git', :tag => 'release/0.2.0-dev-2'
   pod 'ValueStepper'
   pod 'Cosmos', '~> 22.1'
+  pod 'Nuke', '~> 9.0'
 end

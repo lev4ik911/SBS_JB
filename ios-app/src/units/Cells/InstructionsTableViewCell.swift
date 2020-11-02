@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import MultiPlatformLibrary
+import MultiPlatformLibraryMvvm
 
 class InstructionsTableViewCell : UITableViewCell {
     
@@ -24,6 +26,17 @@ class InstructionsTableViewCell : UITableViewCell {
         let negativeRating: String
         
         let description: String
+        
+        static func convertGuidelineToCellModel(_ guideline: Guideline) -> CellModel {
+            return CellModel(id: guideline.id,
+                             picturePath: guideline.imagePath,
+                             isFavorite: guideline.isFavorite,
+                             title: guideline.name,
+                             author: guideline.author,
+                             positiveRating: String(guideline.rating.positive),
+                             negativeRating: String(guideline.rating.negative),
+                             description: guideline.descr)
+        }
     }
     
     
@@ -42,7 +55,7 @@ class InstructionsTableViewCell : UITableViewCell {
     
     func fill(_ data: InstructionsTableViewCell.CellModel) {
         //TODO: checking of ImagePath
-        let tmpImage = UIImage(named: "ic_paneer.jpg")
+        let tmpImage = UIImage(named: "iba_logo.png")
         
         let favoriteImage = (data.isFavorite ?
                            UIImage(systemName: "star.fill") :
@@ -62,17 +75,6 @@ class InstructionsTableViewCell : UITableViewCell {
         positiveRatingLabel.text = data.positiveRating
         negativeRatingLabel.text = data.negativeRating
         
-        descriptionLabel.text = data.description
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        descriptionLabel.text = (data.description.isEmpty ? "   " : data.description)
     }
 }

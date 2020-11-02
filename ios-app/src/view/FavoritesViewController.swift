@@ -30,7 +30,7 @@ class FavoritesViewController : UITableViewController  {
         return InstructionsTableViewCell.CellModel (
             id: item.id,
             picturePath: item.imagePath,
-            isFavorite: item.isFavorite,
+            isFavorite: true,
             title: item.name,
             author: item.author,
             positiveRating: String(item.rating.positive),
@@ -69,6 +69,10 @@ class FavoritesViewController : UITableViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if (LoginAlert.navigate_index > -1) {
+            return
+        }
+        
         self.tableView.dataSource = self
         self.tableView.delegate = self
         
@@ -86,11 +90,9 @@ class FavoritesViewController : UITableViewController  {
         search.searchResultsUpdater = self
         self.navigationItem.searchController = search
 
-        self.tableView.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        self.tableView.refreshControl?.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
-        
-        
-        self.refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        let refControl = UIRefreshControl()
+        self.refreshControl = refControl
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "Reload instructions")
         self.refreshControl?.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         
         vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
@@ -103,32 +105,29 @@ class FavoritesViewController : UITableViewController  {
             self?.tableView.reloadData()
         }
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 
     @objc func refresh(_ sender: AnyObject) {
        // Code to refresh table view
-        vm.loadInstructions(forceRefresh: true)
+        self.data.removeAll()
         tableView.reloadData()
-        refreshControl?.endRefreshing()
+        vm.loadInstructions(forceRefresh: true)
+        self.refreshControl?.endRefreshing()
     }
     
     override func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        return data.count
+        //return data.count
+        return 2
     }
     
     override func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if (indexPath.row < 3 && data.count > 0) {
         if let cell = self.tableView.dequeueReusableCell(withIdentifier: consts.InstructionCellName) as? InstructionsTableViewCell {
             cell.fill(self.createGuidlinesTile(item: data[indexPath.row]))
             return cell
         }
-        
+        }
         return UITableViewCell()
     }
     
@@ -165,6 +164,10 @@ extension FavoritesViewController: UISearchResultsUpdating {
 }
 
 extension FavoritesViewController: GuidelineListViewModelSharedEventsListener {
+    func loadImage(url: String, guideline: Guideline) {
+        
+    }
+    
     func showToast(msg: ToastMessage) {
         Toast.show(message: msg.message, controller: self)
     }

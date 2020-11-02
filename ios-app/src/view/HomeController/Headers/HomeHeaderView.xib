@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="HomeHeaderView" customModule="SBS" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="59"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Header Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qbt-q8-St9">
+                    <rect key="frame" x="16" y="10" width="296" height="39"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <color key="textColor" red="0.21758231519999999" green="0.36754113440000002" blue="0.44686639309999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tfL-AN-Ddt">
+                    <rect key="frame" x="328" y="10" width="70" height="39"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="GV4-jd-AzT">
+                            <rect key="frame" x="0.0" y="0.0" width="70" height="39"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View all" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ufi-47-UyV">
+                                    <rect key="frame" x="0.0" y="0.0" width="52.5" height="39"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Qj-wS-MCk">
+                                    <rect key="frame" x="57.5" y="0.0" width="12.5" height="39"/>
+                                    <color key="tintColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <state key="normal" image="chevron.right" catalog="system"/>
+                                </button>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="GV4-jd-AzT" secondAttribute="trailing" id="NHm-WT-Cm5"/>
+                        <constraint firstItem="GV4-jd-AzT" firstAttribute="leading" secondItem="tfL-AN-Ddt" secondAttribute="leading" id="TSp-JB-35i"/>
+                        <constraint firstAttribute="bottom" secondItem="GV4-jd-AzT" secondAttribute="bottom" id="fL9-Rn-Tbx"/>
+                        <constraint firstItem="GV4-jd-AzT" firstAttribute="top" secondItem="tfL-AN-Ddt" secondAttribute="top" id="kIq-FQ-Rc3"/>
+                    </constraints>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JRj-3b-fOX">
+                    <rect key="frame" x="328" y="10" width="70" height="39"/>
+                </button>
+            </subviews>
+            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="tfL-AN-Ddt" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="5iR-oc-hx7"/>
+                <constraint firstItem="Qbt-q8-St9" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="Cs1-qf-cp3"/>
+                <constraint firstItem="tfL-AN-Ddt" firstAttribute="top" secondItem="JRj-3b-fOX" secondAttribute="top" id="L7i-NO-FGo"/>
+                <constraint firstItem="tfL-AN-Ddt" firstAttribute="leading" secondItem="JRj-3b-fOX" secondAttribute="leading" id="ZVo-Pg-4UT"/>
+                <constraint firstAttribute="bottom" secondItem="tfL-AN-Ddt" secondAttribute="bottom" constant="10" id="aft-gb-aT2"/>
+                <constraint firstItem="tfL-AN-Ddt" firstAttribute="trailing" secondItem="JRj-3b-fOX" secondAttribute="trailing" id="dzl-ja-RX7"/>
+                <constraint firstItem="tfL-AN-Ddt" firstAttribute="bottom" secondItem="JRj-3b-fOX" secondAttribute="bottom" id="fXX-1i-N2J"/>
+                <constraint firstItem="tfL-AN-Ddt" firstAttribute="leading" secondItem="Qbt-q8-St9" secondAttribute="trailing" constant="16" id="h0c-VB-c6o"/>
+                <constraint firstItem="Qbt-q8-St9" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="hWq-VO-lN5"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="Qbt-q8-St9" secondAttribute="bottom" constant="10" id="hsM-Ze-o97"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="tfL-AN-Ddt" secondAttribute="trailing" constant="16" id="xPa-BZ-BIO"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="actionButton" destination="JRj-3b-fOX" id="WaH-Ux-G7K"/>
+                <outlet property="headerTitle" destination="Qbt-q8-St9" id="m1G-kz-KkK"/>
+            </connections>
+            <point key="canvasLocation" x="137.68115942028987" y="388.72767857142856"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="chevron.right" catalog="system" width="96" height="128"/>
+    </resources>
+</document>

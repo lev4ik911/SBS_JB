@@ -15,6 +15,18 @@ class SignUpView : UIView {
     
     let nibName = "SignUpView"
     
+    struct Texts {
+        var EmailLabelErrorText = "Invalid email"
+        var IncorrectSymbolsErrorText = "Password has incorrect symbols"
+        var SmallPasswordErrorText = "Password is too small"
+        var MismatchPasswordErrorText = "Password mismatch"
+        var SuccessRegistrationText = "Registration successfully completed"
+    }
+    var texts = Texts()
+    
+    let errorColor : UIColor = UIColor.red
+    let normalColor : UIColor = UIColor.lightGray
+    
     @IBOutlet var mainView: UIView!
     
     @IBOutlet var nameTextField: UITextField!
@@ -22,14 +34,17 @@ class SignUpView : UIView {
     @IBOutlet var passwordTextField: UITextField!
     @IBOutlet var repeatTextField: UITextField!
     
-    @IBOutlet var signUpButton: UIButton!
+    @IBOutlet var emailLabel: UILabel!
+    @IBOutlet var passwordLabel: UILabel!
+    @IBOutlet var confirmLabel: UILabel!
     
+    
+    @IBOutlet var signUpButton: UIButton!
     @IBAction func onSignUpButton_TouchUp(_ sender: Any) {
-        
         registerVM.onRegisterButtonClick()
     }
     
-    @IBAction func onBackToLogin_Tap(_ sender: Any) {
+    @IBAction func onBackButtonTap(_ sender: Any) {
         self.parentViewController?.navigationController?.popViewController(animated: true)
     }
     
@@ -43,7 +58,21 @@ class SignUpView : UIView {
         
         self.parentViewController!.hideKeyboardWhenTappedAround()
         
-      //Do stuff here
+        signUpButton.isEnabled = false
+        
+        nameTextField.addTarget(self, action: #selector(self.textDidChange), for: .editingChanged)
+        emailTextField.addTarget(self, action: #selector(self.textDidChange), for: .editingChanged)
+        passwordTextField.addTarget(self, action: #selector(self.textDidChange), for: .editingChanged)
+        repeatTextField.addTarget(self, action: #selector(self.textDidChange), for: .editingChanged)
+        
+        emailTextField.addTarget(self, action: #selector(self.colorChange), for: .editingDidBegin)
+        passwordTextField.addTarget(self, action: #selector(self.colorChange), for: .editingDidBegin)
+        repeatTextField.addTarget(self, action: #selector(self.colorChange), for: .editingDidBegin)
+        
+        emailLabel.isHidden = true
+        passwordLabel.isHidden = true
+        confirmLabel.isHidden = true
+        //Do stuff here
         registerVM = RegisterViewModel(settings: AppleSettings(delegate: UserDefaults.standard),
         eventsDispatcher: EventsDispatcher(listener: self), systemInfo: self)
         
@@ -52,7 +81,36 @@ class SignUpView : UIView {
         passwordTextField.bindTextTwoWay(liveData: registerVM.password)
         repeatTextField.bindTextTwoWay(liveData: registerVM.passwordConfirm)
         
-        signUpButton.bindEnabled(liveData: registerVM.isRegisterEnabled)
+        //signUpButton.bindEnabled(liveData: registerVM.isRegisterEnabled)
+    }
+    
+    @objc func colorChange(_ textField: UITextField) {
+        textField.layer.borderWidth = 0
+        textField.layer.borderColor = normalColor.cgColor
+        if textField == emailTextField
+        {
+            emailLabel.isHidden = true
+        }
+        if textField == passwordTextField
+        {
+            passwordLabel.isHidden = true
+        }
+        if textField == repeatTextField
+        {
+            confirmLabel.isHidden = true
+        }
+    }
+    
+    @objc func textDidChange(_ textField: UITextField) {
+        signUpButton.isEnabled = canRegister()
+    }
+    
+    func canRegister() -> Bool{
+        let isUserNotEmpty = nameTextField.text!.count > 0
+        let isEmailNotEmpty = emailTextField.text!.count > 0
+        let isPasswordNotEmpty = passwordTextField.text!.count > 0
+        let isRepeatPassNotEmpty = repeatTextField.text!.count > 0
+        return isUserNotEmpty && isEmailNotEmpty && isPasswordNotEmpty && isRepeatPassNotEmpty
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -100,17 +158,53 @@ extension SignUpView : SystemInformation {
 }
 
 extension SignUpView : RegisterViewModelEventsListener {
+    func showToast(msg: ToastMessage) {
+        Toast.show(message: msg.message, controller: self.parentViewController!)
+    }
+    
     func showErrors(errorList: [ValidationErrors]) {
         //TODO: add validation for text fields
-        Toast.show(message: "Smth went wrong", controller: self.parentViewController!)
+        print(errorList)
+        for error in errorList
+        {
+            switch error {
+            case ValidationErrors.invalidEmail:
+                emailTextField.layer.borderColor = errorColor.cgColor
+                emailTextField.layer.borderWidth = 1
+                emailLabel.isHidden = false
+                emailLabel.text = texts.EmailLabelErrorText
+            case ValidationErrors.passwordHasIncorrectSymbols:
+                passwordTextField.layer.borderColor = errorColor.cgColor
+                passwordTextField.layer.borderWidth = 1
+                passwordLabel.isHidden = false
+                passwordLabel.text = texts.IncorrectSymbolsErrorText
+            case ValidationErrors.passwordIsTooSmall:
+                passwordTextField.layer.borderColor = errorColor.cgColor
+                passwordTextField.layer.borderWidth = 1
+                passwordLabel.isHidden = false
+                passwordLabel.text = texts.SmallPasswordErrorText
+                repeatTextField.layer.borderColor = errorColor.cgColor
+                repeatTextField.layer.borderWidth = 1
+                confirmLabel.isHidden = false
+                confirmLabel.text = texts.SmallPasswordErrorText
+            case ValidationErrors.passwordMismatch:
+                passwordTextField.layer.borderColor = errorColor.cgColor
+                passwordTextField.layer.borderWidth = 1
+                passwordLabel.isHidden = false
+                passwordLabel.text = texts.MismatchPasswordErrorText
+                repeatTextField.layer.borderColor = errorColor.cgColor
+                repeatTextField.layer.borderWidth = 1
+                confirmLabel.isHidden = false
+                confirmLabel.text = texts.MismatchPasswordErrorText
+            default:
+                print(error)
+            }
+        }
     }
     
     func routeToLoginScreen() {
         //TODO: route to profile
-        self.parentViewController?.tabBarController?.selectedIndex = 4
-    }
-
-    func showToast(msg: ToastMessage) {
-        
+        Toast.show(message: texts.SuccessRegistrationText, controller: self.parentViewController!)
+        self.parentViewController?.navigationController?.popViewController(animated: true)
     }
 }

@@ -7,3 +7,11 @@
 //
 
 import Foundation
+import UIKit
+
+class CategoryFragment : UITableViewCell {
+    
+    @IBOutlet var parentView: UIView!
+    
+
+}

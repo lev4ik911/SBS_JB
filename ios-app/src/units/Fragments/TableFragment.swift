@@ -34,66 +34,64 @@ class TableFragment : UIView {
     }
     var consts = Consts()
     
-    @IBOutlet var navigationBar: UINavigationBar!
-    @IBOutlet var showAllButton: UIBarButtonItem!
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var tableView: UITableView!
     
-    func createGuidlinesTile(
-        item: Guideline
-    ) -> InstructionsTableViewCell.CellModel {
-        return InstructionsTableViewCell.CellModel (
-            id: item.id,
-            picturePath: item.imagePath,
-            isFavorite: item.isFavorite,
-            title: item.name,
-            author: item.author,
-            positiveRating: String(item.rating.positive),
-            negativeRating: String(item.rating.negative),
-            description: item.descr
-        )
-    }
+//    func createGuidlinesTile(
+//        item: Guideline
+//    ) -> InstructionsTableViewCell.CellModel {
+//        return InstructionsTableViewCell.CellModel (
+//            id: item.id,
+//            picturePath: item.imagePath,
+//            isFavorite: item.isFavorite,
+//            title: item.name,
+//            author: item.author,
+//            positiveRating: String(item.rating.positive),
+//            negativeRating: String(item.rating.negative),
+//            description: item.descr
+//        )
+//    }
     
     func loadFavorites() {
-        navigationBar.topItem?.title = "Favorites"
-        vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
-           eventsDispatcher: EventsDispatcher(listener: self))
-        activityIndicator.bindVisibility(liveData: vm.isLoading)
-        tableView.bindVisibility(liveData: vm.isLoading, inverted: true)
-        vm.loadInstructions(forceRefresh: true)
-        vm.instructions.addObserver{[weak self] itemsObject in
-        guard let items = itemsObject as? [Guideline] else { return }
-            self?.data = items
-            self?.tableView.reloadData()
-        }
+        //navigationBar.topItem?.title = "Favorites"
+//        vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
+//           eventsDispatcher: EventsDispatcher(listener: self))
+//        activityIndicator.bindVisibility(liveData: vm.isLoading)
+//        tableView.bindVisibility(liveData: vm.isLoading, inverted: true)
+//        vm.loadInstructions(forceRefresh: true)
+//        vm.instructions.addObserver{[weak self] itemsObject in
+//        guard let items = itemsObject as? [Guideline] else { return }
+//            self?.data = items
+//            self?.tableView.reloadData()
+//        }
     }
     
     func loadRecommended() {
-        navigationBar.topItem?.title = "Recommended"
-        vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
-           eventsDispatcher: EventsDispatcher(listener: self))
-        activityIndicator.bindVisibility(liveData: vm.isLoading)
-        tableView.bindVisibility(liveData: vm.isLoading, inverted: true)
-        vm.loadInstructions(forceRefresh: true)
-        vm.instructions.addObserver{[weak self] itemsObject in
-        guard let items = itemsObject as? [Guideline] else { return }
-            self?.data = items
-            self?.tableView.reloadData()
-        }
+        //navigationBar.topItem?.title = "Recommended"
+//        vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
+//           eventsDispatcher: EventsDispatcher(listener: self))
+//        activityIndicator.bindVisibility(liveData: vm.isLoading)
+//        tableView.bindVisibility(liveData: vm.isLoading, inverted: true)
+//        vm.loadInstructions(forceRefresh: true)
+//        vm.instructions.addObserver{[weak self] itemsObject in
+//        guard let items = itemsObject as? [Guideline] else { return }
+//            self?.data = items
+//            self?.tableView.reloadData()
+//        }
     }
     
     func loadPopular() {
-        navigationBar.topItem?.title = "Popular"
-        vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
-           eventsDispatcher: EventsDispatcher(listener: self))
-        activityIndicator.bindVisibility(liveData: vm.isLoading)
-        tableView.bindVisibility(liveData: vm.isLoading, inverted: true)
-        vm.loadInstructions(forceRefresh: true)
-        vm.instructions.addObserver{[weak self] itemsObject in
-        guard let items = itemsObject as? [Guideline] else { return }
-            self?.data = items
-            self?.tableView.reloadData()
-        }
+        //navigationBar.topItem?.title = "Popular"
+//        vm = GuidelineListViewModelShared(settings: AppleSettings(delegate: UserDefaults.standard),
+//           eventsDispatcher: EventsDispatcher(listener: self))
+//        activityIndicator.bindVisibility(liveData: vm.isLoading)
+//        tableView.bindVisibility(liveData: vm.isLoading, inverted: true)
+//        vm.loadInstructions(forceRefresh: true)
+//        vm.instructions.addObserver{[weak self] itemsObject in
+//        guard let items = itemsObject as? [Guideline] else { return }
+//            self?.data = items
+//            self?.tableView.reloadData()
+//        }
     }
     
     override func willMove(toSuperview newSuperview: UIView?) {
@@ -147,6 +145,10 @@ class TableFragment : UIView {
 }
 
 extension TableFragment : GuidelineListViewModelSharedEventsListener {
+    func loadImage(url: String, guideline: Guideline) {
+        
+    }
+    
     func showToast(msg: ToastMessage) {
     
     }
@@ -168,18 +170,18 @@ extension TableFragment : UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: consts.InstructionCellName) as? InstructionsTableViewCell {
-                cell.fill(self.createGuidlinesTile(item: data[indexPath.row]))
-                return cell
-            }
+        if let cell = tableView.dequeueReusableCell(withIdentifier: consts.InstructionCellName) as? InstructionsTableViewCell {
+            let model = InstructionsTableViewCell.CellModel.convertGuidelineToCellModel(data[indexPath.row])
+            cell.fill(model)
+            return cell
+        }
         
         return UITableViewCell()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //TODO: add navigation to Instruction detail View
+        tableView.deselectRow(at: indexPath, animated: true)
         delegate.cellGotTapped()
-        //performSegue(withIdentifier: consts.InstructionNavigationIdentifier, sender: self)
     }
     /*
     //TODO: Ask ROMAN!!!

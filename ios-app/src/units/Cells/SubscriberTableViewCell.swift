@@ -20,7 +20,6 @@ class SubscriberTableViewCell: UITableViewCell {
     typealias DataType = CellModel
     
     struct CellModel {
-        let id: String
         let userPath: String
         
         let userName: String
@@ -32,29 +31,20 @@ class SubscriberTableViewCell: UITableViewCell {
     
     func fill(_ data: SubscriberTableViewCell.CellModel) {
         //TODO: check the userPath
-        let userPicture = UIImage(named: "ic_profile.jpg")
+        let userPicture = UIImage(named: "ic_profile.png")
+        
+        userAvatar.layer.borderWidth = 0.3
+        userAvatar.layer.masksToBounds = false
+        userAvatar.layer.borderColor = UIColor.gray.cgColor
+        userAvatar.layer.cornerRadius = userAvatar.frame.height/2
+        userAvatar.clipsToBounds = true
+
         userAvatar.image = userPicture
         
         userName.text = data.userName
         userSubscribersCount.text = "Subscribers: " + data.suubscribersCount
         userIntructionsCount.text = "Instructions: " + data.instructionsCount
         
-        ratingCosmoView.rating = data.rating
+        ratingCosmoView.rating = data.rating/10
     }
-    
-    func update(_ data: CellModel) {
-        
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
 }

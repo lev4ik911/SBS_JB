@@ -9,16 +9,14 @@
 import UIKit
 
 class CategoryViewCell: UICollectionViewCell {
-
-    var categoryName = ""
-    
     @IBOutlet var category: UILabel!
-    
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        category.text = categoryName
+    }
+    
+    func updateTitle(_ title: String) {
+        self.category.text = title
     }
 
 }

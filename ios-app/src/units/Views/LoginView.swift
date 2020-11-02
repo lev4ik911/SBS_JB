@@ -20,40 +20,62 @@ class LoginView : UIView {
     @IBOutlet var passwordText: SkyFloatingLabelTextField!
     
     @IBOutlet var forgorPasswordButton: UIButton!
-    
     @IBAction func forgotPasswordClick(_ sender: Any) {
         print("Repair password - load SignUpView.xib")
-        //TODO: need meeting about this
+        //TODO: implement password repairing!!!
     }
     
     @IBOutlet var signUpButton: UIButton!
-    
     @IBAction func signUpButtonClick(_ sender: Any) {
-        print("SignUp pressed - load SignUpView.xib")
+        userText.text = ""
+        passwordText.text = ""
         self.parentViewController?.performSegue(withIdentifier: "show_sign_up", sender: self.parentViewController)
-        //let signUpView = SignUpView()
-        //addSubview(signUpView)
     }
     
     @IBOutlet var mainView: UIView!
-    @IBOutlet var signInButton: UIButton!
     
+    @IBOutlet var signInButton: UIButton!
     @IBAction func signInButtonClick(_ sender: Any) {
-        print("SignIn pressed - load UserView.xib")
-
         loginVM.onLoginButtonClick()
     }
 
     var loginVM: LoginViewModel!
+    var settings : LocalSettings!
     
     override func willMove(toSuperview newSuperview: UIView?) {
-      super.willMove(toSuperview: newSuperview)
-      //Do stuff here
+        super.willMove(toSuperview: newSuperview)
+        signInButton.isEnabled = false
+        forgorPasswordButton.isEnabled = false
+        
+        //Do stuff here
+        settings = LocalSettings(settings: AppleSettings(delegate: UserDefaults.standard))
         loginVM = LoginViewModel(settings: AppleSettings(delegate: UserDefaults.standard),
         eventsDispatcher: EventsDispatcher(listener: self), systemInfo: self)
         
+        userText.addTarget(self, action: #selector(self.textDidChange), for: .editingChanged)
+        userText.addTarget(self, action: #selector(self.resetTextDidChange), for: .editingChanged)
+        passwordText.addTarget(self, action: #selector(self.textDidChange), for: .editingChanged)
+        
         userText.bindTextTwoWay(liveData: loginVM.login)
         passwordText.bindTextTwoWay(liveData: loginVM.password)
+    }
+    
+    @objc func textDidChange(_ textField: UITextField) {
+        signInButton.isEnabled = canLogin()
+    }
+    
+    @objc func resetTextDidChange(_ textField: UITextField) {
+        forgorPasswordButton.isEnabled = canResetPassword()
+    }
+    
+    func canLogin() -> Bool {
+        let isUserNotEmpty = userText.text!.count > 0
+        let isPassNotEmpty = passwordText.text!.count > 0
+        return isUserNotEmpty && isPassNotEmpty
+    }
+    
+    func canResetPassword() -> Bool {
+        return userText.text!.count > 0
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -99,29 +121,32 @@ extension UIView {
     }
 }
 
-extension LoginView :LoginViewModelEventsListener, SystemInformation {
+extension LoginView : LoginViewModelEventsListener, SystemInformation {
     func flipToLogin() {
-        
+        print("flipToLogin")
     }
     
     func flipToPassword() {
-        
+        print("flipToPassword")
     }
     
     func onRegister() {
-        
+        print("onRegister")
     }
     
     func onResetPassword() {
-        
+        print("onResetPassword")
     }
     
     func routeToProfile(userId: String) {
+        //TODO: !!! load profile!
+        settings.userId = userId
+        (self.parentViewController as! ProfileViewController).showProfileScreen(user: userId)
         print(userId)
     }
     
     func showToast(msg: ToastMessage) {
-        print(msg.message)
+        Toast.show(message: msg.message, controller: self.parentViewController!)
     }
     
     func getAppVersion() -> String {

@@ -15,6 +15,7 @@ class MainViewController : UITabBarController {
     var settings : LocalSettings!
     
     @IBOutlet var mainTabBar: UITabBar!
+    var lastSelectedIdx = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +24,7 @@ class MainViewController : UITabBarController {
         /*
         if (settings.accessToken.isEmpty){
             print("hide")
-            hideTabBarItems()
+            //hideTabBarItems()
         }
         else{
             print("show")
@@ -32,42 +33,53 @@ class MainViewController : UITabBarController {
         */
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        //hideTabBarItems()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        print(settings.accessToken)
-        
     }
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-        print(settings.accessToken)
+        LoginAlert.navigate_index = -1
         switch item.tag {
         case 1:
             //Home view
             print("Home pressed")
+            lastSelectedIdx = 0
         case 2:
             // Favorites view
             print("Favorites pressed")
-            if settings.accessToken.isEmpty {
-                self.tabBarController?.selectedIndex = 1
+            if (settings.accessToken.isEmpty) {
+                LoginAlert.navigate_index = lastSelectedIdx
                 LoginAlert.show(controller: self, mainTabBarcontroller: self)
+            } else {
+                lastSelectedIdx = 1
             }
         case 3:
             //Add new
             print("Add new pressed")
             //TODO: route to another storyboard
-            if settings.accessToken.isEmpty{
-                self.tabBarController?.selectedIndex = 1
+            if (settings.accessToken.isEmpty) {
+                LoginAlert.navigate_index = lastSelectedIdx
                 LoginAlert.show(controller: self, mainTabBarcontroller: self)
+            } else {
+                let storyboard = UIStoryboard(name: "AddEvent", bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "AddEventID") as UIViewController
+                vc.modalPresentationStyle = .fullScreen
+                present(vc, animated: true, completion: nil)
             }
-            let storyboard = UIStoryboard(name: "AddEvent", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "AddEventID") as UIViewController
-            present(vc, animated: true, completion: nil)
         case 4:
             print("Search pressed")
+            lastSelectedIdx = 3
         case 5:
             print("User pressed")
+            lastSelectedIdx = 4
         default:
             print("default")
+            lastSelectedIdx = 0
         }
     }
     
@@ -76,7 +88,10 @@ class MainViewController : UITabBarController {
     }
     
     func hideTabBarItems(){
-        var items = tabBarController?.toolbarItems
-        items?.remove(at: 2)
+        //mainTabBar.items?.remove(at: 1)
+        
+        tabBarController?.viewControllers?.remove(at: 1)
+        //var items = tabBarController?.toolbarItems
+        //items?.remove(at: 2)
     }
 }

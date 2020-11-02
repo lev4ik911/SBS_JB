@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Detail Profile View Controller-->
+        <scene sceneID="EAF-lf-HcM">
+            <objects>
+                <viewController storyboardIdentifier="ProfileID" id="8fz-gO-CaW" customClass="DetailProfileViewController" customModule="SBS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uou-X8-h1P">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qjk-t7-HJ2">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <subviews>
+                                    <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CW9-BH-n1m">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                        <items>
+                                            <navigationItem id="6sX-86-dFN">
+                                                <barButtonItem key="leftBarButtonItem" title="&lt; Back" id="I7a-4s-k8w">
+                                                    <connections>
+                                                        <action selector="BackButtonTap:" destination="8fz-gO-CaW" id="dKz-6O-yrN"/>
+                                                    </connections>
+                                                </barButtonItem>
+                                            </navigationItem>
+                                        </items>
+                                    </navigationBar>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HKx-Ff-5mg">
+                                        <rect key="frame" x="0.0" y="44" width="414" height="774"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="HKx-Ff-5mg" secondAttribute="trailing" id="92x-sV-gLl"/>
+                                    <constraint firstAttribute="bottom" secondItem="HKx-Ff-5mg" secondAttribute="bottom" id="DN2-rf-uuu"/>
+                                    <constraint firstItem="HKx-Ff-5mg" firstAttribute="top" secondItem="CW9-BH-n1m" secondAttribute="bottom" id="G7K-EJ-F1r"/>
+                                    <constraint firstItem="CW9-BH-n1m" firstAttribute="top" secondItem="Qjk-t7-HJ2" secondAttribute="top" id="Tcz-gU-6nQ"/>
+                                    <constraint firstItem="CW9-BH-n1m" firstAttribute="leading" secondItem="Qjk-t7-HJ2" secondAttribute="leading" id="kYR-5x-5Wp"/>
+                                    <constraint firstItem="HKx-Ff-5mg" firstAttribute="leading" secondItem="Qjk-t7-HJ2" secondAttribute="leading" id="m1p-jE-nAA"/>
+                                    <constraint firstAttribute="trailing" secondItem="CW9-BH-n1m" secondAttribute="trailing" id="uHt-ze-8yC"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="Qjk-t7-HJ2" firstAttribute="leading" secondItem="Ech-I6-zMS" secondAttribute="leading" id="PVY-cQ-KK8"/>
+                            <constraint firstItem="Ech-I6-zMS" firstAttribute="bottom" secondItem="Qjk-t7-HJ2" secondAttribute="bottom" id="Wee-gx-IGj"/>
+                            <constraint firstItem="Ech-I6-zMS" firstAttribute="trailing" secondItem="Qjk-t7-HJ2" secondAttribute="trailing" id="Ys5-GI-mrc"/>
+                            <constraint firstItem="Qjk-t7-HJ2" firstAttribute="top" secondItem="Ech-I6-zMS" secondAttribute="top" id="c04-hT-AhO"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Ech-I6-zMS"/>
+                    </view>
+                    <connections>
+                        <outlet property="xibView" destination="HKx-Ff-5mg" id="H0N-9o-mCN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="idR-EL-VQL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="100" y="84"/>
+        </scene>
+    </scenes>
+</document>
