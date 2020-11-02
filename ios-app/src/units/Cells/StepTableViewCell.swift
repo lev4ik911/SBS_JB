@@ -25,9 +25,35 @@ class StepTableViewCell : UITableViewCell {
         let description: String
     }
     
+    func getDocumentDirectoryPath() -> NSString {
+            return NSTemporaryDirectory() as NSString
+    }
+    
+    func loadImageFromDocumentsDirectory(imageName: String) -> UIImage? {
+        let tempDirPath = getDocumentDirectoryPath()
+        let imageFilePath = tempDirPath.appendingPathComponent(imageName)
+        return UIImage(contentsOfFile: imageFilePath)
+    }
+    func loadImage(imagePath: String) -> UIImage? {
+        return UIImage(contentsOfFile: imagePath)
+    }
     func fill(_ data: StepTableViewCell.CellModel) {
         //TODO: check the stepPath
-        let stepPicture = UIImage(named: "iba_logo.png")
+        
+        var stepPicture = UIImage()
+        if (data.stepPath != "") {
+            let tmpImage = loadImage(imagePath: data.stepPath)
+            if tmpImage == nil {
+                stepPicture = UIImage(named: "iba_logo.png")!
+            }
+            else
+            {
+                stepPicture = tmpImage!
+            }
+        }
+        else {
+            stepPicture = UIImage(named: "iba_logo.png")!
+        }
         
         pictureImage.layer.borderWidth = 0.3
         pictureImage.layer.masksToBounds = false
